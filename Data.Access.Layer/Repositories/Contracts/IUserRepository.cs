@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Access.Layer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace Data.Access.Layer.Repositories.Contracts
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUserRepository : IGenericRepository<User>
     {
-        IUserRepository Users { get; }
-
-        Task SaveChanges();
 
     }
 }

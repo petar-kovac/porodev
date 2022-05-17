@@ -7,9 +7,12 @@ namespace Data.Access.Layer.Repositories
     {
         private readonly SqlDataContext _context;
 
-        public UnitOfWork(SqlDataContext context)
+        public IUserRepository Users { get; private set; }
+
+        public UnitOfWork(SqlDataContext context, IUserRepository users)
         {
             _context = context;
+            Users = new UserRepository(context);
         }
 
         public async Task SaveChanges()
