@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Access.Layer", "Service.Access.Layer\Service.Access.Layer.csproj", "{C8D3DFE9-E254-46FD-81EE-EDACC6C014D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Access.Layer", "Service.Access.Layer\Service.Access.Layer.csproj", "{C8D3DFE9-E254-46FD-81EE-EDACC6C014D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Access.Layer", "Data.Access.Layer\Data.Access.Layer.csproj", "{21087355-B20F-42AD-B575-552439810E98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Access.Layer", "Data.Access.Layer\Data.Access.Layer.csproj", "{21087355-B20F-42AD-B575-552439810E98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Access.Layer", "Business.Access.Layer\Business.Access.Layer.csproj", "{FAB314DF-954F-4ACE-8CB0-C0F7B99AA052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Access.Layer", "Business.Access.Layer\Business.Access.Layer.csproj", "{FAB314DF-954F-4ACE-8CB0-C0F7B99AA052}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
