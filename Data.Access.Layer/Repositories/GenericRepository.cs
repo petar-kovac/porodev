@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
+    public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T : class, new()
     {
 
         private readonly SqlDataContext _context;
@@ -60,6 +60,26 @@ namespace Data.Access.Layer.Repositories
         public async Task<IEnumerable<T?>> FindAll(Expression<Func<T, bool>> filter )
         {
             return await _context.Set<T>().Where(filter).ToListAsync();
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

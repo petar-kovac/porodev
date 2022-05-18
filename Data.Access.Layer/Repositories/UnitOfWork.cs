@@ -12,7 +12,7 @@ namespace Data.Access.Layer.Repositories
         public UnitOfWork(SqlDataContext context, IUserRepository users)
         {
             _context = context;
-            Users = new UserRepository(context);
+            Users = users;
         }
 
         public async Task SaveChanges()

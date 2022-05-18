@@ -2,7 +2,7 @@
 
 namespace Data.Access.Layer.Repositories.Contracts
 {
-    public interface IGenericRepository<T> where T : class, new()
+    public interface IGenericRepository<T> : IDisposable where T : class, new()
     {
         Task<IEnumerable<T?>> GetAll();
 
@@ -17,5 +17,6 @@ namespace Data.Access.Layer.Repositories.Contracts
         Task<T?> Find(Expression<Func<T, bool>> filter);
 
         Task<IEnumerable<T?>> FindAll(Expression<Func<T, bool>> filter);
+
     }
 }
