@@ -10,7 +10,6 @@ namespace Business.Access.Layer.Extensions
         public static void InjectDependencies(IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }
