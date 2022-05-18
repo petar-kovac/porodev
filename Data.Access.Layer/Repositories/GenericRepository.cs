@@ -1,4 +1,5 @@
 ﻿using Data.Access.Layer.Data;
+using Data.Access.Layer.Models.Contracts;
 using Data.Access.Layer.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -6,49 +7,60 @@ using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
+    public class GenericRepository<TEntity,TDbContext> : IGenericRepository<TEntity> where TEntity : class, IUser where TDbContext : DbContext
     {
 
-        private readonly SqlDataContext _context;
+        private readonly TDbContext _context;
 
-        public GenericRepository(SqlDataContext context)
+        public GenericRepository(TDbContext context)
         {
             _context = context;
         }
 
-        public async Task<T?> Create(T entity)
+        public IQueryable<TEntity> Query()
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            return _context.Set<TEntity>().AsQueryable();
         }
 
-        public async Task<int?> Delete(T entity)
+        public async Task<TEntity?> CreateAsync(TEntity entity)
         {
-            var deletedEntry = _context.Set<T>().Remove(entity);
-            return await _context.SaveChangesAsync();
+            if (await _context.Set<TEntity>().AddAsync(entity) != null)
+                return entity;
+            return null;
         }
 
-        public async Task<IEnumerable<T?>> GetAll()
+        public void Delete(TEntity entity)
         {
-            return await _context.Set<T>().ToListAsync();
+            _context.Set<TEntity>().Remove(entity);
         }
 
-        public async Task<T?> GetById(Guid id)
+        public async Task<ICollection<TEntity>> GetAllAsync()
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
-        public Task<T?> Find(Expression<Func<T, bool>> filter )
+        public async Task<TEntity?> GetByIdAsync(Guid id)
         {
-            return _context.Set<T>().FirstOrDefaultAsync(filter);
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<T?> Update(T entity, Guid id)
+        public async Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> filter )
+        {
+            return await _context.Set<TEntity>().SingleOrDefaultAsync(filter);
+        }
+
+        public async Task<ICollection<TEntity>?> FindAllAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return await _context.Set<TEntity>().Where(filter).ToListAsync();
+        }
+
+        public async Task<TEntity?> UpdateAsync(TEntity entity, Guid id)
         {
             if (entity == null)
+            {
                 return null;
-            T? exist = await _context.Set<T>().FindAsync(id);
+            }
+            TEntity? exist = await _context.Set<TEntity>().FindAsync(id);
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(entity);
@@ -57,9 +69,5 @@ namespace Data.Access.Layer.Repositories
             return exist;
         }
 
-        public async Task<IEnumerable<T?>> FindAll(Expression<Func<T, bool>> filter )
-        {
-            return await _context.Set<T>().Where(filter).ToListAsync();
-        }
     }
 }

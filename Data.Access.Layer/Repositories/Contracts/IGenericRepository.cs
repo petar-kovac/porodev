@@ -1,21 +1,24 @@
-﻿using System.Linq.Expressions;
+﻿using Data.Access.Layer.Models.Contracts;
+using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories.Contracts
 {
-    public interface IGenericRepository<T> where T : class, new()
+    public interface IGenericRepository<TEntity> where TEntity : class, IUser
     {
-        Task<IEnumerable<T?>> GetAll();
+        IQueryable<TEntity> Query();
 
-        Task<T?> GetById(Guid Id);
+        Task<ICollection<TEntity>> GetAllAsync();
 
-        Task<T?> Create(T entity);
+        Task<TEntity?> GetByIdAsync(Guid Id);
 
-        Task<int?> Delete(T entity);
+        Task<TEntity?> CreateAsync(TEntity entity);
 
-        Task<T?> Update(T entity, Guid id);
+        void Delete(TEntity entity);
 
-        Task<T?> Find(Expression<Func<T, bool>> filter);
+        Task<TEntity?> UpdateAsync(TEntity entity, Guid id);
 
-        Task<IEnumerable<T?>> FindAll(Expression<Func<T, bool>> filter);
+        Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> filter);
+
+        Task<ICollection<TEntity>?> FindAllAsync(Expression<Func<TEntity, bool>> filter);
     }
 }
