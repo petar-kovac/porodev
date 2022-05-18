@@ -1,4 +1,5 @@
 ﻿using Data.Access.Layer.Data;
+using Data.Access.Layer.Models.Contracts;
 using Data.Access.Layer.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -6,49 +7,60 @@ using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T : class, new()
+    public class GenericRepository<TemplateEntity,TemplateDatabaseContext> : IGenericRepository<TemplateEntity> where TemplateEntity : class, IUser where TemplateDatabaseContext : DbContext
     {
 
-        private readonly SqlDataContext _context;
+        private readonly TemplateDatabaseContext _context;
 
-        public GenericRepository(SqlDataContext context)
+        public GenericRepository(TemplateDatabaseContext context)
         {
             _context = context;
         }
 
-        public async Task<T?> Create(T entity)
+        public IQueryable<TemplateEntity> Query()
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            return _context.Set<TemplateEntity>().AsQueryable();
         }
 
-        public async Task<int?> Delete(T entity)
+        public async Task<TemplateEntity?> CreateAsync(TemplateEntity entity)
         {
-            var deletedEntry = _context.Set<T>().Remove(entity);
-            return await _context.SaveChangesAsync();
+            if (await _context.Set<TemplateEntity>().AddAsync(entity) != null)
+                return entity;
+            return null;
         }
 
-        public async Task<IEnumerable<T?>> GetAll()
+        public void Delete(TemplateEntity entity)
         {
-            return await _context.Set<T>().ToListAsync();
+            _context.Set<TemplateEntity>().Remove(entity);
         }
 
-        public async Task<T?> GetById(Guid id)
+        public async Task<ICollection<TemplateEntity>> GetAllAsync()
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _context.Set<TemplateEntity>().ToListAsync();
         }
 
-        public Task<T?> Find(Expression<Func<T, bool>> filter )
+        public async Task<TemplateEntity?> GetByIdAsync(Guid id)
         {
-            return _context.Set<T>().FirstOrDefaultAsync(filter);
+            return await _context.Set<TemplateEntity>().FindAsync(id);
         }
 
-        public async Task<T?> Update(T entity, Guid id)
+        public async Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter )
+        {
+            return await _context.Set<TemplateEntity>().SingleOrDefaultAsync(filter);
+        }
+
+        public async Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter)
+        {
+            return await _context.Set<TemplateEntity>().Where(filter).ToListAsync();
+        }
+
+        public async Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id)
         {
             if (entity == null)
+            {
                 return null;
-            T? exist = await _context.Set<T>().FindAsync(id);
+            }
+            TemplateEntity? exist = await _context.Set<TemplateEntity>().FindAsync(id);
             if (exist != null)
             {
                 _context.Entry(exist).CurrentValues.SetValues(entity);
@@ -57,29 +69,5 @@ namespace Data.Access.Layer.Repositories
             return exist;
         }
 
-        public async Task<IEnumerable<T?>> FindAll(Expression<Func<T, bool>> filter )
-        {
-            return await _context.Set<T>().Where(filter).ToListAsync();
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
-            }
-            this.disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
     }
 }

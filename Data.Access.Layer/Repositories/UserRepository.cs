@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class UserRepository : GenericRepository<User>, IUserRepository 
+    public class UserRepository : GenericRepository<User,SqlDataContext>, IUserRepository 
     {
         public UserRepository(SqlDataContext context) : base(context)
         {

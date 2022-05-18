@@ -8,7 +8,7 @@ namespace Data.Access.Layer.Data
     {
         public SqlDataContext(DbContextOptions<SqlDataContext> options) : base(options) { }
 
-        public virtual DbSet<User> Users { get; set; } 
+        public virtual DbSet<User> Users { get; set; } = default!;
 
     }
 }

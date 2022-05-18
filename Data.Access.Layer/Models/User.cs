@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Access.Layer.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Data.Access.Layer.Models
 {
-    public class User
+    public class User : IUser
     {
         public Guid Id { get; set; }
 
