@@ -3,22 +3,22 @@ using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories.Contracts
 {
-    public interface IGenericRepository<TEntity> where TEntity : class, IUser
+    public interface IGenericRepository<TemplateEntity> where TemplateEntity : class, IUser
     {
-        IQueryable<TEntity> Query();
+        IQueryable<TemplateEntity> Query();
 
-        Task<ICollection<TEntity>> GetAllAsync();
+        Task<ICollection<TemplateEntity>> GetAllAsync();
 
-        Task<TEntity?> GetByIdAsync(Guid Id);
+        Task<TemplateEntity?> GetByIdAsync(Guid Id);
 
-        Task<TEntity?> CreateAsync(TEntity entity);
+        Task<TemplateEntity?> CreateAsync(TemplateEntity entity);
 
-        void Delete(TEntity entity);
+        void Delete(TemplateEntity entity);
 
-        Task<TEntity?> UpdateAsync(TEntity entity, Guid id);
+        Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id);
 
-        Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> filter);
+        Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter);
 
-        Task<ICollection<TEntity>?> FindAllAsync(Expression<Func<TEntity, bool>> filter);
+        Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter);
     }
 }
