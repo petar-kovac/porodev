@@ -2,7 +2,7 @@
 
 namespace Service.Access.Layer.Controllers
 {
-    [Route("api/[ontroller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public abstract class BaseController : ControllerBase
     {

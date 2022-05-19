@@ -3,11 +3,12 @@ using Data.Access.Layer.Data;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly SqlDataContext _context;
+        private bool _disposed;
 
-        public IUserRepository Users { get; private set; }
+        public IUserRepository Users { get; }
 
         public UnitOfWork(SqlDataContext context, IUserRepository users)
         {
@@ -15,14 +16,26 @@ namespace Data.Access.Layer.Repositories
             Users = users;
         }
 
-        public async Task SaveChanges()
+        public async Task<int> SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            _disposed = true;
         }
 
-        public async void Dispose()
+        public void Dispose()
         {
-            await _context.DisposeAsync();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
     }
