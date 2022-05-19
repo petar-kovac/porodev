@@ -10,7 +10,7 @@ namespace Data.Access.Layer.Repositories.Contracts
     {
         IUserRepository Users { get; }
 
-        Task SaveChanges();
+        Task<int> SaveChanges();
 
     }
 }
