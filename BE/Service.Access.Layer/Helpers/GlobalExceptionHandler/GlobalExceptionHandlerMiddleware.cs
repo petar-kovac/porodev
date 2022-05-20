@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class GlobalExceptionHandler
+    public class GlobalExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public GlobalExceptionHandler(RequestDelegate next)
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -27,20 +27,24 @@ namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
                 var response = httpContext.Response;
                 response.ContentType = "application/json";
 
+                string HRMessage;
                 switch (error)
                 {
-                    case AppException e:
+                    case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException e:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HRMessage = e.HumanReadableErrorMessage;
                         break;
                     case KeyNotFoundException e:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
+                        HRMessage = "Key not found exception";
                         break;
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HRMessage = "Internal server error";
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                var result = JsonSerializer.Serialize(new { humanReadableMessage = HRMessage, exceptionMessage = error?.Message });
                 await response.WriteAsync(result);
             }
         }
@@ -51,7 +55,7 @@ namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
     {
         public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<GlobalExceptionHandler>();
+            return builder.UseMiddleware<GlobalExceptionHandlerMiddleware>();
         }
     }
 }
