@@ -17,8 +17,6 @@ namespace Business.Access.Layer.Helpers.GlobalExceptionHandler
         public AppException() : base()
         {
             HumanReadableErrorMessage = "Internal server error occurred";
-            var log = LogManager.GetLogger("Default");
-            log.Debug(HumanReadableErrorMessage, this);
         }
 
         public AppException(string message) : base()

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Business.Access.Layer.Helpers.GlobalExceptionHandler;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Text.Json;
@@ -33,14 +34,17 @@ namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
                     case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException e:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HRMessage = e.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HRMessage, e);
                         break;
                     case KeyNotFoundException e:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         HRMessage = "Key not found exception";
+                        ExceptionLogger.WriteNewLog(HRMessage, e);
                         break;
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HRMessage = "Internal server error";
+                        ExceptionLogger.WriteNewLog(HRMessage, new Exception());
                         break;
                 }
 
