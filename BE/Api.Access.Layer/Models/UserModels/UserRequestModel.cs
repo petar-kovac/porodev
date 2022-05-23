@@ -10,11 +10,11 @@
 
         public string? Password { get; set; }
 
-        public Enums.UserRole Role { get; set; }
+        public string? Role { get; set; }
 
-        public Enums.UserDepartment Department { get; set; }
+        public string? Department { get; set; }
 
-        public Enums.UserPosition Position { get; set; }
+        public string? Position { get; set; }
 
         public string? AvatarUrl { get; set; }
 
