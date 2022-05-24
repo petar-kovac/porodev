@@ -1,7 +1,8 @@
 ﻿using Business.Access.Layer.Helpers.GlobalExceptionHandler;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using Service.Access.Layer.Helpers.GlobalExceptionHandler;
+using Api.Access.Layer.Helpers.GlobalExceptionHandler;
+using AutoMapper;
 
 namespace Api.Access.Layer.Controllers
 {
@@ -9,6 +10,11 @@ namespace Api.Access.Layer.Controllers
     [ApiController]
     public class TestExceptionController : BaseController
     {
+
+        public TestExceptionController(IMapper mapper) : base(mapper)
+        {
+
+        }
 
         [HttpGet("CustomAppException")]
         //[ProducesResponseType(typeof(Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException), StatusCodes.Status200OK)]

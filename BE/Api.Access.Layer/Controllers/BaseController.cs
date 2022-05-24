@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Access.Layer.Controllers
 {
@@ -6,8 +7,10 @@ namespace Api.Access.Layer.Controllers
     [ApiController]
     public abstract class BaseController : ControllerBase
     {
-        protected BaseController()
+        protected readonly IMapper _mapper;
+        protected BaseController(IMapper mapper)
         {
+            _mapper = mapper;
         }
     }
 }

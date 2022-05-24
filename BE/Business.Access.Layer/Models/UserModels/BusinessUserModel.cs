@@ -17,6 +17,8 @@ namespace Business.Access.Layer.Models.UserModels
 
         public string? Password { get; set; }
 
+        public string? Salt { get; set; }
+
         public Enums.UserRole Role { get; set; }
 
         public Enums.UserDepartment Department { get; set; }

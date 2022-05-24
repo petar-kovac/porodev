@@ -29,5 +29,7 @@ namespace Data.Access.Layer.Models
         public string? AvatarUrl { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        public string? Salt { get; set; }
     }
 }

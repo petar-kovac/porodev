@@ -10,6 +10,8 @@
 
         public string? Password { get; set; }
 
+        public string? Salt { get; set; }
+
         public string? Role { get; set; }
 
         public string? Department { get; set; }
