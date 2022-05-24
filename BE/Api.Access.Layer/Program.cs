@@ -1,5 +1,5 @@
+using Api.Access.Layer.Helpers.GlobalExceptionHandler;
 using Business.Access.Layer.Extensions;
-using Service.Access.Layer.Helpers.GlobalExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 

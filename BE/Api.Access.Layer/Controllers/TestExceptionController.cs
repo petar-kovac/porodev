@@ -3,19 +3,19 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Service.Access.Layer.Helpers.GlobalExceptionHandler;
 
-namespace Service.Access.Layer.Controllers
+namespace Api.Access.Layer.Controllers
 {
 
     [ApiController]
     public class TestExceptionController : BaseController
     {
-        
+
         [HttpGet("CustomAppException")]
         //[ProducesResponseType(typeof(Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException), StatusCodes.Status200OK)]
         //[ProducesErrorResponseType(typeof(ApiError))]
         public void CustomAppException()
         {
-            throw new Helpers.GlobalExceptionHandler.AppException("Custom app exception");  
+            throw new Helpers.GlobalExceptionHandler.AppException("Custom app exception");
         }
 
         [HttpGet("NotFoundException")]
