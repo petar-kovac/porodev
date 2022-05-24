@@ -1,4 +1,5 @@
 using Api.Access.Layer.Helpers.GlobalExceptionHandler;
+using Api.Access.Layer.Mapper;
 using Business.Access.Layer.Extensions;
 using Business.Access.Layer.Mapper;
 
@@ -12,7 +13,7 @@ SqlConnector.ConnectToSqlServer(builder.Services, builder.Configuration);
 
 DependencyInjector.InjectDependencies(builder.Services);
 
-builder.Services.AddAutoMapper(typeof(MapperBALProfiles));
+builder.Services.AddAutoMapper(typeof(MapperBALProfiles), typeof(ApiProfiles));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
