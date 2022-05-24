@@ -32,6 +32,17 @@ namespace Api.Access.Layer.Controllers
 
         }
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update([FromBody] BusinessUserModel model)
+        {
+            var result = await _userService.Update(model);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
 
     }
 }

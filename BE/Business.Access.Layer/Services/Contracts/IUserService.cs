@@ -13,7 +13,7 @@ namespace Business.Access.Layer.Services.Contracts
 
         Task<BusinessUserModel> GetByMail(string mail);
 
-        Task<BusinessUserModel> Update(string mail, BusinessUserModel model);
+        Task<BusinessUserModel> Update(BusinessUserModel model);
 
         Task<BusinessUserModel> Delete(string mail);
     }

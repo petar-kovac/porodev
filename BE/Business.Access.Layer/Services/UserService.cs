@@ -49,9 +49,18 @@ namespace Business.Access.Layer.Services
             throw new NotImplementedException();
         }
 
-        public Task<BusinessUserModel> Update(string mail, BusinessUserModel model)
+        public async Task<BusinessUserModel> Update(BusinessUserModel model)
         {
-            throw new NotImplementedException();
+            var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(model.Email));
+            if (userToBeUpdated == null)
+                throw new KeyNotFoundException("User with this email doesn't exists!");
+
+            var mappedUser = _mapper.Map<DataUserModel>(model);
+            mappedUser.Id = userToBeUpdated.Id;
+            await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
+            return _mapper.Map<BusinessUserModel>(mappedUser);
+            await _unitOfWork.SaveChanges();
+
         }
     }
 }
