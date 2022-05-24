@@ -32,6 +32,20 @@ namespace Api.Access.Layer.Controllers
 
         }
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [HttpDelete("read")]
+        public async Task<IActionResult> Read([FromBody] string email)
+        {
+            var user = await _userService.GetByMail(email);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(user);
+        }
 
     }
 }
