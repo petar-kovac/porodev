@@ -5,7 +5,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
+namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class GlobalExceptionHandlerMiddleware

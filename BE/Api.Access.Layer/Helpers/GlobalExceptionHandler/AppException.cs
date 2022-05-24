@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
+namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
 {
     public class AppException : Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException
     {
@@ -15,7 +15,7 @@ namespace Service.Access.Layer.Helpers.GlobalExceptionHandler
         }
         public AppException(string message, params object[] args) : base()
         {
-            HumanReadableErrorMessage = String.Format(CultureInfo.CurrentCulture, message, args);
+            HumanReadableErrorMessage = string.Format(CultureInfo.CurrentCulture, message, args);
         }
     }
 }

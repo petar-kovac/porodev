@@ -13,5 +13,15 @@ namespace Data.Access.Layer.Models
             SuperAdmin = 0,
             User = 1
         }
+
+        public enum UserDepartment : int
+        {
+            notDefined = 0
+        }
+
+        public enum UserPosition : int
+        {
+            notDefined = 0
+        }
     }
 }
