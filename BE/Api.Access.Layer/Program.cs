@@ -1,4 +1,5 @@
 using Business.Access.Layer.Extensions;
+using Service.Access.Layer.Helpers.GlobalExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+
+
 
 app.UseHttpsRedirection();
 
