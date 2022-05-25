@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Business.Access.Layer.Exceptions;
+using Business.Access.Layer.Helpers.GlobalExceptionHandler;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Data.Access.Layer.Models;
@@ -22,21 +24,24 @@ namespace Business.Access.Layer.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid?> Create(BusinessUserModel model)
+        public Task<Guid?> Create(BusinessUserModel model)
         {
             throw new NotImplementedException();
         }
 
         public async Task<BusinessUserModel> Delete(string mail)
         {
-            var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(mail));
+            if (mail == null)
+                throw new AppException("Mail is null.");
+            
+            var query = _unitOfWork.Users.Query();
 
-            if (userForDeletion == null)
-                throw new KeyNotFoundException("User with that email doesn't exist!");
+            if (query.SingleOrDefault(user => user.Email.Equals(mail)) == null)
+                throw new UserNotFoundException("User with that email doesn't exist.");
 
-            var userReturnModel = _mapper.Map<BusinessUserModel>(userForDeletion);
+            var userReturnModel = _mapper.Map<BusinessUserModel>(query.First());
 
-            _unitOfWork.Users.Delete(userForDeletion);
+            _unitOfWork.Users.Delete(query.First());
 
             await _unitOfWork.SaveChanges();
 

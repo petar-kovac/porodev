@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using Api.Access.Layer.Helpers.GlobalExceptionHandler;
+using Api.Access.Layer.Models.UserModels;
+using AutoMapper;
+using Business.Access.Layer.Exceptions;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +22,7 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesErrorResponseType(typeof(UserNotFoundException))]
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] string email)
         {
@@ -31,7 +35,6 @@ namespace Api.Access.Layer.Controllers
             
 
         }
-
 
     }
 }
