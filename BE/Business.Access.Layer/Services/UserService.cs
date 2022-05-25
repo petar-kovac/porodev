@@ -51,6 +51,9 @@ namespace Business.Access.Layer.Services
 
         public async Task<BusinessUserModel> Update(BusinessUserModel model)
         {
+            if (model.Email == null)
+                throw new KeyNotFoundException("User email has NULL value.");
+
             var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(model.Email));
             if (userToBeUpdated == null)
                 throw new KeyNotFoundException("User with this email doesn't exists!");
