@@ -12,13 +12,12 @@
 
         public string? Salt { get; set; }
 
-        public string? Role { get; set; }
+        public int? Role { get; set; }
 
-        public string? Department { get; set; }
+        public int? Department { get; set; }
 
-        public string? Position { get; set; }
+        public int? Position { get; set; }
 
         public string? AvatarUrl { get; set; }
-
     }
 }

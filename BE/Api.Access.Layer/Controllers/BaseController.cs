@@ -8,6 +8,7 @@ namespace Api.Access.Layer.Controllers
     public abstract class BaseController : ControllerBase
     {
         protected readonly IMapper _mapper;
+
         protected BaseController(IMapper mapper)
         {
             _mapper = mapper;

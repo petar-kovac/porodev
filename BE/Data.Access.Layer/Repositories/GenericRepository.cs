@@ -1,15 +1,12 @@
-﻿using Data.Access.Layer.Data;
-using Data.Access.Layer.Models.Contracts;
+﻿using Data.Access.Layer.Models.Contracts;
 using Data.Access.Layer.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-
 namespace Data.Access.Layer.Repositories
 {
-    public class GenericRepository<TemplateEntity,TemplateDatabaseContext> : IGenericRepository<TemplateEntity> where TemplateEntity : class, IUser where TemplateDatabaseContext : DbContext
+    public class GenericRepository<TemplateEntity, TemplateDatabaseContext> : IGenericRepository<TemplateEntity> where TemplateEntity : class, IUser where TemplateDatabaseContext : DbContext
     {
-
         private readonly TemplateDatabaseContext _context;
 
         public GenericRepository(TemplateDatabaseContext context)
@@ -44,7 +41,7 @@ namespace Data.Access.Layer.Repositories
             return await _context.Set<TemplateEntity>().FindAsync(id);
         }
 
-        public async Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter )
+        public async Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter)
         {
             return await _context.Set<TemplateEntity>().SingleOrDefaultAsync(filter);
         }
@@ -68,6 +65,5 @@ namespace Data.Access.Layer.Repositories
             }
             return exist;
         }
-
     }
 }

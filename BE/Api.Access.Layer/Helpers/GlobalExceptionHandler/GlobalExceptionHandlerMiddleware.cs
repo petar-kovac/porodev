@@ -1,9 +1,6 @@
 ﻿using Business.Access.Layer.Helpers.GlobalExceptionHandler;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
 {
@@ -28,27 +25,29 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
                 var response = httpContext.Response;
                 response.ContentType = "application/json";
 
-                string HRMessage;
+                string HumanReadableErrorMessage;
                 switch (error)
                 {
                     case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException e:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        HRMessage = e.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HRMessage, e);
+                        HumanReadableErrorMessage = e.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
                         break;
+
                     case KeyNotFoundException e:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
-                        HRMessage = "Key not found exception";
-                        ExceptionLogger.WriteNewLog(HRMessage, e);
+                        HumanReadableErrorMessage = "Key not found exception";
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
                         break;
+
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        HRMessage = "Internal server error";
-                        ExceptionLogger.WriteNewLog(HRMessage, new Exception());
+                        HumanReadableErrorMessage = "Internal server error";
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, new Exception());
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { humanReadableMessage = HRMessage, exceptionMessage = error?.Message });
+                var result = JsonSerializer.Serialize(new { humanReadableErrorMessage = HumanReadableErrorMessage, exceptionMessage = error?.Message });
                 await response.WriteAsync(result);
             }
         }
