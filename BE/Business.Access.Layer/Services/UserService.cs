@@ -26,7 +26,18 @@ namespace Business.Access.Layer.Services
 
         public Task<Guid?> Create(BusinessUserModel model)
         {
-            throw new NotImplementedException();
+            var existis = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
+            if (existis != null) throw new AppException("User already exists");
+
+            var userToCreate = _mapper.Map<DataUserModel>(model);
+            userToCreate.Id = Guid.NewGuid();
+            userToCreate.DateCreated = DateTime.Now;
+
+            var created = await _unitOfWork.Users.CreateAsync(userToCreate);
+
+            await _unitOfWork.SaveChanges();
+            return created.Id;
+            
         }
 
         public async Task<BusinessUserModel> Delete(string mail)
@@ -49,14 +60,41 @@ namespace Business.Access.Layer.Services
             
         }
 
-        public Task<BusinessUserModel> GetByMail(string mail)
+        public async Task<BusinessUserModel> GetByMail(string email)
         {
-            throw new NotImplementedException();
+            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
+            
+            if(email == null)
+            {
+                throw new KeyNotFoundException("User email has NULL value.");
+            }
+
+            if(userForRead == null)
+            {
+                throw new KeyNotFoundException("User with that email doesn't exist!");
+            }
+
+            var userReturnModel = _mapper.Map<BusinessUserModel>(userForRead);
+
+            return userReturnModel;
+          
         }
 
-        public Task<BusinessUserModel> Update(string mail, BusinessUserModel model)
+        public async Task<BusinessUserModel> Update(BusinessUserModel model)
         {
-            throw new NotImplementedException();
+            if (model.Email == null)
+                throw new KeyNotFoundException("User email has NULL value.");
+
+            var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(model.Email));
+            if (userToBeUpdated == null)
+                throw new KeyNotFoundException("User with this email doesn't exists!");
+
+            var mappedUser = _mapper.Map<DataUserModel>(model);
+            mappedUser.Id = userToBeUpdated.Id;
+            await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
+            await _unitOfWork.SaveChanges();
+            return _mapper.Map<BusinessUserModel>(mappedUser);
+
         }
     }
 }
