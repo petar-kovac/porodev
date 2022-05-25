@@ -39,11 +39,6 @@ namespace Api.Access.Layer.Controllers
         {
             var user = await _userService.GetByMail(email);
 
-            if(user == null)
-            {
-                return NotFound();
-            }
-            
             return Ok(user);
         }
 
