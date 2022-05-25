@@ -33,15 +33,15 @@ namespace Business.Access.Layer.Services
         {
             if (mail == null)
                 throw new AppException("Mail is null.");
-            
-            var query = _unitOfWork.Users.Query();
 
-            if (query.SingleOrDefault(user => user.Email.Equals(mail)) == null)
+            var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(mail));
+
+            if (userForDeletion == null)
                 throw new UserNotFoundException("User with that email doesn't exist.");
 
-            var userReturnModel = _mapper.Map<BusinessUserModel>(query.First());
+            var userReturnModel = _mapper.Map<BusinessUserModel>(userForDeletion);
 
-            _unitOfWork.Users.Delete(query.First());
+            _unitOfWork.Users.Delete(userForDeletion);
 
             await _unitOfWork.SaveChanges();
 
