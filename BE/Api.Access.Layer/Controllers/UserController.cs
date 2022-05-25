@@ -27,13 +27,7 @@ namespace Api.Access.Layer.Controllers
         public async Task<IActionResult> Delete([FromBody] string email)
         {
             var result = await _userService.Delete(email);
-
-            if(result == null)
-                return NotFound();
-
-            return Ok(result);
-            
-
+            return Ok(result);           
         }
 
     }
