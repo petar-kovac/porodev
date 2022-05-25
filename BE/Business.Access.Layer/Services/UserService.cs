@@ -44,9 +44,24 @@ namespace Business.Access.Layer.Services
             
         }
 
-        public Task<BusinessUserModel> GetByMail(string mail)
+        public async Task<BusinessUserModel> GetByMail(string email)
         {
-            throw new NotImplementedException();
+            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
+            
+            if(email == null)
+            {
+                throw new KeyNotFoundException("User email has NULL value.");
+            }
+
+            if(userForRead == null)
+            {
+                throw new KeyNotFoundException("User with that email doesn't exist!");
+            }
+
+            var userReturnModel = _mapper.Map<BusinessUserModel>(userForRead);
+
+            return userReturnModel;
+          
         }
 
         public async Task<BusinessUserModel> Update(BusinessUserModel model)
