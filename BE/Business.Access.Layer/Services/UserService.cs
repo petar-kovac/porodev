@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Business.Access.Layer.Helpers.GlobalExceptionHandler;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Data.Access.Layer.Models;
@@ -24,7 +25,18 @@ namespace Business.Access.Layer.Services
 
         public async Task<Guid?> Create(BusinessUserModel model)
         {
-            throw new NotImplementedException();
+            var existis = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
+            if (existis != null) throw new AppException("User already exists");
+
+            var userToCreate = _mapper.Map<DataUserModel>(model);
+            userToCreate.Id = Guid.NewGuid();
+            userToCreate.DateCreated = DateTime.Now;
+
+            var created = await _unitOfWork.Users.CreateAsync(userToCreate);
+
+            await _unitOfWork.SaveChanges();
+            return created.Id;
+            
         }
 
         public async Task<BusinessUserModel> Delete(string mail)
