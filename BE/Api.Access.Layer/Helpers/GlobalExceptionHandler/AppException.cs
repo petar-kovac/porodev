@@ -13,6 +13,7 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
         {
             HumanReadableErrorMessage = message;
         }
+
         public AppException(string message, params object[] args) : base()
         {
             HumanReadableErrorMessage = string.Format(CultureInfo.CurrentCulture, message, args);

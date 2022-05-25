@@ -5,11 +5,6 @@ using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Data.Access.Layer.Models;
 using Data.Access.Layer.Repositories.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Access.Layer.Services
 {
@@ -24,7 +19,7 @@ namespace Business.Access.Layer.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid?> Create(BusinessUserModel model)
+        public async Task<Guid?> CreateUser(BusinessUserModel model)
         {
             var existis = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
             if (existis != null) throw new AppException("User already exists");
@@ -37,10 +32,9 @@ namespace Business.Access.Layer.Services
 
             await _unitOfWork.SaveChanges();
             return created.Id;
-            
         }
 
-        public async Task<BusinessUserModel> Delete(string mail)
+        public async Task<BusinessUserModel> DeleteUser(string mail)
         {
             if (mail == null)
                 throw new AppException("Mail is null.");
@@ -57,10 +51,9 @@ namespace Business.Access.Layer.Services
             await _unitOfWork.SaveChanges();
 
             return userReturnModel;
-            
         }
 
-        public async Task<BusinessUserModel> GetByMail(string email)
+        public async Task<BusinessUserModel> GetUserByMail(string email)
         {
             if (email == null)
             {
@@ -68,9 +61,8 @@ namespace Business.Access.Layer.Services
             }
 
             var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
-            
 
-            if(userForRead == null)
+            if (userForRead == null)
             {
                 throw new KeyNotFoundException("User with that email doesn't exist!");
             }
@@ -78,10 +70,9 @@ namespace Business.Access.Layer.Services
             var userReturnModel = _mapper.Map<BusinessUserModel>(userForRead);
 
             return userReturnModel;
-          
         }
 
-        public async Task<BusinessUserModel> Update(BusinessUserModel model)
+        public async Task<BusinessUserModel> UpdateUser(BusinessUserModel model)
         {
             if (model.Email == null)
                 throw new KeyNotFoundException("User email has NULL value.");
@@ -95,7 +86,6 @@ namespace Business.Access.Layer.Services
             await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
             await _unitOfWork.SaveChanges();
             return _mapper.Map<BusinessUserModel>(mappedUser);
-
         }
     }
 }

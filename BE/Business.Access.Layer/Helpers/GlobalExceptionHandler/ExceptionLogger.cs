@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Business.Access.Layer.Helpers.GlobalExceptionHandler
+﻿namespace Business.Access.Layer.Helpers.GlobalExceptionHandler
 {
     public class ExceptionLogger
     {
-        static string filePath = System.IO.Directory.GetCurrentDirectory() + "\\logs\\logs.csv";
+        private static string filePath = System.IO.Directory.GetCurrentDirectory() + "\\logs\\logs.csv";
 
         public static void WriteNewLog(string hrmessage, Exception e)
         {
@@ -45,10 +39,8 @@ namespace Business.Access.Layer.Helpers.GlobalExceptionHandler
         private static void CreateDir()
         {
             string dirPath = System.IO.Directory.GetCurrentDirectory() + "\\logs";
-            if(!Directory.Exists(dirPath))
+            if (!Directory.Exists(dirPath))
                 Directory.CreateDirectory(dirPath);
         }
-
-        
     }
 }

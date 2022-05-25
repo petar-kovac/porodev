@@ -1,5 +1,5 @@
-﻿using Data.Access.Layer.Repositories.Contracts;
-using Data.Access.Layer.Data;
+﻿susing Data.Access.Layer.Data;
+using Data.Access.Layer.Repositories.Contracts;
 
 namespace Data.Access.Layer.Repositories
 {
@@ -20,6 +20,7 @@ namespace Data.Access.Layer.Repositories
         {
             return await _context.SaveChangesAsync();
         }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)
@@ -37,6 +38,5 @@ namespace Data.Access.Layer.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
     }
 }

@@ -4,13 +4,11 @@ using AutoMapper;
 using Business.Access.Layer.Exceptions;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
-using Data.Access.Layer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Api.Access.Layer.Controllers
 {
-
     [ApiController]
     public class UserController : BaseController
     {
@@ -25,29 +23,28 @@ namespace Api.Access.Layer.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesErrorResponseType(typeof(UserNotFoundException))]
         [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromBody] string email)
+        public async Task<IActionResult> DeleteUser([FromBody] string email)
         {
-            var result = await _userService.Delete(email);
+            var result = await _userService.DeleteUser(email);
             return Ok(result);
-            
-
         }
 
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(AppException))]
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] UserRequestModel createReqBody)
+        public async Task<IActionResult> CreateUser([FromBody] UserRequestModel createReqBody)
         {
             var BLModel = _mapper.Map<BusinessUserModel>(createReqBody);
-            var createdId = await _userService.Create(BLModel);
+            var createdId = await _userService.CreateUser(BLModel);
 
             return Ok(createdId);
         }
+
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpPut("Update")]
-        public async Task<IActionResult> Update([FromBody] BusinessUserModel model)
+        public async Task<IActionResult> UpdateUser([FromBody] BusinessUserModel model)
         {
-            var result = await _userService.Update(model);
+            var result = await _userService.UpdateUser(model);
             return Ok(result);
         }
 
@@ -56,9 +53,8 @@ namespace Api.Access.Layer.Controllers
         [HttpGet("read")]
         public async Task<IActionResult> GetUserByEmail([FromBody] string email)
         {
-            var user = await _userService.GetByMail(email);
+            var user = await _userService.GetUserByMail(email);
             return Ok(user);
         }
-
     }
 }

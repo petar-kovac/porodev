@@ -19,6 +19,5 @@
         public int? Position { get; set; }
 
         public string? AvatarUrl { get; set; }
-
     }
 }
