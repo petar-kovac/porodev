@@ -33,7 +33,6 @@ namespace Api.Access.Layer.Controllers
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        feature/updateUserOperation
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] BusinessUserModel model)
         {
@@ -49,7 +48,5 @@ namespace Api.Access.Layer.Controllers
             var user = await _userService.GetByMail(email);
             return Ok(user);
         }
-        dev
-
     }
 }
