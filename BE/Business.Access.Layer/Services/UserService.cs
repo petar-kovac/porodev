@@ -24,7 +24,7 @@ namespace Business.Access.Layer.Services
             _mapper = mapper;
         }
 
-        public Task<Guid?> Create(BusinessUserModel model)
+        public async Task<Guid?> Create(BusinessUserModel model)
         {
             var existis = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
             if (existis != null) throw new AppException("User already exists");
