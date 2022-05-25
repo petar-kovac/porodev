@@ -12,10 +12,5 @@
         {
             notDefined = 0
         }
-
-        public enum UserPosition : int
-        {
-            notDefined = 0
-        }
     }
 }

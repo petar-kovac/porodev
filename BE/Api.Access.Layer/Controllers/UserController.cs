@@ -19,9 +19,9 @@ namespace Api.Access.Layer.Controllers
             _userService = userService;
         }
 
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesErrorResponseType(typeof(UserNotFoundException))]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
+        //[ProducesErrorResponseType(typeof(UserNotFoundException))]
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteUser([FromBody] string email)
         {
@@ -55,6 +55,16 @@ namespace Api.Access.Layer.Controllers
         {
             var user = await _userService.GetUserByMail(email);
             return Ok(user);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(AppException))]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterModel registerModel)
+        {
+            await _userService.Register(registerModel);
+            return Ok(registerModel);
+
         }
     }
 }

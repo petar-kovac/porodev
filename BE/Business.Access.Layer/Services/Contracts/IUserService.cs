@@ -11,5 +11,7 @@ namespace Business.Access.Layer.Services.Contracts
         Task<BusinessUserModel> UpdateUser(BusinessUserModel model);
 
         Task<BusinessUserModel> DeleteUser(string mail);
+
+        Task Register(UserRegisterModel registerModel);
     }
 }
