@@ -23,10 +23,6 @@ namespace Api.Access.Layer.Controllers
         public async Task<IActionResult> Delete([FromBody] string email)
         {
             var result = await _userService.Delete(email);
-
-            if(result == null)
-                return NotFound();
-
             return Ok(result);
             
 
@@ -37,9 +33,6 @@ namespace Api.Access.Layer.Controllers
         public async Task<IActionResult> Update([FromBody] BusinessUserModel model)
         {
             var result = await _userService.Update(model);
-            if (result == null)
-                return NotFound();
-
             return Ok(result);
         }
 
