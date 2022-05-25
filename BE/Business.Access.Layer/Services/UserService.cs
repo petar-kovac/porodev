@@ -58,8 +58,8 @@ namespace Business.Access.Layer.Services
             var mappedUser = _mapper.Map<DataUserModel>(model);
             mappedUser.Id = userToBeUpdated.Id;
             await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
-            return _mapper.Map<BusinessUserModel>(mappedUser);
             await _unitOfWork.SaveChanges();
+            return _mapper.Map<BusinessUserModel>(mappedUser);
 
         }
     }
