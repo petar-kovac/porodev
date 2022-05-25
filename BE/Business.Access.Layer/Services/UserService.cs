@@ -62,12 +62,13 @@ namespace Business.Access.Layer.Services
 
         public async Task<BusinessUserModel> GetByMail(string email)
         {
-            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
-            
-            if(email == null)
+            if (email == null)
             {
                 throw new KeyNotFoundException("User email has NULL value.");
             }
+
+            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
+            
 
             if(userForRead == null)
             {
