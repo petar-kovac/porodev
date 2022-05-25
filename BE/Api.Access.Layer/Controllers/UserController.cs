@@ -42,7 +42,6 @@ namespace Api.Access.Layer.Controllers
         public async Task<IActionResult> Read([FromBody] string email)
         {
             var user = await _userService.GetByMail(email);
-
             return Ok(user);
         }
 
