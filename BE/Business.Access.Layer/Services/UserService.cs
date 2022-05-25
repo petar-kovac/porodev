@@ -48,6 +48,11 @@ namespace Business.Access.Layer.Services
         {
             var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
             
+            if(email == null)
+            {
+                throw new KeyNotFoundException("User email has NULL value.");
+            }
+
             if(userForRead == null)
             {
                 throw new KeyNotFoundException("User with that email doesn't exist!");
