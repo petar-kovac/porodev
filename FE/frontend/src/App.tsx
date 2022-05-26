@@ -3,7 +3,7 @@ import React from 'react';
 import './App.css';
 
 function App() {
-  return <div className="App" />;
+  return <div className="App">Update app.tsx</div>;
 }
 
 export default App;
