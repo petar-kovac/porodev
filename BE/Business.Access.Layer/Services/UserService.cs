@@ -182,6 +182,13 @@ namespace Business.Access.Layer.Services
 
             var mappedUser = _mapper.Map<DataUserModel>(model);
             mappedUser.Id = userToBeUpdated.Id;
+            mappedUser.DateCreated = userToBeUpdated.DateCreated;
+
+            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
+
+            mappedUser.Password = hash;
+            mappedUser.Salt = salt;
+
             await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
             await _unitOfWork.SaveChanges();
             return _mapper.Map<UserCreateRequestModel>(mappedUser);
