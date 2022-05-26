@@ -45,13 +45,13 @@ namespace Business.Access.Layer.Services
         private void CheckPassword(string password)
         {
             if (password.Length < MIN_PASSWORD_LENGTH)
-                throw new AppException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
+                throw new PasswordFormatException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
             if (!password.Any(char.IsUpper))
-                throw new AppException("Password must contain at least 1 uppercase letter!");
+                throw new PasswordFormatException("Password must contain at least 1 uppercase letter!");
             if (!password.Any(char.IsLower))
-                throw new AppException("Password must contain at least 1 lowercase letter!");
+                throw new PasswordFormatException("Password must contain at least 1 lowercase letter!");
             if (!password.Any(char.IsDigit))
-                throw new AppException("Password must contain at least 1 number!");
+                throw new PasswordFormatException("Password must contain at least 1 number!");
 
             CheckPasswordSpecialCharacter(password);
         }
@@ -59,9 +59,9 @@ namespace Business.Access.Layer.Services
         private async Task CheckEmail(string email)
         {
             if (email.Contains(EMAIL_DOMAIN) == false)
-                throw new AppException($"Only emails with {EMAIL_DOMAIN} are accepted!");
+                throw new EmailFormatException($"Only emails with {EMAIL_DOMAIN} are accepted!");
             if (await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email)) != null)
-                throw new AppException("User with that email already exists!");
+                throw new EmailFormatException("User with that email already exists!");
         }
 
         private void CheckPasswordSpecialCharacter(string password)
@@ -77,7 +77,7 @@ namespace Business.Access.Layer.Services
             }
 
             if (!flag)
-                throw new AppException("Password must contain at least 1 special character!");
+                throw new PasswordFormatException("Password must contain at least 1 special character!");
         }
 
         private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
@@ -89,7 +89,7 @@ namespace Business.Access.Layer.Services
             }
         }
 
-        public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel)
+        public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
         {
            await CheckEmail(registerModel.Email);
             CheckPassword(registerModel.Password);
@@ -104,6 +104,7 @@ namespace Business.Access.Layer.Services
                 hash,
                 salt,
                 Enums.UserDepartment.notDefined,
+                role,
                 registerModel.Position,
                 registerModel.AvatarUrl
                 );
@@ -121,7 +122,6 @@ namespace Business.Access.Layer.Services
             if (exists != null) throw new AppException("User already exists");
 
             var userToCreate = _mapper.Map<DataUserModel>(model);
-            userToCreate.Role = 0;
             userToCreate.Id = Guid.NewGuid();
             userToCreate.DateCreated = DateTime.Now;
 

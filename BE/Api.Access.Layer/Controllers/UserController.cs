@@ -4,6 +4,7 @@ using AutoMapper;
 using Business.Access.Layer.Exceptions;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
+using Data.Access.Layer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -58,10 +59,18 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(AppException))]
-        [HttpPost("register")]
+        [HttpPost("register/user")]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequestModel registerModel)
         {
-            return Ok(await _userService.Register(registerModel));
+            return Ok(await _userService.Register(registerModel, Enums.UserRole.User));
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(AppException))]
+        [HttpPost("register/admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] UserRegisterRequestModel registerModel)
+        {
+            return Ok(await _userService.Register(registerModel, Enums.UserRole.SuperAdmin));
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]

@@ -16,6 +16,8 @@ namespace Business.Access.Layer.Models.UserModels
 
         public Enums.UserDepartment Department { get; set; }
 
+        public Enums.UserRole Role { get; set; }
+
         public string Position { get; set; }
 
         public string AvatarUrl { get; set; }
@@ -24,7 +26,7 @@ namespace Business.Access.Layer.Models.UserModels
         {
         }
 
-        public UserCreateRequestModel(string name, string lastname, string email, byte[] password, byte[] salt, Enums.UserDepartment department, string position, string avatarUrl)
+        public UserCreateRequestModel(string name, string lastname, string email, byte[] password, byte[] salt, Enums.UserDepartment department, Enums.UserRole role, string position, string avatarUrl)
         {
             Name = name;
             Lastname = lastname;
@@ -32,6 +34,7 @@ namespace Business.Access.Layer.Models.UserModels
             Password = password;
             Salt = salt;
             Department = department;
+            Role = role;
             Position = position;
             AvatarUrl = avatarUrl;
         }

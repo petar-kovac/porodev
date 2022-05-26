@@ -13,7 +13,7 @@ namespace Business.Access.Layer.Services.Contracts
 
         Task<UserCreateRequestModel> DeleteUser(string mail);
 
-        Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel);
+        Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role);
 
         Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel);
     }
