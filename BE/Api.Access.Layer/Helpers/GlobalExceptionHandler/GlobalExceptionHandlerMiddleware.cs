@@ -21,40 +21,46 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
             {
                 await _next(httpContext);
             }
-            catch (Exception error)
+            catch (Exception exception)
             {
                 var response = httpContext.Response;
                 response.ContentType = "application/json";
 
                 string HumanReadableErrorMessage;
-                switch (error)
+                switch (exception)
                 {
                     case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException e:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = e.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        break;                    
+                    
+                    case UserNotFoundException userNotFound:
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        HumanReadableErrorMessage = userNotFound.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userNotFound);
                         break;
 
-                    case KeyNotFoundException e:
+                    case KeyNotFoundException keyNotFound:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         HumanReadableErrorMessage = "Key not found exception";
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, keyNotFound);
                         break;
 
-                    case FailedToLogInException e:
+                    case FailedToLogInException failedToLogIn:
                         response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        HumanReadableErrorMessage = e.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        HumanReadableErrorMessage = failedToLogIn.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToLogIn);
                         break;
 
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = "Internal server error";
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, new Exception());
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, exception);
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { humanReadableErrorMessage = HumanReadableErrorMessage, exceptionMessage = error?.Message });
+                var result = JsonSerializer.Serialize(new { humanReadableErrorMessage = HumanReadableErrorMessage, exceptionMessage = exception?.Message });
                 await response.WriteAsync(result);
             }
         }
