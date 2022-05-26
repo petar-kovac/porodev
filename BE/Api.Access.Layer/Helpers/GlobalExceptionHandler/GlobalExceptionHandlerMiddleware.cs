@@ -20,18 +20,19 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
             {
                 await _next(httpContext);
             }
-            catch (Exception error)
+            catch (Exception exception)
             {
                 var response = httpContext.Response;
                 response.ContentType = "application/json";
 
                 string HumanReadableErrorMessage;
-                switch (error)
+                switch (exception)
                 {
-                    case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException e:
+                    case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException appException
+                    :
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        HumanReadableErrorMessage = e.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        HumanReadableErrorMessage = appException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, appException);
                         break;
 
                     case KeyNotFoundException e:
@@ -43,11 +44,11 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = "Internal server error";
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, new Exception());
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, exception);
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { humanReadableErrorMessage = HumanReadableErrorMessage, exceptionMessage = error?.Message });
+                var result = JsonSerializer.Serialize(new { humanReadableErrorMessage = HumanReadableErrorMessage, exceptionMessage = exception?.Message });
                 await response.WriteAsync(result);
             }
         }

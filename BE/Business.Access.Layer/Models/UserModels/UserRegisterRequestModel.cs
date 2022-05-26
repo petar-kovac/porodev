@@ -1,6 +1,6 @@
 ﻿namespace Business.Access.Layer.Models.UserModels
 {
-    public class UserRegisterModel
+    public class UserRegisterRequestModel
     {
         public string Name { get; set; }
 
@@ -16,7 +16,7 @@
 
         public string AvatarUrl { get; set; }
 
-        public UserRegisterModel(string name, string lastname, string email, string password, int department, string position, string avatarUrl)
+        public UserRegisterRequestModel(string name, string lastname, string email, string password, int department, string position, string avatarUrl)
         {
             Name = name;
             Lastname = lastname;

@@ -18,9 +18,9 @@ namespace Api.Access.Layer.Controllers
             _userService = userService;
         }
 
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType((int)HttpStatusCode.NotFound)]
-        //[ProducesErrorResponseType(typeof(UserNotFoundException))]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesErrorResponseType(typeof(AppException))]
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteUser([FromBody] string email)
         {
@@ -33,7 +33,7 @@ namespace Api.Access.Layer.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateUser([FromBody] UserRequestModel createReqBody)
         {
-            var BLModel = _mapper.Map<BusinessUserModel>(createReqBody);
+            var BLModel = _mapper.Map<UserCreateRequestModel>(createReqBody);
             var createdId = await _userService.CreateUser(BLModel);
 
             return Ok(createdId);
@@ -41,7 +41,7 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateUser([FromBody] BusinessUserModel model)
+        public async Task<IActionResult> UpdateUser([FromBody] UserCreateRequestModel model)
         {
             var result = await _userService.UpdateUser(model);
             return Ok(result);
@@ -59,10 +59,9 @@ namespace Api.Access.Layer.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(AppException))]
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterModel registerModel)
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequestModel registerModel)
         {
-            await _userService.Register(registerModel);
-            return Ok(registerModel);
+            return Ok(await _userService.Register(registerModel));
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]

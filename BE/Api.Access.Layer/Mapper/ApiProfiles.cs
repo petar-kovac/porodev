@@ -10,7 +10,7 @@ namespace Api.Access.Layer.Mapper
         {
             public UserRequestProfile()
             {
-                CreateMap<UserRequestModel, BusinessUserModel>();
+                CreateMap<UserRequestModel, UserCreateRequestModel>();
             }
         }
     }

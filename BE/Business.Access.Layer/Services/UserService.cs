@@ -56,10 +56,12 @@ namespace Business.Access.Layer.Services
             CheckPasswordSpecialCharacter(password);
         }
 
-        private void CheckEmail(string email)
+        private async Task CheckEmail(string email)
         {
             if (email.Contains(EMAIL_DOMAIN) == false)
                 throw new AppException($"Only emails with {EMAIL_DOMAIN} are accepted!");
+            if (await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email)) != null)
+                throw new AppException("User with that email already exists!");
         }
 
         private void CheckPasswordSpecialCharacter(string password)
@@ -87,14 +89,14 @@ namespace Business.Access.Layer.Services
             }
         }
 
-        public async Task Register(UserRegisterModel registerModel)
+        public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel)
         {
-            CheckEmail(registerModel.Email);
+           await CheckEmail(registerModel.Email);
             CheckPassword(registerModel.Password);
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
-            BusinessUserModel userToAdd = new
+            UserCreateRequestModel userToAdd = new
                 (
                 registerModel.Name,
                 registerModel.Lastname,
@@ -106,10 +108,14 @@ namespace Business.Access.Layer.Services
                 registerModel.AvatarUrl
                 );
 
-            await CreateUser(userToAdd);
+            Guid newUserId = await CreateUser(userToAdd);
+
+            var newUser = await _unitOfWork.Users.FindSingleAsync(user => user.Id.Equals(newUserId));
+
+            return _mapper.Map<UserRegisterResponseModel>(newUser);
         }
 
-        public async Task<Guid?> CreateUser(BusinessUserModel model)
+        public async Task<Guid> CreateUser(UserCreateRequestModel model)
         {
             var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
             if (exists != null) throw new AppException("User already exists");
@@ -128,7 +134,7 @@ namespace Business.Access.Layer.Services
             return Guid.Empty;
         }
 
-        public async Task<BusinessUserModel> DeleteUser(string mail)
+        public async Task<UserCreateRequestModel> DeleteUser(string mail)
         {
             if (mail == null)
                 throw new AppException("Mail is null.");
@@ -138,7 +144,7 @@ namespace Business.Access.Layer.Services
             if (userForDeletion == null)
                 throw new UserNotFoundException("User with that email doesn't exist.");
 
-            var userReturnModel = _mapper.Map<BusinessUserModel>(userForDeletion);
+            var userReturnModel = _mapper.Map<UserCreateRequestModel>(userForDeletion);
 
             _unitOfWork.Users.Delete(userForDeletion);
 
@@ -164,7 +170,7 @@ namespace Business.Access.Layer.Services
             return userForRead;
         }
 
-        public async Task<BusinessUserModel> UpdateUser(BusinessUserModel model)
+        public async Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model)
         {
             if (model.Email == null)
                 throw new KeyNotFoundException("User email has NULL value.");
@@ -177,7 +183,7 @@ namespace Business.Access.Layer.Services
             mappedUser.Id = userToBeUpdated.Id;
             await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
             await _unitOfWork.SaveChanges();
-            return _mapper.Map<BusinessUserModel>(mappedUser);
+            return _mapper.Map<UserCreateRequestModel>(mappedUser);
         }
     }
 }
