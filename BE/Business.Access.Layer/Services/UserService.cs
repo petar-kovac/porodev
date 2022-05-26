@@ -7,8 +7,6 @@ using Data.Access.Layer.Models;
 using Data.Access.Layer.Repositories.Contracts;
 using System.Security.Cryptography;
 
-
-
 namespace Business.Access.Layer.Services
 {
     public class UserService : IUserService
@@ -23,6 +21,25 @@ namespace Business.Access.Layer.Services
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+        }
+
+        public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
+        {
+            var dataUserModel = await GetUserByMail(loginModel.Email);
+            VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
+
+            UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
+            return response;
+        }
+
+        private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                if (!computeHash.SequenceEqual(passwordHash))
+                    throw new AppException("Email or password is not valid.");
+            }
         }
 
         private void CheckPassword(string password)
@@ -79,13 +96,13 @@ namespace Business.Access.Layer.Services
 
             BusinessUserModel userToAdd = new
                 (
-                registerModel.Name, 
-                registerModel.Lastname, 
-                registerModel.Email, 
-                hash, 
-                salt, 
-                Enums.UserDepartment.notDefined, 
-                registerModel.Position, 
+                registerModel.Name,
+                registerModel.Lastname,
+                registerModel.Email,
+                hash,
+                salt,
+                Enums.UserDepartment.notDefined,
+                registerModel.Position,
                 registerModel.AvatarUrl
                 );
 
@@ -105,8 +122,8 @@ namespace Business.Access.Layer.Services
             var created = await _unitOfWork.Users.CreateAsync(userToCreate);
 
             await _unitOfWork.SaveChanges();
-            
-            if(created != null)
+
+            if (created != null)
                 return created.Id;
             return Guid.Empty;
         }
@@ -130,7 +147,7 @@ namespace Business.Access.Layer.Services
             return userReturnModel;
         }
 
-        public async Task<BusinessUserModel> GetUserByMail(string email)
+        public async Task<DataUserModel> GetUserByMail(string email)
         {
             if (email == null)
             {
@@ -144,9 +161,7 @@ namespace Business.Access.Layer.Services
                 throw new KeyNotFoundException("User with that email doesn't exist!");
             }
 
-            var userReturnModel = _mapper.Map<BusinessUserModel>(userForRead);
-
-            return userReturnModel;
+            return userForRead;
         }
 
         public async Task<BusinessUserModel> UpdateUser(BusinessUserModel model)

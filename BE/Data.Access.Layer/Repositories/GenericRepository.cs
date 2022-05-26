@@ -5,8 +5,8 @@ using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class GenericRepository<TemplateEntity, TemplateDatabaseContext> : 
-        IGenericRepository<TemplateEntity> where TemplateEntity : class, 
+    public class GenericRepository<TemplateEntity, TemplateDatabaseContext> :
+        IGenericRepository<TemplateEntity> where TemplateEntity : class,
         IUser where TemplateDatabaseContext : DbContext
     {
         private readonly TemplateDatabaseContext _context;
@@ -45,16 +45,7 @@ namespace Data.Access.Layer.Repositories
 
         public async Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter)
         {
-            try
-            {
-                return await _context.Set<TemplateEntity>().SingleOrDefaultAsync(filter);
-
-    }
-            catch (Exception e)
-            {
-                e.ToString();
-                throw;
-            };
+            return await _context.Set<TemplateEntity>().SingleOrDefaultAsync(filter);
         }
 
         public async Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter)
