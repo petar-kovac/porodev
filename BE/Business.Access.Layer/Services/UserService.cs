@@ -158,7 +158,7 @@ namespace Business.Access.Layer.Services
 
             if (userForRead == null)
             {
-                throw new KeyNotFoundException("User with that email doesn't exist!");
+                throw new KeyNotFoundException("Email or password is not valid.");
             }
 
             return userForRead;
