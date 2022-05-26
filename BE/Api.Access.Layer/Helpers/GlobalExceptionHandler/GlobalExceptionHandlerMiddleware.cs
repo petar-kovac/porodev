@@ -1,4 +1,5 @@
 ﻿using Business.Access.Layer.Helpers.GlobalExceptionHandler;
+using Business.Access.Layer.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -37,6 +38,12 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
                     case KeyNotFoundException e:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         HumanReadableErrorMessage = "Key not found exception";
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        break;
+
+                    case FailedToLogInException e:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = e.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
                         break;
 
