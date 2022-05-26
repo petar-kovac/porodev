@@ -25,5 +25,20 @@ namespace Data.Access.Layer.Models
         public DateTime DateCreated { get; set; }
 
         public byte[] Salt { get; set; }
+
+        public DataUserModel(Guid id, string name, string lastname, string email, byte[] password, Enums.UserRole role, Enums.UserDepartment department, string position, string avatarUrl, DateTime dateCreated, byte[] salt)
+        {
+            Id = id;
+            Name = name;
+            Lastname = lastname;
+            Email = email;
+            Password = password;
+            Role = role;
+            Department = department;
+            Position = position;
+            AvatarUrl = avatarUrl;
+            DateCreated = dateCreated;
+            Salt = salt;
+        }
     }
 }

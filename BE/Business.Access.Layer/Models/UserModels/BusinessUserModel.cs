@@ -20,12 +20,7 @@ namespace Business.Access.Layer.Models.UserModels
 
         public string AvatarUrl { get; set; }
 
-        public BusinessUserModel()
-        {
-
-        }
-
-        public BusinessUserModel(string? name, string? lastname, string? email, byte[] password, byte[] salt, Enums.UserDepartment department, string? position, string? avatarUrl)
+        public BusinessUserModel(string name, string lastname, string email, byte[] password, byte[] salt, Enums.UserDepartment department, string position, string avatarUrl)
         {
             Name = name;
             Lastname = lastname;

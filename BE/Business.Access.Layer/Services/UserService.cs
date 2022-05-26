@@ -7,6 +7,8 @@ using Data.Access.Layer.Models;
 using Data.Access.Layer.Repositories.Contracts;
 using System.Security.Cryptography;
 
+
+
 namespace Business.Access.Layer.Services
 {
     public class UserService : IUserService
@@ -14,58 +16,78 @@ namespace Business.Access.Layer.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
+        private const int MIN_PASSWORD_LENGTH = 8;
+        private readonly string EMAIL_DOMAIN = "@boing.rs";
+
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task Register(UserRegisterModel registerModel)
+        private void CheckPassword(string password)
         {
-            if (registerModel.Email.Contains("@boing.rs") == false)
-                throw new AppException("Email format!");
-
-            if (registerModel.Password.Length < 8)
-                throw new AppException("Password must be at least 8 characters!");
-            if (!registerModel.Password.Any(char.IsUpper))
+            if (password.Length < MIN_PASSWORD_LENGTH)
+                throw new AppException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
+            if (!password.Any(char.IsUpper))
                 throw new AppException("Password must contain at least 1 uppercase letter!");
-            if (!registerModel.Password.Any(char.IsLower))
+            if (!password.Any(char.IsLower))
                 throw new AppException("Password must contain at least 1 lowercase letter!");
-            if (!registerModel.Password.Any(char.IsDigit))
+            if (!password.Any(char.IsDigit))
                 throw new AppException("Password must contain at least 1 number!");
 
+            CheckPasswordSpecialCharacter(password);
+        }
+
+        private void CheckEmail(string email)
+        {
+            if (email.Contains(EMAIL_DOMAIN) == false)
+                throw new AppException($"Only emails with {EMAIL_DOMAIN} are accepted!");
+        }
+
+        private void CheckPasswordSpecialCharacter(string password)
+        {
             string specialCh = @"%!@#$%^&*()?/>.<,:;'\|}]{[_~`+=-" + "\"";
             char[] specialChArray = specialCh.ToCharArray();
             bool flag = false;
+
             foreach (char ch in specialChArray)
             {
-                if (registerModel.Password.Contains(ch))
+                if (password.Contains(ch))
                     flag = true;
             }
 
             if (!flag)
                 throw new AppException("Password must contain at least 1 special character!");
+        }
 
-            byte[] hash;
-            byte[] salt;
-
+        private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
+        {
             using (var hmac = new HMACSHA512())
             {
                 salt = hmac.Key;
-                hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(registerModel.Password));
+                hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
 
-            BusinessUserModel userToAdd = new()
-            {
-                Name = registerModel.Name,
-                Lastname = registerModel.Lastname,
-                Email = registerModel.Email,
-                AvatarUrl = registerModel.AvatarUrl,
-                Password = hash,
-                Salt = salt,
-                Department = Enums.UserDepartment.notDefined,
-                Position = registerModel.Position
-            };
+        public async Task Register(UserRegisterModel registerModel)
+        {
+            CheckEmail(registerModel.Email);
+            CheckPassword(registerModel.Password);
+
+            GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
+
+            BusinessUserModel userToAdd = new
+                (
+                registerModel.Name, 
+                registerModel.Lastname, 
+                registerModel.Email, 
+                hash, 
+                salt, 
+                Enums.UserDepartment.notDefined, 
+                registerModel.Position, 
+                registerModel.AvatarUrl
+                );
 
             await CreateUser(userToAdd);
         }
@@ -83,7 +105,10 @@ namespace Business.Access.Layer.Services
             var created = await _unitOfWork.Users.CreateAsync(userToCreate);
 
             await _unitOfWork.SaveChanges();
-            return created.Id;
+            
+            if(created != null)
+                return created.Id;
+            return Guid.Empty;
         }
 
         public async Task<BusinessUserModel> DeleteUser(string mail)
