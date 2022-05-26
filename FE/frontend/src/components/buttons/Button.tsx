@@ -1,5 +1,5 @@
-function Button() {
-  return <div></div>;
-}
+const Button = () => {
+  return <div />;
+};
 
 export default Button;

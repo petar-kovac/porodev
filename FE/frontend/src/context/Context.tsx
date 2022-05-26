@@ -1,5 +1,5 @@
-function Context() {
-  return <div></div>;
-}
+const Context = () => {
+  return <div />;
+};
 
 export default Context;

@@ -1,5 +1,5 @@
-function Router() {
-  return <div></div>;
-}
+const Router = () => {
+  return <div />;
+};
 
 export default Router;
