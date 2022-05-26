@@ -1,12 +1,12 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import Util from './util/Util';
+import Login from './pages/login/Login';
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <Util />
+      <Login />
     </div>
   );
 };
