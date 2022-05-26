@@ -96,24 +96,22 @@ namespace Business.Access.Layer.Services
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
-            UserCreateRequestModel userToAdd = new
-                (
-                registerModel.Name,
-                registerModel.Lastname,
-                registerModel.Email,
-                hash,
-                salt,
-                Enums.UserDepartment.notDefined,
-                role,
-                registerModel.Position,
-                registerModel.AvatarUrl
-                );
+            DataUserModel userToAdd = new()
+            {
+                Id = Guid.NewGuid(),
+                Name = registerModel.Name,
+                Lastname = registerModel.Lastname,
+                Email = registerModel.Email,
+                Password = hash,
+                Salt = salt,
+                Department = Enums.UserDepartment.notDefined,
+                Role = role,
+                Position = registerModel.Position,
+                AvatarUrl = registerModel.AvatarUrl,
+                DateCreated = DateTime.Now
+            };
 
-            Guid newUserId = await CreateUser(userToAdd);
-
-            var newUser = await _unitOfWork.Users.FindSingleAsync(user => user.Id.Equals(newUserId));
-
-            return _mapper.Map<UserRegisterResponseModel>(newUser);
+            return _mapper.Map<UserRegisterResponseModel>(await _unitOfWork.Users.CreateAsync(userToAdd));
         }
 
         public async Task<Guid> CreateUser(UserCreateRequestModel model)
@@ -122,6 +120,9 @@ namespace Business.Access.Layer.Services
             if (exists != null) throw new AppException("User already exists");
 
             var userToCreate = _mapper.Map<DataUserModel>(model);
+            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
+            userToCreate.Password = hash;
+            userToCreate.Salt = salt;
             userToCreate.Id = Guid.NewGuid();
             userToCreate.DateCreated = DateTime.Now;
 

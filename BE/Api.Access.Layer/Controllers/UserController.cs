@@ -1,5 +1,4 @@
 ﻿using Api.Access.Layer.Helpers.GlobalExceptionHandler;
-using Api.Access.Layer.Models.UserModels;
 using AutoMapper;
 using Business.Access.Layer.Exceptions;
 using Business.Access.Layer.Models.UserModels;
@@ -32,11 +31,9 @@ namespace Api.Access.Layer.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(AppException))]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequestModel createReqBody)
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateRequestModel createReqBody)
         {
-            var BLModel = _mapper.Map<UserCreateRequestModel>(createReqBody);
-            var createdId = await _userService.CreateUser(BLModel);
-
+            var createdId = await _userService.CreateUser(createReqBody);
             return Ok(createdId);
         }
 

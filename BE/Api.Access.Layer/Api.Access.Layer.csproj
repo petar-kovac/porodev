@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Business.Access.Layer\Business.Access.Layer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\UserModels\" />
+  </ItemGroup>
+
 </Project>

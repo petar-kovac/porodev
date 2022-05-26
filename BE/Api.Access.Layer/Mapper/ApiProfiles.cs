@@ -1,5 +1,4 @@
-﻿using Api.Access.Layer.Models.UserModels;
-using AutoMapper;
+﻿using AutoMapper;
 using Business.Access.Layer.Models.UserModels;
 
 namespace Api.Access.Layer.Mapper
@@ -10,7 +9,6 @@ namespace Api.Access.Layer.Mapper
         {
             public UserRequestProfile()
             {
-                CreateMap<UserRequestModel, UserCreateRequestModel>();
             }
         }
     }
