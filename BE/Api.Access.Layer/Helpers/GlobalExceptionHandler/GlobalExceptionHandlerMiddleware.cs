@@ -1,4 +1,5 @@
 ﻿using Business.Access.Layer.Helpers.GlobalExceptionHandler;
+using Business.Access.Layer.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -31,14 +32,26 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
                     case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException appException
                     :
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        HumanReadableErrorMessage = appException.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, appException);
+                        HumanReadableErrorMessage = e.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        break;                    
+                    
+                    case UserNotFoundException userNotFound:
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
+                        HumanReadableErrorMessage = userNotFound.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userNotFound);
                         break;
 
-                    case KeyNotFoundException e:
+                    case KeyNotFoundException keyNotFound:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         HumanReadableErrorMessage = "Key not found exception";
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, keyNotFound);
+                        break;
+
+                    case FailedToLogInException failedToLogIn:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = failedToLogIn.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToLogIn);
                         break;
 
                     default:

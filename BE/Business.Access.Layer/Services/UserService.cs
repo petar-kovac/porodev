@@ -38,7 +38,7 @@ namespace Business.Access.Layer.Services
             {
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 if (!computeHash.SequenceEqual(passwordHash))
-                    throw new AppException("Email or password is not valid.");
+                    throw new FailedToLogInException("Email or password is not valid.");
             }
         }
 
@@ -164,7 +164,7 @@ namespace Business.Access.Layer.Services
 
             if (userForRead == null)
             {
-                throw new KeyNotFoundException("User with that email doesn't exist!");
+                throw new KeyNotFoundException("Email or password is not valid.");
             }
 
             return userForRead;
