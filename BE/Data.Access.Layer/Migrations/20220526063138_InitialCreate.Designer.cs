@@ -11,8 +11,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Access.Layer.Migrations
 {
     [DbContext(typeof(SqlDataContext))]
+<<<<<<<< HEAD:BE/Data.Access.Layer/Migrations/20220526063138_InitialCreate.Designer.cs
     [Migration("20220526063138_InitialCreate")]
     partial class InitialCreate
+========
+    [Migration("20220526070437_InitialMigration")]
+    partial class InitialMigration
+>>>>>>>> feature/login:BE/Data.Access.Layer/Migrations/20220526070437_InitialMigration.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

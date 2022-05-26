@@ -1,7 +1,6 @@
 ﻿using Api.Access.Layer.Helpers.GlobalExceptionHandler;
 using Api.Access.Layer.Models.UserModels;
 using AutoMapper;
-using Business.Access.Layer.Exceptions;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -50,8 +49,8 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpGet("read")]
-        public async Task<IActionResult> GetUserByEmail([FromBody] string email)
+        [HttpGet("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
         {
             var user = await _userService.GetUserByMail(email);
             return Ok(user);
@@ -64,7 +63,14 @@ namespace Api.Access.Layer.Controllers
         {
             await _userService.Register(registerModel);
             return Ok(registerModel);
+        }
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(AppException))]
+        [HttpGet("login")]
+        public async Task<IActionResult> LoginUser([FromQuery] UserLoginRequestModel loginModel)
+        {
+            return Ok(await _userService.Login(loginModel));
         }
     }
 }

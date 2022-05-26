@@ -26,6 +26,10 @@ namespace Data.Access.Layer.Models
 
         public byte[] Salt { get; set; }
 
+        public DataUserModel()
+        {
+        }
+
         public DataUserModel(Guid id, string name, string lastname, string email, byte[] password, Enums.UserRole role, Enums.UserDepartment department, string position, string avatarUrl, DateTime dateCreated, byte[] salt)
         {
             Id = id;
