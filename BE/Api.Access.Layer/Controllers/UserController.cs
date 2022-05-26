@@ -20,10 +20,9 @@ namespace Api.Access.Layer.Controllers
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesErrorResponseType(typeof(UserNotFoundException))]
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteUser([FromBody] string email)
+        public async Task<IActionResult> DeleteUser([FromQuery] string email)
         {
             var result = await _userService.DeleteUser(email);
             return Ok(result);
@@ -50,11 +49,28 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpGet("read")]
-        public async Task<IActionResult> GetUserByEmail([FromBody] string email)
+        [HttpGet("GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
         {
             var user = await _userService.GetUserByMail(email);
             return Ok(user);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(AppException))]
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterModel registerModel)
+        {
+            await _userService.Register(registerModel);
+            return Ok(registerModel);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(AppException))]
+        [HttpGet("login")]
+        public async Task<IActionResult> LoginUser([FromQuery] UserLoginRequestModel loginModel)
+        {
+            return Ok(await _userService.Login(loginModel));
         }
     }
 }

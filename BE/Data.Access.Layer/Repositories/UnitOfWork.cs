@@ -1,4 +1,4 @@
-﻿susing Data.Access.Layer.Data;
+﻿using Data.Access.Layer.Data;
 using Data.Access.Layer.Repositories.Contracts;
 
 namespace Data.Access.Layer.Repositories

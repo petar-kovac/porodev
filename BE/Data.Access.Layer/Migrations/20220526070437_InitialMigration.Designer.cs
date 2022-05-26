@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Access.Layer.Migrations
 {
     [DbContext(typeof(SqlDataContext))]
-    [Migration("20220524093617_InitalCreate3")]
-    partial class InitalCreate3
+    [Migration("20220526070437_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,6 +28,7 @@ namespace Data.Access.Layer.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AvatarUrl")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateCreated")
@@ -37,25 +38,31 @@ namespace Data.Access.Layer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Lastname")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("longtext");
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasColumnType("longblob");
 
-                    b.Property<int>("Position")
-                        .HasColumnType("int");
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<string>("Salt")
-                        .HasColumnType("longtext");
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("longblob");
 
                     b.HasKey("Id");
 

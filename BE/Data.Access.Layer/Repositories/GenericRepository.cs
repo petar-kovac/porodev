@@ -5,7 +5,9 @@ using System.Linq.Expressions;
 
 namespace Data.Access.Layer.Repositories
 {
-    public class GenericRepository<TemplateEntity, TemplateDatabaseContext> : IGenericRepository<TemplateEntity> where TemplateEntity : class, IUser where TemplateDatabaseContext : DbContext
+    public class GenericRepository<TemplateEntity, TemplateDatabaseContext> :
+        IGenericRepository<TemplateEntity> where TemplateEntity : class,
+        IUser where TemplateDatabaseContext : DbContext
     {
         private readonly TemplateDatabaseContext _context;
 

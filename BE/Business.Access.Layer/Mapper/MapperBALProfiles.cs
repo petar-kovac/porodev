@@ -11,6 +11,7 @@ namespace Business.Access.Layer.Mapper
             public UserModelProfile()
             {
                 CreateMap<BusinessUserModel, DataUserModel>().ReverseMap();
+                CreateMap<DataUserModel, UserLoginResponseModel>();
             }
         }
     }
