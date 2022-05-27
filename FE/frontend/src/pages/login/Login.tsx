@@ -8,10 +8,6 @@ import '../../App.css';
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
-  const switchStateHandler = () => {
-    setIsLogin((prevState) => !prevState);
-  };
-
   const onFinish = (values: any) => {
     console.log(values);
 
@@ -120,7 +116,7 @@ const Login: FC = () => {
                 <StyledLoginButton type="primary" htmlType="submit">
                   {isLogin ? 'Login' : 'Create account'}
                 </StyledLoginButton>
-                <StyledChangeStateButton onClick={switchStateHandler}>
+                <StyledChangeStateButton onClick={() => setIsLogin(!isLogin)}>
                   {isLogin
                     ? 'Create new account'
                     : 'Login with existing account'}
