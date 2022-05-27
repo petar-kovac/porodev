@@ -8,10 +8,47 @@ import '../../App.css';
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
 
+  console.log(isLogin, 'lg');
   const onFinish = (values: any) => {
     console.log(values);
 
-    // axios.post('http://localhost:7151/api/User/register');
+    if (isLogin) {
+      try {
+        const res = async () => {
+          axios({
+            method: 'post',
+
+            url: 'https://localhost:7151/api/user/login',
+            data: {
+              ...values,
+            },
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8',
+              'Access-Control-Allow-Origin': '*',
+            },
+          });
+        };
+        res();
+      } catch (err) {
+        console.log('ok');
+      }
+    } else {
+      const res = async () => {
+        axios({
+          method: 'post',
+          url: 'https://localhost:7151/api/user/register/User',
+          data: {
+            ...values,
+            avatarUrl: 'url',
+          },
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      };
+      res();
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
