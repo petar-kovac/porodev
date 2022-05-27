@@ -3,10 +3,20 @@ using Api.Access.Layer.Mapper;
 using Business.Access.Layer.Extensions;
 using Business.Access.Layer.Mapper;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:3000/",
+    "http://localhost:3000")
+    .AllowAnyHeader()
+    .AllowAnyMethod(); ;
+    });
+});
 builder.Services.AddControllers();
 
 SqlConnector.ConnectToSqlServer(builder.Services, builder.Configuration);
@@ -34,7 +44,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseCors("CorsPolicy");
+app.UseCors(MyAllowSpecificOrigins);
 
 app.MapControllers();
 

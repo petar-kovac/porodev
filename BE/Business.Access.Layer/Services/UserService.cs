@@ -154,7 +154,7 @@ namespace Business.Access.Layer.Services
         public async Task<UserCreateRequestModel> DeleteUser(string mail)
         {
             if (mail == null)
-                throw new AppException("Mail is null.");
+                throw new KeyNotFoundException("Mail is null.");
 
             var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(mail));
 
