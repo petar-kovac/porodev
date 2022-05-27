@@ -1,11 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Form, Input, Button, Checkbox } from 'antd';
-import logo from '../../assets/logo.svg';
+import landingImage from '../../assets/landing.jpg';
 import '../../App.css';
 
 const Login: FC = () => {
+  const [isLogin, setIsLogin] = useState<boolean>(true);
+
+  const switchStateHandler = () => {
+    setIsLogin((prevState) => !prevState);
+  };
+
   const onFinish = (values: any) => {
     console.log(values);
 
@@ -22,6 +28,7 @@ const Login: FC = () => {
         <StyledFormWrapper>
           <StyledForm
             name="basic"
+            wide={isLogin}
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             initialValues={{ remember: true }}
@@ -29,11 +36,34 @@ const Login: FC = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
+            <StyledHeader>{isLogin ? 'Login' : 'SignUp'}</StyledHeader>
+            {!isLogin && (
+              <Form.Item
+                label="Firstname"
+                name="name"
+                rules={[
+                  { required: true, message: 'Please input your first name' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            )}
+            {!isLogin && (
+              <Form.Item
+                label="Lastname"
+                name="lastname"
+                rules={[
+                  { required: true, message: 'Please input your last name' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            )}
             <Form.Item
-              label="Username"
-              name="username"
+              label="Email"
+              name="email"
               rules={[
-                { required: true, message: 'Please input your username!' },
+                { required: true, message: 'Please input your username' },
               ]}
             >
               <Input />
@@ -43,30 +73,65 @@ const Login: FC = () => {
               label="Password"
               name="password"
               rules={[
-                { required: true, message: 'Please input your password!' },
+                { required: true, message: 'Please input your password' },
               ]}
             >
               <Input.Password />
             </Form.Item>
 
-            <Form.Item
-              name="remember"
-              valuePropName="checked"
-              wrapperCol={{ offset: 8, span: 16 }}
-            >
-              <Checkbox>Remember me</Checkbox>
-            </Form.Item>
+            {!isLogin && (
+              <Form.Item
+                label="Confirm password"
+                name="password"
+                rules={[
+                  { required: true, message: 'Please confirm your password' },
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+            )}
+
+            {!isLogin && (
+              <Form.Item
+                label="Department"
+                name="department"
+                rules={[
+                  { required: true, message: 'Please input your department' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            )}
+
+            {!isLogin && (
+              <Form.Item
+                label="Position"
+                name="position"
+                rules={[
+                  { required: true, message: 'Please input your position' },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            )}
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
+              <StyledButtonsWrapper>
+                <StyledLoginButton type="primary" htmlType="submit">
+                  {isLogin ? 'Login' : 'Create account'}
+                </StyledLoginButton>
+                <StyledChangeStateButton onClick={switchStateHandler}>
+                  {isLogin
+                    ? 'Create new account'
+                    : 'Login with existing account'}
+                </StyledChangeStateButton>
+              </StyledButtonsWrapper>
             </Form.Item>
           </StyledForm>
         </StyledFormWrapper>
       </StyledLoginContent>
       <StyledImageWrapper>
-        <StyledImage src={logo} alt="no-image" />
+        {/* <StyledImage src={landingImage} alt="no-image" /> */}
       </StyledImageWrapper>
     </StyledPage>
   );
@@ -74,9 +139,42 @@ const Login: FC = () => {
 
 export default Login;
 
+const StyledButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledLoginButton = styled(Button)`
+  box-shadow: 1px 3px 8px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+`;
+
+const StyledChangeStateButton = styled(Button)`
+  background-color: #e6f0fc;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 1px 5px 8px 2px rgba(0, 0, 0, 0.15);
+
+  &:hover,
+  &:focus {
+    color: #515559;
+  }
+`;
+
+const StyledHeader = styled.h1`
+  font-size: 32px;
+  color: #ffffff;
+  opacity: 0.9;
+`;
+
 const StyledPage = styled.div`
   display: flex;
   height: 100vh;
+  background-image: url(${landingImage});
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 const StyledLoginContent = styled.div`
   display: flex;
@@ -90,13 +188,36 @@ const StyledImageWrapper = styled.div`
 `;
 const StyledFormWrapper = styled.div`
   display: flex;
-  padding: 40px;
+  padding: 30px;
   border-radius: 12px;
-  border: 1px solid black;
+  border: 1px solid #d4e0f7;
+  box-shadow: 0px 3px 8px -1px #ffffff;
   justify-content: center;
   align-items: center;
+  background-image: linear-gradient(
+    to left bottom,
+    rgba(92, 159, 231, 0.1),
+    rgba(221, 233, 246, 0.9)
+  );
 `;
-const StyledForm = styled(Form)``;
+const StyledForm = styled(Form)<{ wide: boolean }>`
+  width: ${(props) => (props.wide ? 'auto' : '440px')};
+  & input,
+  & span {
+    opacity: 0.75;
+    border-radius: 10px;
+  }
+
+  & input:active,
+  & input:focus {
+    opacity: 1;
+  }
+
+  & label {
+    color: rgb(0, 0, 0, 0.5);
+    font-weight: bold;
+  }
+`;
 
 const StyledImage = styled.img`
   height: 100%;
