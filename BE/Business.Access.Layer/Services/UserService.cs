@@ -25,7 +25,16 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
         {
-            var dataUserModel = await GetUserByMail(loginModel.Email);
+            DataUserModel dataUserModel;
+            try
+            {
+                dataUserModel = await GetUserByMail(loginModel.Email);
+            }
+            catch (Exception)
+            {
+                throw new FailedToLogInException("Login credentials don't match");
+            }
+
             VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
 
             UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
@@ -172,7 +181,7 @@ namespace Business.Access.Layer.Services
 
             if (userForRead == null)
             {
-                throw new KeyNotFoundException("Email or password is not valid.");
+                throw new KeyNotFoundException("User with that email doesn't exist.");
             }
 
             return userForRead;
