@@ -5,6 +5,9 @@ using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Data.Access.Layer.Models;
 using Data.Access.Layer.Repositories.Contracts;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace Business.Access.Layer.Services
@@ -16,6 +19,7 @@ namespace Business.Access.Layer.Services
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private readonly string EMAIL_DOMAIN = "@boing.rs";
+        private const string TOKEN = "FrontendToken";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -37,9 +41,34 @@ namespace Business.Access.Layer.Services
 
             VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
 
+            string token = CreateToken(dataUserModel);
+            //we have to discuss about this part and return in this method
+            //return token
             UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
             return response;
         }
+
+        public string CreateToken(DataUserModel user)
+        {
+            String s = "";
+
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(s, user.Id.ToString()),
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(TOKEN));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
+
 
         private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
