@@ -73,8 +73,8 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(AppException))]
-        [HttpGet("login")]
-        public async Task<IActionResult> LoginUser([FromQuery] UserLoginRequestModel loginModel)
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] UserLoginRequestModel loginModel)
         {
             return Ok(await _userService.Login(loginModel));
         }
