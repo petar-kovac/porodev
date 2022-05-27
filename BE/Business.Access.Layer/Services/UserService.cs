@@ -111,13 +111,20 @@ namespace Business.Access.Layer.Services
                 DateCreated = DateTime.Now
             };
 
-            return _mapper.Map<UserRegisterResponseModel>(await _unitOfWork.Users.CreateAsync(userToAdd));
+            var newUser = await _unitOfWork.Users.CreateAsync(userToAdd);
+            await _unitOfWork.SaveChanges();
+
+            var returnModel = _mapper.Map<UserRegisterResponseModel>(newUser);
+
+            return returnModel;
         }
 
         public async Task<Guid> CreateUser(UserCreateRequestModel model)
         {
-            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
-            if (exists != null) throw new AppException("User already exists");
+            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email));
+
+            if (exists != null) 
+                throw new AppException("User already exists");
 
             var userToCreate = _mapper.Map<DataUserModel>(model);
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);

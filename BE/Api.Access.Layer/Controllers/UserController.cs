@@ -67,7 +67,8 @@ namespace Api.Access.Layer.Controllers
         [HttpPost("register/admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] UserRegisterRequestModel registerModel)
         {
-            return Ok(await _userService.Register(registerModel, Enums.UserRole.SuperAdmin));
+            var modelReturn = await _userService.Register(registerModel, Enums.UserRole.SuperAdmin);
+            return Ok(modelReturn);
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
