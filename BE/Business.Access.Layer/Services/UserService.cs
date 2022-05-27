@@ -25,7 +25,16 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
         {
-            var dataUserModel = await GetUserByMail(loginModel.Email);
+            DataUserModel dataUserModel;
+            try
+            {
+                dataUserModel = await GetUserByMail(loginModel.Email);
+            }
+            catch (Exception)
+            {
+                throw new FailedToLogInException("Login credentials don't match");
+            }
+
             VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
 
             UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
@@ -45,21 +54,23 @@ namespace Business.Access.Layer.Services
         private void CheckPassword(string password)
         {
             if (password.Length < MIN_PASSWORD_LENGTH)
-                throw new AppException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
+                throw new PasswordFormatException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
             if (!password.Any(char.IsUpper))
-                throw new AppException("Password must contain at least 1 uppercase letter!");
+                throw new PasswordFormatException("Password must contain at least 1 uppercase letter!");
             if (!password.Any(char.IsLower))
-                throw new AppException("Password must contain at least 1 lowercase letter!");
+                throw new PasswordFormatException("Password must contain at least 1 lowercase letter!");
             if (!password.Any(char.IsDigit))
-                throw new AppException("Password must contain at least 1 number!");
+                throw new PasswordFormatException("Password must contain at least 1 number!");
 
             CheckPasswordSpecialCharacter(password);
         }
 
-        private void CheckEmail(string email)
+        private async Task CheckEmail(string email)
         {
             if (email.Contains(EMAIL_DOMAIN) == false)
-                throw new AppException($"Only emails with {EMAIL_DOMAIN} are accepted!");
+                throw new EmailFormatException($"Only emails with {EMAIL_DOMAIN} are accepted!");
+            if (await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email)) != null)
+                throw new EmailFormatException("User with that email already exists!");
         }
 
         private void CheckPasswordSpecialCharacter(string password)
@@ -75,7 +86,7 @@ namespace Business.Access.Layer.Services
             }
 
             if (!flag)
-                throw new AppException("Password must contain at least 1 special character!");
+                throw new PasswordFormatException("Password must contain at least 1 special character!");
         }
 
         private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
@@ -87,35 +98,47 @@ namespace Business.Access.Layer.Services
             }
         }
 
-        public async Task Register(UserRegisterModel registerModel)
+        public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
         {
-            CheckEmail(registerModel.Email);
+           await CheckEmail(registerModel.Email);
             CheckPassword(registerModel.Password);
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
-            BusinessUserModel userToAdd = new
-                (
-                registerModel.Name,
-                registerModel.Lastname,
-                registerModel.Email,
-                hash,
-                salt,
-                Enums.UserDepartment.notDefined,
-                registerModel.Position,
-                registerModel.AvatarUrl
-                );
+            DataUserModel userToAdd = new()
+            {
+                Id = Guid.NewGuid(),
+                Name = registerModel.Name,
+                Lastname = registerModel.Lastname,
+                Email = registerModel.Email,
+                Password = hash,
+                Salt = salt,
+                Department = Enums.UserDepartment.notDefined,
+                Role = role,
+                Position = registerModel.Position,
+                AvatarUrl = registerModel.AvatarUrl,
+                DateCreated = DateTime.Now
+            };
 
-            await CreateUser(userToAdd);
+            var newUser = await _unitOfWork.Users.CreateAsync(userToAdd);
+            await _unitOfWork.SaveChanges();
+
+            var returnModel = _mapper.Map<UserRegisterResponseModel>(newUser);
+
+            return returnModel;
         }
 
-        public async Task<Guid?> CreateUser(BusinessUserModel model)
+        public async Task<Guid> CreateUser(UserCreateRequestModel model)
         {
-            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email)); ;
-            if (exists != null) throw new AppException("User already exists");
+            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email));
+
+            if (exists != null) 
+                throw new AppException("User already exists");
 
             var userToCreate = _mapper.Map<DataUserModel>(model);
-            userToCreate.Role = 0;
+            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
+            userToCreate.Password = hash;
+            userToCreate.Salt = salt;
             userToCreate.Id = Guid.NewGuid();
             userToCreate.DateCreated = DateTime.Now;
 
@@ -128,17 +151,17 @@ namespace Business.Access.Layer.Services
             return Guid.Empty;
         }
 
-        public async Task<BusinessUserModel> DeleteUser(string mail)
+        public async Task<UserCreateRequestModel> DeleteUser(string mail)
         {
             if (mail == null)
-                throw new AppException("Mail is null.");
+                throw new KeyNotFoundException("Mail is null.");
 
             var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(mail));
 
             if (userForDeletion == null)
                 throw new UserNotFoundException("User with that email doesn't exist.");
 
-            var userReturnModel = _mapper.Map<BusinessUserModel>(userForDeletion);
+            var userReturnModel = _mapper.Map<UserCreateRequestModel>(userForDeletion);
 
             _unitOfWork.Users.Delete(userForDeletion);
 
@@ -158,13 +181,13 @@ namespace Business.Access.Layer.Services
 
             if (userForRead == null)
             {
-                throw new KeyNotFoundException("Email or password is not valid.");
+                throw new KeyNotFoundException("User with that email doesn't exist.");
             }
 
             return userForRead;
         }
 
-        public async Task<BusinessUserModel> UpdateUser(BusinessUserModel model)
+        public async Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model)
         {
             if (model.Email == null)
                 throw new KeyNotFoundException("User email has NULL value.");
@@ -175,9 +198,16 @@ namespace Business.Access.Layer.Services
 
             var mappedUser = _mapper.Map<DataUserModel>(model);
             mappedUser.Id = userToBeUpdated.Id;
+            mappedUser.DateCreated = userToBeUpdated.DateCreated;
+
+            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
+
+            mappedUser.Password = hash;
+            mappedUser.Salt = salt;
+
             await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
             await _unitOfWork.SaveChanges();
-            return _mapper.Map<BusinessUserModel>(mappedUser);
+            return _mapper.Map<UserCreateRequestModel>(mappedUser);
         }
     }
 }

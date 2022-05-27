@@ -29,10 +29,10 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
-                    case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException e:
+                    case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException appException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        HumanReadableErrorMessage = e.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, e);
+                        HumanReadableErrorMessage = appException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, appException);
                         break;                    
                     
                     case UserNotFoundException userNotFound:
@@ -51,6 +51,18 @@ namespace Api.Access.Layer.Helpers.GlobalExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         HumanReadableErrorMessage = failedToLogIn.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToLogIn);
+                        break;
+
+                    case EmailFormatException emailFormatException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = emailFormatException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, emailFormatException);
+                        break;
+
+                    case PasswordFormatException passwordFormatException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = passwordFormatException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, passwordFormatException);
                         break;
 
                     default:

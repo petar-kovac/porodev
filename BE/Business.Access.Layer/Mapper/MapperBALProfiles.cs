@@ -10,8 +10,9 @@ namespace Business.Access.Layer.Mapper
         {
             public UserModelProfile()
             {
-                CreateMap<BusinessUserModel, DataUserModel>().ReverseMap();
+                CreateMap<UserCreateRequestModel, DataUserModel>().ReverseMap();
                 CreateMap<DataUserModel, UserLoginResponseModel>();
+                CreateMap<DataUserModel, UserRegisterResponseModel>();
             }
         }
     }

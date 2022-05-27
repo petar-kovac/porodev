@@ -5,15 +5,15 @@ namespace Business.Access.Layer.Services.Contracts
 {
     public interface IUserService
     {
-        Task<Guid?> CreateUser(BusinessUserModel model);
+        Task<Guid> CreateUser(UserCreateRequestModel model);
 
         Task<DataUserModel> GetUserByMail(string mail);
 
-        Task<BusinessUserModel> UpdateUser(BusinessUserModel model);
+        Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model);
 
-        Task<BusinessUserModel> DeleteUser(string mail);
+        Task<UserCreateRequestModel> DeleteUser(string mail);
 
-        Task Register(UserRegisterModel registerModel);
+        Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role);
 
         Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel);
     }

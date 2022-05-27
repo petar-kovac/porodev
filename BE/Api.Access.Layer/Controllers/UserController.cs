@@ -1,9 +1,9 @@
 ﻿using Api.Access.Layer.Helpers.GlobalExceptionHandler;
-using Api.Access.Layer.Models.UserModels;
 using AutoMapper;
 using Business.Access.Layer.Exceptions;
 using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
+using Data.Access.Layer.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -31,17 +31,15 @@ namespace Api.Access.Layer.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(AppException))]
         [HttpPost("create")]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequestModel createReqBody)
+        public async Task<IActionResult> CreateUser([FromBody] UserCreateRequestModel createReqBody)
         {
-            var BLModel = _mapper.Map<BusinessUserModel>(createReqBody);
-            var createdId = await _userService.CreateUser(BLModel);
-
+            var createdId = await _userService.CreateUser(createReqBody);
             return Ok(createdId);
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateUser([FromBody] BusinessUserModel model)
+        public async Task<IActionResult> UpdateUser([FromBody] UserCreateRequestModel model)
         {
             var result = await _userService.UpdateUser(model);
             return Ok(result);
@@ -58,11 +56,19 @@ namespace Api.Access.Layer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(AppException))]
-        [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterModel registerModel)
+        [HttpPost("register/user")]
+        public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequestModel registerModel)
         {
-            await _userService.Register(registerModel);
-            return Ok(registerModel);
+            return Ok(await _userService.Register(registerModel, Enums.UserRole.User));
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(AppException))]
+        [HttpPost("register/admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] UserRegisterRequestModel registerModel)
+        {
+            var modelReturn = await _userService.Register(registerModel, Enums.UserRole.SuperAdmin);
+            return Ok(modelReturn);
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
