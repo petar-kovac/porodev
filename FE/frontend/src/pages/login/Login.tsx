@@ -186,8 +186,7 @@ const StyledFormWrapper = styled.div`
   display: flex;
   padding: 30px;
   border-radius: 12px;
-  border: 1px solid #d4e0f7;
-  box-shadow: 0px 3px 8px -1px #ffffff;
+  box-shadow: -1px 1px 10px -1px #ffffff;
   justify-content: center;
   align-items: center;
   background-image: linear-gradient(
