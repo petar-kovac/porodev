@@ -19,7 +19,7 @@ namespace Business.Access.Layer.Services
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private readonly string EMAIL_DOMAIN = "@boing.rs";
-        private const string TOKEN = "FrontendToken";
+        private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -38,37 +38,28 @@ namespace Business.Access.Layer.Services
             {
                 throw new FailedToLogInException("Login credentials don't match");
             }
-
             VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
-
-            string token = CreateToken(dataUserModel);
-            //we have to discuss about this part and return in this method
-            //return token
             UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
+            response.Jwt = CreateToken(dataUserModel);
             return response;
         }
 
         public string CreateToken(DataUserModel user)
         {
-            String s = "";
-
             List<Claim> claims = new List<Claim>
             {
-                new Claim(s, user.Id.ToString()),
+                new Claim("Id", user.Id.ToString()),
             };
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(TOKEN));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SECRET_KEY));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);
-
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
         }
-
 
         private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -129,7 +120,7 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
         {
-           await CheckEmail(registerModel.Email);
+            await CheckEmail(registerModel.Email);
             CheckPassword(registerModel.Password);
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
@@ -161,7 +152,7 @@ namespace Business.Access.Layer.Services
         {
             var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email));
 
-            if (exists != null) 
+            if (exists != null)
                 throw new AppException("User already exists");
 
             var userToCreate = _mapper.Map<DataUserModel>(model);
