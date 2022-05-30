@@ -17,8 +17,10 @@ namespace Business.Access.Layer.Models.UserModels
         public string Position { get; set; }
 
         public string AvatarUrl { get; set; }
+        public string Jwt { get; set; }
 
-        public UserLoginResponseModel(string name, string lastname, string email, Enums.UserRole role, Enums.UserDepartment department, string position, string avatarUrl)
+        public UserLoginResponseModel() { }
+        public UserLoginResponseModel(string name, string lastname, string email, Enums.UserRole role, Enums.UserDepartment department, string position, string avatarUrl, string jwt)
         {
             Name = name;
             Lastname = lastname;
@@ -27,6 +29,7 @@ namespace Business.Access.Layer.Models.UserModels
             Department = department.ToString();
             Position = position;
             AvatarUrl = avatarUrl;
+            Jwt = jwt;
         }
     }
 }

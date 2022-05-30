@@ -5,6 +5,9 @@ using Business.Access.Layer.Models.UserModels;
 using Business.Access.Layer.Services.Contracts;
 using Data.Access.Layer.Models;
 using Data.Access.Layer.Repositories.Contracts;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 
 namespace Business.Access.Layer.Services
@@ -16,6 +19,7 @@ namespace Business.Access.Layer.Services
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private readonly string EMAIL_DOMAIN = "@boing.rs";
+        private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -34,11 +38,27 @@ namespace Business.Access.Layer.Services
             {
                 throw new FailedToLogInException("Login credentials don't match");
             }
-
             VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
-
             UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
+            response.Jwt = CreateToken(dataUserModel);
             return response;
+        }
+
+        public string CreateToken(DataUserModel user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim("Id", user.Id.ToString()),
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SECRET_KEY));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: creds);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
         }
 
         private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
@@ -100,7 +120,7 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
         {
-           await CheckEmail(registerModel.Email);
+            await CheckEmail(registerModel.Email);
             CheckPassword(registerModel.Password);
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
@@ -130,9 +150,9 @@ namespace Business.Access.Layer.Services
 
         public async Task<Guid> CreateUser(UserCreateRequestModel model)
         {
-            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email));
+            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Trim().Equals(model.Email.Trim()));
 
-            if (exists != null) 
+            if (exists != null)
                 throw new AppException("User already exists");
 
             var userToCreate = _mapper.Map<DataUserModel>(model);
@@ -153,10 +173,10 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserCreateRequestModel> DeleteUser(string mail)
         {
-            if (mail == null)
+            if (mail.Trim() == null)
                 throw new KeyNotFoundException("Mail is null.");
 
-            var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(mail));
+            var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(mail.Trim()));
 
             if (userForDeletion == null)
                 throw new UserNotFoundException("User with that email doesn't exist.");
@@ -172,12 +192,12 @@ namespace Business.Access.Layer.Services
 
         public async Task<DataUserModel> GetUserByMail(string email)
         {
-            if (email == null)
+            if (email.Trim() == null)
             {
                 throw new KeyNotFoundException("User email has NULL value.");
             }
 
-            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
+            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(email.Trim()));
 
             if (userForRead == null)
             {
@@ -189,10 +209,10 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model)
         {
-            if (model.Email == null)
+            if (model.Email.Trim() == null)
                 throw new KeyNotFoundException("User email has NULL value.");
 
-            var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(model.Email));
+            var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
             if (userToBeUpdated == null)
                 throw new KeyNotFoundException("User with this email doesn't exists!");
 
