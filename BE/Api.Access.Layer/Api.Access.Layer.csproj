@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="log4net" Version="2.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
@@ -20,10 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Business.Access.Layer\Business.Access.Layer.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\UserModels\" />
   </ItemGroup>
 
 </Project>

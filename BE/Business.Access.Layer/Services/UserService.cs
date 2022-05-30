@@ -150,7 +150,7 @@ namespace Business.Access.Layer.Services
 
         public async Task<Guid> CreateUser(UserCreateRequestModel model)
         {
-            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Equals(model.Email));
+            var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Trim().Equals(model.Email.Trim()));
 
             if (exists != null)
                 throw new AppException("User already exists");
@@ -173,10 +173,10 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserCreateRequestModel> DeleteUser(string mail)
         {
-            if (mail == null)
+            if (mail.Trim() == null)
                 throw new KeyNotFoundException("Mail is null.");
 
-            var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(mail));
+            var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(mail.Trim()));
 
             if (userForDeletion == null)
                 throw new UserNotFoundException("User with that email doesn't exist.");
@@ -192,12 +192,12 @@ namespace Business.Access.Layer.Services
 
         public async Task<DataUserModel> GetUserByMail(string email)
         {
-            if (email == null)
+            if (email.Trim() == null)
             {
                 throw new KeyNotFoundException("User email has NULL value.");
             }
 
-            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email));
+            var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(email.Trim()));
 
             if (userForRead == null)
             {
@@ -209,10 +209,10 @@ namespace Business.Access.Layer.Services
 
         public async Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model)
         {
-            if (model.Email == null)
+            if (model.Email.Trim() == null)
                 throw new KeyNotFoundException("User email has NULL value.");
 
-            var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(model.Email));
+            var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
             if (userToBeUpdated == null)
                 throw new KeyNotFoundException("User with this email doesn't exists!");
 
