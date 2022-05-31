@@ -1,14 +1,15 @@
-import React from 'react';
-// import logo from './logo.svg';
-import './App.css';
-
-import Login from './pages/Login';
-
-const App: React.FC = () => {
+import React, { useState, FC } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Main from './Main';
+// import Page from './layout/PLayout';
+// import Login from './pages/login/Login';
+const App: FC<any> = () => {
+  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  // return <div>{isLoggedIn ? <Page /> : <Login />}</div>;
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <Router>
+      <Main />
+    </Router>
   );
 };
 
