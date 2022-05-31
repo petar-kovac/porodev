@@ -18,8 +18,8 @@ public class ApiConfig {
     public static void setup() {
 
         api_requestSpec = new RequestSpecBuilder()
-                .setBaseUri("https://localhost:7151/")
-                .setBasePath("api/")
+                .setBaseUri(Endpoints.BASE_URI)
+                .setBasePath(Endpoints.BASE_PATH)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "text/plain")
                 .addFilter(new RequestLoggingFilter())
