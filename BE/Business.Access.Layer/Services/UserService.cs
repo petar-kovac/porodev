@@ -18,7 +18,7 @@ namespace Business.Access.Layer.Services
         private readonly IMapper _mapper;
 
         private const int MIN_PASSWORD_LENGTH = 8;
-        private readonly string EMAIL_DOMAIN = "@boing.rs";
+        private readonly string EMAIL_DOMAIN = "boing.rs";
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
@@ -87,11 +87,42 @@ namespace Business.Access.Layer.Services
 
         private async Task CheckEmail(string email)
         {
-            if (email.Contains(EMAIL_DOMAIN) == false)
-                throw new EmailFormatException($"Only emails with {EMAIL_DOMAIN} are accepted!");
+            if (email.Length > 50)
+                throw new EmailFormatException("Email cannot contain more than 50 characters!");
+
+            var splitEmail = email.Split('@');
+
+            if (splitEmail.Length != 2)
+                throw new EmailFormatException("Email format is invalid!");
+
+            if (splitEmail[0].Any(x => Char.IsWhiteSpace(x)))
+                throw new EmailFormatException("Email cannot contain whitespace!");
+
+            CheckEmailSpecialCharaters(splitEmail[0]);
+
+            if (!splitEmail[1].Equals(EMAIL_DOMAIN))
+                throw new EmailFormatException("Email domain is invalid!");
+
             if (await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email)) != null)
                 throw new EmailFormatException("User with that email already exists!");
         }
+
+        private void CheckEmailSpecialCharaters(string emailUsername)
+        {
+            string specialCh = @"%!@#$%^&*()?/><,:;'\|}]{[~`+=" + "\"";
+            char[] specialChArray = specialCh.ToCharArray();
+            bool flag = false;
+
+            foreach (char ch in specialChArray)
+            {
+                if (emailUsername.Contains(ch))
+                    flag = true;
+            }
+
+            if (flag)
+                throw new EmailFormatException("Email can only contain '.', '-' and '_' characters!");
+        }
+
 
         private void CheckPasswordSpecialCharacter(string password)
         {
