@@ -1,24 +1,39 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const { Sider } = Layout;
 
 const PSider: FC = () => {
-  console.log('Sider');
+  const [collapsed, setCollapsed] = useState<boolean | undefined>(
+    localStorage.getItem('collapsedMenu') === 'true' ? true : false,
+  );
 
   return (
-    <Sider collapsible style={{ color: 'white' }}>
+    <StyledSider
+      collapsible
+      collapsed={collapsed}
+      style={{ color: 'white' }}
+      onCollapse={(collapsed: boolean) => {
+        localStorage.setItem('collapsedMenu', collapsed.toString());
+        setCollapsed(collapsed);
+      }}
+    >
       <Menu>
-        <Menu.Item>
+        <Menu.Item key={1}>
           <Link to="/">Home</Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key={2}>
           <Link to="/test">Test</Link>
         </Menu.Item>
       </Menu>
-    </Sider>
+    </StyledSider>
   );
 };
+
+const StyledSider = styled(Sider)`
+  background-color: #fff;
+`;
 
 export default PSider;

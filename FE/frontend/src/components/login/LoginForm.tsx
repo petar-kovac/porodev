@@ -10,60 +10,12 @@ interface ILoginFormProps {
 }
 
 const LoginForm: FC<ILoginFormProps> = ({ onSubmit, onFailed = undefined }) => {
-  // const [isLogin, setIsLogin] = useState<boolean>(true);
-
-  // console.log(isLogin, 'lg');
-  // const onFinish = (values: any) => {
-  //   console.log(values);
-
-  //   if (isLogin) {
-  //     try {
-  //       const res = async () => {
-  //         axios({
-  //           method: 'post',
-
-  //           url: 'https://localhost:7151/api/user/login',
-  //           data: {
-  //             ...values,
-  //           },
-  //           headers: {
-  //             'Content-Type': 'application/json; charset=utf-8',
-  //             'Access-Control-Allow-Origin': '*',
-  //           },
-  //         });
-  //       };
-  //       res();
-  //     } catch (err) {
-  //       console.log('ok');
-  //     }
-  //   } else {
-  //     const res = async () => {
-  //       axios({
-  //         method: 'post',
-  //         url: 'https://localhost:7151/api/user/register/User',
-  //         data: {
-  //           ...values,
-  //           avatarUrl: 'url',
-  //         },
-  //         headers: {
-  //           'Content-Type': 'application/json; charset=utf-8',
-  //           'Access-Control-Allow-Origin': '*',
-  //         },
-  //       });
-  //     };
-  //     res();
-  //   }
-  // };
-
-  // const onFinishFailed = (errorInfo: any) => {
-  //   console.log('Failed:', errorInfo);
-  // };
-
   return (
     <>
       <StyledHeader>Login</StyledHeader>
       <StyledForm
         name="basic"
+        id="loginForm"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         initialValues={{ remember: true }}
@@ -87,7 +39,7 @@ const LoginForm: FC<ILoginFormProps> = ({ onSubmit, onFailed = undefined }) => {
           <Input.Password />
         </Form.Item>
       </StyledForm>
-      <StyledLoginButton type="primary" htmlType="submit">
+      <StyledLoginButton type="primary" htmlType="submit" form="loginForm">
         Login
       </StyledLoginButton>
     </>
