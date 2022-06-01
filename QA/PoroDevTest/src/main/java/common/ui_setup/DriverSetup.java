@@ -9,12 +9,8 @@ import java.time.Duration;
 
 public class DriverSetup {
     private WebDriver driver;
-    private int pageLoadTime;
-    private int elementDetectionTimeout;
 
     public DriverSetup(DriverType browserType) {
-        pageLoadTime = 10;
-        elementDetectionTimeout = 10;
 
         switch(browserType) {
             case CHROME -> {
@@ -35,26 +31,22 @@ public class DriverSetup {
     }
 
     public void navigateToUrl(String url) {
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTime));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(elementDetectionTimeout));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
         driver.get(url);
+    }
+
+    public void closeBrowserTab() {
+        driver.close();
+    }
+
+    public void quitBrowser() {
+        driver.quit();
     }
     public WebDriver getDriver() {
         return driver;
     }
     public void setDriver(WebDriver driver) {
         this.driver = driver;
-    }
-    public int getPageLoadTime() {
-        return pageLoadTime;
-    }
-    public void setPageLoadTime(int pageLoadTime) {
-        this.pageLoadTime = pageLoadTime;
-    }
-    public int getElementDetectionTimeout() {
-        return elementDetectionTimeout;
-    }
-    public void setElementDetectionTimeout(int elementDetectionTimeout) {
-        this.elementDetectionTimeout = elementDetectionTimeout;
     }
 }
