@@ -1,10 +1,9 @@
-import { FC, useState } from 'react';
+import { Button, message } from 'antd';
+import { FC, useEffect, useState } from 'react';
 import { useAuthStateValue } from '../../context/AuthContext';
 
 const Test: FC = () => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
-  console.log('Test');
-  console.log(isAuthenticated);
 
   return (
     <>

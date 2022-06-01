@@ -1,54 +1,27 @@
-import React, { FC, useState } from 'react';
+import { Button, Form, Input } from 'antd';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
-import { Form, Input, Button, Checkbox } from 'antd';
-import landingImage from '../../assets/landing.jpg';
 import '../../App.css';
+import landingImage from '../../assets/landing.jpg';
+import { useAuthStateValue } from '../../context/AuthContext';
 
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const { login, register } = useAuthStateValue();
 
-  console.log(isLogin, 'lg');
   const onFinish = (values: any) => {
-    console.log(values);
-
     if (isLogin) {
-      try {
-        const res = async () => {
-          axios({
-            method: 'post',
-
-            url: 'https://localhost:7151/api/user/login',
-            data: {
-              ...values,
-            },
-            headers: {
-              'Content-Type': 'application/json; charset=utf-8',
-              'Access-Control-Allow-Origin': '*',
-            },
-          });
-        };
-        res();
-      } catch (err) {
-        console.log('ok');
-      }
-    } else {
-      const res = async () => {
-        axios({
-          method: 'post',
-          url: 'https://localhost:7151/api/user/register/User',
-          data: {
-            ...values,
-            avatarUrl: 'url',
-          },
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-      };
-      res();
-    }
+      login(values.email, values.password);
+    } else
+      register(
+        values.name,
+        values.lastname,
+        values.email,
+        values.password,
+        values.department,
+        values.position,
+        'avatarurl',
+      );
   };
 
   const onFinishFailed = (errorInfo: any) => {

@@ -7,12 +7,28 @@ import {
   StyledPage,
   StyledFormWrapper,
 } from '../components/styled/StyledLoginPage';
+import { useAuthStateValue } from '../context/AuthContext';
+import {
+  ILoginRequest,
+  IRegisterRequest,
+} from '../service/authorization/authorization.props';
 
 const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const { login, register } = useAuthStateValue();
 
-  const handleLogin = (values: any) => console.log(values);
-
+  const handleLogin = (values: ILoginRequest) =>
+    login(values.email, values.password);
+  const handleRegister = (values: IRegisterRequest) =>
+    register(
+      values.name,
+      values.lastname,
+      values.email,
+      values.password,
+      values.department,
+      values.position,
+      'avatarurl',
+    );
   const handleFormChange = () => setIsLogin((value) => !value);
 
   return (
@@ -21,7 +37,7 @@ const Login: React.FC = () => {
         {isLogin ? (
           <LoginForm onSubmit={handleLogin} onFailed={undefined} />
         ) : (
-          <RegisterForm onSubmit={handleLogin} onFailed={undefined} />
+          <RegisterForm onSubmit={handleRegister} onFailed={undefined} />
         )}
         <StyledLoginButton type="default" onClick={handleFormChange}>
           {isLogin ? 'Create new account' : 'Login with existing account'}
