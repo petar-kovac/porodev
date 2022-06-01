@@ -95,12 +95,34 @@ namespace Business.Access.Layer.Services
             if (splitEmail.Length != 2)
                 throw new EmailFormatException("Email format is invalid!");
 
+            if (splitEmail[0].Any(x => Char.IsWhiteSpace(x)))
+                throw new EmailFormatException("Email cannot contain whitespace!");
+
+            CheckEmailSpecialCharaters(splitEmail[0]);
+
             if (!splitEmail[1].Equals(EMAIL_DOMAIN))
                 throw new EmailFormatException("Email domain is invalid!");
 
             if (await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email)) != null)
                 throw new EmailFormatException("User with that email already exists!");
         }
+
+        private void CheckEmailSpecialCharaters(string emailUsername)
+        {
+            string specialCh = @"%!@#$%^&*()?/><,:;'\|}]{[~`+=" + "\"";
+            char[] specialChArray = specialCh.ToCharArray();
+            bool flag = false;
+
+            foreach (char ch in specialChArray)
+            {
+                if (emailUsername.Contains(ch))
+                    flag = true;
+            }
+
+            if (flag)
+                throw new EmailFormatException("Email can only contain '.', '-' and '_' characters!");
+        }
+
 
         private void CheckPasswordSpecialCharacter(string password)
         {
