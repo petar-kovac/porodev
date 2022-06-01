@@ -15,15 +15,15 @@ public class DriverSetup {
         switch(browserType) {
             case CHROME -> {
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver();
+                this.driver = new ChromeDriver();
             }
             case FIREFOX -> {
                 WebDriverManager.firefoxdriver().setup();
-                driver = new FirefoxDriver();
+                this.driver = new FirefoxDriver();
             }
             case EDGE -> {
                 WebDriverManager.edgedriver().setup();
-                driver = new EdgeDriver();
+                this.driver = new EdgeDriver();
             }
         }
         driver.manage().window().maximize();
@@ -31,8 +31,8 @@ public class DriverSetup {
     }
 
     public void navigateToUrl(String url) {
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
+        /*driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));*/
         driver.get(url);
     }
 
@@ -43,9 +43,11 @@ public class DriverSetup {
     public void quitBrowser() {
         driver.quit();
     }
+
     public WebDriver getDriver() {
         return driver;
     }
+
     public void setDriver(WebDriver driver) {
         this.driver = driver;
     }
