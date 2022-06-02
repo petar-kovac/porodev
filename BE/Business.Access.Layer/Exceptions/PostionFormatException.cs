@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ namespace Business.Access.Layer.Exceptions
         public PositionFormatException() : base()
         {
             HumanReadableErrorMessage = "Internal server error occurred";
-
         }
 
         public PositionFormatException(string message) : base()
