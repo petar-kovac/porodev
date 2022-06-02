@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { Layout } from 'antd';
 
 const { Content } = Layout;
 
-const PContent: FC<any> = ({ children }) => {
+const PContent: FC<{ children: ReactNode }> = ({ children }) => {
   return <Content style={{ color: 'black' }}>{children} </Content>;
 };
 

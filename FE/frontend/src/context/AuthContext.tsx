@@ -67,6 +67,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     },
     [],
   );
+
   const register: (registerData: IRegisterRequest) => Promise<void> =
     useCallback(async (registerData: IRegisterRequest) => {
       try {

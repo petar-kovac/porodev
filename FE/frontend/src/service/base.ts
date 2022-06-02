@@ -5,12 +5,12 @@ interface Config {
   baseURL: string | undefined;
 }
 
-const api = (dontUseAuthorizationHeader?: any) => {
+const api = (dontUseAuthorizationHeader?: boolean) => {
   const baseConfig: Config = {
     baseURL: process.env.REACT_APP_BASE_ENDPOINT_URL,
   };
-  const createInstance = (baseConfig: any) => {
-    const instance = axios.create(baseConfig);
+  const createInstance = (value: any) => {
+    const instance = axios.create(value);
     instance.defaults.headers.common['Content-Type'] = 'application/json';
     instance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
     instance.interceptors.request.use(

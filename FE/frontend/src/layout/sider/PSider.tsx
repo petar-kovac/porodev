@@ -7,7 +7,7 @@ const { Sider } = Layout;
 
 const PSider: FC = () => {
   const [collapsed, setCollapsed] = useState<boolean | undefined>(
-    localStorage.getItem('collapsedMenu') === 'true' ? true : false,
+    localStorage.getItem('collapsedMenu') === 'true',
   );
 
   return (
@@ -15,8 +15,8 @@ const PSider: FC = () => {
       collapsible
       collapsed={collapsed}
       style={{ color: 'white' }}
-      onCollapse={(collapsed: boolean) => {
-        localStorage.setItem('collapsedMenu', collapsed.toString());
+      onCollapse={(value: boolean) => {
+        localStorage.setItem('collapsedMenu', value.toString());
         setCollapsed(collapsed);
       }}
     >

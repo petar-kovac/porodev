@@ -1,4 +1,4 @@
-import { createContext, FC, useContext } from 'react';
+import { createContext, FC, useContext, useMemo } from 'react';
 
 type AppContextProps = {
   testMessage: string;
@@ -13,9 +13,12 @@ export const AppConsumer = AppContext.Consumer;
 const AppProvider: FC<any> = ({ children }) => {
   const testMessage = 'cedo-cedo ';
 
-  const state: AppContextProps = {
-    testMessage,
-  };
+  const state: AppContextProps = useMemo(
+    () => ({
+      testMessage,
+    }),
+    [testMessage],
+  );
   return <AppContext.Provider value={state}>{children}</AppContext.Provider>;
 };
 

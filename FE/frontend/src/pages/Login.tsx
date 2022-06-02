@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Button } from 'antd';
 import styled from 'styled-components';
 import LoginForm from '../components/login/LoginForm';
@@ -13,7 +13,7 @@ import {
   IRegisterRequest,
 } from '../service/authorization/authorization.props';
 
-const Login: React.FC = () => {
+const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const { login, register } = useAuthStateValue();
 

@@ -23,9 +23,7 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
-    "no-unneeded-ternary": "off",
     "import/prefer-default-export": "off",
-    "@typescript-eslint/no-shadow": "off",
     "no-param-reassign": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-use-before-define": "off",
