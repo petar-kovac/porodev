@@ -9,6 +9,7 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        driver.get("http://localhost:3000/");
     }
 
     //element section

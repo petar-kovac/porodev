@@ -25,7 +25,6 @@ public class BaseTest {
         driverSetup = new DriverSetup(DriverType.CHROME);
         driver = driverSetup.getDriver();
         loginPage = new LoginPage(driver);
-        driverSetup.navigateToUrl("http://localhost:3000/");
     };
 
     @AfterMethod

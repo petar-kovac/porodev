@@ -30,11 +30,6 @@ public class DriverSetup {
         driver.manage().deleteAllCookies();
     }
 
-    public void navigateToUrl(String url) {
-        /*driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));*/
-        driver.get(url);
-    }
 
     public void closeBrowserTab() {
         driver.close();
