@@ -9,6 +9,7 @@ import PContent from '../layout/content/PContent';
 import PHeader from '../layout/header/PHeader';
 import PSider from '../layout/sider/PSider';
 import Login from '../pages/Login';
+import Profile from '../pages/profile/Profile';
 
 const PRouter: FC = () => {
   const { isAuthenticated } = useAuthStateValue();
@@ -22,6 +23,7 @@ const PRouter: FC = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/test" element={<Test />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </PContent>
         </Layout>

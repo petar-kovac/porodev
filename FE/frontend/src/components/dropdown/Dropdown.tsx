@@ -1,5 +1,6 @@
 import { SettingFilled } from '@ant-design/icons';
 import { Dropdown, Menu } from 'antd';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuthStateValue } from '../../context/AuthContext';
 
@@ -9,7 +10,7 @@ const PDropdown: React.FC = () => {
   const menu = (
     <Menu>
       <Menu.Item key={1} onClick={() => {}}>
-        Profile
+        <Link to="/profile">Profile</Link>
       </Menu.Item>
       <Menu.Item key={2} onClick={() => logout()}>
         Logout
