@@ -6,7 +6,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 public class ElementControl {
-    private WebDriver driver;
+    protected WebDriver driver;
 
     public ElementControl(WebDriver driver) {
         this.driver = driver;

@@ -2,6 +2,7 @@ package ui;
 
 import common.ui_setup.DriverSetup;
 import common.ui_setup.DriverType;
+import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.PoroDevPom.LoginPage;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
@@ -24,6 +25,7 @@ public class BaseTest {
         System.out.println("BEFORE METHOD");
         driverSetup = new DriverSetup(DriverType.CHROME);
         driver = driverSetup.getDriver();
+        driver.get(SetupConstants.BASE_URL);
         loginPage = new LoginPage(driver);
     };
 
