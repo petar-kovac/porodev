@@ -18,10 +18,12 @@ namespace Business.Access.Layer.Services
         private readonly IMapper _mapper;
 
         private const int MIN_PASSWORD_LENGTH = 8;
-        private readonly string EMAIL_DOMAIN = "boing.rs";
+        private const string EMAIL_DOMAIN = "boing.rs";
         private const int MIN_UPPERCASE_LETTERS = 1;
         private const int MIN_LOWERCASE_LETTERS = 1;
         private const int MIN_NUMBERS = 1;
+        private const int MIN_SPECIAL_CHARACTERS = 1;
+        private const int MAX_EMAIL_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
@@ -91,7 +93,7 @@ namespace Business.Access.Layer.Services
         private async Task CheckEmail(string email)
         {
             if (email.Length > 50)
-                throw new EmailFormatException("Email cannot contain more than 50 characters!");
+                throw new EmailFormatException($"Email cannot contain more than {MAX_EMAIL_LENGTH} characters!");
 
             var splitEmail = email.Split('@');
 
@@ -140,7 +142,7 @@ namespace Business.Access.Layer.Services
             }
 
             if (!flag)
-                throw new PasswordFormatException("Password must contain at least 1 special character!");
+                throw new PasswordFormatException($"Password must contain at least {MIN_SPECIAL_CHARACTERS} special character!");
         }
 
         private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
