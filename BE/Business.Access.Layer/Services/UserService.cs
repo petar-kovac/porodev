@@ -19,6 +19,9 @@ namespace Business.Access.Layer.Services
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private readonly string EMAIL_DOMAIN = "boing.rs";
+        private const int MIN_UPPERCASE_LETTERS = 1;
+        private const int MIN_LOWERCASE_LETTERS = 1;
+        private const int MIN_NUMBERS = 1;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
@@ -76,11 +79,11 @@ namespace Business.Access.Layer.Services
             if (password.Length < MIN_PASSWORD_LENGTH)
                 throw new PasswordFormatException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
             if (!password.Any(char.IsUpper))
-                throw new PasswordFormatException("Password must contain at least 1 uppercase letter!");
+                throw new PasswordFormatException($"Password must contain at least {MIN_UPPERCASE_LETTERS} uppercase letter!");
             if (!password.Any(char.IsLower))
-                throw new PasswordFormatException("Password must contain at least 1 lowercase letter!");
+                throw new PasswordFormatException($"Password must contain at least {MIN_LOWERCASE_LETTERS} lowercase letter!");
             if (!password.Any(char.IsDigit))
-                throw new PasswordFormatException("Password must contain at least 1 number!");
+                throw new PasswordFormatException($"Password must contain at least {MIN_NUMBERS} number!");
 
             CheckPasswordSpecialCharacter(password);
         }
