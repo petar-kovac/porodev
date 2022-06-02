@@ -5,12 +5,7 @@ import { useAuthStateValue } from '../../context/AuthContext';
 const Test: FC = () => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
 
-  return (
-    <>
-      <div>Test</div>
-      <div>{testMessage}</div>
-    </>
-  );
+  return <div>{testMessage}</div>;
 };
 
 export default Test;

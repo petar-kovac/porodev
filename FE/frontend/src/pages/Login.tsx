@@ -17,18 +17,8 @@ const Login: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const { login, register } = useAuthStateValue();
 
-  const handleLogin = (values: ILoginRequest) =>
-    login(values.email, values.password);
-  const handleRegister = (values: IRegisterRequest) =>
-    register(
-      values.name,
-      values.lastname,
-      values.email,
-      values.password,
-      values.department,
-      values.position,
-      'avatarurl',
-    );
+  const handleLogin = (values: ILoginRequest) => login(values);
+  const handleRegister = (values: IRegisterRequest) => register(values);
   const handleFormChange = () => setIsLogin((value) => !value);
 
   return (

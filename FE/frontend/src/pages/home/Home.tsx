@@ -7,12 +7,7 @@ import api from '../../service/base';
 const Home: FC = () => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
 
-  return (
-    <>
-      <div>Homeee</div>
-      <div>Homeee</div>
-    </>
-  );
+  return <div>Homeee</div>;
 };
 
 export default Home;

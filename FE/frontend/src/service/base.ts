@@ -1,6 +1,5 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 import { StatusCode } from '../util/enums/enums';
-import config from '../util/config';
 
 interface Config {
   baseURL: string | undefined;
@@ -8,7 +7,7 @@ interface Config {
 
 const api = (dontUseAuthorizationHeader?: any) => {
   const baseConfig: Config = {
-    baseURL: config.BASE_ENDPOINT_URL,
+    baseURL: process.env.REACT_APP_BASE_ENDPOINT_URL,
   };
   const createInstance = (baseConfig: any) => {
     const instance = axios.create(baseConfig);
@@ -24,7 +23,6 @@ const api = (dontUseAuthorizationHeader?: any) => {
             ...config.params,
             Authorization: `Bearer ${token}`,
           };
-          // config.headers['Content-Type'] = 'application/json';
         }
         return config;
       },

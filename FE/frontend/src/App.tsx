@@ -1,11 +1,8 @@
-import React, { useState, FC } from 'react';
+import { FC } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Main from './Main';
-// import Page from './layout/PLayout';
-// import Login from './pages/login/Login';
-const App: FC<any> = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  // return <div>{isLoggedIn ? <Page /> : <Login />}</div>;
+
+const App: FC = () => {
   return (
     <Router>
       <Main />

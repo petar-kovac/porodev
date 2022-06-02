@@ -3,6 +3,10 @@ import { Form, Input, Button } from 'antd';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import styled from 'styled-components';
 import '../../App.css';
+import {
+  ILoginRequest,
+  IRegisterRequest,
+} from '../../service/authorization/authorization.props';
 
 interface ILoginFormProps {
   onSubmit: (values: any) => void;
