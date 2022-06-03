@@ -5,7 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class DriverSetup {
     private WebDriver driver;
@@ -30,6 +33,11 @@ public class DriverSetup {
         driver.manage().deleteAllCookies();
     }
 
+    public void navigateToUrl(String url) {
+        driver.manage().timeouts().pageLoadTimeout(SetupConstants.PAGE_LOAD_TIME, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(SetupConstants.ELEMENT_DETECTION_TIMEOUT, TimeUnit.SECONDS);
+        driver.get(url);
+    }
 
     public void closeBrowserTab() {
         driver.close();
