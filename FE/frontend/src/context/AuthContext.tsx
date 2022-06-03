@@ -10,6 +10,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { loginApi, registerApi } from '../service/authorization/authorization';
 import {
@@ -29,6 +30,7 @@ type AuthContextProps = {
   testMessage: string;
   loggedUser: ILoginResponse | null;
   isAdmin: boolean;
+  isLoading: boolean;
 };
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -40,6 +42,7 @@ export const AuthContext = createContext<AuthContextProps>({
   testMessage: '',
   loggedUser: null,
   isAdmin: false,
+  isLoading: true,
 });
 
 export const AuthConsumer = AuthContext.Consumer;
@@ -48,12 +51,28 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [loggedUser, setLoggedUser] = useState<ILoginResponse | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const testMessage = 'test-test ';
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem(StorageKey.NAME)) {
-      setAuthenticated(true);
-    }
+    const findAdmin = async () => {
+      const getLastname = await localStorage.getItem(StorageKey.LASTNAME);
+      // because backend is not finished, checking if its admin, if user's lastname is Admin
+      if (getLastname) {
+        if (getLastname === 'Admin') {
+          setIsAdmin(true);
+        }
+        setAuthenticated(true);
+        setIsLoading(false);
+        navigate(location);
+      } else {
+        navigate('/login');
+      }
+      setIsLoading(false);
+    };
+    findAdmin();
   }, []);
 
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
@@ -64,12 +83,17 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           password: loginData.password,
         });
         message.success('Successful login');
-        localStorage.setItem(StorageKey.NAME, res.name);
-        localStorage.setItem(StorageKey.LASTNAME, res.lastname);
-        setLoggedUser(res);
+        await localStorage.setItem(StorageKey.NAME, res.name);
+        await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
+        if (res.lastname === 'Admin') {
+          setIsAdmin(true);
+        }
         setAuthenticated(true);
+        setIsLoading(false);
+        navigate('/');
       } catch (err: any) {
         message.error(err.message);
+        navigate('/login');
       }
     },
     [],
@@ -87,8 +111,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           position: registerData.position,
           avatarUrl: 'aurl',
         });
-        localStorage.setItem(StorageKey.NAME, res.name);
-        localStorage.setItem(StorageKey.LASTNAME, res.lastname);
+        await localStorage.setItem(StorageKey.NAME, res.name);
+        await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         message.success('Successful registration');
         setAuthenticated(true);
       } catch (err: any) {
@@ -97,7 +121,10 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }, []);
 
   const logout: () => void = useCallback(() => {
+    localStorage.removeItem(StorageKey.NAME);
+    localStorage.removeItem(StorageKey.LASTNAME);
     message.success('Logged out');
+    setIsAdmin(false);
     setAuthenticated(false);
   }, []);
 
@@ -111,6 +138,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       loggedUser,
       testMessage,
       isAdmin,
+      isLoading,
     }),
     [
       isAuthenticated,
@@ -121,6 +149,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       loggedUser,
       testMessage,
       isAdmin,
+      isLoading,
     ],
   );
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;

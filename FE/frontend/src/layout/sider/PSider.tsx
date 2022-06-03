@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuthStateValue } from '../../context/AuthContext';
 
 const { Sider } = Layout;
 
@@ -9,6 +10,7 @@ const PSider: FC = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean | undefined>(
     localStorage.getItem('collapsedMenu') === 'true',
   );
+  const { isAdmin } = useAuthStateValue();
 
   return (
     <StyledSider
@@ -27,9 +29,11 @@ const PSider: FC = () => {
         <Menu.Item key={2}>
           <Link to="/test">Test</Link>
         </Menu.Item>
-        <Menu.Item key={3}>
-          <Link to="/adminpage">Adminpage</Link>
-        </Menu.Item>
+        {isAdmin && (
+          <Menu.Item key={3}>
+            <Link to="/adminpage">Adminpage</Link>
+          </Menu.Item>
+        )}
       </Menu>
     </StyledSider>
   );

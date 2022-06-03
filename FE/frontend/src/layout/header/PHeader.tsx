@@ -3,6 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import PDropdown from '../../components/dropdown/Dropdown';
 import { useAuthStateValue } from '../../context/AuthContext';
+import { StorageKey } from '../../util/enums/enums';
 
 const { Header } = Layout;
 
@@ -13,8 +14,10 @@ const PHeader: FC = () => {
     <StyledHeader style={{ color: 'white' }}>
       <StyledLogo>Header</StyledLogo>
       <StyledButtons>
-        <StyledUserName> {loggedUser?.name}</StyledUserName>
-        <StyledUserName> {loggedUser?.lastname} </StyledUserName>
+        <StyledUserName>{localStorage.getItem(StorageKey.NAME)}</StyledUserName>
+        <StyledUserName>
+          {localStorage.getItem(StorageKey.LASTNAME)}
+        </StyledUserName>
         <PDropdown />
       </StyledButtons>
     </StyledHeader>

@@ -12,40 +12,45 @@ import PSider from '../layout/sider/PSider';
 import Login from '../pages/Login';
 import Profile from '../pages/profile/Profile';
 import PProtectedRoute from './PProtectedRoute';
+import Error from '../pages/error/ErrorPage';
 
 const PRouter: FC = () => {
-  const { isAuthenticated } = useAuthStateValue();
-  if (isAuthenticated) {
+  const { isAuthenticated, isLoading } = useAuthStateValue();
+  if (!isLoading) {
+    if (isAuthenticated) {
+      return (
+        <StyledLayout>
+          <PHeader />
+          <Layout>
+            <PSider />
+            <PContent>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/test" element={<Test />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="*" element={<Error />} />
+                <Route
+                  path="/adminpage"
+                  element={
+                    <PProtectedRoute>
+                      <AdminPage />
+                    </PProtectedRoute>
+                  }
+                />
+              </Routes>
+            </PContent>
+          </Layout>
+        </StyledLayout>
+      );
+    }
     return (
-      <StyledLayout>
-        <PHeader />
-        <Layout>
-          <PSider />
-          <PContent>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/test" element={<Test />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route
-                path="/adminpage"
-                element={
-                  <PProtectedRoute>
-                    <AdminPage />
-                  </PProtectedRoute>
-                }
-              />
-            </Routes>
-          </PContent>
-        </Layout>
-      </StyledLayout>
+      <Routes>
+        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
     );
   }
-  return (
-    <Routes>
-      <Route path="*" element={<Navigate to="/login" />} />
-      <Route path="/login" element={<Login />} />
-    </Routes>
-  );
+  return <h1>loading</h1>;
 };
 
 export default PRouter;
