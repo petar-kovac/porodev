@@ -6,6 +6,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -32,14 +33,10 @@ type AuthContextProps = {
 
 export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
-  setAuthenticated(isAuthenticated: boolean): void {},
-  async login(loginData: ILoginRequest): Promise<void> {
-    // return new Promise((value: string | PromiseLike<string>) => void, );
-  },
-  async register(registerData: IRegisterRequest): Promise<void> {
-    // return new Promise((value: string | PromiseLike<string>) => void, );
-  },
-  logout(): void {},
+  setAuthenticated: (isAuthenticated: boolean) => {},
+  login: async (loginData: ILoginRequest) => {},
+  register: async (registerData: IRegisterRequest) => {},
+  logout: () => {},
   testMessage: '',
   loggedUser: null,
   isAdmin: false,
@@ -51,7 +48,13 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [loggedUser, setLoggedUser] = useState<ILoginResponse | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const testMessage = 'cedo-cedo ';
+  const testMessage = 'test-test ';
+
+  useEffect(() => {
+    if (localStorage.getItem(StorageKey.NAME)) {
+      setAuthenticated(true);
+    }
+  }, []);
 
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
     async (loginData: ILoginRequest) => {

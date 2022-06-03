@@ -6,18 +6,18 @@ import styled from 'styled-components';
 const { Sider } = Layout;
 
 const PSider: FC = () => {
-  const [collapsed, setCollapsed] = useState<boolean | undefined>(
+  const [isCollapsed, setIsCollapsed] = useState<boolean | undefined>(
     localStorage.getItem('collapsedMenu') === 'true',
   );
 
   return (
     <StyledSider
       collapsible
-      collapsed={collapsed}
+      collapsed={isCollapsed}
       style={{ color: 'white' }}
-      onCollapse={(value: boolean) => {
-        localStorage.setItem('collapsedMenu', value.toString());
-        setCollapsed(collapsed);
+      onCollapse={(collapsed: boolean) => {
+        localStorage.setItem('collapsedMenu', collapsed.toString());
+        setIsCollapsed(collapsed);
       }}
     >
       <Menu>
