@@ -57,22 +57,19 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const findAdmin = async () => {
-      const getLastname = await localStorage.getItem(StorageKey.LASTNAME);
-      // because backend is not finished, checking if its admin, if user's lastname is Admin
-      if (getLastname) {
-        if (getLastname === 'Admin') {
-          setIsAdmin(true);
-        }
-        setAuthenticated(true);
-        setIsLoading(false);
-        navigate(location);
-      } else {
-        navigate('/login');
+    const getLastname = localStorage.getItem(StorageKey.LASTNAME);
+    // because backend is not finished, checking if its admin, if user's lastname is Admin
+    if (getLastname) {
+      if (getLastname === 'Admin') {
+        setIsAdmin(true);
       }
+      setAuthenticated(true);
       setIsLoading(false);
-    };
-    findAdmin();
+      navigate(location);
+    } else {
+      navigate('/login');
+    }
+    setIsLoading(false);
   }, []);
 
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
