@@ -2,14 +2,11 @@ import { Layout } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
 import PDropdown from '../../components/dropdown/Dropdown';
-import { useAuthStateValue } from '../../context/AuthContext';
 import { StorageKey } from '../../util/enums/enums';
 
 const { Header } = Layout;
 
 const PHeader: FC = () => {
-  const { loggedUser } = useAuthStateValue();
-
   return (
     <StyledHeader style={{ color: 'white' }}>
       <StyledLogo>Header</StyledLogo>

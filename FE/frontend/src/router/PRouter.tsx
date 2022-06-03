@@ -28,7 +28,7 @@ const PRouter: FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/test" element={<Test />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="*" element={<Error />} />
+                <Route path="*" element={<Error message="Router error" />} />
                 <Route
                   path="/adminpage"
                   element={
