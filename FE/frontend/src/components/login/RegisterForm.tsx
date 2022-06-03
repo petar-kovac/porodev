@@ -5,7 +5,7 @@ import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import '../../App.css';
 
 interface ILoginFormProps {
-  onSubmit: (values: any) => void;
+  onSubmit: (values: unknown) => void;
   onFailed: ((errorInfo: ValidateErrorEntity<unknown>) => void) | undefined;
 }
 

@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
+
 import { loginApi, registerApi } from '../service/authorization/authorization';
 import {
   ILoginRequest,
@@ -26,6 +27,7 @@ type AuthContextProps = {
   logout: () => void;
   testMessage: string;
   loggedUser: ILoginResponse | null;
+  isAdmin: boolean;
 };
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -40,6 +42,7 @@ export const AuthContext = createContext<AuthContextProps>({
   logout(): void {},
   testMessage: '',
   loggedUser: null,
+  isAdmin: false,
 });
 
 export const AuthConsumer = AuthContext.Consumer;
@@ -47,6 +50,7 @@ export const AuthConsumer = AuthContext.Consumer;
 const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [loggedUser, setLoggedUser] = useState<ILoginResponse | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const testMessage = 'cedo-cedo ';
 
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
@@ -103,6 +107,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       register,
       loggedUser,
       testMessage,
+      isAdmin,
     }),
     [
       isAuthenticated,
@@ -112,6 +117,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       register,
       loggedUser,
       testMessage,
+      isAdmin,
     ],
   );
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;

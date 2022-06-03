@@ -1,15 +1,17 @@
 import { FC, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Layout } from 'antd';
 import { useAuthStateValue } from '../context/AuthContext';
 import Home from '../pages/home/Home';
 import Test from '../pages/home/Test';
+import AdminPage from '../pages/home/AdminPage';
 import PContent from '../layout/content/PContent';
 import PHeader from '../layout/header/PHeader';
 import PSider from '../layout/sider/PSider';
 import Login from '../pages/Login';
 import Profile from '../pages/profile/Profile';
+import PProtectedRoute from './PProtectedRoute';
 
 const PRouter: FC = () => {
   const { isAuthenticated } = useAuthStateValue();
@@ -24,13 +26,26 @@ const PRouter: FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/test" element={<Test />} />
               <Route path="/profile" element={<Profile />} />
+              <Route
+                path="/adminpage"
+                element={
+                  <PProtectedRoute>
+                    <AdminPage />
+                  </PProtectedRoute>
+                }
+              />
             </Routes>
           </PContent>
         </Layout>
       </StyledLayout>
     );
   }
-  return <Login />;
+  return (
+    <Routes>
+      <Route path="*" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
+  );
 };
 
 export default PRouter;

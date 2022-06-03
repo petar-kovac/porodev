@@ -9,7 +9,7 @@ import {
 } from '../../service/authorization/authorization.props';
 
 interface ILoginFormProps {
-  onSubmit: (values: any) => void;
+  onSubmit: (values: unknown) => void;
   onFailed: ((errorInfo: ValidateErrorEntity<unknown>) => void) | undefined;
 }
 

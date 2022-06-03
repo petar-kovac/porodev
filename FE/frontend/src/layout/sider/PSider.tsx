@@ -27,6 +27,9 @@ const PSider: FC = () => {
         <Menu.Item key={2}>
           <Link to="/test">Test</Link>
         </Menu.Item>
+        <Menu.Item key={3}>
+          <Link to="/adminpage">Adminpage</Link>
+        </Menu.Item>
       </Menu>
     </StyledSider>
   );
