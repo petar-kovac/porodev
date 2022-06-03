@@ -18,7 +18,14 @@ namespace Business.Access.Layer.Services
         private readonly IMapper _mapper;
 
         private const int MIN_PASSWORD_LENGTH = 8;
-        private readonly string EMAIL_DOMAIN = "boing.rs";
+        private const string EMAIL_DOMAIN = "boing.rs";
+        private const int MIN_UPPERCASE_LETTERS = 1;
+        private const int MIN_LOWERCASE_LETTERS = 1;
+        private const int MIN_NUMBERS = 1;
+        private const int MIN_SPECIAL_CHARACTERS = 1;
+        private const int MAX_EMAIL_LENGTH = 50;
+        private const int MAX_NAME_AND_LASTNAME_LENGTH = 20;
+        private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
@@ -75,20 +82,24 @@ namespace Business.Access.Layer.Services
         {
             if (password.Length < MIN_PASSWORD_LENGTH)
                 throw new PasswordFormatException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
-            if (!password.Any(char.IsUpper))
-                throw new PasswordFormatException("Password must contain at least 1 uppercase letter!");
-            if (!password.Any(char.IsLower))
-                throw new PasswordFormatException("Password must contain at least 1 lowercase letter!");
-            if (!password.Any(char.IsDigit))
-                throw new PasswordFormatException("Password must contain at least 1 number!");
 
-            CheckPasswordSpecialCharacter(password);
+            if (!password.Any(char.IsUpper))
+                throw new PasswordFormatException($"Password must contain at least {MIN_UPPERCASE_LETTERS} uppercase letter!");
+
+            if (!password.Any(char.IsLower))
+                throw new PasswordFormatException($"Password must contain at least {MIN_LOWERCASE_LETTERS} lowercase letter!");
+
+            if (!password.Any(char.IsDigit))
+                throw new PasswordFormatException($"Password must contain at least {MIN_NUMBERS} number!");
+
+            if (!CheckForSpecialCharacters(password))
+                throw new PasswordFormatException($"Password must contain at least {MIN_SPECIAL_CHARACTERS} special character!");
         }
 
         private async Task CheckEmail(string email)
         {
-            if (email.Length > 50)
-                throw new EmailFormatException("Email cannot contain more than 50 characters!");
+            if (email.Length > MAX_EMAIL_LENGTH)
+                throw new EmailFormatException($"Email cannot contain more than {MAX_EMAIL_LENGTH} characters!");
 
             var splitEmail = email.Split('@');
 
@@ -124,7 +135,7 @@ namespace Business.Access.Layer.Services
         }
 
 
-        private void CheckPasswordSpecialCharacter(string password)
+        private bool CheckForSpecialCharacters(string stringToCheck)
         {
             string specialCh = @"%!@#$%^&*()?/>.<,:;'\|}]{[_~`+=-" + "\"";
             char[] specialChArray = specialCh.ToCharArray();
@@ -132,12 +143,11 @@ namespace Business.Access.Layer.Services
 
             foreach (char ch in specialChArray)
             {
-                if (password.Contains(ch))
+                if (stringToCheck.Contains(ch))
                     flag = true;
             }
 
-            if (!flag)
-                throw new PasswordFormatException("Password must contain at least 1 special character!");
+            return flag;
         }
 
         private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
@@ -149,10 +159,43 @@ namespace Business.Access.Layer.Services
             }
         }
 
+        private void CheckFullName(string name, string lastname)
+        {
+            if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
+                throw new FullNameFormatException($"Name or lastname cannot exceed {MAX_NAME_AND_LASTNAME_LENGTH} characters!");
+
+            if (name.Any(x => Char.IsWhiteSpace(x)) || lastname.Any(x => Char.IsWhiteSpace(x)))
+                throw new FullNameFormatException("Name or lastname cannot contain whitespace!");
+
+            if (name.Any(x => Char.IsNumber(x)) || lastname.Any(x => Char.IsNumber(x)))
+                throw new FullNameFormatException("Name or lastname cannot contain numbers!");
+
+            if (CheckForSpecialCharacters(name) || CheckForSpecialCharacters(lastname))
+                throw new FullNameFormatException("Name or lastname cannot contain special characters!");
+        }
+
+        private void CheckPosition(string position)
+        {
+            if (position.Length > MAX_POSITION_LENGTH)
+                throw new PositionFormatException($"Postion cannot exceed {MAX_POSITION_LENGTH} characters!");
+
+            if (position.Any(x => Char.IsNumber(x)))
+                throw new FullNameFormatException("Position cannot contain numbers!");
+
+            if (CheckForSpecialCharacters(position))
+                throw new FullNameFormatException("Position cannot contain special characters!");
+        }
+
+
         public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
         {
             await CheckEmail(registerModel.Email);
+
             CheckPassword(registerModel.Password);
+
+            CheckFullName(registerModel.Name, registerModel.Lastname);
+
+            CheckPosition(registerModel.Position);
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
