@@ -17,9 +17,14 @@ const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const { login, register } = useAuthStateValue();
 
-  const handleLogin = (values: unknown) => login(values as ILoginRequest);
-  const handleRegister = (values: unknown) =>
+  const handleLogin = (values: unknown) => {
+    console.log('clicked');
+    login(values as ILoginRequest);
+  };
+  const handleRegister = (values: unknown) => {
+    console.log('clicked');
     register(values as IRegisterRequest);
+  };
   const handleFormChange = () => setIsLogin((value) => !value);
 
   return (
