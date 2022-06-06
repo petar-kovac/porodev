@@ -1,5 +1,6 @@
 package common.ui_setup.pom_setup.PoroDevPom;
 
+import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +11,7 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        driver.get(SetupConstants.BASE_URL);
     }
 
     //element section

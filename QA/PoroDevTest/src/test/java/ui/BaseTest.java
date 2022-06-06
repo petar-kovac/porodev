@@ -29,7 +29,6 @@ public class BaseTest {
         System.out.println("BEFORE METHOD");
         driverSetup = new DriverSetup(DriverType.CHROME);
         driver = driverSetup.getDriver();
-        driverSetup.navigateToUrl(SetupConstants.BASE_URL);
         loginPage = new LoginPage(driver);
         elementControl = new ElementControl(driver);
     };
