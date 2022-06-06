@@ -13,6 +13,7 @@ import Login from '../pages/Login';
 import Profile from '../pages/profile/Profile';
 import PProtectedRoute from './PProtectedRoute';
 import Error from '../pages/error/ErrorPage';
+import Files from '../pages/files/Files';
 
 const PRouter: FC = () => {
   const { isAuthenticated, isLoading } = useAuthStateValue();
@@ -28,6 +29,7 @@ const PRouter: FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/test" element={<Test />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/files" element={<Files />} />
                 <Route
                   path="*"
                   element={<Error message="Router error 404" />}

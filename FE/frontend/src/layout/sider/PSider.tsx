@@ -34,6 +34,10 @@ const PSider: FC = () => {
             <Link to="/adminpage">Adminpage</Link>
           </Menu.Item>
         )}
+
+        <Menu.Item key={3}>
+          <Link to="/files">Files</Link>
+        </Menu.Item>
       </Menu>
     </StyledSider>
   );

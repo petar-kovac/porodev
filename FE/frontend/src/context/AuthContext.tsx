@@ -82,6 +82,9 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         message.success('Successful login');
         await localStorage.setItem(StorageKey.NAME, res.name);
         await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
+        await localStorage.setItem(StorageKey.ACCESS_TOKEN, res.jwt);
+        // await localStorage.setItem(StorageKey.LASTNAME, res.refreshToken);
+
         if (res.lastname === 'Admin') {
           setIsAdmin(true);
         }

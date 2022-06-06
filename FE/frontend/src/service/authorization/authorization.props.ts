@@ -10,6 +10,7 @@ export interface ILoginResponse {
   department: number;
   position: string;
   avatarUrl: string;
+  jwt: string;
 }
 
 export interface IRegisterRequest {
