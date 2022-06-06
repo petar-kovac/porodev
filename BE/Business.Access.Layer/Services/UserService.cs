@@ -98,6 +98,9 @@ namespace Business.Access.Layer.Services
 
         private async Task CheckEmail(string email)
         {
+            if (String.IsNullOrWhiteSpace(email))
+                throw new EmailFormatException($"Email cannot be empty!");
+
             if (email.Length > MAX_EMAIL_LENGTH)
                 throw new EmailFormatException($"Email cannot contain more than {MAX_EMAIL_LENGTH} characters!");
 
@@ -161,6 +164,9 @@ namespace Business.Access.Layer.Services
 
         private void CheckFullName(string name, string lastname)
         {
+            if (String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(lastname))
+                throw new FullNameFormatException($"Name or lastname cannot be empty!");
+
             if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
                 throw new FullNameFormatException($"Name or lastname cannot exceed {MAX_NAME_AND_LASTNAME_LENGTH} characters!");
 
@@ -176,14 +182,17 @@ namespace Business.Access.Layer.Services
 
         private void CheckPosition(string position)
         {
+            if (String.IsNullOrWhiteSpace(position))
+                throw new PositionFormatException($"Postion cannot be empty!");
+
             if (position.Length > MAX_POSITION_LENGTH)
-                throw new PositionFormatException($"Postion cannot exceed {MAX_POSITION_LENGTH} characters!");
+                throw new PositionFormatException($"Postion cannot exceed {MAX_POSITION_LENGTH} characters!"); 
 
             if (position.Any(x => Char.IsNumber(x)))
-                throw new FullNameFormatException("Position cannot contain numbers!");
+                throw new PositionFormatException("Position cannot contain numbers!");
 
             if (CheckForSpecialCharacters(position))
-                throw new FullNameFormatException("Position cannot contain special characters!");
+                throw new PositionFormatException("Position cannot contain special characters!");
         }
 
 
