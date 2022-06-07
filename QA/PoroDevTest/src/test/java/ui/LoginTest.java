@@ -1,14 +1,15 @@
 package ui;
 
 import common.ui_setup.FileControl;
+import common.ui_setup.pom_setup.PoroDevPom.LoginPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 public class LoginTest extends BaseTest {
-    public FileControl fileControl = new FileControl(FileControl.LOGIN_DATA_PROPERTIES);
-    ;
+    protected FileControl fileControl = new FileControl(FileControl.LOGIN_DATA_PROPERTIES);
 
     public LoginTest() throws IOException {
     }

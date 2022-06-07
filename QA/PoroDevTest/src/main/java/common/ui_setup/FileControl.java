@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class FileControl {
-    public static final String LOGIN_DATA_PROPERTIES = "user_data.properties";
+    public static String LOGIN_DATA_PROPERTIES = "login_data.properties";
+    public static String REGISTRATION_DATA_PROPERTIES = "registration_data.properties";
     public Properties properties;
 
     public FileControl(String file) throws IOException {
