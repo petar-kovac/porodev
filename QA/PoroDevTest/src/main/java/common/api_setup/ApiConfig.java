@@ -27,7 +27,6 @@ public class ApiConfig {
                 .build();
 
         api_responseSpec = new ResponseSpecBuilder()
-                .expectStatusCode(200)
                 .build();
 
         RestAssured.requestSpecification = api_requestSpec;
