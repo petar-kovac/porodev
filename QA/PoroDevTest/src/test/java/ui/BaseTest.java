@@ -17,8 +17,6 @@ import java.io.IOException;
 public class BaseTest {
     protected DriverSetup driverSetup;
     protected WebDriver driver;
-    protected LoginPage loginPage;
-    protected RegistrationPage registrationPage;
     protected ElementControl elementControl;
 
     @BeforeClass
@@ -31,9 +29,6 @@ public class BaseTest {
         System.out.println("BEFORE METHOD");
         driverSetup = new DriverSetup(DriverType.CHROME);
         driver = driverSetup.getDriver();
-        loginPage = new LoginPage(driver);
-        registrationPage = new RegistrationPage(driver);
-        elementControl = new ElementControl(driver);
     };
 
     @AfterMethod

@@ -9,7 +9,11 @@ import org.openqa.selenium.support.FindBy;
 public class RegistrationPage extends BasePage {
     public RegistrationPage(WebDriver driver) {
         super(driver);
-        driver.get(SetupConstants.BASE_URL);
+    }
+
+    public RegistrationPage(WebDriver driver, String url) {
+        super(driver);
+        driver.get(url);
     }
 
     //FIELD SECTION
@@ -53,25 +57,25 @@ public class RegistrationPage extends BasePage {
     public WebElement successful_registrationMsg;
 
     public void enterFirstName(String firstName) {
-        elementControl.sendText(firstName_field, firstName);
+        BasePage.sendText(firstName_field, firstName);
     }
     public void enterLastName(String lastName) {
-        elementControl.sendText(lastName_field, lastName);
+        BasePage.sendText(lastName_field, lastName);
     }
     public void enterEmail(String email) {
-        elementControl.sendText(email_field, email);
+        BasePage.sendText(email_field, email);
     }
     public void enterPassword(String pass) {
-        elementControl.sendText(password_field, pass);
+        BasePage.sendText(password_field, pass);
     }
     public void enterDepartment(String department) {
-        elementControl.sendText(department_field, department);
+        BasePage.sendText(department_field, department);
     }
     public void enterPosition(String position) {
-        elementControl.sendText(position_field, position);
+        BasePage.sendText(position_field, position);
     }
     public void clickRegisterButton() {
-        elementControl.clickElement(register_button);
+        BasePage.clickElement(register_button);
     }
 
     public void registerUser(String firstName, String lastName, String email, String password, String department, String position) throws InterruptedException {
