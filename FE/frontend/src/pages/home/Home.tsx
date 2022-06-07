@@ -1,11 +1,34 @@
-import { FC, useEffect } from 'react';
+import { Button } from 'antd';
+import axios from 'axios';
+import { FC, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PCard from '../../components/card/PCard';
+import {
+  StyledLoginButton,
+  StyledToggleButton,
+} from '../../components/login/StyledForm';
 import PUpload from '../../components/upload/PUpload';
 import { useAuthStateValue } from '../../context/AuthContext';
 
 const Home: FC = () => {
+  const [data, setData] = useState<[]>([]);
   const { isAuthenticated, testMessage } = useAuthStateValue();
+
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        await axios
+          .get(`${process.env.REACT_APP_MOCK_URL}/home`)
+          .then((res) => setData(res.data));
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCards();
+  }, []);
+
+  console.log(data, 'dt');
 
   return (
     <StyledPage>
@@ -18,12 +41,21 @@ const Home: FC = () => {
           Here is the preview of the latest uploaded files
         </StyledCardHeading>
         <StyledCardWrapper>
-          <PCard />
-          <PCard />
-          <PCard />
-          <PCard />
-          <PCard />
+          {data?.map((value: any, index: any) => (
+            <PCard
+              heading={value?.name}
+              description={value?.description}
+              image={value?.image}
+            />
+          ))}
         </StyledCardWrapper>
+        <StyledShowMoreButton>
+          <Link to="/files">
+            <StyledLoginButton type="primary">
+              Show more files
+            </StyledLoginButton>
+          </Link>
+        </StyledShowMoreButton>
       </StyledCardListWrapper>
     </StyledPage>
   );
@@ -58,6 +90,7 @@ const StyledCardWrapper = styled.div`
   justify-content: center;
   align-items: flex-start;
   overflow-x: auto;
+  height: 100px;
 `;
 const StyledCardHeading = styled.div`
   font-size: 20px;
@@ -65,6 +98,13 @@ const StyledCardHeading = styled.div`
   justify-content: center;
   font-weight: 300;
   color: #555;
+`;
+const StyledShowMoreButton = styled.div`
+  display: flex;
+  justify-content: center;
+  font-weight: 300;
+  color: #555;
+  margin-bottom: 5%;
 `;
 
 export default Home;

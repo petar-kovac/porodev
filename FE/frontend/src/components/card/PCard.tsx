@@ -5,17 +5,18 @@ import PUpload from '../upload/PUpload';
 import { useAuthStateValue } from '../../context/AuthContext';
 
 const { Meta } = Card;
+interface IPCardProps {
+  heading: string;
+  description: string;
+  image: string;
+}
 
-const PCard: FC = () => {
+const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
 
   return (
-    <StyledCard
-      hoverable
-      style={{ width: 240 }}
-      cover={<img alt="example" src={`${process.env.REACT_APP_IMAGE_CARD}`} />}
-    >
-      <Meta title="Europe Street beat" description="www.instagram.com" />
+    <StyledCard hoverable cover={<img alt="example" src={`${image}`} />}>
+      <Meta title={heading} description={description} />
     </StyledCard>
   );
 };
@@ -29,6 +30,11 @@ const StyledCard = styled(Card)`
   }
   height: 200px;
   border-radius: 15px;
+  overflow: hidden;
+  max-width: 240px;
+  .ant-card-body {
+    padding: 1rem 2rem;
+  }
 `;
 
 export default PCard;

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Layout } from 'antd';
 import { useAuthStateValue } from '../context/AuthContext';
 import Home from '../pages/home/Home';
-import Test from '../pages/home/Test';
 import AdminPage from '../pages/home/AdminPage';
 import PContent from '../layout/content/PContent';
 import PHeader from '../layout/header/PHeader';
@@ -14,6 +13,8 @@ import Profile from '../pages/profile/Profile';
 import PProtectedRoute from './PProtectedRoute';
 import Error from '../pages/error/ErrorPage';
 import Files from '../pages/files/Files';
+import Users from '../pages/users/Users';
+import Admins from '../pages/admins/Admins';
 
 const PRouter: FC = () => {
   const { isAuthenticated, isLoading } = useAuthStateValue();
@@ -27,9 +28,10 @@ const PRouter: FC = () => {
             <PContent>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/test" element={<Test />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/files" element={<Files />} />
+                <Route path="/users" element={<Users />} />
+                <Route path="/admins" element={<Admins />} />
                 <Route
                   path="*"
                   element={<Error message="Router error 404" />}

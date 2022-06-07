@@ -31,10 +31,11 @@ const StyledButtons = styled.div`
   gap: 10px;
 `;
 const StyledHeader = styled(Header)`
-  background-color: blue;
+  background-color: #1990ff;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
 `;
 const StyledLogo = styled.div`
   color: #fff;
