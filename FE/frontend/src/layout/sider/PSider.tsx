@@ -1,9 +1,12 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Layout, Menu, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
+  AlertOutlined,
   AppstoreOutlined,
+  FileOutlined,
+  HomeOutlined,
   MailOutlined,
   SettingOutlined,
   UserOutlined,
@@ -28,19 +31,25 @@ const PSider: FC = () => {
       }}
     >
       <StyledSiderHeader>
-        <Avatar size={isCollapsed ? 56 : 64} icon={<UserOutlined />} />
+        <Avatar
+          size={isCollapsed ? 56 : 64}
+          src="https://joeschmoe.io/api/v1/random"
+        />
         <h1>Dashboard</h1>
       </StyledSiderHeader>
 
       <StyledSiderMenu mode="inline" style={{ height: '144px' }}>
-        <Menu.Item key={1} icon={<MailOutlined />}>
+        <Menu.Item key={1} icon={<HomeOutlined />}>
           <Link to="/">Home</Link>
         </Menu.Item>
-        <Menu.Item key={2} icon={<AppstoreOutlined />}>
-          <Link to="/test">Test</Link>
+        <Menu.Item key={2} icon={<UserOutlined />}>
+          <Link to="/users">Users</Link>
+        </Menu.Item>
+        <Menu.Item key={3} icon={<UserOutlined />}>
+          <Link to="/admins">Admins</Link>
         </Menu.Item>
         {!isAdmin && (
-          <Menu.Item key={3} icon={<SettingOutlined />}>
+          <Menu.Item key={4} icon={<FileOutlined />}>
             <Link to="/files">Files</Link>
           </Menu.Item>
         )}
