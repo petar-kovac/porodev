@@ -13,7 +13,11 @@ const props: UploadProps = {
   onChange(info) {
     const { status } = info.file;
     if (status !== 'uploading') {
+<<<<<<< Updated upstream
       console.log('upload');
+=======
+      console.log('cdccd');
+>>>>>>> Stashed changes
     }
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);
