@@ -17,11 +17,9 @@ const Login: FC = () => {
   const { login, register } = useAuthStateValue();
 
   const handleLogin = (values: unknown) => {
-    console.log('clicked');
     login(values as ILoginRequest);
   };
   const handleRegister = (values: unknown) => {
-    console.log('clicked');
     register(values as IRegisterRequest);
   };
   const handleFormChange = () => setIsLogin((value) => !value);

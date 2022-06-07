@@ -4,7 +4,6 @@ import { useAuthStateValue } from '../../context/AuthContext';
 
 const Test: FC = () => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
-
   return <div>{testMessage}</div>;
 };
 
