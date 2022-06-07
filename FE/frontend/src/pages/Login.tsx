@@ -1,4 +1,7 @@
 import { FC, useState } from 'react';
+import styled from 'styled-components';
+import logoImage from '../assets/logo.png';
+
 import LoginForm from '../components/login/LoginForm';
 import RegisterForm from '../components/login/RegisterForm';
 import {
@@ -36,8 +39,16 @@ const Login: FC = () => {
           {isLogin ? 'Create new account' : 'Login with existing account'}
         </StyledToggleButton>
       </StyledFormWrapper>
+      <StyledLogo src={logoImage} />
     </StyledPage>
   );
 };
 
 export default Login;
+
+const StyledLogo = styled.img`
+  position: absolute;
+  top: 5rem;
+  right: 10rem;
+  width: 25rem;
+`;

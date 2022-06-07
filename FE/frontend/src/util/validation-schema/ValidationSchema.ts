@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import * as yup from 'yup';
 
 const emailRegex = /^[a-zA-Z0-9.-_]+@boing\.rs$/g;
