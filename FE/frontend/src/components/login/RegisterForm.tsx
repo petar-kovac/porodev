@@ -1,8 +1,9 @@
 import { FC } from 'react';
-import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
-import '../../App.css';
-import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from 'react-hook-form';
+import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
+
+import '../../App.css';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
 import {
   StyledHeader,
@@ -94,7 +95,7 @@ const RegisterForm: FC<ILoginFormProps> = ({
           render={({ field }) => (
             <StyledFormBox>
               <span>Password:</span>
-              <StyledFormInput
+              <StyledFormInput.Password
                 {...field}
                 type="password"
                 autoComplete="new-password"
@@ -111,7 +112,7 @@ const RegisterForm: FC<ILoginFormProps> = ({
           render={({ field }) => (
             <StyledFormBox>
               <span>Confirm password:</span>
-              <StyledFormInput {...field} type="password" />
+              <StyledFormInput.Password {...field} type="password" />
               <StyledFormSpan>
                 {errors?.confirmPassword?.message}
               </StyledFormSpan>

@@ -43,6 +43,7 @@ const Home: FC = () => {
         <StyledCardWrapper>
           {data?.map((value: any, index: any) => (
             <PCard
+              key={value?.id}
               heading={value?.name}
               description={value?.description}
               image={value?.image}

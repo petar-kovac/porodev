@@ -2,8 +2,8 @@ import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { boolean } from 'yup';
-import PCard from '../../components/card/PCard';
-import { findFiles } from '../../service/files/files';
+import PCard from 'components/card/PCard';
+import { findFiles } from 'service/files/files';
 
 const Files: FC = () => {
   const [data, setData] = useState<[]>([]);
@@ -38,6 +38,7 @@ const StyledFilesWrapper = styled.div`
   padding: 20px;
   gap: 10px;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
 `;
 

@@ -60,7 +60,7 @@ const LoginForm: FC<ILoginFormProps> = ({ onSubmit, onFailed = undefined }) => {
           render={({ field }) => (
             <StyledFormBox>
               <span>Password:</span>
-              <StyledFormInput
+              <StyledFormInput.Password
                 {...field}
                 type="password"
                 autoComplete="new-password"
