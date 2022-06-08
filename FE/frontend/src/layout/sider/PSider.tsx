@@ -31,10 +31,7 @@ const PSider: FC = () => {
       }}
     >
       <StyledSiderHeader>
-        <Avatar
-          size={isCollapsed ? 56 : 64}
-          src="https://joeschmoe.io/api/v1/random"
-        />
+        <Avatar size={60} src="https://joeschmoe.io/api/v1/random" />
         <h1>Dashboard</h1>
       </StyledSiderHeader>
 

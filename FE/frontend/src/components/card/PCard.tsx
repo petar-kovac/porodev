@@ -1,6 +1,6 @@
-import { Card } from 'antd';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Card, Button, Modal } from 'antd';
 import PUpload from '../upload/PUpload';
 import { useAuthStateValue } from '../../context/AuthContext';
 
@@ -13,11 +13,43 @@ interface IPCardProps {
 
 const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   return (
-    <StyledCard hoverable cover={<img alt="example" src={`${image}`} />}>
-      <Meta title={heading} description={description} />
-    </StyledCard>
+    <>
+      <StyledCard
+        hoverable
+        cover={<img alt="example" src={`${image}`} />}
+        role="button"
+        onClick={showModal}
+      >
+        <Meta title={heading} description={description} />
+      </StyledCard>
+      {/* <Button type="primary" onClick={showModal}>
+        Open Modal
+      </Button> */}
+      <Modal
+        title="Basic Modal"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>{heading}</p>
+        <p>{description}</p>
+      </Modal>
+    </>
   );
 };
 const StyledCard = styled(Card)`
