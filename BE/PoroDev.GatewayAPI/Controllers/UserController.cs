@@ -33,8 +33,8 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateUser([FromBody] UserCreateRequestModel createReqBody)
         {
-            var createdId = await _userService.CreateUser(createReqBody);
-            return Ok(createdId);
+            /*var createdId =*/ await _userService.CreateUser(createReqBody);
+            return Ok(/*createdId*/);
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
