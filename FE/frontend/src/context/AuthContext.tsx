@@ -114,9 +114,13 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         await localStorage.setItem(StorageKey.NAME, res.name);
         await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         message.success('Successful registration');
+
+        navigate('/');
+        setIsLoading(false);
         setAuthenticated(true);
       } catch (err: any) {
         message.error(err.message);
+        navigate('/login');
       }
     }, []);
 
