@@ -106,7 +106,7 @@ namespace Business.Access.Layer.Services
 
             var splitEmail = email.Split('@');
 
-            if (splitEmail.Length != 2 && !String.IsNullOrWhiteSpace(splitEmail[0]) && !splitEmail[0].Equals(String.Empty))
+            if (splitEmail.Length != 2 || String.IsNullOrWhiteSpace(splitEmail[0]))
                 throw new EmailFormatException("Email format is invalid!");
 
             if (splitEmail[0].Any(x => Char.IsWhiteSpace(x)))
