@@ -5,26 +5,31 @@ const passwordRegex =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/g;
 
 export const registrationSchema = yup.object().shape({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
+  name: yup.string().required('This field is required'),
+  lastname: yup.string().required('This field is required'),
   email: yup
     .string()
-    .required('Email is required')
+    .required('This field is required')
     .matches(emailRegex, 'Email is invalid'),
   password: yup
     .string()
-    .required('Password is required')
+    .required('This field is required')
     .matches(passwordRegex, 'Wrong password'),
   confirmPassword: yup
     .string()
-    .required('Confirm password')
-    .oneOf([yup.ref('password'), null]),
+    .required('This field is required')
+    .oneOf([yup.ref('password'), null], 'Passwords should match'),
   department: yup
     .number()
     .positive()
-    .integer()
-    .required('Department is required'),
-  position: yup.string().required('Position is required'),
+    .label('department')
+    .transform((value, originalValue) => {
+      return originalValue === '' ? undefined : value;
+    })
+    .min(1, 'Must be > 1')
+    .typeError('Must be a number')
+    .required('This field is required'),
+  position: yup.string().required('This field is required'),
 });
 
 export const loginSchema = yup.object().shape({
