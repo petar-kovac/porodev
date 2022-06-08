@@ -1,23 +1,24 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import logoImage from '../assets/logo.png';
+import logoImage from '../../assets/logo.png';
 
-import LoginForm from '../components/login/LoginForm';
-import RegisterForm from '../components/login/RegisterForm';
+import LoginForm from '../../components/login/LoginForm';
+import RegisterForm from '../../components/login/RegisterForm';
 import {
   StyledPage,
   StyledFormWrapper,
   StyledToggleButton,
-} from '../components/login/StyledForm';
-import { useAuthStateValue } from '../context/AuthContext';
+} from '../../components/login/StyledForm';
+import { useAuthStateValue } from '../../context/AuthContext';
 import {
   ILoginRequest,
   IRegisterRequest,
-} from '../service/authorization/authorization.props';
+} from '../../service/authorization/authorization.props';
 
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const { login, register } = useAuthStateValue();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogin = (values: unknown) => {
     login(values as ILoginRequest);
@@ -31,7 +32,11 @@ const Login: FC = () => {
     <StyledPage>
       <StyledFormWrapper>
         {isLogin ? (
-          <LoginForm onSubmit={handleLogin} onFailed={undefined} />
+          <LoginForm
+            isLoading={isLoading}
+            onSubmit={handleLogin}
+            onFailed={undefined}
+          />
         ) : (
           <RegisterForm onSubmit={handleRegister} onFailed={undefined} />
         )}

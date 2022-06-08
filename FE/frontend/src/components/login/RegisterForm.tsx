@@ -13,6 +13,7 @@ import {
   StyledFormSpan,
   StyledLoginButton,
 } from './StyledForm';
+import { StyledButtonWrapper } from './LoginForm';
 
 interface ILoginFormProps {
   onSubmit: (values: unknown) => void;
@@ -145,9 +146,11 @@ const RegisterForm: FC<ILoginFormProps> = ({
           )}
         />
       </StyledForm>
-      <StyledLoginButton type="primary" htmlType="submit" form="registerForm">
-        Register
-      </StyledLoginButton>
+      <StyledButtonWrapper>
+        <StyledLoginButton type="primary" htmlType="submit" form="registerForm">
+          Register
+        </StyledLoginButton>
+      </StyledButtonWrapper>
     </>
   );
 };

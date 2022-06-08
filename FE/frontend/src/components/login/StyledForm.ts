@@ -32,7 +32,7 @@ export const StyledFormWrapper = styled.div`
 
 export const StyledLoginButton = styled(Button)`
   border-radius: 8px;
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
 
   &:hover,
   &:focus {

@@ -8,27 +8,30 @@ import {
   StyledLoginButton,
   StyledToggleButton,
 } from '../../components/login/StyledForm';
+import Spinner from '../../components/spinner/Spinner';
 import PUpload from '../../components/upload/PUpload';
 import { useAuthStateValue } from '../../context/AuthContext';
 
 const Home: FC = () => {
   const [data, setData] = useState<[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>();
   const { isAuthenticated, testMessage } = useAuthStateValue();
 
   useEffect(() => {
     const fetchCards = async () => {
+      setIsLoading(true);
       try {
         await axios
           .get(`${process.env.REACT_APP_MOCK_URL}/home`)
           .then((res) => setData(res.data));
       } catch (err) {
         console.log(err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCards();
   }, []);
-
-  console.log(data, 'dt');
 
   return (
     <StyledPage>
@@ -36,32 +39,42 @@ const Home: FC = () => {
         <StyledHeading>File upload:</StyledHeading>
         <PUpload />
       </StyledUploadWrapper>
-      <StyledCardListWrapper>
-        <StyledCardHeading>
-          Here is the preview of the latest uploaded files
-        </StyledCardHeading>
-        <StyledCardWrapper>
-          {data?.map((value: any, index: any) => (
-            <PCard
-              key={value?.id}
-              heading={value?.name}
-              description={value?.description}
-              image={value?.image}
-            />
-          ))}
-        </StyledCardWrapper>
-        <StyledShowMoreButton>
-          <Link to="/files">
-            <StyledLoginButton type="primary">
-              Show more files
-            </StyledLoginButton>
-          </Link>
-        </StyledShowMoreButton>
-      </StyledCardListWrapper>
+      {!isLoading ? (
+        <StyledCardListWrapper>
+          <StyledCardHeading>
+            Here is the preview of the latest uploaded files
+          </StyledCardHeading>
+          <StyledCardWrapper>
+            {data?.map((value: any, index: any) => (
+              <PCard
+                heading={value?.name}
+                description={value?.description}
+                image={value?.image}
+              />
+            ))}
+          </StyledCardWrapper>
+          <StyledShowMoreButton>
+            <Link to="/files">
+              <StyledLoginButton type="primary">
+                Show more files
+              </StyledLoginButton>
+            </Link>
+          </StyledShowMoreButton>
+        </StyledCardListWrapper>
+      ) : (
+        <StyledSpinnerWrappper>
+          <Spinner color="#000" size={42} speed={1.2} />
+        </StyledSpinnerWrappper>
+      )}
     </StyledPage>
   );
 };
-
+const StyledSpinnerWrappper = styled.div`
+  display: flex;
+  flex: 1.1;
+  justify-content: center;
+  align-items: center;
+`;
 const StyledHeading = styled.div`
   font-size: 42px;
   display: flex;
@@ -75,6 +88,8 @@ const StyledPage = styled.div`
   height: 100%;
 `;
 const StyledUploadWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1.1;
 `;
 const StyledCardListWrapper = styled.div`

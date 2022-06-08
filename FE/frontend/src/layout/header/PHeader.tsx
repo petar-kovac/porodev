@@ -3,13 +3,14 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import PDropdown from '../../components/dropdown/Dropdown';
 import { StorageKey } from '../../util/enums/enums';
+import logoImage from '../../assets/logo.png';
 
 const { Header } = Layout;
 
 const PHeader: FC = () => {
   return (
     <StyledHeader style={{ color: 'white' }}>
-      <StyledLogo>Header</StyledLogo>
+      <StyledLogo src={logoImage} />
       <StyledButtons>
         <StyledUserName>{localStorage.getItem(StorageKey.NAME)}</StyledUserName>
         <StyledUserName>
@@ -35,12 +36,11 @@ const StyledHeader = styled(Header)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding-right: 20px;
+  padding-left: 0;
 `;
-const StyledLogo = styled.div`
-  color: #fff;
-  font-size: 20px;
-  font-weight: 500;
+const StyledLogo = styled.img`
+  width: 110px;
 `;
 
 export default PHeader;

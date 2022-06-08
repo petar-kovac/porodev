@@ -3,6 +3,7 @@ import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import '../../App.css';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import styled from 'styled-components';
 import { loginSchema } from '../../util/validation-schema/ValidationSchema';
 import {
   StyledHeader,
@@ -12,10 +13,12 @@ import {
   StyledFormSpan,
   StyledLoginButton,
 } from './StyledForm';
+import Spinner from '../spinner/Spinner';
 
 interface ILoginFormProps {
   onSubmit: (values: unknown) => void;
   onFailed: ((errorInfo: ValidateErrorEntity<unknown>) => void) | undefined;
+  isLoading: boolean;
 }
 
 type IFormValues = {
@@ -23,7 +26,11 @@ type IFormValues = {
   password: string;
 };
 
-const LoginForm: FC<ILoginFormProps> = ({ onSubmit, onFailed = undefined }) => {
+const LoginForm: FC<ILoginFormProps> = ({
+  isLoading,
+  onSubmit,
+  onFailed = undefined,
+}) => {
   const {
     control,
     handleSubmit,
@@ -70,11 +77,34 @@ const LoginForm: FC<ILoginFormProps> = ({ onSubmit, onFailed = undefined }) => {
           )}
         />
       </StyledForm>
-      <StyledLoginButton type="primary" htmlType="submit" form="loginForm">
-        Login
-      </StyledLoginButton>
+      <StyledButtonWrapper>
+        <StyledSpace />
+        <StyledLoginButton type="primary" htmlType="submit" form="loginForm">
+          Login
+        </StyledLoginButton>
+        <StyledSpace>
+          <StyledSpinWrapper>
+            {isLoading && <Spinner color="#000" size={24} speed={1.2} />}
+          </StyledSpinWrapper>
+        </StyledSpace>
+      </StyledButtonWrapper>
     </>
   );
 };
+export const StyledButtonWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  height: 62px;
+  justify-content: space-around;
+`;
+const StyledSpinWrapper = styled.div`
+  padding-bottom: 4px;
+  margin-left: 8px;
+`;
+const StyledSpace = styled.div`
+  display: flex;
+  flex: 1;
+`;
 
 export default LoginForm;
