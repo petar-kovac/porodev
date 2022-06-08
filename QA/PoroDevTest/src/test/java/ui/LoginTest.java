@@ -2,9 +2,7 @@ package ui;
 
 import common.ui_setup.FileControlUtil;
 import common.ui_setup.SetupConstants;
-import common.ui_setup.pom_setup.BasePage;
 import common.ui_setup.pom_setup.PoroDevPom.LoginPage;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -23,7 +21,8 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
                 fileControlUtil.getValue("VALID_PASS_CREATED_USER"));
-        loginPage.assert_valid_login();
+
+        loginPage.assert_valid_login("Successful login");
     }
 
     @Test(priority = 1)
@@ -33,6 +32,7 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 "",
                 fileControlUtil.getValue("INVALID_FORM_PASS"));
+
         loginPage.assert_login_with_invalid_form_password("Wrong password");
     }
 
@@ -43,6 +43,7 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
                 fileControlUtil.getValue("VALID_NOT_EXISTING_USER_PASSWORD"));
+
         loginPage.assert_login_with_valid_notExistingCredentials("Cannot read properties of undefined (reading 'data')");
     }
 
@@ -53,6 +54,7 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 fileControlUtil.getValue("INVALID_FORM_EMAIL"),
                 "");
+
         loginPage.assert_login_with_invalid_form_email("Invalid email");
     }
 
@@ -63,6 +65,7 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 fileControlUtil.getValue("VALID_NOT_EXISTING_USER_EMAIL"),
                 fileControlUtil.getValue("VALID_NOT_EXISTING_USER_PASSWORD"));
+
         loginPage.assert_login_with_valid_notExistingCredentials("Cannot read properties of undefined (reading 'data')");
     }
 
@@ -73,22 +76,29 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 "",
                 fileControlUtil.getValue("VALID_PASS_CREATED_USER"));
+
         loginPage.assert_email_isRequired("Email is required");
     }
 
     @Test(priority = 6)
     public void login_without_password() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
-        loginPage.login(fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"), "");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.pass_requiredMsg), "Password is required");
+
+        loginPage.login(
+                fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
+                "");
+
+        loginPage.assert_password_isRequired("Password is required");
     }
 
     @Test(priority = 7)
     public void login_without_bothCredentials() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
+
         loginPage.login("", "");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.email_requiredMsg), "Email is required");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.pass_requiredMsg), "Password is required");
+
+        loginPage.assert_email_isRequired("Email is required");
+        loginPage.assert_password_isRequired("Password is required");
     }
 
     @Test(priority = 8)
@@ -97,7 +107,8 @@ public class LoginTest extends BaseTest {
         loginPage.login(
                 fileControlUtil.getValue("INVALID_FORM_EMAIL"),
                 fileControlUtil.getValue("INVALID_FORM_PASS"));
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.email_invalidMsg), "Invalid email");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.pass_invalidMsg), "Wrong password");
+
+        loginPage.assert_login_with_invalid_form_password("Wrong password");
+        loginPage.assert_login_with_invalid_form_email("Invalid email");
     }
 }

@@ -19,67 +19,56 @@ public class LoginPage extends BasePage {
 
     //element section
     @FindBy(name = "email")
-    WebElement emailField;
+    WebElement we_emailInputField;
     @FindBy(name = "password")
-    WebElement passField;
+    WebElement we_passInputField;
     @FindBy(className = "ant-btn-primary")
-    WebElement loginButton;
+    WebElement we_loginButton;
     //ASSERTION ELEMENTS
     @FindBy(xpath = "//span[contains(text(),'Email is required')]")
-    public WebElement email_requiredMsg;
+    WebElement we_email_requiredMsg;
     @FindBy(xpath = "//span[contains(text(),'Password is required')]")
-    public WebElement pass_requiredMsg;
+    WebElement we_pass_requiredMsg;
     @FindBy(xpath = "//span[contains(text(),'Invalid email')]")
-    public WebElement email_invalidMsg;
+    WebElement we_email_invalidMsg;
     @FindBy(xpath = "//span[contains(text(),'Wrong password')]")
-    public WebElement pass_invalidMsg;
+    WebElement we_pass_invalidMsg;
     @FindBy(xpath = "//span[contains(text(),'Successful login')]")
-    public WebElement successfulLogin;
+    WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
-    public WebElement badRequestError;
+    WebElement we_badRequestError;
 
-    //methods section
-    public void enterEmail(String email) {
-        BasePage.sendText(emailField, email);
-    }
-
-    public void enterPassword(String pass) {
-        BasePage.sendText(passField, pass);
-    }
-
-    public void clickLoginButton() {
-        BasePage.clickElement(loginButton);
-    }
+    //functional methods section
 
     public void login(String email, String password) throws InterruptedException {
-        enterEmail(email);
-        enterPassword(password);
-        clickLoginButton();
+        BasePage.sendText(we_emailInputField,email);
+        BasePage.sendText(we_passInputField, password);
+        BasePage.clickElement(we_loginButton);
         Thread.sleep(2000);
     }
 
     //ASSERT METHODS
-    public void assert_valid_login() {
-        Assert.assertEquals(BasePage.getTextFromElement(successfulLogin), "Successful login");
+    public void assert_valid_login(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_successfulLogin), expectedResults);
     }
 
     public void assert_login_with_invalid_form_password(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(pass_invalidMsg), expectedResults);
+        Assert.assertEquals(BasePage.getTextFromElement(we_pass_invalidMsg), expectedResults);
     }
 
     public void assert_login_with_invalid_form_email(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(email_invalidMsg), expectedResults);
+        Assert.assertEquals(BasePage.getTextFromElement(we_email_invalidMsg), expectedResults);
     }
 
     public void assert_login_with_valid_notExistingCredentials(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(badRequestError), expectedResults);
+        Assert.assertEquals(BasePage.getTextFromElement(we_badRequestError), expectedResults);
     }
 
     public void assert_email_isRequired(String expectedResult) {
-        Assert.assertEquals(BasePage.getTextFromElement(email_requiredMsg), expectedResult);
+        Assert.assertEquals(BasePage.getTextFromElement(we_email_requiredMsg), expectedResult);
     }
 
     public void assert_password_isRequired(String expectedResult) {
-        Assert.assertEquals(BasePage.getTextFromElement(pass_requiredMsg), expectedResult);
+        Assert.assertEquals(BasePage.getTextFromElement(we_pass_requiredMsg), expectedResult);
     }
 }

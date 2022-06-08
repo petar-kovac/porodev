@@ -1,10 +1,10 @@
 package common.ui_setup.pom_setup.PoroDevPom;
 
-import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 public class RegistrationPage extends BasePage {
     public RegistrationPage(WebDriver driver) {
@@ -17,77 +17,109 @@ public class RegistrationPage extends BasePage {
     }
 
     //FIELD SECTION
-    @FindBy(id = "basic_name")
-    WebElement firstName_field;
-    @FindBy(id = "basic_lastname")
-    WebElement lastName_field;
-    @FindBy(id = "basic_email")
-    WebElement email_field;
-    @FindBy(id = "basic_password")
-    WebElement password_field;
-    @FindBy(id = "basic_department")
-    WebElement department_field;
-    @FindBy(id = "basic_position")
-    WebElement position_field;
+    @FindBy(name = "name")
+    WebElement we_firstName_inputField;
+    @FindBy(name = "lastname")
+    WebElement we_lastName_inputField;
+    @FindBy(name = "email")
+    WebElement we_email_inputField;
+    @FindBy(name = "password")
+    WebElement we_password_inputField;
+    @FindBy(name = "confirmPassword")
+    WebElement we_confirmPass_inputField;
+    @FindBy(name = "department")
+    WebElement we_department_inputField;
+    @FindBy(name = "position")
+    WebElement we_position_inputField;
 
     //BUTTONS SECTION
     @FindBy(xpath = "//span[contains(text(),'Register')]")
-    WebElement register_button;
+    WebElement we_register_button;
     @FindBy(xpath = "//span[contains(text(),'Create new account')]")
-    WebElement createNewAccount_button;
+    WebElement we_createNewAccount_button;
 
     //ERROR MESSAGE SECTION
     @FindBy(xpath = "//div[contains(text(),'Please input your first name')]")
-    public WebElement firstName_errorMsg;
+    public WebElement we_firstName_errorMsg;
     @FindBy(xpath = "//div[contains(text(),'Please input your last name')]")
-    public WebElement lastName_errorMsg;
+    public WebElement we_lastName_errorMsg;
     @FindBy(xpath = "//div[contains(text(),'Please input your username')]")
-    public WebElement email_errorMsg;
+    public WebElement we_email_errorMsg;
     @FindBy(xpath = "//div[contains(text(),'Please input your password')]")
-    public WebElement password_errorMsg;
+    public WebElement we_password_errorMsg;
     @FindBy(xpath = "//div[contains(text(),'Please confirm your password')]")
-    public WebElement passwordConfirmation_errorMsg;
+    public WebElement we_passwordConfirmation_errorMsg;
     @FindBy(xpath = "//div[contains(text(),'Please input your department')]")
-    public WebElement department_errorMsg;
+    public WebElement we_department_errorMsg;
     @FindBy(xpath = "//div[contains(text(),'Please input your position')]")
-    public WebElement position_errorMsg;
+    public WebElement we_position_errorMsg;
+
+    //REQUIRED MESSAGE SECTION
+    @FindBy(xpath = "//span[contains(text(),'First name is required')]")
+    WebElement we_firstName_requiredMsg;
+    @FindBy(xpath = "//span[contains(text(),'Last name is required')]")
+    WebElement we_lastName_requiredMsg;
+    @FindBy(xpath = "//span[contains(text(),'Email is required')]")
+    WebElement we_email_requiredMsg;
+    @FindBy(xpath = "//span[contains(text(),'Password is required')]")
+    WebElement we_password_requiredMsg;
+    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[5]/span[2]")
+    WebElement we_confirmPass_requiredMsg;
+    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[5]/span[2]")
+    WebElement we_confirmPass_errorMsg_while_pass_isNotTyped;
+    @FindBy(xpath = "//span[contains(text(),'Department is required')]")
+    WebElement we_department_requiredMsg;
+    @FindBy(xpath = "//span[contains(text(),'Position is required')]")
+    WebElement we_position_requiredMsg;
 
     //SUCCESSFUL MESSAGE SECTION
     @FindBy(xpath = "//span[contains(text(),'Successful registration')]")
     public WebElement successful_registrationMsg;
 
-    public void enterFirstName(String firstName) {
-        BasePage.sendText(firstName_field, firstName);
-    }
-    public void enterLastName(String lastName) {
-        BasePage.sendText(lastName_field, lastName);
-    }
-    public void enterEmail(String email) {
-        BasePage.sendText(email_field, email);
-    }
-    public void enterPassword(String pass) {
-        BasePage.sendText(password_field, pass);
-    }
-    public void enterDepartment(String department) {
-        BasePage.sendText(department_field, department);
-    }
-    public void enterPosition(String position) {
-        BasePage.sendText(position_field, position);
-    }
-    public void clickRegisterButton() {
-        BasePage.clickElement(register_button);
+    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) throws InterruptedException {
+        BasePage.clickElement(we_createNewAccount_button);
+        Thread.sleep(2000);
+        BasePage.sendText(we_firstName_inputField, firstName);
+        BasePage.sendText(we_lastName_inputField, lastName);
+        BasePage.sendText(we_email_inputField, email);
+        BasePage.sendText(we_password_inputField, password);
+        BasePage.sendText(we_confirmPass_inputField, confirmPass);
+        BasePage.sendText(we_department_inputField, department);
+        BasePage.sendText(we_position_inputField, position);
+        BasePage.clickElement(we_register_button);
+        Thread.sleep(3000);
     }
 
-    public void registerUser(String firstName, String lastName, String email, String password, String department, String position) throws InterruptedException {
-        elementControl.clickElement(createNewAccount_button);
-        Thread.sleep(2000);
-        enterFirstName(firstName);
-        enterLastName(lastName);
-        enterEmail(email);
-        enterPassword(password);
-        enterDepartment(department);
-        enterPosition(position);
-        clickRegisterButton();
-        Thread.sleep(3000);
+    //ASSERT METHODS
+    public void assert_user_registration_isSuccessful(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(successful_registrationMsg), expectedResults);
+    }
+
+    public void assert_firstName_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_firstName_requiredMsg), expectedResults);
+    }
+
+    public void assert_lastName_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_lastName_requiredMsg), expectedResults);
+    }
+
+    public void assert_email_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_email_requiredMsg), expectedResults);
+    }
+
+    public void assert_password_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_password_requiredMsg), expectedResults);
+    }
+
+    public void assert_confirmationPassword_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_confirmPass_requiredMsg), expectedResults);
+    }
+
+    public void assert_department_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_department_requiredMsg), expectedResults);
+    }
+
+    public void assert_position_isRequired(String expectedResults) {
+        Assert.assertEquals(BasePage.getTextFromElement(we_position_requiredMsg), expectedResults);
     }
 }
