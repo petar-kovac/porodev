@@ -1,13 +1,12 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Models.UserModels.Create;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
 using System.Reflection;
 
 namespace PoroDev.Database.Consumers
 {
-    public class UserCreateConsumer : IConsumer<IUserCreateRequestServiceToDatabase>
+    public class UserCreateConsumer : IConsumer<UserCreateRequestServiceToDatabase>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -16,14 +15,25 @@ namespace PoroDev.Database.Consumers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Consume(ConsumeContext<IUserCreateRequestServiceToDatabase> context)
+        public async Task Consume(ConsumeContext<UserCreateRequestServiceToDatabase> context)
         {
             var model = context.Message;
 
-            DataUserModel temp = (DataUserModel)context.Message;
-           
-
-            var createdModel = await _unitOfWork.Users.CreateAsync((DataUserModel)context.Message);
+            DataUserModel modelForDB = new DataUserModel()
+            {
+                Id = model.Id,
+                AvatarUrl = model.AvatarUrl,
+                Department = model.Department,
+                Email = model.Email,
+                Lastname = model.Lastname,
+                Name = model.Name,
+                Position = model.Position,
+                Role = model.Role,
+                Password = model.Password,
+                Salt = model.Salt,
+                DateCreated = DateTime.Now
+            };
+            var createdModel = await _unitOfWork.Users.CreateAsync(modelForDB);
             await _unitOfWork.SaveChanges();
 
             UserCreateResponseDatabaseToService returnModel = new()
@@ -33,7 +43,7 @@ namespace PoroDev.Database.Consumers
                 ErrorMessage = null
             };
 
-            await context.RespondAsync<IUserCreateResponseDatabaseToService>(returnModel);
+            await context.RespondAsync<UserCreateResponseDatabaseToService>(returnModel);
         }
     }
 }

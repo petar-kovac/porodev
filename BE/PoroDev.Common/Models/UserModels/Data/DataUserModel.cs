@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PoroDev.Common.Models.UserModels.Data
 {
-    public class DataUserModel : IUserCreateRequestServiceToDatabase
+    public class DataUserModel 
     {
         public Guid Id { get; set; }
 

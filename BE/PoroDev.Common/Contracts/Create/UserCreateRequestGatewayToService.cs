@@ -1,14 +1,13 @@
-﻿using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Enums;
+﻿using PoroDev.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Models.UserModels.Create
+namespace PoroDev.Common.Contracts.Create
 {
-    public class UserCreateRequestGatewayToService : IUserCreateRequestGatewayToService
+    public class UserCreateRequestGatewayToService
     {
         public string AvatarUrl { get; set; }
         public UserEnums.UserDepartment Department { get; set; }

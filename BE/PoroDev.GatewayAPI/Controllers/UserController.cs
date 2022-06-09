@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Models.UserModels.Create;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;

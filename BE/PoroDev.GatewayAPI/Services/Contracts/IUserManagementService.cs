@@ -1,4 +1,4 @@
-﻿using PoroDev.Common.Models.UserModels.Create;
+﻿using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Models.UserModels.Data;
 
 namespace PoroDev.GatewayAPI.Services.Contracts

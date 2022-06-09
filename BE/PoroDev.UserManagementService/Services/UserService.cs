@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Enums;
-using PoroDev.Common.Models.UserModels.Create;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,7 +13,7 @@ namespace PoroDev.UserManagementService.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRequestClient<IUserCreateRequestServiceToDatabase> _createRequestClient;
+        private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -27,7 +26,7 @@ namespace PoroDev.UserManagementService.Services
         private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
-        public UserService(IRequestClient<IUserCreateRequestServiceToDatabase> createRequestClient)
+        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient)
         {
             _createRequestClient = createRequestClient;
         }
@@ -150,14 +149,14 @@ namespace PoroDev.UserManagementService.Services
         //    return flag;
         //}
 
-        //private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
-        //{
-        //    using (var hmac = new HMACSHA512())
-        //    {
-        //        salt = hmac.Key;
-        //        hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        //    }
-        //}
+        private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                salt = hmac.Key;
+                hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
 
         //private void CheckFullName(string name, string lastname)
         //{
@@ -233,23 +232,26 @@ namespace PoroDev.UserManagementService.Services
         //    return returnModel;
         //}
 
-        public async Task<IUserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
+        public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
         {
-            DataUserModel createModel = new() {
+            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
+
+            UserCreateRequestServiceToDatabase temp = new()
+            {
                 Id = Guid.NewGuid(),
                 AvatarUrl = model.AvatarUrl,
                 Department = model.Department,
                 Email = model.Email,
                 Lastname = model.Lastname,
                 Name = model.Name,
-                Password = new byte[5],
-                Salt = new byte[5],
                 Position = model.Position,
                 Role = model.Role,
+                Password = hash,
+                Salt = salt,
                 DateCreated = DateTime.Now
             };
 
-            var response = await _createRequestClient.GetResponse<IUserCreateResponseDatabaseToService>(createModel);
+            var response = await _createRequestClient.GetResponse<UserCreateResponseDatabaseToService>(temp);
 
             return response.Message;
 
