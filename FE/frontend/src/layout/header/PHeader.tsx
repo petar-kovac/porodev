@@ -1,9 +1,10 @@
 import { Layout } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
-import PDropdown from '../../components/dropdown/Dropdown';
-import { StorageKey } from '../../util/enums/enums';
-import logoImage from '../../assets/logo.png';
+
+import PDropdown from 'components/dropdown/Dropdown';
+import { StorageKey } from 'util/enums/enums';
+import logoImage from 'assets/logo.png';
 
 const { Header } = Layout;
 

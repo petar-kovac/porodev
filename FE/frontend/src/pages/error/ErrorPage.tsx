@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
-import { useAuthStateValue } from '../../context/AuthContext';
+
 import { loginApi } from '../../service/authorization/authorization';
 import api from '../../service/base';
+
+import { useAuthStateValue } from '../../context/AuthContext';
 
 const Error: FC<{ message: string }> = ({ message }) => {
   const { isAuthenticated, testMessage } = useAuthStateValue();

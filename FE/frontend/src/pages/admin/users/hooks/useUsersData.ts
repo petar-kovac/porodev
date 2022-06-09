@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useCallback, useState } from 'react';
+import axios from 'axios';
 
 const useUsersData = () => {
   const [isLoading, setisLoading] = useState<boolean>(false);

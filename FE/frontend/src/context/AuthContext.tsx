@@ -1,5 +1,4 @@
 import { message } from 'antd';
-import { AxiosError, AxiosResponse } from 'axios';
 import {
   createContext,
   FC,
@@ -10,7 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { loginApi, registerApi } from '../service/authorization/authorization';
 import {
@@ -128,9 +127,18 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         message.success('Successful registration');
 
-        navigate('/');
-        setIsLoading(false);
+        // mocked this until backend has been implemented
+        if (res.lastname === 'Admin') {
+          setIsAdmin(true);
+        }
         setAuthenticated(true);
+        setIsLoading(false);
+
+        if (res.lastname === 'Admin') {
+          navigate('/');
+        } else {
+          navigate('/user-home');
+        }
       } catch (err: any) {
         message.error(err.message);
         navigate('/login');

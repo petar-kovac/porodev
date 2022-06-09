@@ -1,24 +1,29 @@
-import { Layout } from 'antd';
 import { FC } from 'react';
+import { Layout } from 'antd';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
+
 import PContent from '../layout/content/PContent';
 import PHeader from '../layout/header/PHeader';
 import PSider from '../layout/sider/PSider';
-import Admins from '../pages/admin/admins/Admins';
-import Error from '../pages/error/ErrorPage';
-import Files from '../pages/admin/files/Files';
-import UserFiles from '../pages/user/files/Files';
-import AdminPage from '../pages/admin/home/AdminPage';
-import Home from '../pages/admin/home/Home';
-import UserHome from '../pages/user/home/Home';
-import Login from '../pages/login/Login';
-import Profile from '../pages/user/profile/Profile';
-import Users from '../pages/admin/users/Users';
+
+// routes
 import AdminRoutes from './AdminRoutes';
 import UserRoutes from './UserRoutes';
+import Error from '../pages/error/ErrorPage';
+import Login from '../pages/login/Login';
+// admin routes
+import Home from '../pages/admin/home/Home';
+import Admins from '../pages/admin/admins/Admins';
+import Files from '../pages/admin/files/Files';
+import Users from '../pages/admin/users/Users';
+// user routes
+import UserHome from '../pages/user/home/Home';
+import UserFiles from '../pages/user/files/Files';
+import Profile from '../pages/user/profile/Profile';
 
 const PRouter: FC = () => {
   const { isAuthenticated, isLoading, isAdmin } = useAuthStateValue();
@@ -37,7 +42,6 @@ const PRouter: FC = () => {
                   <Route path="/files" element={<Files />} />
                   <Route path="/admins" element={<Admins />} />
                   <Route path="/users" element={<Users />} />
-                  <Route path="/adminpage" element={<AdminPage />} />
                 </Route>
                 <Route element={<UserRoutes isUser={!isAdmin} />}>
                   <Route path="/user-home" element={<UserHome />} />

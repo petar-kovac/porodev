@@ -1,19 +1,21 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import logoImage from '../../assets/logo.png';
 
-import LoginForm from '../../components/login/LoginForm';
-import RegisterForm from '../../components/login/RegisterForm';
+import logoImage from 'assets/logo.png';
+import LoginForm from 'components/login/LoginForm';
+import RegisterForm from 'components/login/RegisterForm';
 import {
   StyledPage,
   StyledFormWrapper,
   StyledToggleButton,
-} from '../../components/login/StyledForm';
-import { useAuthStateValue } from '../../context/AuthContext';
+} from 'components/login/StyledForm';
+
 import {
   ILoginRequest,
   IRegisterRequest,
-} from '../../service/authorization/authorization.props';
+} from 'service/authorization/authorization.props';
+
+import { useAuthStateValue } from 'context/AuthContext';
 
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);

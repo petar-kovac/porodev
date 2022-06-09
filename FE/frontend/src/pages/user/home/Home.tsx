@@ -22,7 +22,7 @@ const Home: FC = () => {
       setIsLoading(true);
       try {
         await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/home`)
+          .get(`${process.env.REACT_APP_MOCK_URL}/files`)
           .then((res) => setData(res.data));
       } catch (err) {
         console.log(err);
@@ -45,7 +45,7 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.map((value: any, index: any) => (
+            {data?.splice(0, 5).map((value: any, index: any) => (
               <PCard
                 heading={value?.name}
                 description={value?.description}
@@ -54,7 +54,7 @@ const Home: FC = () => {
             ))}
           </StyledCardWrapper>
           <StyledShowMoreButton>
-            <Link to="/files">
+            <Link to="/user-files">
               <StyledLoginButton type="primary">
                 Show more files
               </StyledLoginButton>

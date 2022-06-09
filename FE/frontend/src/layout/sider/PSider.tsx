@@ -1,18 +1,15 @@
-import { FC, useEffect, useState } from 'react';
-import { Layout, Menu, Avatar } from 'antd';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import {
-  AlertOutlined,
-  AppstoreOutlined,
   FileOutlined,
   FontColorsOutlined,
   HomeOutlined,
-  MailOutlined,
-  SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { useAuthStateValue } from '../../context/AuthContext';
+import { Avatar, Layout, Menu } from 'antd';
+import { FC, useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { useAuthStateValue } from 'context/AuthContext';
 
 const { Sider } = Layout;
 

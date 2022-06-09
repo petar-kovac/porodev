@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
-import '../../App.css';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styled from 'styled-components';
-import { loginSchema } from '../../util/validation-schema/ValidationSchema';
+
+import { loginSchema } from 'util/validation-schema/ValidationSchema';
 import {
   StyledHeader,
   StyledForm,

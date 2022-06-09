@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { boolean } from 'yup';
-import PCard from 'components/card/PCard';
-import { findFiles } from 'service/files/files';
+import { DatePicker, Select, Slider } from 'antd';
 
-import { DatePicker, Select, Slider, Switch } from 'antd';
+import PCard from 'components/card/PCard';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;

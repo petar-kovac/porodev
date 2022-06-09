@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Input, Button } from 'antd';
+
 import landingImage from '../../assets/landing.jpg';
 
 export const StyledPage = styled.div`

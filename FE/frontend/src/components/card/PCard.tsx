@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { Card, Modal } from 'antd';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
-import { Card, Button, Modal } from 'antd';
-import PUpload from '../upload/PUpload';
+
 import { useAuthStateValue } from '../../context/AuthContext';
 
 const { Meta } = Card;

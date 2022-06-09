@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
-import styled from 'styled-components';
 import { Layout } from 'antd';
+import { FC } from 'react';
+import styled from 'styled-components';
+
+import PContent from './content/PContent';
 import PHeader from './header/PHeader';
 import PSider from './sider/PSider';
-import PContent from './content/PContent';
 
 const PLayout: FC = () => (
   <StyledLayout>

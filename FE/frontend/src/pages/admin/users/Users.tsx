@@ -1,15 +1,14 @@
-import { FC, useEffect } from 'react';
 import { Button } from 'antd';
-import styled from 'styled-components';
+import { FC, useEffect } from 'react';
 
+import { pages } from 'constants/constants';
 import {
   StyledHeading,
   StyledHeadingWrapper,
   StyledPage,
 } from 'styles/commonStyles';
-import { pages } from 'constants/constants';
-
 import PTable from 'components/table/PTable';
+
 import useUsersColumns from './hooks/useUsersColumns';
 import useUsersData from './hooks/useUsersData';
 

@@ -1,29 +1,30 @@
-import { Button } from 'antd';
-import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
-import PCard from 'components/card/PCard';
-import {
-  StyledLoginButton,
-  StyledToggleButton,
-} from 'components/login/StyledForm';
+
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
+import PCard from 'components/card/PCard';
+import { StyledLoginButton } from 'components/login/StyledForm';
+
 import { useAuthStateValue } from 'context/AuthContext';
+import PList from 'components/list/List';
+import useAdminsData from '../admins/hooks/useAdminsData';
 
 const Home: FC = () => {
-  const [data, setData] = useState<[]>([]);
+  const [filesData, setFilesData] = useState<[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>();
-  const { isAuthenticated, testMessage } = useAuthStateValue();
+
+  const { findData, data } = useAdminsData();
 
   useEffect(() => {
     const fetchCards = async () => {
       setIsLoading(true);
       try {
         await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/home`)
-          .then((res) => setData(res.data));
+          .get(`${process.env.REACT_APP_MOCK_URL}/files`)
+          .then((res) => setFilesData(res.data));
       } catch (err) {
         console.log(err);
       } finally {
@@ -31,13 +32,20 @@ const Home: FC = () => {
       }
     };
     fetchCards();
+    findData();
   }, []);
 
   return (
     <StyledPage>
       <StyledUploadWrapper>
-        <StyledHeading>File upload:</StyledHeading>
-        <PUpload />
+        <StyledListWrapper>
+          <StyledHeading>Admins</StyledHeading>
+          <PList data={data?.slice(0, 4)} />
+        </StyledListWrapper>
+        <StyledListWrapper>
+          <StyledHeading>Users</StyledHeading>
+          <PList data={data?.reverse().slice(0, 4)} />
+        </StyledListWrapper>
       </StyledUploadWrapper>
       {!isLoading ? (
         <StyledCardListWrapper>
@@ -45,7 +53,8 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.map((value: any, index: any) => (
+            {/* fix when backend is implemented */}
+            {filesData?.slice(0, 5).map((value: any, index: any) => (
               <PCard
                 heading={value?.name}
                 description={value?.description}
@@ -69,6 +78,13 @@ const Home: FC = () => {
     </StyledPage>
   );
 };
+const StyledList = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StyledSpinnerWrappper = styled.div`
   display: flex;
   flex: 1.1;
@@ -78,7 +94,6 @@ const StyledSpinnerWrappper = styled.div`
 const StyledHeading = styled.div`
   font-size: 42px;
   display: flex;
-  justify-content: center;
   font-weight: 600;
   margin: 20px 0;
 `;
@@ -87,10 +102,19 @@ const StyledPage = styled.div`
   flex-direction: column;
   height: 100%;
 `;
-const StyledUploadWrapper = styled.div`
+
+const StyledListWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  flex: 1;
+`;
+const StyledUploadWrapper = styled.div`
+  display: flex;
   flex: 1.1;
+  justify-content: center;
+  align-items: center;
+  margin: 0 100px;
 `;
 const StyledCardListWrapper = styled.div`
   display: flex;

@@ -1,5 +1,4 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 const useAdminsColumns = () => {
   const columns = useMemo(

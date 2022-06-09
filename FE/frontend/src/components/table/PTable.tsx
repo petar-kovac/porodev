@@ -1,4 +1,3 @@
-import { LoadingOutlined } from '@ant-design/icons';
 import { Table } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';

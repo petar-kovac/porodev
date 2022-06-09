@@ -9,6 +9,7 @@ import {
   StyledHeadingWrapper,
 } from 'styles/commonStyles';
 import PTable from 'components/table/PTable';
+
 import useAdminsColumns from './hooks/useAdminsColumns';
 import useAdminsData from './hooks/useAdminsData';
 
