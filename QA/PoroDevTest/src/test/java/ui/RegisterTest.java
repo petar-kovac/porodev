@@ -45,8 +45,7 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        //registrationPage.assert_errorMessageIsDisplayed();
-        registrationPage.assert_withSwitch();
+        registrationPage.assert_errorMessageIsDisplayed();
     }
 
     @Test(priority = 3)
