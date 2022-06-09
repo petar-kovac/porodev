@@ -1,20 +1,22 @@
-﻿using Data.Access.Layer.Models;
+﻿using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Enums;
+using PoroDev.Common.Models.UserModels.Create;
 using PoroDev.UserManagementService.Models.UserModels;
 
 namespace PoroDev.UserManagementService.Services.Contracts
 {
     public interface IUserService
     {
-        Task<Guid> CreateUser(UserCreateRequestModel model);
+        Task<IUserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model);
 
-        Task<DataUserModel> GetUserByMail(string mail);
+        //Task<DataUserModel> GetUserByMail(string mail);
 
-        Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model);
+        //Task<UserCreateModelGateway> UpdateUser(UserCreateModelGateway model);
 
-        Task<UserCreateRequestModel> DeleteUser(string mail);
+        //Task<UserCreateModelGateway> DeleteUser(string mail);
 
-        Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role);
+        //Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, UserEnums.UserRole role);
 
-        Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel);
+        //Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel);
     }
 }

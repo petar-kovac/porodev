@@ -1,4 +1,4 @@
-﻿using Data.Access.Layer.Models;
+﻿using PoroDev.Common.Enums;
 
 namespace PoroDev.UserManagementService.Models.UserModels
 {
@@ -20,7 +20,7 @@ namespace PoroDev.UserManagementService.Models.UserModels
         public string Jwt { get; set; }
 
         public UserLoginResponseModel() { }
-        public UserLoginResponseModel(string name, string lastname, string email, Enums.UserRole role, Enums.UserDepartment department, string position, string avatarUrl, string jwt)
+        public UserLoginResponseModel(string name, string lastname, string email, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl, string jwt)
         {
             Name = name;
             Lastname = lastname;
