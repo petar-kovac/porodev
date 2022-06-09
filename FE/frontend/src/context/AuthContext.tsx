@@ -65,6 +65,13 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       }
       setAuthenticated(true);
       setIsLoading(false);
+
+      // change this when backend is implemented
+      if (isAdmin && location.pathname === '/') {
+        navigate('/');
+      } else {
+        navigate('/user-home');
+      }
       navigate(location);
     } else {
       navigate('/login');
@@ -83,14 +90,20 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         await localStorage.setItem(StorageKey.NAME, res.name);
         await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         await localStorage.setItem(StorageKey.ACCESS_TOKEN, res.jwt);
-        // await localStorage.setItem(StorageKey.LASTNAME, res.refreshToken);
 
+        // mocked this until backend has been implemented
         if (res.lastname === 'Admin') {
           setIsAdmin(true);
         }
         setAuthenticated(true);
         setIsLoading(false);
-        navigate('/');
+
+        // mocked this until backend has been implemented
+        if (res.lastname === 'Admin') {
+          navigate('/');
+        } else {
+          navigate('/user-home');
+        }
       } catch (err: any) {
         message.error(err.message);
         navigate('/login');

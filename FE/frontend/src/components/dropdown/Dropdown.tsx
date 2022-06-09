@@ -5,13 +5,15 @@ import styled from 'styled-components';
 import { useAuthStateValue } from '../../context/AuthContext';
 
 const PDropdown: React.FC = () => {
-  const { logout } = useAuthStateValue();
+  const { logout, isAdmin } = useAuthStateValue();
 
   const menu = (
     <Menu>
-      <Menu.Item key={1} onClick={() => {}}>
-        <Link to="/profile">Profile</Link>
-      </Menu.Item>
+      {!isAdmin && ( // fix this when backend has user impleneted
+        <Menu.Item key={1} onClick={() => {}}>
+          <Link to="/profile">Profile</Link>
+        </Menu.Item>
+      )}
       <Menu.Item key={2} onClick={() => logout()}>
         Logout
       </Menu.Item>

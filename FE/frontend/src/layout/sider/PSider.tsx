@@ -6,6 +6,7 @@ import {
   AlertOutlined,
   AppstoreOutlined,
   FileOutlined,
+  FontColorsOutlined,
   HomeOutlined,
   MailOutlined,
   SettingOutlined,
@@ -36,19 +37,31 @@ const PSider: FC = () => {
       </StyledSiderHeader>
 
       <StyledSiderMenu mode="inline" style={{ height: '144px' }}>
-        <Menu.Item key={1} icon={<HomeOutlined />}>
-          <Link to="/">Home</Link>
-        </Menu.Item>
-        <Menu.Item key={2} icon={<UserOutlined />}>
-          <Link to="/users">Users</Link>
-        </Menu.Item>
-        <Menu.Item key={3} icon={<UserOutlined />}>
-          <Link to="/admins">Admins</Link>
-        </Menu.Item>
-        {!isAdmin && (
-          <Menu.Item key={4} icon={<FileOutlined />}>
-            <Link to="/files">Files</Link>
-          </Menu.Item>
+        {isAdmin && (
+          <>
+            <Menu.Item key={1} icon={<HomeOutlined />}>
+              <Link to="/">Home</Link>
+            </Menu.Item>
+            <Menu.Item key={2} icon={<FontColorsOutlined />}>
+              <Link to="/admins">Admins</Link>
+            </Menu.Item>
+            <Menu.Item key={3} icon={<UserOutlined />}>
+              <Link to="/users">Users</Link>
+            </Menu.Item>
+            <Menu.Item key={4} icon={<FileOutlined />}>
+              <Link to="/files">Files</Link>
+            </Menu.Item>
+          </>
+        )}
+        {!isAdmin && ( // later change it to isUser when backend is implemented
+          <>
+            <Menu.Item key={5} icon={<HomeOutlined />}>
+              <Link to="/user-home">Home</Link>
+            </Menu.Item>
+            <Menu.Item key={6} icon={<FileOutlined />}>
+              <Link to="/user-files">Files</Link>
+            </Menu.Item>
+          </>
         )}
       </StyledSiderMenu>
 

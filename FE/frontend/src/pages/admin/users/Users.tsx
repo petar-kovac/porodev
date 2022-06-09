@@ -9,7 +9,7 @@ import {
 } from 'styles/commonStyles';
 import { pages } from 'constants/constants';
 
-import PTable from '../../components/table/PTable';
+import PTable from 'components/table/PTable';
 import useUsersColumns from './hooks/useUsersColumns';
 import useUsersData from './hooks/useUsersData';
 

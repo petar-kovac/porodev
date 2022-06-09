@@ -1,24 +1,28 @@
-import { FC, useState } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { Layout } from 'antd';
+import { FC } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import styled from 'styled-components';
+import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
-import Home from '../pages/home/Home';
-import AdminPage from '../pages/home/AdminPage';
 import PContent from '../layout/content/PContent';
 import PHeader from '../layout/header/PHeader';
 import PSider from '../layout/sider/PSider';
-import Login from '../pages/login/Login';
-import Profile from '../pages/profile/Profile';
-import PProtectedRoute from './PProtectedRoute';
+import Admins from '../pages/admin/admins/Admins';
 import Error from '../pages/error/ErrorPage';
-import Files from '../pages/files/Files';
-import Users from '../pages/users/Users';
-import Admins from '../pages/admins/Admins';
-import Spinner from '../components/spinner/Spinner';
+import Files from '../pages/admin/files/Files';
+import UserFiles from '../pages/user/files/Files';
+import AdminPage from '../pages/admin/home/AdminPage';
+import Home from '../pages/admin/home/Home';
+import UserHome from '../pages/user/home/Home';
+import Login from '../pages/login/Login';
+import Profile from '../pages/user/profile/Profile';
+import Users from '../pages/admin/users/Users';
+import AdminRoutes from './AdminRoutes';
+import UserRoutes from './UserRoutes';
 
 const PRouter: FC = () => {
-  const { isAuthenticated, isLoading } = useAuthStateValue();
+  const { isAuthenticated, isLoading, isAdmin } = useAuthStateValue();
+
   if (!isLoading) {
     if (isAuthenticated) {
       return (
@@ -28,22 +32,25 @@ const PRouter: FC = () => {
             <PSider />
             <PContent>
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/files" element={<Files />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/admins" element={<Admins />} />
+                <Route element={<AdminRoutes isAdmin={isAdmin} />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/files" element={<Files />} />
+                  <Route path="/admins" element={<Admins />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/adminpage" element={<AdminPage />} />
+                </Route>
+                <Route element={<UserRoutes isUser={!isAdmin} />}>
+                  <Route path="/user-home" element={<UserHome />} />
+                  <Route path="/user-files" element={<UserFiles />} />
+                  <Route path="/profile" element={<Profile />} />
+                </Route>
+                <Route
+                  path="/notallowed"
+                  element={<Error message="Cant go here" />}
+                />
                 <Route
                   path="*"
                   element={<Error message="Router error 404" />}
-                />
-                <Route
-                  path="/adminpage"
-                  element={
-                    <PProtectedRoute>
-                      <AdminPage />
-                    </PProtectedRoute>
-                  }
                 />
               </Routes>
             </PContent>

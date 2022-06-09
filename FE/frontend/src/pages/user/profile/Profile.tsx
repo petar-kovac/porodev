@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { useAuthStateValue } from '../../context/AuthContext';
-import { StorageKey } from '../../util/enums/enums';
+import { useAuthStateValue } from 'context/AuthContext';
+import { StorageKey } from 'util/enums/enums';
 
 const Profile: FC = () => {
   const { isAuthenticated, testMessage, loggedUser } = useAuthStateValue();
