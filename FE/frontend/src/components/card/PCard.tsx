@@ -35,11 +35,24 @@ const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
         role="button"
         onClick={showModal}
       >
-        <Meta title={heading} description={description} />
+        <Meta
+          title={heading}
+          description={[
+            <div>
+              <span>{description.slice(0, 60)}...</span>
+              <span
+                style={{
+                  fontWeight: 'bold',
+                  marginLeft: '2rem',
+                }}
+              >
+                &rarr; Show more
+              </span>
+            </div>,
+          ]}
+        />
       </StyledCard>
-      {/* <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button> */}
+
       <Modal
         title="Basic Modal"
         visible={isModalVisible}
@@ -53,14 +66,15 @@ const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
   );
 };
 const StyledCard = styled(Card)`
+  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   .ant-card-cover {
-    height: 120px;
+    height: 140px;
     width: 240px;
     overflow: hidden;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
   }
-  height: 200px;
+  height: 250px;
   border-radius: 15px;
   overflow: hidden;
   max-width: 240px;
