@@ -1,6 +1,6 @@
-﻿using System.Net;
+﻿using PoroDev.Common.Exceptions;
+using System.Net;
 using System.Text.Json;
-using PoroDev.GatewayAPI.Exceptions;
 
 namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
 {
@@ -28,11 +28,6 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
-                    case Business.Access.Layer.Helpers.GlobalExceptionHandler.AppException appException:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        HumanReadableErrorMessage = appException.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, appException);
-                        break;
 
                     case UserNotFoundException userNotFound:
                         response.StatusCode = (int)HttpStatusCode.NotFound;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoroDev.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,8 @@ namespace PoroDev.Common.Models.UserModels
 
         public byte[] Password { get; set; }
 
+        public byte[] Salt { get; set; }
+
         public UserEnums.UserRole Role { get; set; }
 
         public UserEnums.UserDepartment Department { get; set; }
@@ -27,8 +30,6 @@ namespace PoroDev.Common.Models.UserModels
         public string AvatarUrl { get; set; }
 
         public DateTime DateCreated { get; set; }
-
-        public byte[] Salt { get; set; }
 
         public DataUserModel()
         {
