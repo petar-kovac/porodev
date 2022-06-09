@@ -9,6 +9,7 @@ const { Dragger } = Upload;
 const props: UploadProps = {
   name: 'file',
   multiple: true,
+  accept: '*',
   action: `${process.env.REACT_APP_IMAGE_URL}`,
   onChange(info) {
     const { status } = info.file;

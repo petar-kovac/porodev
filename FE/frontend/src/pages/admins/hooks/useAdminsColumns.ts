@@ -2,8 +2,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useMemo, useState } from 'react';
 
 const useAdminsColumns = () => {
-  const [filterData, setFilterData] = useState([]);
-  const [currentColumn, setCurrentColumn] = useState('all');
   const columns = useMemo(
     () => [
       {

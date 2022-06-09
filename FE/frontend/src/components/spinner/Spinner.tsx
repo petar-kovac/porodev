@@ -1,12 +1,7 @@
-import {
-  HolderOutlined,
-  LoadingOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { Airplane } from '@styled-icons/ionicons-outline';
 import { Spin } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Airplane } from '@styled-icons/ionicons-outline';
 
 const Spinner: FC<{ size: number; color: string; speed: number }> = ({
   size,

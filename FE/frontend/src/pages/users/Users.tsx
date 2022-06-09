@@ -1,5 +1,14 @@
 import { FC, useEffect } from 'react';
+import { Button } from 'antd';
 import styled from 'styled-components';
+
+import {
+  StyledHeading,
+  StyledHeadingWrapper,
+  StyledPage,
+} from 'styles/commonStyles';
+import { pages } from 'constants/constants';
+
 import PTable from '../../components/table/PTable';
 import useUsersColumns from './hooks/useUsersColumns';
 import useUsersData from './hooks/useUsersData';
@@ -14,13 +23,13 @@ const Users: FC = () => {
 
   return (
     <StyledPage>
+      <StyledHeadingWrapper>
+        <StyledHeading>{pages.users}</StyledHeading>
+        <Button>aaa</Button>
+      </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />
     </StyledPage>
   );
 };
-
-const StyledPage = styled.div`
-  padding: 20px;
-`;
 
 export default Users;
