@@ -5,19 +5,11 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Database", "PoroDev.Database\PoroDev.Database.csproj", "{6D7F51AE-3358-4E26-A355-AECDB563E80F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common.Models", "PoroDev.Common.Models\PoroDev.Common.Models.csproj", "{E3F675AE-6ACD-4BDC-BF19-BDA645B962AE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common.Enums", "PoroDev.Common.Enums\PoroDev.Common.Enums.csproj", "{D1F83241-47CA-450E-B215-764BE4C62B36}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.UserManagementService", "PoroDev.UserManagementService\PoroDev.UserManagementService.csproj", "{B02645A0-9BC0-4DF5-8044-9FC224172888}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.GatewayAPI", "PoroDev.GatewayAPI\PoroDev.GatewayAPI.csproj", "{AD73231A-2F05-4E47-B90E-0073D5C801B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common.Exceptions", "PoroDev.Common.Exceptions\PoroDev.Common.Exceptions.csproj", "{D9C4B828-D852-456C-A402-9570E01FEF6D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common.Constants", "PoroDev.Common.Constants\PoroDev.Common.Constants.csproj", "{3313F093-248B-4763-B6FB-E7FD8D7DD666}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoroDev.Common.Contracts", "PoroDev.Common.Contracts\PoroDev.Common.Contracts.csproj", "{E09852FD-4FC4-4C1A-B15E-D61B361B6DBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoroDev.Common", "PoroDev.Common\PoroDev.Common.csproj", "{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,14 +21,6 @@ Global
 		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3F675AE-6ACD-4BDC-BF19-BDA645B962AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3F675AE-6ACD-4BDC-BF19-BDA645B962AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3F675AE-6ACD-4BDC-BF19-BDA645B962AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3F675AE-6ACD-4BDC-BF19-BDA645B962AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1F83241-47CA-450E-B215-764BE4C62B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1F83241-47CA-450E-B215-764BE4C62B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1F83241-47CA-450E-B215-764BE4C62B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1F83241-47CA-450E-B215-764BE4C62B36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,18 +29,10 @@ Global
 		{AD73231A-2F05-4E47-B90E-0073D5C801B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD73231A-2F05-4E47-B90E-0073D5C801B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD73231A-2F05-4E47-B90E-0073D5C801B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9C4B828-D852-456C-A402-9570E01FEF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9C4B828-D852-456C-A402-9570E01FEF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9C4B828-D852-456C-A402-9570E01FEF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9C4B828-D852-456C-A402-9570E01FEF6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3313F093-248B-4763-B6FB-E7FD8D7DD666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3313F093-248B-4763-B6FB-E7FD8D7DD666}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3313F093-248B-4763-B6FB-E7FD8D7DD666}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3313F093-248B-4763-B6FB-E7FD8D7DD666}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E09852FD-4FC4-4C1A-B15E-D61B361B6DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E09852FD-4FC4-4C1A-B15E-D61B361B6DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E09852FD-4FC4-4C1A-B15E-D61B361B6DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E09852FD-4FC4-4C1A-B15E-D61B361B6DBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
