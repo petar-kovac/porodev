@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PoroDev.Common.Extensions
 {
-    public static class CreateResponse<ResponseModel, CreatedEntity> where ResponseModel : CommunicationModel<CreatedEntity>, new() where CreatedEntity : class, new()
+    public static class CreateResponseExtension
     {
-        public static ResponseModel CreateResponseModel(CreatedEntity entity)
+        public static ResponseModel CreateResponseModel<ResponseModel, CreatedEntity>(CreatedEntity entity) where ResponseModel : CommunicationModel<CreatedEntity>, new() where CreatedEntity : class, new()
         {
             ResponseModel response = new ResponseModel()
             {
@@ -21,7 +21,7 @@ namespace PoroDev.Common.Extensions
             return response;
         }
 
-        public static ResponseModel CreateResponseModel(string exceptionName, string humanReadableMessage)
+        public static ResponseModel CreateResponseModel<ResponseModel, CreatedEntity>(string exceptionName, string humanReadableMessage) where ResponseModel : CommunicationModel<CreatedEntity>, new() where CreatedEntity : class, new()
         {
             ResponseModel response = new ResponseModel()
             {
@@ -33,6 +33,6 @@ namespace PoroDev.Common.Extensions
             return response;
         }
 
-
     }
+    
 }

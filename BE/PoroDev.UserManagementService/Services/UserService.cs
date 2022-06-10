@@ -4,7 +4,9 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Enums;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -237,6 +239,16 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
         {
+            if(model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
+            {
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = "Email cannot be empty!";
+
+                var responseException = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+
+                return responseException;
+            }
+
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             UserCreateRequestServiceToDatabase temp = new()
@@ -257,26 +269,6 @@ namespace PoroDev.UserManagementService.Services
             var response = await _createRequestClient.GetResponse<UserCreateResponseDatabaseToService>(temp);
 
             return response.Message;
-
-            //var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Trim().Equals(model.Email.Trim()));
-
-            //if (exists != null)
-            //    throw new AppException("User already exists");
-
-            //var userToCreate = _mapper.Map<DataUserModel>(model);
-            //GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
-            //userToCreate.Password = hash;
-            //userToCreate.Salt = salt;
-            //userToCreate.Id = Guid.NewGuid();
-            //userToCreate.DateCreated = DateTime.Now;
-
-            //var created = await _unitOfWork.Users.CreateAsync(userToCreate);
-
-            //await _unitOfWork.SaveChanges();
-
-            //if (created != null)
-            //    return created.Id;
-            //return Guid.Empty;
         }
 
 
