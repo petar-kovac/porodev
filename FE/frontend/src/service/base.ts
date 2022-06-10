@@ -22,7 +22,7 @@ const createInstance = (mainConfig: Config): AxiosInstance => {
   instance.defaults.headers.common['Content-Type'] = 'application/json';
   instance.interceptors.request.use(
     async (config: AxiosRequestConfig) => {
-      const accessToken = await localStorage.getItem(StorageKey.ACCESS_TOKEN);
+      const accessToken = localStorage.getItem(StorageKey.ACCESS_TOKEN);
       const newConfig = { ...config };
       if (!!accessToken && newConfig?.headers) {
         newConfig.headers.Authorization = `Bearer ${accessToken}`;
@@ -58,8 +58,8 @@ instance.interceptors.response.use(
       delete instance.defaults.headers.common.Authorization; // mentor suggestion to check
       // eslint-disable-next-line no-underscore-dangle
       originalRequest._retry = true;
-      const oldAccess = await localStorage.getItem(StorageKey.ACCESS_TOKEN);
-      const oldRefresh = await localStorage.getItem(StorageKey.REFRESH_TOKEN);
+      const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+      const oldRefresh = localStorage.getItem(StorageKey.REFRESH_TOKEN);
       if (oldAccess) {
         try {
           const { accessToken, refreshToken } = await instance
@@ -85,20 +85,20 @@ instance.interceptors.response.use(
             )
             .then((response: AxiosResponse) => response.data);
 
-          await localStorage.setItem(StorageKey.ACCESS_TOKEN, accessToken);
-          await localStorage.setItem(StorageKey.REFRESH_TOKEN, refreshToken);
+          localStorage.setItem(StorageKey.ACCESS_TOKEN, accessToken);
+          localStorage.setItem(StorageKey.REFRESH_TOKEN, refreshToken);
           instance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
           return await instance(originalRequest);
         } catch (err) {
           if (originalRequest.url !== '/login') {
-            await localStorage.clear();
+            localStorage.clear();
           }
 
           throw err;
         }
       }
     } else {
-      await localStorage.clear();
+      localStorage.clear();
       window.location.href = '/login';
       throw error;
     }

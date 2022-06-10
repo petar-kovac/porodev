@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
 
-import { pages } from 'constants/constants';
+import { PAGES } from 'util/constants/constants';
 import {
   StyledPage,
   StyledHeading,
@@ -24,7 +24,7 @@ const Admins: FC = () => {
   return (
     <StyledPage>
       <StyledHeadingWrapper>
-        <StyledHeading>{pages.admins}</StyledHeading>
+        <StyledHeading>{PAGES.admins}</StyledHeading>
         {/* <Button>aaa</Button> */}
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />

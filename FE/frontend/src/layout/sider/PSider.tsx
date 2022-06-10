@@ -27,21 +27,7 @@ const PSider: FC = () => {
       trigger={
         <StyledTriggerContainer>
           <StyledTriggerIcon>
-            {!isCollapsed ? (
-              <StyledAirplane
-                style={{
-                  transform: 'rotate(-180deg)',
-                  transition: '0.3s',
-                }}
-              />
-            ) : (
-              <StyledAirplane
-                style={{
-                  transform: 'rotate(0deg)',
-                  transition: '0.3s',
-                }}
-              />
-            )}
+            <StyledAirplane isCollapsed={isCollapsed} />
           </StyledTriggerIcon>
         </StyledTriggerContainer>
       }
@@ -91,8 +77,11 @@ const PSider: FC = () => {
   );
 };
 
-const StyledAirplane = styled(Airplane)`
-  height: 25px;
+const StyledAirplane = styled(Airplane)<{ isCollapsed: boolean | undefined }>`
+  height: ${({ isCollapsed }) => (isCollapsed ? '20px' : '25px')};
+  transform: ${({ isCollapsed }) =>
+    isCollapsed ? 'rotate(0)' : 'rotate(-180deg)'};
+  transition: 0.3s;
 `;
 
 const StyledTriggerIcon = styled.div`

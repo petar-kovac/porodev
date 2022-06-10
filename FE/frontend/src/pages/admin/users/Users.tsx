@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { FC, useEffect } from 'react';
 
-import { pages } from 'constants/constants';
+import { PAGES } from 'util/constants/constants';
 import {
   StyledHeading,
   StyledHeadingWrapper,
@@ -23,7 +23,7 @@ const Users: FC = () => {
   return (
     <StyledPage>
       <StyledHeadingWrapper>
-        <StyledHeading>{pages.users}</StyledHeading>
+        <StyledHeading>{PAGES.users}</StyledHeading>
         {/* <Button>aaa</Button> */}
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />

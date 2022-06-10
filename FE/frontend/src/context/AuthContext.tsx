@@ -87,9 +87,9 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           password: loginData.password,
         });
         message.success('Successful login');
-        await localStorage.setItem(StorageKey.NAME, res.name);
-        await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
-        await localStorage.setItem(StorageKey.ACCESS_TOKEN, res.jwt);
+        localStorage.setItem(StorageKey.NAME, res.name);
+        localStorage.setItem(StorageKey.LASTNAME, res.lastname);
+        localStorage.setItem(StorageKey.ACCESS_TOKEN, res.jwt);
 
         // mocked this until backend has been implemented
         if (res.lastname === 'Admin') {
@@ -124,8 +124,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           position: registerData.position,
           avatarUrl: 'aurl',
         });
-        await localStorage.setItem(StorageKey.NAME, res.name);
-        await localStorage.setItem(StorageKey.LASTNAME, res.lastname);
+        localStorage.setItem(StorageKey.NAME, res.name);
+        localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         message.success('Successful registration');
 
         // mocked this until backend has been implemented

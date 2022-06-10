@@ -1,21 +1,26 @@
-import { createContext, FC, useContext, useMemo } from 'react';
+import { createContext, FC, useContext, useMemo, useState } from 'react';
+import { boolean } from 'yup';
 
 type AppContextProps = {
   testMessage: string;
+  isLoading: boolean;
 };
 
 export const AppContext = createContext<AppContextProps>({
   testMessage: '',
+  isLoading: true,
 });
 
 export const AppConsumer = AppContext.Consumer;
 
 const AppProvider: FC<any> = ({ children }) => {
   const testMessage = 'cedo-cedo ';
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const state: AppContextProps = useMemo(
     () => ({
       testMessage,
+      isLoading,
     }),
     [testMessage],
   );
