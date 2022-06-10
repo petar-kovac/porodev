@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Extensions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
 using System.Reflection;
@@ -36,16 +37,7 @@ namespace PoroDev.Database.Consumers
             var createdModel = await _unitOfWork.Users.CreateAsync(modelForDB);
             await _unitOfWork.SaveChanges();
 
-            UserCreateResponseDatabaseToService returnModel = new()
-            {
-                Entity = createdModel,
-                ExceptionName = null,
-                HumanReadableMessage = null
-            };
-            returnmodel = UserCreate<UserCreateResponseDatabaseToService, DataUserModel>(createdModel);
-            returnmodel = UserCreate<UserCreateResponseDatabaseToService, DataUserModel>(exceprtion );
-
-
+            var returnModel = CreateResponse<UserCreateResponseDatabaseToService, DataUserModel>.CreateResponseModel(createdModel);
 
             await context.RespondAsync<UserCreateResponseDatabaseToService>(returnModel);
         }
