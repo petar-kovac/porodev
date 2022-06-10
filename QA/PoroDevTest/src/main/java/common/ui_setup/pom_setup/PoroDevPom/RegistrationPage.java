@@ -50,41 +50,41 @@ public class RegistrationPage extends BasePage {
 
     //ERROR MESSAGE SECTION
     @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[1]/span[2]")
-    WebElement we_firstName_errorMsg;
+    public WebElement we_firstName_errorMsg;
     @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[2]/span[2]")
-    WebElement we_lastName_errorMsg;
+    public WebElement we_lastName_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Email is invalid')]")
-    WebElement we_email_errorMsg;
+    public WebElement we_email_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Wrong password')]")
-    WebElement we_password_errorMsg;
+    public WebElement we_password_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Whitespace not allowed')]")
-    WebElement we_password_whiteSpace_errorMsg;
+    public WebElement we_password_whiteSpace_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Passwords should match')]")
-    WebElement we_confirmPass_errorMsg;
+    public WebElement we_confirmPass_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Must be a number')]")
-    WebElement we_department_errorMsg;
+    public WebElement we_department_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Letters & whitespace only')]")
-    WebElement we_position_errorMsg;
+    public WebElement we_position_errorMsg;
     @FindBy(xpath = "//span[contains(text(),'Request failed with status code 500')]")
-    WebElement we_requestFailed_statusCode500;
+    public WebElement we_requestFailed_statusCode500;
     @FindBy(xpath = "//span[contains(text(),'Request failed with status code 400')]")
-    WebElement getWe_requestFailed_statusCode400;
+    public WebElement getWe_requestFailed_statusCode400;
 
     //REQUIRED MESSAGE SECTION
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[1]/span[2]")
-    WebElement we_firstName_requiredMsg;
+    public WebElement we_firstName_requiredMsg;
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[2]/span[2]")
-    WebElement we_lastName_requiredMsg;
+    public WebElement we_lastName_requiredMsg;
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[3]/span[2]")
-    WebElement we_email_requiredMsg;
+    public WebElement we_email_requiredMsg;
     @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[4]/span[3]")
-    WebElement we_password_requiredMsg;
+    public WebElement we_password_requiredMsg;
     @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[5]/span[3]")
-    WebElement we_confirmPass_requiredMsg;
+    public WebElement we_confirmPass_requiredMsg;
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[6]/span[2]")
-    WebElement we_department_requiredMsg;
+    public WebElement we_department_requiredMsg;
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[7]/span[2]")
-    WebElement we_position_requiredMsg;
+    public WebElement we_position_requiredMsg;
     @FindBy(className = "sc-ftvSup")
     List<WebElement> we_errorFields;
 
@@ -93,7 +93,7 @@ public class RegistrationPage extends BasePage {
     public WebElement we_successful_registrationMsg;
 
     public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) throws InterruptedException {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
+
 
         BasePage.clickElement(we_createNewAccount_button);
         BasePage.sendText(we_firstName_inputField, firstName);
@@ -104,8 +104,11 @@ public class RegistrationPage extends BasePage {
         BasePage.sendText(we_department_inputField, department);
         BasePage.sendText(we_position_inputField, position);
         BasePage.clickElement(we_register_button);
-        //wait.until(ExpectedConditions.visibilityOf(we_successful_registrationMsg));
+    }
 
+    public void explicitWait(WebElement element) {
+        wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     //ASSERT METHODS
@@ -113,30 +116,16 @@ public class RegistrationPage extends BasePage {
         Assert.assertEquals(BasePage.getTextFromElement(we_successful_registrationMsg), expectedResults);
     }
 
-    public void assert_errorMessageIsDisplayed() {
+    public void assert_errorMessage(String expectedResults) {
+        String currentError = "";
+
         for (WebElement element : we_errorFields) {
-            String currentError = BasePage.getTextFromElement(element);
-            if (currentError.equals("Wrong password")) {
-                Assert.assertTrue(BasePage.isDisplayed(element));
-            }
-            if (currentError.equals("Whitespace not allowed")) {
-                Assert.assertTrue(BasePage.isDisplayed(element));
-            }
-            if (currentError.equals("Only letters allowed")) {
-                Assert.assertTrue(BasePage.isDisplayed(element));
-            }
-            if (currentError.equals("This field is required")) {
-                Assert.assertTrue(BasePage.isDisplayed(element));
-            }
-            if (currentError.equals("Email is invalid")) {
-                Assert.assertEquals(BasePage.getTextFromElement(element), "Email is invalid");
-            }
-            if (currentError.equals("Password should match")) {
-                Assert.assertEquals(BasePage.getTextFromElement(element), "Password should match");
-            }
-            if (currentError.equals("Must be a number")) {
-                Assert.assertEquals(BasePage.getTextFromElement(element), "Must be a number");
+            if (!BasePage.getTextFromElement(element).equals("")) {
+                currentError = BasePage.getTextFromElement(element);
+                break;
             }
         }
+        System.out.println("error: " + currentError);
+        Assert.assertEquals(currentError, expectedResults);
     }
 }

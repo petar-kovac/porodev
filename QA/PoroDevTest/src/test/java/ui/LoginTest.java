@@ -30,10 +30,10 @@ public class LoginTest extends BaseTest {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
         loginPage.login(
-                "",
+                fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
                 fileControlUtil.getValue("INVALID_FORM_PASS"));
 
-        loginPage.assert_login_with_invalid_form_password("Wrong password");
+        loginPage.assert_login("Wrong password");
     }
 
     @Test(priority = 2)
@@ -55,7 +55,7 @@ public class LoginTest extends BaseTest {
                 fileControlUtil.getValue("INVALID_FORM_EMAIL"),
                 "");
 
-        loginPage.assert_login_with_invalid_form_email("Invalid email");
+        loginPage.assert_login("Email is invalid");
     }
 
     @Test(priority = 4)
@@ -77,7 +77,7 @@ public class LoginTest extends BaseTest {
                 "",
                 fileControlUtil.getValue("VALID_PASS_CREATED_USER"));
 
-        loginPage.assert_email_isRequired("Email is required");
+        loginPage.assert_login("This field is required");
     }
 
     @Test(priority = 6)
@@ -88,27 +88,6 @@ public class LoginTest extends BaseTest {
                 fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
                 "");
 
-        loginPage.assert_password_isRequired("Password is required");
-    }
-
-    @Test(priority = 7)
-    public void login_without_bothCredentials() throws InterruptedException {
-        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
-
-        loginPage.login("", "");
-
-        loginPage.assert_email_isRequired("Email is required");
-        loginPage.assert_password_isRequired("Password is required");
-    }
-
-    @Test(priority = 8)
-    public void login_with_invalidEmail_invalidPassword() throws InterruptedException {
-        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
-        loginPage.login(
-                fileControlUtil.getValue("INVALID_FORM_EMAIL"),
-                fileControlUtil.getValue("INVALID_FORM_PASS"));
-
-        loginPage.assert_login_with_invalid_form_password("Wrong password");
-        loginPage.assert_login_with_invalid_form_email("Invalid email");
+        loginPage.assert_login("This field is required");
     }
 }

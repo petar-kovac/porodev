@@ -8,6 +8,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
+import java.util.List;
+
 public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
@@ -27,11 +29,11 @@ public class LoginPage extends BasePage {
     @FindBy(className = "ant-btn-primary")
     WebElement we_loginButton;
     //ASSERTION ELEMENTS
-    @FindBy(xpath = "//span[contains(text(),'Email is required')]")
+    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[1]/span[2]")
     WebElement we_email_requiredMsg;
-    @FindBy(xpath = "//span[contains(text(),'Password is required')]")
+    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[2]/span[3]")
     WebElement we_pass_requiredMsg;
-    @FindBy(xpath = "//span[contains(text(),'Invalid email')]")
+    @FindBy(xpath = "//span[contains(text(),'Email is invalid')]")
     WebElement we_email_invalidMsg;
     @FindBy(xpath = "//span[contains(text(),'Wrong password')]")
     WebElement we_pass_invalidMsg;
@@ -39,6 +41,8 @@ public class LoginPage extends BasePage {
     WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
     WebElement we_badRequestError;
+    @FindBy(className = "sc-ftvSup")
+    List<WebElement> we_listOfErrors;
 
     //functional methods section
 
@@ -50,27 +54,23 @@ public class LoginPage extends BasePage {
     }
 
     //ASSERT METHODS
+    public void assert_login(String expectedResults) {
+
+        String currentError = "";
+        for (WebElement element : we_listOfErrors) {
+            if (!BasePage.getTextFromElement(element).equals("")) {
+                currentError = BasePage.getTextFromElement(element);
+                break;
+            }
+        }
+        System.out.println(currentError);
+        Assert.assertEquals(currentError, expectedResults);
+    }
     public void assert_valid_login(String expectedResults) {
         Assert.assertEquals(BasePage.getTextFromElement(we_successfulLogin), expectedResults);
     }
 
-    public void assert_login_with_invalid_form_password(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_pass_invalidMsg), expectedResults);
-    }
-
-    public void assert_login_with_invalid_form_email(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_email_invalidMsg), expectedResults);
-    }
-
     public void assert_login_with_valid_notExistingCredentials(String expectedResults) {
         Assert.assertEquals(BasePage.getTextFromElement(we_badRequestError), expectedResults);
-    }
-
-    public void assert_email_isRequired(String expectedResult) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_email_requiredMsg), expectedResult);
-    }
-
-    public void assert_password_isRequired(String expectedResult) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_pass_requiredMsg), expectedResult);
     }
 }

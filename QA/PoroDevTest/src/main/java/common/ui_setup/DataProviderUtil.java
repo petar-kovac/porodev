@@ -6,26 +6,34 @@ public class DataProviderUtil {
 
     @DataProvider(name = "passwordForm")
     public static Object[][] invalidPasswordForms() {
-        Object[][] passwordForm = new Object[][]{
+        return new Object[][]{
                 {"markoilic1!"},
                 {"MARKOILIC1!"},
                 {"Markoilic!"},
                 {"Markoilic1"},
                 {"Mark1!"},
-                {"Marko ilic 1 !"}
             };
-        return passwordForm;
+    }
+
+    @DataProvider(name = "passwords_with_whitespace")
+    public static Object[][] invalidPasswordForm_whitespace() {
+        return new Object[][]{
+                {"marko ilic1!"},
+                {"MARKO ILIC1!"},
+                {"Marko ilic !"},
+                {"Marko ilic1"},
+                {"Mark1 !"},
+        };
     }
 
     @DataProvider(name = "emailForm")
     public static Object[][] invalidEmailForms() {
-        Object[][] passwordForm = new Object[][]{
+        return new Object[][]{
                 {"marko@gmail.com"},
                 {"@marko@boing.rs"},
                 {"markoboing.rs"},
                 {"MarkoMarko@boingrs"}
             };
-        return passwordForm;
 
     }
 }
