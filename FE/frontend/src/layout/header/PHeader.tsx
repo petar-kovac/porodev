@@ -39,6 +39,10 @@ const StyledHeader = styled(Header)`
   align-items: center;
   padding-right: 20px;
   padding-left: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0px 3px 6px rgba(34, 25, 25, 0.3);
+  z-index: 1000;
 `;
 const StyledLogo = styled.img`
   width: 110px;

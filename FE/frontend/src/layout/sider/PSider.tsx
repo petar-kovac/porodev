@@ -27,10 +27,10 @@ const PSider: FC = () => {
       trigger={
         <StyledTriggerContainer>
           <StyledTriggerIcon>
-            {isCollapsed ? (
+            {!isCollapsed ? (
               <StyledAirplane
                 style={{
-                  transform: 'rotate(180deg)',
+                  transform: 'rotate(-180deg)',
                   transition: '0.3s',
                 }}
               />
@@ -110,6 +110,11 @@ const StyledSider = styled(Sider)`
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  box-shadow: 1px 0px 6px rgba(34, 25, 25, 0.1);
+
+  .ant-layout-sider-trigger {
+    box-shadow: 1px 0px 6px rgba(34, 25, 25, 0.1);
+  }
 
   .ant-layout-sider-children {
     display: flex;

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { boolean } from 'yup';
 import PCard from 'components/card/PCard';
 import { findFiles } from 'service/files/files';
 
@@ -34,15 +33,7 @@ const Files: FC = () => {
   return (
     <>
       <StyledFilesWrapper>
-        <StyledFilesHeader
-          style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: '10px',
-            justifyContent: 'space-around',
-            flexWrap: 'wrap',
-          }}
-        >
+        <StyledFilesHeader style={{}}>
           <StyledFilesDateFilter>
             <h4>Filter files by date:</h4>
             <RangePicker />
@@ -50,24 +41,17 @@ const Files: FC = () => {
 
           <StyledFilesSlider>
             <h4>Filter by size:</h4>
-            <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
+            <Slider range defaultValue={[0, 30]} />
           </StyledFilesSlider>
           <StyledFilesSelect>
-            <Select
-              defaultValue="Filter by type"
-              style={{ width: 160 }}
-              onChange={handleChange}
-            >
+            <Select defaultValue="Filter by type" onChange={handleChange}>
               <Option value="jpg">.jpg</Option>
               <Option value="png">.png</Option>
               <Option value="txt">.txt</Option>
               <Option value="pdf">.pdf</Option>
             </Select>
-            <Select
-              defaultValue="Sort by"
-              style={{ width: 160 }}
-              onChange={handleChange}
-            >
+
+            <Select defaultValue="Sort by" onChange={handleChange}>
               <Option value="asc">Ascending</Option>
               <Option value="desc">Descending</Option>
               <Option value="newest" disabled>
@@ -91,18 +75,23 @@ const Files: FC = () => {
 };
 
 const StyledFilesWrapper = styled.div`
-  padding: 20px;
+  padding: 2rem;
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 2.5rem;
   flex-wrap: wrap;
 `;
 
 const StyledFilesHeader = styled.div`
   width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
   padding: 2rem 0;
   background-color: #fcfcfc;
-  border-radius: 30px;
+  border-radius: 3rem;
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   margin-bottom: 5rem;
 `;
@@ -112,6 +101,7 @@ const StyledFilesSlider = styled.div`
   .ant-slider {
     margin: 22px 6px 10px;
     padding: 0 !important;
+    width: 30rem;
   }
 `;
 
@@ -131,6 +121,10 @@ const StyledFilesSelect = styled.div`
   align-self: flex-end;
   display: flex;
   gap: 1rem;
+
+  .ant-select {
+    width: 16rem;
+  }
 
   .ant-select-selector {
     border-radius: 10px !important;
