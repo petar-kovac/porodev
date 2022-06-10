@@ -2,6 +2,7 @@
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Services
@@ -29,9 +30,13 @@ namespace PoroDev.GatewayAPI.Services
             return returnModel;
         }
 
-        public async Task DeleteUser(UserDeleteRequestGatewayToService deleteModel)
+        public async Task<DeleteUserModel> DeleteUser(UserDeleteRequestGatewayToService deleteModel)
         {
-            await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+            var requestReturnContext = await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+            if (requestReturnContext.Message.ExceptionName != null)
+                throw new Exception("Error");
+
+            return requestReturnContext.Message.Entity;
         }
     }
 }

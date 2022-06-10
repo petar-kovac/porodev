@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
@@ -14,6 +15,7 @@ namespace PoroDev.UserManagementService.Services
     public class UserService : IUserService
     {
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
+        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -26,9 +28,11 @@ namespace PoroDev.UserManagementService.Services
         private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
-        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient)
+        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient)
         {
             _createRequestClient = createRequestClient;
+            _deleteUserRequestclient = deleteUserRequestClient;
+            
         }
 
         //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
@@ -274,6 +278,12 @@ namespace PoroDev.UserManagementService.Services
             //if (created != null)
             //    return created.Id;
             //return Guid.Empty;
+        }
+
+        public async Task<UserDeleteResponseDatabaseToService> DeleteUser(UserDeleteRequestGatewayToService model)
+        {
+            var response = await _deleteUserRequestclient.GetResponse<UserDeleteResponseDatabaseToService>(model);
+            return response.Message;
         }
 
 
