@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.Random;
 
-public abstract class BasePage {
+public class BasePage {
     protected WebDriver driver;
 
     public BasePage(WebDriver driver) {
