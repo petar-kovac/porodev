@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
@@ -34,7 +35,12 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok();
         }
 
-
+        [HttpGet("ReadUserByEmail/{email}")]
+        public async Task<ActionResult<DataUserModel>> ReadUserByEmail([FromRoute] string email)
+        {
+            var returnModel = await _userService.ReadUserByEmail(email);
+            return Ok(returnModel);
+        }
 
 
         //private readonly IUserService _userService;

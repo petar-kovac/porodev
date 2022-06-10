@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 
@@ -10,11 +11,15 @@ namespace PoroDev.GatewayAPI.Services
     {
         private readonly IRequestClient<UserCreateRequestGatewayToService> _createRequestClient;
         private readonly IRequestClient<UserDeleteRequestGatewayToService> _deleteRequestClient;
+        private readonly IRequestClient<UserReadByEmailRequestGatewayToService> _readUserByEmailRequestClient;
 
-        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient, IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient)
+        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
+            IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
+            IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient)
         {
             _createRequestClient = createRequestClient;
             _deleteRequestClient = deleteRequestClient;
+            _readUserByEmailRequestClient = readUserByEmailRequestClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -32,6 +37,20 @@ namespace PoroDev.GatewayAPI.Services
         public async Task DeleteUser(UserDeleteRequestGatewayToService deleteModel)
         {
             await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+        }
+
+        public async Task<DataUserModel> ReadUserByEmail(string email)
+        {
+            var readUserByEmail = new UserReadByEmailRequestGatewayToService()
+            {
+                Email = email
+            };
+            var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<UserReadByEmailResponseServiceToGateway>(readUserByEmail);
+
+            if (requestResponseContext.Message.ExceptionName != null) 
+                throw new Exception("Error");
+
+            return requestResponseContext.Message.Entity;
         }
     }
 }

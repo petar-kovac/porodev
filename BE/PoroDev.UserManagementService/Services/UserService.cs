@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
@@ -274,6 +275,17 @@ namespace PoroDev.UserManagementService.Services
             //if (created != null)
             //    return created.Id;
             //return Guid.Empty;
+        }
+
+        public async Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
+        {
+            UserReadByEmailRequestServiceToDatabase readUser = new()
+            {
+                Email = model.Email
+            };
+
+            var response = await _createRequestClient.GetResponse<UserReadByEmailResponseDatabaseToService>(readUser);
+            return response.Message;
         }
 
 
