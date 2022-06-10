@@ -24,7 +24,7 @@ const Users: FC = () => {
     <StyledPage>
       <StyledHeadingWrapper>
         <StyledHeading>{pages.users}</StyledHeading>
-        <Button>aaa</Button>
+        {/* <Button>aaa</Button> */}
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />
     </StyledPage>

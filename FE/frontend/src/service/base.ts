@@ -55,7 +55,7 @@ instance.interceptors.response.use(
       // eslint-disable-next-line no-underscore-dangle
       !originalRequest._retry
     ) {
-      delete instance.defaults.headers.common.Authorization;
+      delete instance.defaults.headers.common.Authorization; // mentor suggestion to check
       // eslint-disable-next-line no-underscore-dangle
       originalRequest._retry = true;
       const oldAccess = await localStorage.getItem(StorageKey.ACCESS_TOKEN);

@@ -25,7 +25,7 @@ const Admins: FC = () => {
     <StyledPage>
       <StyledHeadingWrapper>
         <StyledHeading>{pages.admins}</StyledHeading>
-        <Button>aaa</Button>
+        {/* <Button>aaa</Button> */}
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />
     </StyledPage>

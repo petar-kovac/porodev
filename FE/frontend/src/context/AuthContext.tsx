@@ -71,6 +71,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       } else {
         navigate('/user-home');
       }
+
       navigate(location);
     } else {
       navigate('/login');

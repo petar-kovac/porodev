@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
+import { StyledLoginButton } from 'components/buttons/buttons';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
 import {
   StyledHeader,
@@ -10,7 +11,6 @@ import {
   StyledFormBox,
   StyledFormInput,
   StyledFormSpan,
-  StyledLoginButton,
 } from './StyledForm';
 import { StyledButtonWrapper } from './LoginForm';
 

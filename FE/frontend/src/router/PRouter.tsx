@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Layout } from 'antd';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Spinner from '../components/spinner/Spinner';
@@ -27,6 +27,7 @@ import Profile from '../pages/user/profile/Profile';
 
 const PRouter: FC = () => {
   const { isAuthenticated, isLoading, isAdmin } = useAuthStateValue();
+  const location = useLocation();
 
   if (!isLoading) {
     if (isAuthenticated) {
@@ -37,7 +38,11 @@ const PRouter: FC = () => {
             <PSider />
             <PContent>
               <Routes>
-                <Route element={<AdminRoutes isAdmin={isAdmin} />}>
+                <Route
+                  element={
+                    <AdminRoutes isAdmin={isAdmin} location={location} />
+                  }
+                >
                   <Route path="/" element={<Home />} />
                   <Route path="/files" element={<Files />} />
                   <Route path="/admins" element={<Admins />} />

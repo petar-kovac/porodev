@@ -4,11 +4,8 @@ import styled from 'styled-components';
 import logoImage from 'assets/logo.png';
 import LoginForm from 'components/login/LoginForm';
 import RegisterForm from 'components/login/RegisterForm';
-import {
-  StyledPage,
-  StyledFormWrapper,
-  StyledToggleButton,
-} from 'components/login/StyledForm';
+import { StyledPage, StyledFormWrapper } from 'components/login/StyledForm';
+import { StyledToggleButton } from 'components/buttons/buttons';
 
 import {
   ILoginRequest,

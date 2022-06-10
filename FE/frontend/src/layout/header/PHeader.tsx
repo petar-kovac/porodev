@@ -38,7 +38,7 @@ const StyledHeader = styled(Header)`
   justify-content: space-between;
   align-items: center;
   padding-right: 20px;
-  padding-left: 0;
+  padding-left: 10px;
 `;
 const StyledLogo = styled.img`
   width: 110px;

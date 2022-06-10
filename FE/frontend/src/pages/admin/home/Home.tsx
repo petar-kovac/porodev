@@ -6,8 +6,7 @@ import styled from 'styled-components';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
 import PCard from 'components/card/PCard';
-import { StyledLoginButton } from 'components/login/StyledForm';
-
+import { StyledLoginButton } from 'components/buttons/buttons';
 import { useAuthStateValue } from 'context/AuthContext';
 import PList from 'components/list/List';
 import useAdminsData from '../admins/hooks/useAdminsData';

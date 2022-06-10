@@ -31,18 +31,6 @@ export const StyledFormWrapper = styled.div`
   );
 `;
 
-export const StyledLoginButton = styled(Button)`
-  border-radius: 8px;
-  /* margin-top: 3rem; */
-
-  &:hover,
-  &:focus {
-    box-shadow: 1px 2px 4px 1px rgba(0, 0, 0, 0.1);
-    background-color: #47a6ff;
-    color: #fff;
-  }
-`;
-
 export const StyledHeader = styled.h1`
   font-size: 32px;
   color: #ffffff;
@@ -83,20 +71,4 @@ export const StyledFormSpan = styled.span`
   left: 50%;
   transform: translateX(-50%);
   color: red;
-`;
-
-export const StyledToggleButton = styled(Button)`
-  border-radius: 8px;
-  margin-top: 1.3rem;
-  color: #777;
-  background: #fcfcfc;
-  border: none;
-  outline: none;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: #777;
-    box-shadow: 1px 2px 6px 1px rgba(0, 0, 0, 0.1);
-  }
 `;

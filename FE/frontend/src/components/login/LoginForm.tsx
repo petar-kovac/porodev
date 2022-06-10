@@ -5,13 +5,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import styled from 'styled-components';
 
 import { loginSchema } from 'util/validation-schema/ValidationSchema';
+import { StyledLoginButton } from 'components/buttons/buttons';
 import {
   StyledHeader,
   StyledForm,
   StyledFormBox,
   StyledFormInput,
   StyledFormSpan,
-  StyledLoginButton,
 } from './StyledForm';
 import Spinner from '../spinner/Spinner';
 

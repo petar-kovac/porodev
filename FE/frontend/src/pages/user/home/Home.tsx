@@ -1,15 +1,13 @@
-import { Button } from 'antd';
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { StyledLoginButton } from 'components/buttons/buttons';
 import PCard from 'components/card/PCard';
-import {
-  StyledLoginButton,
-  StyledToggleButton,
-} from 'components/login/StyledForm';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
+
 import { useAuthStateValue } from 'context/AuthContext';
 
 const Home: FC = () => {

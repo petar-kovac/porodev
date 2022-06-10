@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAuthStateValue } from 'context/AuthContext';
+import { Airplane } from '@styled-icons/ionicons-outline';
 
 const { Sider } = Layout;
 
@@ -23,6 +24,27 @@ const PSider: FC = () => {
     <StyledSider
       collapsible
       collapsed={isCollapsed}
+      trigger={
+        <StyledTriggerContainer>
+          <StyledTriggerIcon>
+            {isCollapsed ? (
+              <StyledAirplane
+                style={{
+                  transform: 'rotate(180deg)',
+                  transition: '0.3s',
+                }}
+              />
+            ) : (
+              <StyledAirplane
+                style={{
+                  transform: 'rotate(0deg)',
+                  transition: '0.3s',
+                }}
+              />
+            )}
+          </StyledTriggerIcon>
+        </StyledTriggerContainer>
+      }
       onCollapse={(collapsed: boolean) => {
         localStorage.setItem('collapsedMenu', collapsed.toString());
         setIsCollapsed(collapsed);
@@ -69,6 +91,21 @@ const PSider: FC = () => {
   );
 };
 
+const StyledAirplane = styled(Airplane)`
+  height: 25px;
+`;
+
+const StyledTriggerIcon = styled.div`
+  width: 50px;
+  height: 50px;
+`;
+
+const StyledTriggerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StyledSider = styled(Sider)`
   background-color: #fff;
   display: flex;
@@ -85,6 +122,10 @@ const StyledSider = styled(Sider)`
 
   & li span svg {
     font-size: 1.9rem;
+  }
+
+  .ant-layout-sider-trigger {
+    background-color: ${({ theme: { colors } }) => colors.primary};
   }
 `;
 
