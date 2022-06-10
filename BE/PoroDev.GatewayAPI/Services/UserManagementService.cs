@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 
@@ -8,10 +9,12 @@ namespace PoroDev.GatewayAPI.Services
     public class UserManagementService : IUserManagementService
     {
         private readonly IRequestClient<UserCreateRequestGatewayToService> _createRequestClient;
+        private readonly IRequestClient<UserDeleteRequestGatewayToService> _deleteRequestClient;
 
-        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient)
+        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient, IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient)
         {
             _createRequestClient = createRequestClient;
+            _deleteRequestClient = deleteRequestClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -24,7 +27,11 @@ namespace PoroDev.GatewayAPI.Services
             var returnModel = requestReturnContext.Message.Entity;
 
             return returnModel;
+        }
 
+        public async Task DeleteUser(UserDeleteRequestGatewayToService deleteModel)
+        {
+            await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
         }
     }
 }
