@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.MassTransit;
 using PoroDev.Database.Data;
+using PoroDev.Database.MapperProfiles;
 using PoroDev.Database.Repositories;
 using PoroDev.Database.Repositories.Contracts;
 
@@ -12,11 +13,12 @@ builder.Services.AddDbContext<SqlDataContext>(options =>
             {
     options.UseMySql(
        builder.Configuration.GetConnectionString("DefaultConnection"),
-       ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+       ServerVersion.AutoDetect(    builder.Configuration.GetConnectionString("DefaultConnection"))
        );
 });
 
 builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddAutoMapper(typeof(MapperProfiles));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddControllers();
