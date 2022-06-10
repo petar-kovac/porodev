@@ -50,7 +50,7 @@ const Files: FC = () => {
 
           <StyledFilesSlider>
             <h4>Filter by size:</h4>
-            <Slider style={{ width: '300px' }} range defaultValue={[20, 50]} />
+            <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
           </StyledFilesSlider>
           <StyledFilesSelect>
             <Select
