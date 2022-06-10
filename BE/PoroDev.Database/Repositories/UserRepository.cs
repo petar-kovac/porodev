@@ -1,4 +1,4 @@
-﻿using PoroDev.Common.Models.UserModels;
+﻿using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Data;
 using PoroDev.Database.Repositories.Contracts;
 

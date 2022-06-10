@@ -1,4 +1,4 @@
-﻿using Data.Access.Layer.Models;
+﻿using PoroDev.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace PoroDev.UserManagementService.Models.UserModels
 
         }
 
-        public UserRegisterResponseModel(string name, string lastname, string email, Enums.UserRole role, Enums.UserDepartment department, string position, string avatarUrl)
+        public UserRegisterResponseModel(string name, string lastname, string email, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl)
         {
             Name = name;
             Lastname = lastname;

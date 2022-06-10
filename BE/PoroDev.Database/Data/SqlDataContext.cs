@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PoroDev.Common.Models.UserModels;
+using PoroDev.Common.Models.UserModels.Data;
 
 namespace PoroDev.Database.Data
 {

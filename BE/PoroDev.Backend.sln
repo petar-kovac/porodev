@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.UserManagementServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.GatewayAPI", "PoroDev.GatewayAPI\PoroDev.GatewayAPI.csproj", "{AD73231A-2F05-4E47-B90E-0073D5C801B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoroDev.Common", "PoroDev.Common\PoroDev.Common.csproj", "{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common", "PoroDev.Common\PoroDev.Common.csproj", "{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
