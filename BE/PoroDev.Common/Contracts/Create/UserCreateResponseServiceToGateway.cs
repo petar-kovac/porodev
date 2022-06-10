@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace PoroDev.Common.Contracts.Create
 {
-    public class UserCreateResponseServiceToGateway
+    public class UserCreateResponseServiceToGateway : CommunicationModel<DataUserModel>
     {
-        public DataUserModel Entity { get; set; }
-        public string ExceptionName { get; set; }
-        public string HumanReadableExceptionMessage { get; set; }
+
     }
 }

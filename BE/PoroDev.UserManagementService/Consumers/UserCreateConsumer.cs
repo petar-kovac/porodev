@@ -30,8 +30,8 @@ namespace PoroDev.UserManagementService.Consumers
 
 
             var modelToReturn = await _userService.CreateUser(context.Message);
-            modelToReturn.ErrorName = null;
-            modelToReturn.ErrorMessage = null;
+            modelToReturn.ExceptionName = null;
+            modelToReturn.HumanReadableMessage = null;
 
             await context.RespondAsync<UserCreateResponseServiceToGateway>(modelToReturn);
         }

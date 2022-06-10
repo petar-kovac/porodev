@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace PoroDev.Common.Contracts.Create
 {
-    public class UserCreateResponseDatabaseToService 
+    public class UserCreateResponseDatabaseToService : CommunicationModel<DataUserModel>
     {
-        public DataUserModel Entity { get; set; }
-        public string ErrorName { get; set; }
-        public string ErrorMessage { get; set; }
+    
     }
 }
