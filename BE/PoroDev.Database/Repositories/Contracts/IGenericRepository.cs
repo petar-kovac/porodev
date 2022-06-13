@@ -14,7 +14,7 @@ namespace PoroDev.Database.Repositories.Contracts
 
         Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id);
 
-        Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter);
+        Task<TemplateEntity?> FindAsync(Expression<Func<TemplateEntity, bool>> filter);
 
         Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter);
     }
