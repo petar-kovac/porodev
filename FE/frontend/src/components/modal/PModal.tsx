@@ -1,19 +1,12 @@
 import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Card, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 
-import { useAuthStateValue } from '../../context/AuthContext';
-
-const { Meta } = Card;
-interface IPCardProps {
-  heading: string;
-  description: string;
-  image: string;
-}
-
-const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
-  const { isAuthenticated, testMessage } = useAuthStateValue();
+const PModal: FC<{ heading?: string; description?: string }> = ({
+  heading,
+  description,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = (e: any) => {
@@ -29,33 +22,8 @@ const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
   return (
-    <>
-      <StyledFilesCard
-        hoverable
-        cover={<img alt="example" src={`${image}`} />}
-        role="button"
-        onClick={(e) => showModal(e)}
-      >
-        <Meta
-          title={heading}
-          description={[
-            <div>
-              <span>{description.slice(0, 60)}...</span>
-              <span
-                style={{
-                  fontWeight: 'bold',
-                  marginLeft: '2rem',
-                }}
-              >
-                &rarr; Show more
-              </span>
-            </div>,
-          ]}
-        />
-      </StyledFilesCard>
-
+    <div>
       <StyledFilesModal
         title={heading}
         visible={isModalVisible}
@@ -72,26 +40,9 @@ const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
       >
         <p>{description}</p>
       </StyledFilesModal>
-    </>
+    </div>
   );
 };
-const StyledFilesCard = styled(Card)`
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  .ant-card-cover {
-    height: 14rem;
-    width: 24rem;
-    overflow: hidden;
-    border-top-left-radius: 1.5rem;
-    border-top-right-radius: 1.5rem;
-  }
-  height: 25rem;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  max-width: 24rem;
-  .ant-card-body {
-    padding: 1rem 2rem;
-  }
-`;
 
 const StyledFilesModal = styled(Modal)`
   .ant-modal-header {
@@ -123,9 +74,8 @@ const StyledFilesModal = styled(Modal)`
     }
   }
 `;
-
 const StyledFilesButton = styled(Button)`
   border-radius: 0.8rem;
 `;
 
-export default PCard;
+export default PModal;

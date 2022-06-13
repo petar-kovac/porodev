@@ -1,13 +1,13 @@
-import { Button } from 'antd';
 import { FC, useEffect } from 'react';
 
-import { PAGES } from 'util/constants/constants';
+import PButton from 'components/buttons/Button';
+import PTable from 'components/table/PTable';
 import {
   StyledHeading,
   StyledHeadingWrapper,
   StyledPage,
 } from 'styles/commonStyles';
-import PTable from 'components/table/PTable';
+import { PAGES } from 'util/constants/constants';
 
 import useUsersColumns from './hooks/useUsersColumns';
 import useUsersData from './hooks/useUsersData';
@@ -24,7 +24,12 @@ const Users: FC = () => {
     <StyledPage>
       <StyledHeadingWrapper>
         <StyledHeading>{PAGES.users}</StyledHeading>
-        {/* <Button>aaa</Button> */}
+        <PButton
+          text="Add user"
+          color="#000"
+          borderRadius="12px"
+          background="#fff"
+        />
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />
     </StyledPage>

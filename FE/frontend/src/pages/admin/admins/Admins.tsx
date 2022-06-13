@@ -1,6 +1,5 @@
 import { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { Button } from 'antd';
 
 import { PAGES } from 'util/constants/constants';
 import {
@@ -9,6 +8,8 @@ import {
   StyledHeadingWrapper,
 } from 'styles/commonStyles';
 import PTable from 'components/table/PTable';
+import PButton from 'components/buttons/Button';
+import theme from 'theme/theme';
 
 import useAdminsColumns from './hooks/useAdminsColumns';
 import useAdminsData from './hooks/useAdminsData';
@@ -25,17 +26,16 @@ const Admins: FC = () => {
     <StyledPage>
       <StyledHeadingWrapper>
         <StyledHeading>{PAGES.admins}</StyledHeading>
-        {/* <Button>aaa</Button> */}
+        <PButton
+          text="Add admin"
+          color="#000"
+          borderRadius="12px"
+          background="#fff"
+        />
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />
     </StyledPage>
   );
 };
-
-const StyledSpinnerWrapper = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: center;
-`;
 
 export default Admins;

@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import PDropdown from 'components/dropdown/Dropdown';
+import PDropdown from 'components/dropdown/PDropdown';
 import { StorageKey } from 'util/enums/enums';
 import logoImage from 'assets/logo.png';
 
