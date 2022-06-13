@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
 
@@ -34,30 +36,12 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(returnModel);
         }
 
-        //private readonly IUserService _userService;
-
-        //public UserController(IUserService userService, IMapper mapper) : base(mapper)
-        //{
-        //    _userService = userService;
-        //}
-
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesErrorResponseType(typeof(UserNotFoundException))]
-        //[HttpDelete("delete")]
-        //public async Task<IActionResult> DeleteUser([FromQuery] string email)
-        //{
-        //    var result = await _userService.DeleteUser(email);
-        //    return Ok(result);
-        //}
-
-        //[ProducesResponseType((int)HttpStatusCode.Created)]
-        //[ProducesErrorResponseType(typeof(AppException))]
-        //[HttpPost("create")]
-        //public async Task<IActionResult> CreateUser([FromBody] UserCreateRequestModel createReqBody)
-        //{
-        //    /*var createdId =*/ await _userService.CreateUser(createReqBody);
-        //    return Ok(/*createdId*/);
-        //}
+        [HttpPost("LoginUser")]
+        public async Task<ActionResult<LoginUserModel>> LoginUser([FromBody] UserLoginRequestGatewayToService model)
+        {
+            var returnModel = await _userService.LoginUser(model);
+            return Ok(returnModel);
+        }
 
         //[ProducesResponseType((int)HttpStatusCode.OK)]
         //[HttpPut("Update")]
