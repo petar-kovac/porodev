@@ -20,7 +20,7 @@ namespace PoroDev.Database.Consumers
         public async Task Consume(ConsumeContext<UserDeleteRequestServiceToDatabase> context)
         {
             UserDeleteResponseDatabaseToService returnModel;
-            var userToDelete = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(context.Message.Email));
+            var userToDelete = await _unitOfWork.Users.FindAsync(user => user.Email.Equals(context.Message.Email.Trim()));
 
             if(userToDelete == null)
             {
