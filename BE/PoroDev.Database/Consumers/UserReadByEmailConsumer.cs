@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.ReadUser;
-using PoroDev.Common.Extensions;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
 
@@ -19,7 +19,7 @@ namespace PoroDev.Database.Consumers
         {
             var fetchUser = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(context.Message.Email));
 
-            var returnUser = CreateResponse<UserReadByEmailResponseDatabaseToService, DataUserModel>.CreateResponseModel(fetchUser);
+            var returnUser = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(fetchUser);
 
             await context.RespondAsync<UserReadByEmailResponseDatabaseToService>(returnUser);
         }

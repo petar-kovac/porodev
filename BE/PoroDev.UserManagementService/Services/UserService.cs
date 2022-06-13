@@ -2,9 +2,12 @@
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Enums;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,6 +18,7 @@ namespace PoroDev.UserManagementService.Services
     public class UserService : IUserService
     {
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
+        private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -27,9 +31,10 @@ namespace PoroDev.UserManagementService.Services
         private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
-        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient)
+        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient)
         {
             _createRequestClient = createRequestClient;
+            _updateRequestClient = updateRequestClient;
         }
 
         //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
@@ -235,6 +240,16 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
         {
+            if(model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
+            {
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = "Email cannot be empty!";
+
+                var responseException = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+
+                return responseException;
+            }
+
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             UserCreateRequestServiceToDatabase temp = new()
@@ -255,26 +270,6 @@ namespace PoroDev.UserManagementService.Services
             var response = await _createRequestClient.GetResponse<UserCreateResponseDatabaseToService>(temp);
 
             return response.Message;
-
-            //var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Trim().Equals(model.Email.Trim()));
-
-            //if (exists != null)
-            //    throw new AppException("User already exists");
-
-            //var userToCreate = _mapper.Map<DataUserModel>(model);
-            //GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
-            //userToCreate.Password = hash;
-            //userToCreate.Salt = salt;
-            //userToCreate.Id = Guid.NewGuid();
-            //userToCreate.DateCreated = DateTime.Now;
-
-            //var created = await _unitOfWork.Users.CreateAsync(userToCreate);
-
-            //await _unitOfWork.SaveChanges();
-
-            //if (created != null)
-            //    return created.Id;
-            //return Guid.Empty;
         }
 
         public async Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
@@ -326,10 +321,18 @@ namespace PoroDev.UserManagementService.Services
         //    return userForRead;
         //}
 
-        //public async Task<UserCreateRequestModel> UpdateUser(UserCreateRequestModel model)
+        //Task<UserCreateResponseDatabaseToService>
+        //public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
         //{
         //    if (model.Email.Trim() == null)
         //        throw new KeyNotFoundException("User email has NULL value.");
+
+        //    if(model.Email.Trim() == null)
+        //    {
+
+        //    }
+
+
 
         //    var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
         //    if (userToBeUpdated == null)
@@ -348,5 +351,35 @@ namespace PoroDev.UserManagementService.Services
         //    await _unitOfWork.SaveChanges();
         //    return _mapper.Map<UserCreateRequestModel>(mappedUser);
         //}
+
+        public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
+        {
+            //da li je ovo potrebno uopste ovde provjeravati ili u database ? 
+            if (model.Email.Trim() == null)
+            {
+                 //should I pass some fault 
+            }
+
+            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
+
+            UserUpdateRequestServiceToDatabase temp = new UserUpdateRequestServiceToDatabase()
+            {
+                Id = Guid.NewGuid(),
+                AvatarUrl = model.AvatarUrl,
+                Department = model.Department,
+                Email = model.Email,
+                Lastname = model.Lastname,
+                Name = model.Name,
+                Position = model.Position,
+                Role = model.Role,
+                Password = hash,
+                Salt = salt,
+                DateCreated = DateTime.Now
+            };
+
+            var response = await _createRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
+
+            return response.Message;
+        }
     }
 }
