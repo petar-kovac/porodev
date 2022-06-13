@@ -2,6 +2,7 @@
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.ReadUser;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
@@ -46,10 +47,11 @@ namespace PoroDev.GatewayAPI.Services
             {
                 Email = email
             };
+
             var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<UserReadByEmailResponseServiceToGateway>(readUserByEmail);
 
-            if (requestResponseContext.Message.ExceptionName != null) 
-                throw new Exception("Error");
+            if (requestResponseContext.Message.ExceptionName != null)
+                ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
 
             var returnUser = requestResponseContext.Message.Entity;
 

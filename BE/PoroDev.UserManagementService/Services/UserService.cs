@@ -1,8 +1,7 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Contracts.ReadUser;
-using PoroDev.Common.Enums;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
@@ -28,8 +27,8 @@ namespace PoroDev.UserManagementService.Services
         private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
-        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, 
-                           IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient, 
+        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
+                           IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient,
                            IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient)
         {
             _createRequestClient = createRequestClient;
@@ -273,12 +272,23 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
         {
+            if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
+            {
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = "Email cannot be empty!";
+
+                var responseException = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+
+                return responseException;
+            }
+
             UserReadByEmailRequestServiceToDatabase readUser = new()
             {
                 Email = model.Email
             };
 
             var response = await _readUserByEmailClient.GetResponse<UserReadByEmailResponseDatabaseToService>(readUser);
+
             return response.Message;
         }
 
