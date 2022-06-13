@@ -11,11 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<SqlDataContext>(options =>
             {
-    options.UseMySql(
-       builder.Configuration.GetConnectionString("DefaultConnection"),
-       ServerVersion.AutoDetect(    builder.Configuration.GetConnectionString("DefaultConnection"))
-       );
-});
+                options.UseMySql(
+                   builder.Configuration.GetConnectionString("DefaultConnection"),
+                   ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+                   );
+            });
 
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddAutoMapper(typeof(MapperProfiles));

@@ -2,10 +2,9 @@
 using MassTransit;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Exceptions;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
-using System.Reflection;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 
 namespace PoroDev.Database.Consumers
 {
