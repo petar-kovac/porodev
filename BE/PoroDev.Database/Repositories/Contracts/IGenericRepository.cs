@@ -9,7 +9,7 @@ namespace PoroDev.Database.Repositories.Contracts
 
         Task<TemplateEntity?> GetByIdAsync(Guid Id);
 
-        Task<TemplateEntity?> CreateAsync(TemplateEntity entity);
+        Task<UnitOfWorkResponseModel<TemplateEntity>> CreateAsync(TemplateEntity entity);
 
         void Delete(TemplateEntity entity);
 

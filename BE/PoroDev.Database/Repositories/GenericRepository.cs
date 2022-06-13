@@ -19,11 +19,34 @@ namespace PoroDev.Database.Repositories
             _context = context;
         }
 
-        public async Task<TemplateEntity?> CreateAsync(TemplateEntity entity)
+        public async Task<UnitOfWorkResponseModel<TemplateEntity>> CreateAsync(TemplateEntity entity)
         {
-            if (await _context.Set<TemplateEntity>().AddAsync(entity) != null)
-                return entity;
-            return null;
+            TemplateEntity createdEntity;
+            try
+            {
+                createdEntity = (await _context.Set<TemplateEntity>().AddAsync(entity)).Entity;
+            }
+            catch (Exception)
+            {
+                UnitOfWorkResponseModel<TemplateEntity> responseException = new()
+                {
+                    Entity = null,
+                    ExceptionName = nameof(DatabaseException),
+                    HumanReadableMessage = InternalDatabaseError
+                };
+
+                return responseException;
+            }
+
+            UnitOfWorkResponseModel<TemplateEntity> response = new()
+            {
+                Entity = createdEntity,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+
+            return response;
+
         }
 
         public void Delete(TemplateEntity entity)
