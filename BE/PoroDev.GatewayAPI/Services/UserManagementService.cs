@@ -23,7 +23,7 @@ namespace PoroDev.GatewayAPI.Services
             var requestReturnContext = await _createRequestClient.GetResponse<UserCreateResponseServiceToGateway>(createModel);
 
             if (requestReturnContext.Message.ExceptionName != null)
-                throw new Exception("Error");
+                throw new Exception(requestReturnContext.Message.HumanReadableMessage);
 
             var returnModel = requestReturnContext.Message.Entity;
 

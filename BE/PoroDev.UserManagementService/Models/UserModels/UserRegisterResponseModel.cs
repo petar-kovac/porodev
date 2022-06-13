@@ -1,9 +1,4 @@
 ﻿using PoroDev.Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoroDev.UserManagementService.Models.UserModels
 {
@@ -25,7 +20,6 @@ namespace PoroDev.UserManagementService.Models.UserModels
 
         public UserRegisterResponseModel()
         {
-
         }
 
         public UserRegisterResponseModel(string name, string lastname, string email, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl)

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Extensions;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Database.Repositories.Contracts;
 
@@ -25,7 +25,7 @@ namespace PoroDev.Database.Consumers
 
             DeleteUserModel deleteUserModel = new DeleteUserModel() { Deleted = true };
 
-            var returnModel = CreateResponse<UserDeleteResponseDatabaseToService, DeleteUserModel>.CreateResponseModel(deleteUserModel);
+            var returnModel = CreateResponseModel<UserDeleteResponseDatabaseToService, DeleteUserModel>(deleteUserModel);
             await context.RespondAsync(returnModel);
         }
     }

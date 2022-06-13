@@ -1,8 +1,8 @@
 ﻿using PoroDev.Common.Enums;
 
-namespace PoroDev.Common.Contracts.Create
+namespace PoroDev.Common.Contracts.Update
 {
-    public class UserCreateRequestServiceToDatabase
+    public class UserUpdateRequestServiceToDatabase
     {
         public Guid Id { get; set; }
 
