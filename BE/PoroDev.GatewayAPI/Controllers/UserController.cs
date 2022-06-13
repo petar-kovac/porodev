@@ -33,8 +33,8 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("ReadUserByEmail/{email}")]
-        public async Task<ActionResult<DataUserModel>> ReadUserByEmail([FromRoute] string email)
+        [HttpGet("ReadUserByEmail")]
+        public async Task<ActionResult<DataUserModel>> ReadUserByEmail([FromQuery] string email)
         {
             var returnModel = await _userService.ReadUserByEmail(email);
             return Ok(returnModel);

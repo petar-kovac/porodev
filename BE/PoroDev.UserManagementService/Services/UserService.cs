@@ -14,6 +14,7 @@ namespace PoroDev.UserManagementService.Services
     public class UserService : IUserService
     {
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
+        private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
 
         private const int MIN_PASSWORD_LENGTH = 8;
@@ -27,9 +28,12 @@ namespace PoroDev.UserManagementService.Services
         private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
-        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient)
+        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, 
+                           IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient, 
+                           IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient)
         {
             _createRequestClient = createRequestClient;
+            _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
         }
 
@@ -274,7 +278,7 @@ namespace PoroDev.UserManagementService.Services
                 Email = model.Email
             };
 
-            var response = await _createRequestClient.GetResponse<UserReadByEmailResponseDatabaseToService>(readUser);
+            var response = await _readUserByEmailClient.GetResponse<UserReadByEmailResponseDatabaseToService>(readUser);
             return response.Message;
         }
 

@@ -50,7 +50,9 @@ namespace PoroDev.GatewayAPI.Services
             if (requestResponseContext.Message.ExceptionName != null) 
                 throw new Exception("Error");
 
-            return requestResponseContext.Message.Entity;
+            var returnUser = requestResponseContext.Message.Entity;
+
+            return returnUser;
         }
     }
 }
