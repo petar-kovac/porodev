@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
+using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -27,7 +28,7 @@ namespace PoroDev.GatewayAPI.Services
             var requestReturnContext = await _createRequestClient.GetResponse<UserCreateResponseServiceToGateway>(createModel);
 
             if (requestReturnContext.Message.ExceptionName != null)
-                throw new Exception(requestReturnContext.Message.HumanReadableMessage);
+                ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);         
 
             var returnModel = requestReturnContext.Message.Entity;
 

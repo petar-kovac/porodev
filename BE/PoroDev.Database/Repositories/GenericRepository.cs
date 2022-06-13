@@ -37,9 +37,9 @@ namespace PoroDev.Database.Repositories
             return await _context.Set<TemplateEntity>().FindAsync(id);
         }
 
-        public async Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter)
+        public async Task<TemplateEntity?> FindAsync(Expression<Func<TemplateEntity, bool>> filter)
         {
-            return await _context.Set<TemplateEntity>().SingleOrDefaultAsync(filter);
+            return await _context.Set<TemplateEntity>().FirstOrDefaultAsync(filter);
         }
 
         public async Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter)
