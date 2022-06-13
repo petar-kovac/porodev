@@ -1,7 +1,9 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
@@ -30,9 +32,19 @@ namespace PoroDev.GatewayAPI.Services
             return returnModel;
         }
 
-        public async Task DeleteUser(UserDeleteRequestGatewayToService deleteModel)
+        public async Task<DeleteUserModel> DeleteUser(UserDeleteRequestGatewayToService deleteModel)
         {
-            await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+            if(string.IsNullOrEmpty(deleteModel.Email.Trim()))
+            {
+                ThrowException(nameof(EmailFormatException), "Email can't be empty.");
+            }    
+
+            var requestReturnContext = await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+
+            if (requestReturnContext.Message.ExceptionName != null)
+                ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);
+
+            return requestReturnContext.Message.Entity;
         }
     }
 }

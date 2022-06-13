@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace PoroDev.Common.Contracts.DeleteUser
 {
-    public class UserDeleteResponseServiceToGateway : CommunicationModel<DeleteUserModel>
+    public class UserDeleteRequestServiceToDatabase 
     {
-
+        public string Email { get; set; }
     }
 }

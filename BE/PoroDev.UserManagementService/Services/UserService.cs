@@ -2,6 +2,8 @@
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
@@ -13,6 +15,7 @@ namespace PoroDev.UserManagementService.Services
     {
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
+        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -25,10 +28,12 @@ namespace PoroDev.UserManagementService.Services
         private const int MAX_POSITION_LENGTH = 50;
         private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
-        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient)
+        public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient, IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient, IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient)
         {
             _createRequestClient = createRequestClient;
             _updateRequestClient = updateRequestClient;
+            _deleteUserRequestclient = deleteUserRequestClient;
+            
         }
 
         //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
@@ -264,6 +269,14 @@ namespace PoroDev.UserManagementService.Services
 
             return response.Message;
         }
+
+        public async Task<UserDeleteResponseDatabaseToService> DeleteUser(UserDeleteRequestGatewayToService model)
+        {
+            var response = await _deleteUserRequestclient.GetResponse<UserDeleteResponseDatabaseToService>(model);
+            return response.Message;
+        }
+
+
 
         //public async Task<UserCreateRequestModel> DeleteUser(string mail)
         //{
