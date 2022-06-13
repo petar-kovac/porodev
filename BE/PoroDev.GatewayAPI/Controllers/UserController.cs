@@ -2,8 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.LoginUser;
+using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
 
@@ -13,7 +17,6 @@ namespace PoroDev.GatewayAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        
         private readonly IUserManagementService _userService;
 
         public UserController(IUserManagementService userService)
@@ -29,10 +32,17 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpDelete("DeleteUser")]
-        public async Task<IActionResult> DeleteUser([FromBody] UserDeleteRequestGatewayToService model)
+        public async Task<ActionResult<DeleteUserModel>> DeleteUser([FromBody] UserDeleteRequestGatewayToService model)
         {
+            var returnModel = await _userService.DeleteUser(model);
+            return Ok(returnModel);
+        }
 
-            return Ok();
+        [HttpGet("ReadUserByEmail")]
+        public async Task<ActionResult<DataUserModel>> ReadUserByEmail([FromQuery] string email)
+        {
+            var returnModel = await _userService.ReadUserByEmail(email);
+            return Ok(returnModel);
         }
 
         [HttpPut("UpdateUser")]
@@ -41,8 +51,6 @@ namespace PoroDev.GatewayAPI.Controllers
             var returnModel = await _userService.UpdateUser(model);
             return Ok(returnModel);
         }
-
-
 
         //private readonly IUserService _userService;
 
@@ -68,6 +76,12 @@ namespace PoroDev.GatewayAPI.Controllers
         //    /*var createdId =*/ await _userService.CreateUser(createReqBody);
         //    return Ok(/*createdId*/);
         //}
+        [HttpPost("LoginUser")]
+        public async Task<ActionResult<LoginUserModel>> LoginUser([FromBody] UserLoginRequestGatewayToService model)
+        {
+            var returnModel = await _userService.LoginUser(model);
+            return Ok(returnModel);
+        }
 
         //[ProducesResponseType((int)HttpStatusCode.OK)]
         //[HttpPut("Update")]

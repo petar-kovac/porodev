@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Database.Repositories.Contracts;
 using System.Linq.Expressions;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
+using static PoroDev.Database.Constants.Constants;
 
 namespace PoroDev.Database.Repositories
 {
@@ -37,9 +41,37 @@ namespace PoroDev.Database.Repositories
             return await _context.Set<TemplateEntity>().FindAsync(id);
         }
 
-        public async Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter)
+        public async Task<UnitOfWorkResponseModel<TemplateEntity>> FindAsync(Expression<Func<TemplateEntity, bool>> filter)
         {
-            return await _context.Set<TemplateEntity>().SingleOrDefaultAsync(filter);
+            TemplateEntity? entity;
+            try
+            {
+                entity = await _context.Set<TemplateEntity>().FirstOrDefaultAsync(filter);
+            }
+            catch (Exception)
+            {
+                UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = null;
+                response.ExceptionName = nameof(DatabaseException);
+                response.HumanReadableMessage = InternalDatabaseError;
+                return response;
+            }
+            if (entity != null)
+            {
+                UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = entity;
+                response.ExceptionName = null;
+                response.HumanReadableMessage = null;
+                return response;
+            }
+            else
+            {
+                UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = null;
+                response.ExceptionName = nameof(UserNotFoundException);
+                response.HumanReadableMessage = UserNotFoundExceptionMessage;
+                return response;
+            }
         }
 
         public async Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter)

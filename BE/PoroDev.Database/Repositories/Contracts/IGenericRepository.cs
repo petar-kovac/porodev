@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using PoroDev.Common.Models.UnitOfWorkResponse;
+using System.Linq.Expressions;
 
 namespace PoroDev.Database.Repositories.Contracts
 {
@@ -14,7 +15,7 @@ namespace PoroDev.Database.Repositories.Contracts
 
         Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id);
 
-        Task<TemplateEntity?> FindSingleAsync(Expression<Func<TemplateEntity, bool>> filter);
+        Task<UnitOfWorkResponseModel<TemplateEntity>> FindAsync(Expression<Func<TemplateEntity, bool>> filter);
 
         Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter);
     }

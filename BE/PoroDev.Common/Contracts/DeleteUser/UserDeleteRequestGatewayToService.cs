@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.DeleteUser
+﻿namespace PoroDev.Common.Contracts.DeleteUser
 {
     public class UserDeleteRequestGatewayToService
     {
+        public string Email { get; set; }
     }
 }

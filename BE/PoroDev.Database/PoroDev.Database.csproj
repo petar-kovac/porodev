@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PoroDev.Common\PoroDev.Common.csproj" />
+    <ProjectReference Include="..\PoroDev.UserManagementService\PoroDev.UserManagementService.csproj" />
   </ItemGroup>
 
 </Project>
