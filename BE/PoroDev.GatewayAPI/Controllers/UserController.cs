@@ -31,7 +31,7 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<DeleteUserModel>> DeleteUser([FromBody] UserDeleteRequestGatewayToService model)
         {
             var returnModel = await _userService.DeleteUser(model);
-            return Ok();
+            return Ok(returnModel);
         }
 
         //private readonly IUserService _userService;
