@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PoroDev.UserManagementService.Models.UserModels;
 
 namespace PoroDev.UserManagementService.Mapper
 {
@@ -9,7 +8,6 @@ namespace PoroDev.UserManagementService.Mapper
         {
             public UserModelProfile()
             {
-                
             }
         }
     }

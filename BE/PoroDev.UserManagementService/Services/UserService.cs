@@ -1,16 +1,11 @@
 ﻿using MassTransit;
-using Microsoft.IdentityModel.Tokens;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.Update;
-using PoroDev.Common.Enums;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.UserManagementService.Services.Contracts;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -196,7 +191,6 @@ namespace PoroDev.UserManagementService.Services
         //        throw new PositionFormatException("Position cannot contain special characters!");
         //}
 
-
         //private async Task CheckUserFields(UserRegisterRequestModel registerModel)
         //{
         //    await CheckEmail(registerModel.Email);
@@ -239,7 +233,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
         {
-            if(model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
+            if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
             {
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = "Email cannot be empty!";
@@ -270,8 +264,6 @@ namespace PoroDev.UserManagementService.Services
 
             return response.Message;
         }
-
-
 
         //public async Task<UserCreateRequestModel> DeleteUser(string mail)
         //{
@@ -317,10 +309,7 @@ namespace PoroDev.UserManagementService.Services
 
         //    if(model.Email.Trim() == null)
         //    {
-
         //    }
-
-
 
         //    var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
         //    if (userToBeUpdated == null)
@@ -342,10 +331,10 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
         {
-            //da li je ovo potrebno uopste ovde provjeravati ili u database ? 
+            //da li je ovo potrebno uopste ovde provjeravati ili u database ?
             if (model.Email.Trim() == null)
             {
-                 //should I pass some fault 
+                //should I pass some fault
             }
 
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);

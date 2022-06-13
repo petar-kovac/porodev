@@ -12,7 +12,6 @@ namespace PoroDev.GatewayAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        
         private readonly IUserManagementService _userService;
 
         public UserController(IUserManagementService userService)
@@ -30,12 +29,8 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpDelete("DeleteUser")]
         public async Task<IActionResult> DeleteUser([FromBody] UserDeleteRequestGatewayToService model)
         {
-
             return Ok();
         }
-
-
-
 
         //private readonly IUserService _userService;
 
