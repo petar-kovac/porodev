@@ -1,14 +1,11 @@
 ﻿using MassTransit;
-using Microsoft.IdentityModel.Tokens;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.Update;
-using PoroDev.Common.Enums;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -194,7 +191,6 @@ namespace PoroDev.UserManagementService.Services
         //        throw new PositionFormatException("Position cannot contain special characters!");
         //}
 
-
         //private async Task CheckUserFields(UserRegisterRequestModel registerModel)
         //{
         //    await CheckEmail(registerModel.Email);
@@ -237,6 +233,16 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
         {
+            if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
+            {
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = "Email cannot be empty!";
+
+                var responseException = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+
+                return responseException;
+            }
+
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             UserCreateRequestServiceToDatabase temp = new()
@@ -257,29 +263,7 @@ namespace PoroDev.UserManagementService.Services
             var response = await _createRequestClient.GetResponse<UserCreateResponseDatabaseToService>(temp);
 
             return response.Message;
-
-            //var exists = await _unitOfWork.Users.FindSingleAsync(c => c.Email.Trim().Equals(model.Email.Trim()));
-
-            //if (exists != null)
-            //    throw new AppException("User already exists");
-
-            //var userToCreate = _mapper.Map<DataUserModel>(model);
-            //GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
-            //userToCreate.Password = hash;
-            //userToCreate.Salt = salt;
-            //userToCreate.Id = Guid.NewGuid();
-            //userToCreate.DateCreated = DateTime.Now;
-
-            //var created = await _unitOfWork.Users.CreateAsync(userToCreate);
-
-            //await _unitOfWork.SaveChanges();
-
-            //if (created != null)
-            //    return created.Id;
-            //return Guid.Empty;
         }
-
-
 
         //public async Task<UserCreateRequestModel> DeleteUser(string mail)
         //{
@@ -325,10 +309,7 @@ namespace PoroDev.UserManagementService.Services
 
         //    if(model.Email.Trim() == null)
         //    {
-
         //    }
-
-
 
         //    var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
         //    if (userToBeUpdated == null)
@@ -350,10 +331,10 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
         {
-            //da li je ovo potrebno uopste ovde provjeravati ili u database ? 
+            //da li je ovo potrebno uopste ovde provjeravati ili u database ?
             if (model.Email.Trim() == null)
             {
-                 //should I pass some fault 
+                //should I pass some fault
             }
 
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);

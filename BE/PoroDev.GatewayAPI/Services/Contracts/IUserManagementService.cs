@@ -9,6 +9,5 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel);
 
         Task DeleteUser(UserDeleteRequestGatewayToService deleteModel);
-
     }
 }

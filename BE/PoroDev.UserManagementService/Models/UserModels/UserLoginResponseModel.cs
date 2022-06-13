@@ -19,7 +19,9 @@ namespace PoroDev.UserManagementService.Models.UserModels
         public string AvatarUrl { get; set; }
         public string Jwt { get; set; }
 
-        public UserLoginResponseModel() { }
+        public UserLoginResponseModel()
+        { }
+
         public UserLoginResponseModel(string name, string lastname, string email, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl, string jwt)
         {
             Name = name;

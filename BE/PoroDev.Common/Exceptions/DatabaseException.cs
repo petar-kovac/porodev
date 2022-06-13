@@ -2,21 +2,21 @@
 
 namespace PoroDev.Common.Exceptions
 {
-    public class UserNotFoundException : Exception
+    public class DatabaseException : Exception
     {
         public string HumanReadableErrorMessage { get; set; }
 
-        public UserNotFoundException() : base()
+        public DatabaseException() : base()
         {
             HumanReadableErrorMessage = "Internal server error occurred";
         }
 
-        public UserNotFoundException(string message) : base()
+        public DatabaseException(string message) : base()
         {
             HumanReadableErrorMessage = message;
         }
 
-        public UserNotFoundException(string message, params object[] args) : base()
+        public DatabaseException(string message, params object[] args) : base()
         {
             HumanReadableErrorMessage = string.Format(CultureInfo.CurrentCulture, message, args);
         }
