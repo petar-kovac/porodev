@@ -2,6 +2,7 @@
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Enums;
 using PoroDev.UserManagementService.Models.UserModels;
+using PoroDev.Common.Contracts.DeleteUser;
 
 namespace PoroDev.UserManagementService.Services.Contracts
 {
@@ -15,7 +16,7 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
         //Task<UserCreateModelGateway> UpdateUser(UserCreateModelGateway model);
 
-        //Task<UserCreateModelGateway> DeleteUser(string mail);
+        Task<UserDeleteResponseDatabaseToService> DeleteUser(UserDeleteRequestGatewayToService model);
 
         //Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, UserEnums.UserRole role);
 

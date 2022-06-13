@@ -2,6 +2,7 @@
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {

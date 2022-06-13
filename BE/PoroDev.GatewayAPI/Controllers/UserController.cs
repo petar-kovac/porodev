@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
 
@@ -28,9 +29,10 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpDelete("DeleteUser")]
-        public async Task<IActionResult> DeleteUser([FromBody] UserDeleteRequestGatewayToService model)
+        public async Task<ActionResult<DeleteUserModel>> DeleteUser([FromBody] UserDeleteRequestGatewayToService model)
         {
-            return Ok();
+            var returnModel = await _userService.DeleteUser(model);
+            return Ok(returnModel);
         }
 
         [HttpGet("ReadUserByEmail")]

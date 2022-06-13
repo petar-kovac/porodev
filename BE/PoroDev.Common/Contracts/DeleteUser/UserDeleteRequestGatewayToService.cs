@@ -2,5 +2,6 @@
 {
     public class UserDeleteRequestGatewayToService
     {
+        public string Email { get; set; }
     }
 }

@@ -3,6 +3,8 @@ using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
@@ -15,6 +17,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
+        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -29,11 +32,14 @@ namespace PoroDev.UserManagementService.Services
 
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
                            IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient,
-                           IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient)
+                           IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient,
+                           IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient)
         {
             _createRequestClient = createRequestClient;
             _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
+            _deleteUserRequestclient = deleteUserRequestClient;
+            
         }
 
         //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
@@ -269,6 +275,14 @@ namespace PoroDev.UserManagementService.Services
 
             return response.Message;
         }
+
+        public async Task<UserDeleteResponseDatabaseToService> DeleteUser(UserDeleteRequestGatewayToService model)
+        {
+            var response = await _deleteUserRequestclient.GetResponse<UserDeleteResponseDatabaseToService>(model);
+            return response.Message;
+        }
+
+
 
         public async Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
         {
