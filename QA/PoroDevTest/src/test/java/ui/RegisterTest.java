@@ -24,7 +24,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.registerUser(
                 fileControlUtil.getValue("VALID_FIRSTNAME"),
                 fileControlUtil.getValue("VALID_LASTNAME"),
-                fileControlUtil.getValue("VALID_EMAIL"),
+                BasePage.getRandomBoingEmail(),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
