@@ -3,7 +3,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
+import theme from 'theme/theme';
 import { StyledLoginButton } from 'components/buttons/buttons';
+import PButton from 'components/buttons/PButton';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
 import {
   StyledHeader,
@@ -146,9 +148,17 @@ const RegisterForm: FC<ILoginFormProps> = ({
         />
       </StyledForm>
       <StyledButtonWrapper>
-        <StyledLoginButton type="primary" htmlType="submit" form="registerForm">
+        {/* <StyledLoginButton type="primary" htmlType="submit" form="registerForm">
           Register
-        </StyledLoginButton>
+        </StyledLoginButton> */}
+        <PButton
+          text="Register"
+          color="#fff"
+          borderRadius="8px"
+          htmlType="submit"
+          form="registerForm"
+          background={theme.colors.primary}
+        />
       </StyledButtonWrapper>
     </>
   );

@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 
-import PButton from 'components/buttons/Button';
+import PButton from 'components/buttons/PButton';
 import PTable from 'components/table/PTable';
 import {
   StyledHeading,

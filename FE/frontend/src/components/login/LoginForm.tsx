@@ -4,7 +4,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styled from 'styled-components';
 
+import theme from 'theme/theme';
 import { loginSchema } from 'util/validation-schema/ValidationSchema';
+import PButton from 'components/buttons/PButton';
 import { StyledLoginButton } from 'components/buttons/buttons';
 import {
   StyledHeader,
@@ -79,9 +81,14 @@ const LoginForm: FC<ILoginFormProps> = ({
       </StyledForm>
       <StyledButtonWrapper>
         <StyledSpace />
-        <StyledLoginButton type="primary" htmlType="submit" form="loginForm">
-          Login
-        </StyledLoginButton>
+        <PButton
+          text="Login"
+          color="#fff"
+          borderRadius="8px"
+          htmlType="submit"
+          form="loginForm"
+          background={theme.colors.primary}
+        />
         <StyledSpace>
           <StyledSpinWrapper>
             {isLoading && <Spinner color="#000" size={24} speed={1.2} />}
@@ -97,6 +104,7 @@ export const StyledButtonWrapper = styled.div`
   align-items: flex-end;
   height: 62px;
   justify-content: space-around;
+  margin-bottom: 8px;
 `;
 const StyledSpinWrapper = styled.div`
   padding-bottom: 4px;

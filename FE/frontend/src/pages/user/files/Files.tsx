@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { boolean } from 'yup';
 import PCard from 'components/card/PCard';
-import { findFiles } from 'service/files/files';
+import { FC, useEffect, useState, useCallback } from 'react';
+import styled from 'styled-components';
 
-import { DatePicker, Select, Slider, Switch } from 'antd';
+import { Button, DatePicker, Modal, Select, Slider } from 'antd';
+import PSider from 'layout/sider/PSider';
+import PFileSider from 'layout/sider/PFileSider';
+import { DownloadOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -17,7 +18,47 @@ const handleChange = (value: string) => {
 const Files: FC = () => {
   const [data, setData] = useState<[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showSider, setShowSider] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalData, setModalData] = useState<any>();
 
+  const onClick = useCallback(
+    (e: any, value: any) => {
+      if (e.type === 'click') {
+        setShowSider(true);
+        console.log('click');
+      }
+      if (e.type === 'dblclick') {
+        console.log(e.type);
+        setShowSider(false);
+        setModalData(value);
+        setIsModalVisible(true);
+      }
+    },
+    [showSider],
+  );
+
+  const onDoubleClick = useCallback(
+    (e: any, value: any) => {
+      if (e.type === 'click') {
+        setShowSider(true);
+      }
+      if (e.type === 'dblclick') {
+        console.log(e.type);
+        setShowSider(false);
+        setModalData(value);
+        setIsModalVisible(true);
+      }
+    },
+    [modalData, isModalVisible],
+  );
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -32,63 +73,92 @@ const Files: FC = () => {
   }, []);
 
   return (
-    <>
-      <StyledFilesWrapper>
-        <StyledFilesHeader
-          style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: '10px',
-            justifyContent: 'space-around',
-            flexWrap: 'wrap',
-          }}
-        >
-          <StyledFilesDateFilter>
-            <h4>Filter files by date:</h4>
-            <RangePicker />
-          </StyledFilesDateFilter>
+    <StyledPageWrapper>
+      <StyledFilesHeader
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          gap: '10px',
+          justifyContent: 'space-around',
+          flexWrap: 'wrap',
+        }}
+      >
+        <StyledFilesDateFilter>
+          <h4>Filter files by date:</h4>
+          <RangePicker />
+        </StyledFilesDateFilter>
 
-          <StyledFilesSlider>
-            <h4>Filter by size:</h4>
-            <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
-          </StyledFilesSlider>
-          <StyledFilesSelect>
-            <Select
-              defaultValue="Filter by type"
-              style={{ width: 160 }}
-              onChange={handleChange}
-            >
-              <Option value="jpg">.jpg</Option>
-              <Option value="png">.png</Option>
-              <Option value="txt">.txt</Option>
-              <Option value="pdf">.pdf</Option>
-            </Select>
-            <Select
-              defaultValue="Sort by"
-              style={{ width: 160 }}
-              onChange={handleChange}
-            >
-              <Option value="asc">Ascending</Option>
-              <Option value="desc">Descending</Option>
-              <Option value="newest" disabled>
-                Newest
-              </Option>
-              <Option value="oldest">Oldest</Option>
-            </Select>
-          </StyledFilesSelect>
-        </StyledFilesHeader>
+        <StyledFilesSlider>
+          <h4>Filter by size:</h4>
+          <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
+        </StyledFilesSlider>
+        <StyledFilesSelect>
+          <Select
+            defaultValue="Filter by type"
+            style={{ width: 160 }}
+            onChange={handleChange}
+          >
+            <Option value="jpg">.jpg</Option>
+            <Option value="png">.png</Option>
+            <Option value="txt">.txt</Option>
+            <Option value="pdf">.pdf</Option>
+          </Select>
+          <Select
+            defaultValue="Sort by"
+            style={{ width: 160 }}
+            onChange={handleChange}
+          >
+            <Option value="asc">Ascending</Option>
+            <Option value="desc">Descending</Option>
+            <Option value="newest" disabled>
+              Newest
+            </Option>
+            <Option value="oldest">Oldest</Option>
+          </Select>
+        </StyledFilesSelect>
+      </StyledFilesHeader>
+      <StyledContent>
+        <StyledFilesWrapper>
+          {data?.map((value: any, index: any) => (
+            <PCard
+              image={value?.image}
+              heading={value?.name}
+              description={value?.description}
+              onClick={(e: any) => onClick(e, value)}
+              onDoubleClick={(e: any) => onDoubleClick(e, value)}
+            />
+          ))}
+        </StyledFilesWrapper>
 
-        {data?.map((value: any, index: any) => (
-          <PCard
-            image={value?.image}
-            heading={value?.name}
-            description={value?.description}
-          />
-        ))}
-      </StyledFilesWrapper>
-    </>
+        {showSider && <PFileSider />}
+      </StyledContent>
+      <StyledFilesModal
+        title={modalData?.name}
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <div className="footer-content">
+            <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
+            <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
+              Download
+            </StyledFilesButton>
+          </div>,
+        ]}
+      >
+        <p>{modalData?.description}</p>
+      </StyledFilesModal>
+    </StyledPageWrapper>
   );
 };
+
+const StyledContent = styled.div`
+  display: flex;
+`;
+const StyledPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const StyledFilesWrapper = styled.div`
   padding: 20px;
@@ -113,6 +183,41 @@ const StyledFilesSlider = styled.div`
     margin: 22px 6px 10px;
     padding: 0 !important;
   }
+`;
+
+const StyledFilesModal = styled(Modal)`
+  .ant-modal-header {
+    border-radius: 1.2rem;
+    background-color: rgba(220, 220, 220, 0.1);
+    border: 1px solid #fff;
+    border-bottom: 1px solid #eee;
+  }
+
+  .ant-modal-title {
+    color: #555;
+    letter-spacing: 0.5px;
+    font-size: 1.8rem;
+  }
+
+  .ant-modal-content {
+    border-radius: 1.2rem;
+    box-shadow: 1px 3px 4px rgba(255, 255, 255, 0.4);
+  }
+
+  .ant-modal-footer {
+    padding: 1.4rem 2.2rem;
+    border-radius: 1.6rem;
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+`;
+
+const StyledFilesButton = styled(Button)`
+  border-radius: 0.8rem;
 `;
 
 const StyledFilesDateFilter = styled.div`

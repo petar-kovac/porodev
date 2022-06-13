@@ -9,6 +9,8 @@ import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
 
 import { useAuthStateValue } from 'context/AuthContext';
+import PButton from 'components/buttons/PButton';
+import theme from 'theme/theme';
 
 const Home: FC = () => {
   const [data, setData] = useState<[]>([]);
@@ -53,9 +55,12 @@ const Home: FC = () => {
           </StyledCardWrapper>
           <StyledShowMoreButton>
             <Link to="/user-files">
-              <StyledLoginButton type="primary">
-                Show more files
-              </StyledLoginButton>
+              <PButton
+                text="Add user"
+                color="#fff"
+                borderRadius="12px"
+                background={theme.colors.primary}
+              />
             </Link>
           </StyledShowMoreButton>
         </StyledCardListWrapper>

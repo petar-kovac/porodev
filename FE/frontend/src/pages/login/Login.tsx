@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, MouseEventHandler, useState } from 'react';
 import styled from 'styled-components';
 
 import logoImage from 'assets/logo.png';
@@ -13,6 +13,8 @@ import {
 } from 'service/authorization/authorization.props';
 
 import { useAuthStateValue } from 'context/AuthContext';
+import PButton from 'components/buttons/PButton';
+import theme from 'theme/theme';
 
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -25,7 +27,11 @@ const Login: FC = () => {
   const handleRegister = (values: unknown) => {
     register(values as IRegisterRequest);
   };
-  const handleFormChange = () => setIsLogin((value) => !value);
+  const handleFormChange: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsLogin((value) => !value);
+  };
 
   return (
     <StyledPage>
@@ -39,9 +45,16 @@ const Login: FC = () => {
         ) : (
           <RegisterForm onSubmit={handleRegister} onFailed={undefined} />
         )}
-        <StyledToggleButton type="default" onClick={handleFormChange}>
-          {isLogin ? 'Create new account' : 'Login with existing account'}
-        </StyledToggleButton>
+
+        <PButton
+          text={isLogin ? 'Create new account' : 'Login with existing account'}
+          color="#777"
+          borderRadius="8px"
+          htmlType="submit"
+          form="registerForm"
+          background="#fcfcfc"
+          onClick={handleFormChange}
+        />
       </StyledFormWrapper>
       <StyledLogo src={logoImage} />
     </StyledPage>

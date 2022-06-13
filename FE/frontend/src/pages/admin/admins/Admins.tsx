@@ -1,15 +1,13 @@
 import { FC, useEffect } from 'react';
-import styled from 'styled-components';
 
-import { PAGES } from 'util/constants/constants';
+import PButton from 'components/buttons/PButton';
+import PTable from 'components/table/PTable';
 import {
-  StyledPage,
   StyledHeading,
   StyledHeadingWrapper,
+  StyledPage,
 } from 'styles/commonStyles';
-import PTable from 'components/table/PTable';
-import PButton from 'components/buttons/Button';
-import theme from 'theme/theme';
+import { PAGES } from 'util/constants/constants';
 
 import useAdminsColumns from './hooks/useAdminsColumns';
 import useAdminsData from './hooks/useAdminsData';

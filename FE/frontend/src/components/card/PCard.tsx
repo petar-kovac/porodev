@@ -1,4 +1,3 @@
-import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Card, Modal } from 'antd';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -10,33 +9,28 @@ interface IPCardProps {
   heading: string;
   description: string;
   image: string;
+  onClick?: any;
+  onDoubleClick?: any;
 }
 
-const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
+const PCard: FC<IPCardProps> = ({
+  heading,
+  description,
+  image,
+  onClick,
+  onDoubleClick,
+}) => {
   const { isAuthenticated, testMessage } = useAuthStateValue();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const showModal = (e: any) => {
-    console.log(e.target, 'e');
-
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <>
-      <StyledFilesCard
+      <StyledCard
         hoverable
         cover={<img alt="example" src={`${image}`} />}
         role="button"
-        onClick={(e) => showModal(e)}
+        onDoubleClick={onDoubleClick}
+        onClick={onClick}
       >
         <Meta
           title={heading}
@@ -54,28 +48,11 @@ const PCard: FC<IPCardProps> = ({ heading, description, image }) => {
             </div>,
           ]}
         />
-      </StyledFilesCard>
-
-      <StyledFilesModal
-        title={heading}
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <div className="footer-content">
-            <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
-            <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-              Download
-            </StyledFilesButton>
-          </div>,
-        ]}
-      >
-        <p>{description}</p>
-      </StyledFilesModal>
+      </StyledCard>
     </>
   );
 };
-const StyledFilesCard = styled(Card)`
+const StyledCard = styled(Card)`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   .ant-card-cover {
     height: 14rem;
