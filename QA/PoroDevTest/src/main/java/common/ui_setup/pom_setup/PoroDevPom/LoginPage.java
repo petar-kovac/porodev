@@ -41,7 +41,7 @@ public class LoginPage extends BasePage {
     WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
     WebElement we_badRequestError;
-    @FindBy(className = "sc-ftvSup")
+    @FindBy(className = "sc-hHLeRK")
     List<WebElement> we_listOfErrors;
 
     //functional methods section

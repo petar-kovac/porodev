@@ -29,8 +29,8 @@ public class BaseTest {
 
     @AfterMethod
     public void tearDownAfterMethod() {
-        driverSetup.closeBrowserTab();
         System.out.println("AFTER METHOD");
+        driverSetup.closeBrowserTab();
     };
 
     @AfterClass

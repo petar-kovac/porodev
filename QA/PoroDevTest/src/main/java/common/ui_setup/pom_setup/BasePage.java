@@ -65,6 +65,6 @@ public class BasePage {
             int index = (int) (rnd.nextFloat() * domain.length());
             salt.append(domain.charAt(index));
         }
-        return salt.toString() + "@boing.rs";
+        return salt + "@boing.rs";
     }
 }

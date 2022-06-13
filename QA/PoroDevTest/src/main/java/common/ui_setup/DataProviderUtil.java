@@ -4,7 +4,7 @@ import org.testng.annotations.DataProvider;
 
 public class DataProviderUtil {
 
-    @DataProvider(name = "passwordForm")
+    @DataProvider(name = "invalidPasswordForm")
     public static Object[][] invalidPasswordForms() {
         return new Object[][]{
                 {"markoilic1!"},
@@ -15,7 +15,7 @@ public class DataProviderUtil {
             };
     }
 
-    @DataProvider(name = "passwords_with_whitespace")
+    @DataProvider(name = "invalidPassForm_with_whitespace")
     public static Object[][] invalidPasswordForm_whitespace() {
         return new Object[][]{
                 {"marko ilic1!"},
@@ -26,7 +26,7 @@ public class DataProviderUtil {
         };
     }
 
-    @DataProvider(name = "emailForm")
+    @DataProvider(name = "invalidFormEmail")
     public static Object[][] invalidEmailForms() {
         return new Object[][]{
                 {"marko@gmail.com"},
@@ -34,6 +34,16 @@ public class DataProviderUtil {
                 {"markoboing.rs"},
                 {"MarkoMarko@boingrs"}
             };
+
+    }
+
+    @DataProvider(name = "validEmailForms")
+    public static Object[][] validEmailForms() {
+        return new Object[][]{
+                {"marko-ilic@boing.rs"},
+                {"marko.ilic@boing.rs"},
+                {"marko_ilic@boing.rs"},
+        };
 
     }
 }

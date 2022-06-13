@@ -24,17 +24,38 @@ public class RegisterTest extends BaseTest{
         registrationPage.registerUser(
                 fileControlUtil.getValue("VALID_FIRSTNAME"),
                 fileControlUtil.getValue("VALID_LASTNAME"),
-                BasePage.getRandomBoingEmail(),
+                fileControlUtil.getValue("VALID_EMAIL"),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
         registrationPage.explicitWait(registrationPage.we_successful_registrationMsg);
-        registrationPage.assert_user_registration(PomConstants.SUCCESSFUL_REGISTRATION);
+        registrationPage.assert_user_registration(
+                registrationPage.we_successful_registrationMsg,
+                PomConstants.SUCCESSFUL_REGISTRATION);
     }
 
-    @Test(priority = 2)
+    @Test(priority = 2, dataProvider = "validEmailForms", dataProviderClass = DataProviderUtil.class)
+    public void register_with_valid_emailForms(String validEmailForms) throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("VALID_FIRSTNAME"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
+                validEmailForms,
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("VALID_POSITION"));
+
+        registrationPage.explicitWait(registrationPage.we_successful_registrationMsg);
+        registrationPage.assert_user_registration(
+                registrationPage.we_successful_registrationMsg,
+                PomConstants.SUCCESSFUL_REGISTRATION);
+    }
+
+    @Test(priority = 3)
     public void register_without_firstName() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -50,7 +71,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 3)
+    @Test(priority = 4)
     public void register_without_lastName() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -66,7 +87,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 4)
+    @Test(priority = 5)
     public void register_without_email() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -82,7 +103,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 5)
+    @Test(priority = 6)
     public void register_without_password() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -98,7 +119,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 6)
+    @Test(priority = 7)
     public void register_without_confirmationPassword() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -114,7 +135,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 7)
+    @Test(priority = 8)
     public void register_without_department() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -130,7 +151,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 8)
+    @Test(priority = 9)
     public void register_without_position() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -146,71 +167,155 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
     }
 
-    @Test(priority = 9)
-    public void register_with_invalidForm_firstName_lastName() throws InterruptedException {
+    @Test(priority = 10)
+    public void register_with_invalidForm_firstName() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
-                fileControlUtil.getValue("INVALID_FIRSTNAME"),
-                fileControlUtil.getValue("INVALID_LASTNAME"),
+                fileControlUtil.getValue("INVALID_FIRSTNAME_NUMBERS"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
                 BasePage.getRandomBoingEmail(),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_ONLY_LETTERS);
     }
 
-    @Test(priority = 10, dataProvider = "emailForm", dataProviderClass = DataProviderUtil.class)
-    public void register_with_invalidForm_email(String emailFromDataProvider) throws InterruptedException {
+    @Test(priority = 11)
+    public void register_with_invalidForm_lastName() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
                 fileControlUtil.getValue("VALID_FIRSTNAME"),
-                fileControlUtil.getValue("VALID_LASTNAME"),
-                emailFromDataProvider,
+                fileControlUtil.getValue("INVALID_LASTNAME_NUMBERS"),
+                BasePage.getRandomBoingEmail(),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_PASS"),
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_ONLY_LETTERS);
     }
 
-    @Test(priority = 11, dataProvider = "passwordForm", dataProviderClass = DataProviderUtil.class)
-    public void register_with_invalidFormPass(String passwordsFromDataProvider) throws InterruptedException {
+    @Test(priority = 12)
+    public void register_with_invalidForm_firstName_moreThan20Char() throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("INVALID_FIRSTNAME_MORE_THAN_20"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
+                BasePage.getRandomBoingEmail(),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("VALID_POSITION"));
+
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_MORE_THAN_20);
+    }
+
+    @Test(priority = 13)
+    public void register_with_invalidForm_lastName_moreThan20Char() throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("VALID_FIRSTNAME"),
+                fileControlUtil.getValue("INVALID_LASTNAME_MORE_THAN_20"),
+                BasePage.getRandomBoingEmail(),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("VALID_POSITION"));
+
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_MORE_THAN_20);
+    }
+
+
+
+    @Test(priority = 14, dataProvider = "invalidFormEmail", dataProviderClass = DataProviderUtil.class)
+    public void register_with_invalidForm_email(String invalidEmailForm) throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("VALID_FIRSTNAME"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
+                invalidEmailForm,
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("VALID_POSITION"));
+
+        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR_INVALID);
+    }
+
+    @Test(priority = 15)
+    public void register_with_invalidForm_email_moreThan50Char() throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("VALID_FIRSTNAME"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
+                fileControlUtil.getValue("INVALID_EMAIL_MORE_THAN_50"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("VALID_POSITION"));
+
+        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR_MORE_THAN_50);
+    }
+
+    @Test(priority = 16)
+    public void register_with_already_existing_email() throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("VALID_FIRSTNAME"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
+                fileControlUtil.getValue("VALID_ALREADY_REGISTERED_EMAIL"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("VALID_POSITION"));
+
+        registrationPage.assert_user_registration(
+                registrationPage.we_requestFailed_statusCode400,
+                PomConstants.REQUEST_FAIL_STATUS_CODE_400);
+    }
+
+    @Test(priority = 17, dataProvider = "invalidPasswordForm", dataProviderClass = DataProviderUtil.class)
+    public void register_with_invalidFormPass(String invalidPasswordForms) throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
                 fileControlUtil.getValue("VALID_FIRSTNAME"),
                 fileControlUtil.getValue("VALID_LASTNAME"),
                 BasePage.getRandomBoingEmail(),
-                passwordsFromDataProvider,
-                passwordsFromDataProvider,
+                invalidPasswordForms,
+                invalidPasswordForms,
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
         registrationPage.assert_errorMessage(PomConstants.WRONG_PASSWORD_ERROR);
     }
 
-    @Test(priority = 12, dataProvider = "passwords_with_whitespace", dataProviderClass = DataProviderUtil.class)
-    public void register_with_invalidFormPass_whitespace_betweenChar(String passwordsFromDataProvider) throws InterruptedException {
+    @Test(priority = 18, dataProvider = "invalidPassForm_with_whitespace", dataProviderClass = DataProviderUtil.class)
+    public void register_with_invalidFormPass_whitespace_betweenChar(String pass_with_whiteSpace) throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
                 fileControlUtil.getValue("VALID_FIRSTNAME"),
                 fileControlUtil.getValue("VALID_LASTNAME"),
                 BasePage.getRandomBoingEmail(),
-                passwordsFromDataProvider,
-                passwordsFromDataProvider,
+                pass_with_whiteSpace,
+                pass_with_whiteSpace,
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
         registrationPage.assert_errorMessage(PomConstants.PASSWORD_SPACE_ERROR);
     }
 
-    @Test(priority = 13)
+    @Test(priority = 19)
     public void register_withNotMatching_confirmPassword()throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -226,7 +331,7 @@ public class RegisterTest extends BaseTest{
         registrationPage.assert_errorMessage(PomConstants.PASSWORD_MATCH);
     }
 
-    @Test(priority = 14)
+    @Test(priority = 20)
     public void register_with_wrongFormat_department() throws InterruptedException {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
@@ -240,5 +345,21 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_POSITION"));
 
         registrationPage.assert_errorMessage(PomConstants.DEPARTMENT_ERROR);
+    }
+
+    @Test(priority = 21)
+    public void register_with_wrongFormat_position() throws InterruptedException {
+        RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
+
+        registrationPage.registerUser(
+                fileControlUtil.getValue("VALID_FIRSTNAME"),
+                fileControlUtil.getValue("VALID_LASTNAME"),
+                BasePage.getRandomBoingEmail(),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_PASS"),
+                fileControlUtil.getValue("VALID_DEPARTMENT"),
+                fileControlUtil.getValue("INVALID_POSITION"));
+
+        registrationPage.assert_errorMessage(PomConstants.POSITION_ERROR);
     }
 }

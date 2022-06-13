@@ -68,7 +68,7 @@ public class RegistrationPage extends BasePage {
     @FindBy(xpath = "//span[contains(text(),'Request failed with status code 500')]")
     public WebElement we_requestFailed_statusCode500;
     @FindBy(xpath = "//span[contains(text(),'Request failed with status code 400')]")
-    public WebElement getWe_requestFailed_statusCode400;
+    public WebElement we_requestFailed_statusCode400;
 
     //REQUIRED MESSAGE SECTION
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[1]/span[2]")
@@ -85,7 +85,7 @@ public class RegistrationPage extends BasePage {
     public WebElement we_department_requiredMsg;
     @FindBy(xpath = "//*[@id=\"registerForm\"]/div[7]/span[2]")
     public WebElement we_position_requiredMsg;
-    @FindBy(className = "sc-ftvSup")
+    @FindBy(className = "sc-hHLeRK")
     List<WebElement> we_errorFields;
 
     //SUCCESSFUL MESSAGE SECTION
@@ -112,8 +112,9 @@ public class RegistrationPage extends BasePage {
     }
 
     //ASSERT METHODS
-    public void assert_user_registration(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_successful_registrationMsg), expectedResults);
+    public void assert_user_registration(WebElement element, String expectedResults) {
+        System.out.println("error: " + BasePage.getTextFromElement(element));
+        Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults);
     }
 
     public void assert_errorMessage(String expectedResults) {
