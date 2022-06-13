@@ -51,16 +51,16 @@ const PSider: FC = () => {
       >
         {isAdmin && (
           <>
-            <Menu.Item key="1" icon={<HomeOutlined />}>
+            <Menu.Item key="/" icon={<HomeOutlined />}>
               <Link to="/">Home</Link>
             </Menu.Item>
-            <Menu.Item key={2} icon={<FontColorsOutlined />}>
+            <Menu.Item key="/admins" icon={<FontColorsOutlined />}>
               <Link to="/admins">Admins</Link>
             </Menu.Item>
-            <Menu.Item key={3} icon={<UserOutlined />}>
+            <Menu.Item key="/users" icon={<UserOutlined />}>
               <Link to="/users">Users</Link>
             </Menu.Item>
-            <Menu.Item key={4} icon={<FileOutlined />}>
+            <Menu.Item key="/files" icon={<FileOutlined />}>
               <Link to="/files">Files</Link>
             </Menu.Item>
           </>
