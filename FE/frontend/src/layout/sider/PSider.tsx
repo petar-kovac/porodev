@@ -6,7 +6,7 @@ import {
 } from '@ant-design/icons';
 import { Avatar, Layout, Menu } from 'antd';
 import { FC, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { useAuthStateValue } from 'context/AuthContext';
@@ -18,6 +18,9 @@ const PSider: FC = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean | undefined>(
     localStorage.getItem('collapsedMenu') === 'true',
   );
+
+  const { pathname } = useLocation();
+
   const { isAdmin } = useAuthStateValue();
 
   return (
@@ -41,10 +44,14 @@ const PSider: FC = () => {
         <h1>Dashboard</h1>
       </StyledSiderHeader>
 
-      <StyledSiderMenu mode="inline" style={{ height: '144px' }}>
+      <StyledSiderMenu
+        mode="inline"
+        style={{ height: '144px' }}
+        selectedKeys={[pathname]}
+      >
         {isAdmin && (
           <>
-            <Menu.Item key={1} icon={<HomeOutlined />}>
+            <Menu.Item key="1" icon={<HomeOutlined />}>
               <Link to="/">Home</Link>
             </Menu.Item>
             <Menu.Item key={2} icon={<FontColorsOutlined />}>
@@ -60,10 +67,10 @@ const PSider: FC = () => {
         )}
         {!isAdmin && ( // later change it to isUser when backend is implemented
           <>
-            <Menu.Item key={5} icon={<HomeOutlined />}>
+            <Menu.Item key="/user-home" icon={<HomeOutlined />}>
               <Link to="/user-home">Home</Link>
             </Menu.Item>
-            <Menu.Item key={6} icon={<FileOutlined />}>
+            <Menu.Item key="/user-files" icon={<FileOutlined />}>
               <Link to="/user-files">Files</Link>
             </Menu.Item>
           </>
