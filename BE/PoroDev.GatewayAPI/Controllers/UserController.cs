@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
 
@@ -67,6 +69,12 @@ namespace PoroDev.GatewayAPI.Controllers
         //    /*var createdId =*/ await _userService.CreateUser(createReqBody);
         //    return Ok(/*createdId*/);
         //}
+        [HttpPost("LoginUser")]
+        public async Task<ActionResult<LoginUserModel>> LoginUser([FromBody] UserLoginRequestGatewayToService model)
+        {
+            var returnModel = await _userService.LoginUser(model);
+            return Ok(returnModel);
+        }
 
         //[ProducesResponseType((int)HttpStatusCode.OK)]
         //[HttpPut("Update")]

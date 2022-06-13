@@ -1,12 +1,15 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using static PoroDev.GatewayAPI.Constants.Constats;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -15,14 +18,17 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserCreateRequestGatewayToService> _createRequestClient;
         private readonly IRequestClient<UserDeleteRequestGatewayToService> _deleteRequestClient;
         private readonly IRequestClient<UserReadByEmailRequestGatewayToService> _readUserByEmailRequestClient;
+        private readonly IRequestClient<UserLoginRequestGatewayToService> _loginRequestClient;
 
-        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
-            IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
-            IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient)
+        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
+            IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient, 
+            IRequestClient<UserLoginRequestGatewayToService> loginRequestClient, 
+            IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient)
         {
             _createRequestClient = createRequestClient;
             _deleteRequestClient = deleteRequestClient;
             _readUserByEmailRequestClient = readUserByEmailRequestClient;
+            _loginRequestClient = loginRequestClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -41,15 +47,21 @@ namespace PoroDev.GatewayAPI.Services
         {
             if(string.IsNullOrEmpty(deleteModel.Email.Trim()))
             {
-                ThrowException(nameof(EmailFormatException), "Email can't be empty.");
+                ThrowException(nameof(EmailFormatException), EmptyEmail);
             }    
 
-            var requestReturnContext = await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+            var responseContext = await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
 
-            if (requestReturnContext.Message.ExceptionName != null)
-                ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
 
-            return requestReturnContext.Message.Entity;
+            return responseContext.Message.Entity;
+        }
+
+        public async Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel)
+        {
+            var responseContext = await _loginRequestClient.GetResponse<UserLoginResponseServiceToGateway>(loginModel);
+            return responseContext.Message.Entity;
         }
 
         public async Task<DataUserModel> ReadUserByEmail(string email)

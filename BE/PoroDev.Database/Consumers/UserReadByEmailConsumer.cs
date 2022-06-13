@@ -27,7 +27,7 @@ namespace PoroDev.Database.Consumers
                     throw new UserNotFoundException("User with this email does not exist.");
                 }
 
-                var returnUser = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(fetchUser);
+                var returnUser = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(fetchUser.Entity);
 
                 await context.RespondAsync(returnUser);
             }

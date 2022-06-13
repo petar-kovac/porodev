@@ -22,16 +22,10 @@ namespace PoroDev.Database.Consumers
             UserDeleteResponseDatabaseToService returnModel;
             var userToDelete = await _unitOfWork.Users.FindAsync(user => user.Email.Equals(context.Message.Email.Trim()));
 
-            if(userToDelete == null)
-            {
-                returnModel = CreateResponseModel<UserDeleteResponseDatabaseToService, DeleteUserModel>(nameof(UserNotFoundException), UserNotFoundExceptionMessage);
-                await context.RespondAsync(returnModel);
-            }
-
 
             try
             {
-                _unitOfWork.Users.Delete(userToDelete);
+                _unitOfWork.Users.Delete(userToDelete.Entity);
                 await _unitOfWork.SaveChanges();
             }
             catch (Exception exception)
