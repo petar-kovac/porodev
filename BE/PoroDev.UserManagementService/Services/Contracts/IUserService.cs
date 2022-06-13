@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Enums;
 using PoroDev.UserManagementService.Models.UserModels;
 
@@ -10,7 +11,8 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
         //Task<DataUserModel> GetUserByMail(string mail);
 
-        //Task<UserCreateModelGateway> UpdateUser(UserCreateModelGateway model);
+
+        Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model);
 
         //Task<UserCreateModelGateway> DeleteUser(string mail);
 

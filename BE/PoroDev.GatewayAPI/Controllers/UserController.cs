@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
@@ -34,6 +35,12 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("UpdateUser")]
+        public async Task<ActionResult<DataUserModel>> UpdateUser([FromBody] UserUpdateRequestGatewayToService model)
+        {
+            var returnModel = await _userService.UpdateUser(model);
+            return Ok(returnModel);
+        }
 
 
 

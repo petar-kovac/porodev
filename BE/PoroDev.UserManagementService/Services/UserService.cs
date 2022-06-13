@@ -350,17 +350,10 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
         {
-            //da li je ovo potrebno uopste ovde provjeravati ili u database ? 
-            if (model.Email.Trim() == null)
-            {
-                 //should I pass some fault 
-            }
-
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             UserUpdateRequestServiceToDatabase temp = new UserUpdateRequestServiceToDatabase()
             {
-                Id = Guid.NewGuid(),
                 AvatarUrl = model.AvatarUrl,
                 Department = model.Department,
                 Email = model.Email,
@@ -370,10 +363,9 @@ namespace PoroDev.UserManagementService.Services
                 Role = model.Role,
                 Password = hash,
                 Salt = salt,
-                DateCreated = DateTime.Now
             };
 
-            var response = await _createRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
+            var response = await _updateRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
 
             return response.Message;
         }
