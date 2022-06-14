@@ -285,6 +285,9 @@ namespace PoroDev.UserManagementService.Services
 
             var modelToCreate = _mapper.Map<UserCreateRequestServiceToDatabase>(model);
 
+            modelToCreate.Password = hash;
+            modelToCreate.Salt = salt;
+
             var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate);
 
             return response.Message;
