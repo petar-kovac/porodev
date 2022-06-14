@@ -26,9 +26,38 @@ namespace PoroDev.Database.Repositories
             return null;
         }
 
-        public void Delete(TemplateEntity entity)
+        public async Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity)
         {
-            _context.Set<TemplateEntity>().Remove(entity);
+            TemplateEntity? returnEntity = null;
+            UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
+            try
+            {
+                _context.Set<TemplateEntity>().Remove(entity);
+                returnEntity = entity;
+            }
+            catch (Exception)
+            {
+                response.Entity = null;
+                response.ExceptionName = nameof(DatabaseException);
+                response.HumanReadableMessage = InternalDatabaseError;
+                return response;
+            }
+
+            if (returnEntity != null)
+            {
+                response.Entity = returnEntity;
+                response.ExceptionName = null;
+                response.HumanReadableMessage = null;
+
+            }
+            else
+            {
+                response.Entity = null;
+                response.ExceptionName = nameof(UserNotFoundException);
+                response.HumanReadableMessage = UserNotFoundExceptionMessage;
+            }
+            return response;
+
         }
 
         public async Task<ICollection<TemplateEntity>> GetAllAsync()
@@ -44,13 +73,14 @@ namespace PoroDev.Database.Repositories
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> FindAsync(Expression<Func<TemplateEntity, bool>> filter)
         {
             TemplateEntity? entity;
+            UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
+            
             try
             {
                 entity = await _context.Set<TemplateEntity>().FirstOrDefaultAsync(filter);
             }
             catch (Exception)
             {
-                UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
                 response.Entity = null;
                 response.ExceptionName = nameof(DatabaseException);
                 response.HumanReadableMessage = InternalDatabaseError;
@@ -58,20 +88,18 @@ namespace PoroDev.Database.Repositories
             }
             if (entity != null)
             {
-                UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
                 response.Entity = entity;
                 response.ExceptionName = null;
                 response.HumanReadableMessage = null;
-                return response;
+                
             }
             else
             {
-                UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
                 response.Entity = null;
                 response.ExceptionName = nameof(UserNotFoundException);
                 response.HumanReadableMessage = UserNotFoundExceptionMessage;
-                return response;
             }
+            return response;
         }
 
         public async Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter)

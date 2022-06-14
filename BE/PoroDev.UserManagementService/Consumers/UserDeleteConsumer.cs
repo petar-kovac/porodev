@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers
@@ -18,7 +20,7 @@ namespace PoroDev.UserManagementService.Consumers
         {
             var modelToReturn = await _userService.DeleteUser(context.Message);
 
-            await context.RespondAsync<UserDeleteResponseServiceToGateway>(modelToReturn);
+            await context.RespondAsync<CommunicationModel<DeleteUserModel>>(modelToReturn);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace PoroDev.Database.Repositories.Contracts
 
         Task<TemplateEntity?> CreateAsync(TemplateEntity entity);
 
-        void Delete(TemplateEntity entity);
+        Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity);
 
         Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id);
 

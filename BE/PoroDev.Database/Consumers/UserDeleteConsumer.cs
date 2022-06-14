@@ -6,37 +6,40 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Database.Repositories.Contracts;
 using PoroDev.Common.Exceptions;
 using static PoroDev.Database.Constants.Constants;
+using PoroDev.Common.Models.UnitOfWorkResponse;
+using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Contracts;
+
 namespace PoroDev.Database.Consumers
 {
     public class UserDeleteConsumer : IConsumer<UserDeleteRequestServiceToDatabase>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UserDeleteConsumer(IUnitOfWork unitOfWork)
+        public UserDeleteConsumer(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserDeleteRequestServiceToDatabase> context)
         {
-            UserDeleteResponseDatabaseToService returnModel;
+            CommunicationModel<DeleteUserModel> returnModel;
             var userToDelete = await _unitOfWork.Users.FindAsync(user => user.Email.Equals(context.Message.Email.Trim()));
-
-
-            try
+          
+            if (userToDelete.ExceptionName != null)
             {
-                _unitOfWork.Users.Delete(userToDelete.Entity);
-                await _unitOfWork.SaveChanges();
-            }
-            catch (Exception exception)
-            {
-                returnModel = CreateResponseModel<UserDeleteResponseDatabaseToService, DeleteUserModel>(nameof(exception), InternalDatabaseError);
+                returnModel = _mapper.Map<CommunicationModel<DeleteUserModel>>(userToDelete);
                 await context.RespondAsync(returnModel);
+                return;
             }
 
-            DeleteUserModel deleteUserModel = new DeleteUserModel() { Deleted = true };
+            var deletedUser = await _unitOfWork.Users.Delete(userToDelete.Entity);
+            await _unitOfWork.SaveChanges();
 
-            returnModel = CreateResponseModel<UserDeleteResponseDatabaseToService, DeleteUserModel>(deleteUserModel);
+            returnModel = _mapper.Map<CommunicationModel<DeleteUserModel>>(deletedUser);
+
             await context.RespondAsync(returnModel);
         }
     }

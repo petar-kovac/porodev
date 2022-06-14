@@ -10,6 +10,7 @@ using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.GatewayAPI.Constants.Constats;
+using PoroDev.Common.Contracts;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -50,7 +51,7 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(EmailFormatException), EmptyEmail);
             }    
 
-            var responseContext = await _deleteRequestClient.GetResponse<UserDeleteResponseServiceToGateway>(deleteModel);
+            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(deleteModel);
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);

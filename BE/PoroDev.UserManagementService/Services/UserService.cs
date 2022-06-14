@@ -9,6 +9,8 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -276,9 +278,9 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
-        public async Task<UserDeleteResponseDatabaseToService> DeleteUser(UserDeleteRequestGatewayToService model)
+        public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestclient.GetResponse<UserDeleteResponseDatabaseToService>(model);
+            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 

@@ -28,6 +28,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case DatabaseException databaseException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = databaseException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, databaseException);
+                        break;
+
                     case UserNotFoundException userNotFound:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         HumanReadableErrorMessage = userNotFound.HumanReadableErrorMessage;
