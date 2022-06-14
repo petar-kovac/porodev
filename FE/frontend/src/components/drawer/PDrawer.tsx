@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 const PDrawer: FC = () => {
-  return <div>cedo</div>;
+  return <div>Drawer</div>;
 };
 
 export default PDrawer;

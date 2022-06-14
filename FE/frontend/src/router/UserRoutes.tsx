@@ -1,10 +1,7 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const UserRoutes: FC<{ children?: ReactNode; isUser: boolean }> = ({
-  children,
-  isUser,
-}) => {
+const UserRoutes: FC<{ isUser: boolean }> = ({ isUser }) => {
   return isUser ? <Outlet /> : <Navigate to="/notallowed" />;
 };
 

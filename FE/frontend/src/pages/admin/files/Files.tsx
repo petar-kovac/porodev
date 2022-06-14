@@ -1,10 +1,9 @@
 import axios from 'axios';
+import PCard from 'components/card/PCard';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import PCard from 'components/card/PCard';
-import { findFiles } from 'service/files/files';
 
-import { DatePicker, Select, Slider, Switch } from 'antd';
+import { DatePicker, Select, Slider } from 'antd';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -15,7 +14,6 @@ const handleChange = (value: string) => {
 
 const Files: FC = () => {
   const [data, setData] = useState<[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchFiles = async () => {

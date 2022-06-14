@@ -1,14 +1,14 @@
+import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
 
-import Spinner from 'components/spinner/Spinner';
-import PUpload from 'components/upload/PUpload';
+import theme from 'theme/theme';
 import PCard from 'components/card/PCard';
-import { StyledLoginButton } from 'components/buttons/buttons';
-import { useAuthStateValue } from 'context/AuthContext';
 import PList from 'components/list/List';
+import Spinner from 'components/spinner/Spinner';
+import PButton from 'components/buttons/PButton';
+
 import useAdminsData from '../admins/hooks/useAdminsData';
 
 const Home: FC = () => {
@@ -63,9 +63,12 @@ const Home: FC = () => {
           </StyledCardWrapper>
           <StyledShowMoreButton>
             <Link to="/files">
-              <StyledLoginButton type="primary">
-                Show more files
-              </StyledLoginButton>
+              <PButton
+                text="Show more files"
+                color="#fff"
+                borderRadius="12px"
+                background={theme.colors.primary}
+              />
             </Link>
           </StyledShowMoreButton>
         </StyledCardListWrapper>
@@ -77,12 +80,6 @@ const Home: FC = () => {
     </StyledPage>
   );
 };
-const StyledList = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
 
 const StyledSpinnerWrappper = styled.div`
   display: flex;
@@ -125,7 +122,6 @@ const StyledCardWrapper = styled.div`
   flex: 1;
   display: flex;
   gap: 20px;
-  /* margin: 0 5% 10px; */
   justify-content: center;
   align-items: flex-start;
   overflow-x: auto;

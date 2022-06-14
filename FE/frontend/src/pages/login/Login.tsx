@@ -4,17 +4,15 @@ import styled from 'styled-components';
 import logoImage from 'assets/logo.png';
 import LoginForm from 'components/login/LoginForm';
 import RegisterForm from 'components/login/RegisterForm';
-import { StyledPage, StyledFormWrapper } from 'components/login/StyledForm';
-import { StyledToggleButton } from 'components/buttons/buttons';
+import { StyledFormWrapper, StyledPage } from 'components/login/StyledForm';
 
 import {
   ILoginRequest,
   IRegisterRequest,
 } from 'service/authorization/authorization.props';
 
-import { useAuthStateValue } from 'context/AuthContext';
 import PButton from 'components/buttons/PButton';
-import theme from 'theme/theme';
+import { useAuthStateValue } from 'context/AuthContext';
 
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);

@@ -1,30 +1,26 @@
 import axios from 'axios';
 import PCard from 'components/card/PCard';
-import { FC, useEffect, useState, useCallback, useRef } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { Button, DatePicker, Modal, Select, Slider } from 'antd';
-import PSider from 'layout/sider/PSider';
+import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
-import { DownloadOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
-const handleChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
+interface IModalData {}
 
 const Files: FC = () => {
   const [data, setData] = useState<[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showSider, setShowSider] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState<any>();
 
   const count = useRef(0);
 
-  const onClick = useCallback((e: any, value: any) => {
+  const onClick = useCallback((value: any) => {
     count.current += 1;
     setTimeout(() => {
       if (count.current === 1) {
@@ -41,13 +37,10 @@ const Files: FC = () => {
     }, 300);
   }, []);
 
-  const handleOk = () => {
-    setIsModalVisible(false);
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -108,35 +101,24 @@ const Files: FC = () => {
       </StyledFilesHeader>
       <StyledContent>
         <StyledFilesWrapper>
-          {data?.map((value: any, index: any) => (
+          {data?.map((value: any, index: number) => (
             <PCard
               image={value?.image}
               heading={value?.name}
               description={value?.description}
-              onClick={(e: any) => onClick(e, value)}
-              // onDoubleClick={(e: any) => onDoubleClick(e, value)}
+              onClick={() => onClick(value)}
             />
           ))}
         </StyledFilesWrapper>
 
         {showSider && <PFileSider />}
       </StyledContent>
-      <StyledFilesModal
+      <PModal
+        isModalVisible={isModalVisible}
         title={modalData?.name}
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <div className="footer-content">
-            <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
-            <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-              Download
-            </StyledFilesButton>
-          </div>,
-        ]}
-      >
-        <p>{modalData?.description}</p>
-      </StyledFilesModal>
+        content={modalData?.description}
+        setIsModalVisible={setIsModalVisible}
+      />
     </StyledPageWrapper>
   );
 };

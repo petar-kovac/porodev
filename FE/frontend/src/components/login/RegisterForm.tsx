@@ -1,20 +1,19 @@
-import { FC } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
+import { FC } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
-import theme from 'theme/theme';
-import { StyledLoginButton } from 'components/buttons/buttons';
 import PButton from 'components/buttons/PButton';
+import theme from 'theme/theme';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
+import { StyledButtonWrapper } from './LoginForm';
 import {
-  StyledHeader,
   StyledForm,
   StyledFormBox,
   StyledFormInput,
   StyledFormSpan,
+  StyledHeader,
 } from './StyledForm';
-import { StyledButtonWrapper } from './LoginForm';
 
 interface ILoginFormProps {
   onSubmit: (values: unknown) => void;

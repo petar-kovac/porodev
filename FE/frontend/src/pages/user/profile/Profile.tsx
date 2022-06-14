@@ -3,11 +3,7 @@ import styled from 'styled-components';
 
 import { StorageKey } from 'util/enums/enums';
 
-import { useAuthStateValue } from 'context/AuthContext';
-
 const Profile: FC = () => {
-  const { isAuthenticated, testMessage, loggedUser } = useAuthStateValue();
-
   return (
     <StyledPage>
       <StyledProfileCard>

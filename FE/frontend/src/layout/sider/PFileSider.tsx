@@ -7,19 +7,14 @@ import { useAuthStateValue } from 'context/AuthContext';
 const { Sider } = Layout;
 
 const PFileSider: FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean | undefined>(
-    localStorage.getItem('collapsedMenu') === 'true',
-  );
-  const { isAdmin } = useAuthStateValue();
-
   return (
-    <StyledSider>
+    <StyledFileSider>
       <div>a</div>
-    </StyledSider>
+    </StyledFileSider>
   );
 };
 
-const StyledSider = styled(Sider)`
+const StyledFileSider = styled(Sider)`
   margin-top: 20px;
   background-color: #fff;
   display: flex;

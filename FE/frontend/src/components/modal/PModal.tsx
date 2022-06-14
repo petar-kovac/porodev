@@ -1,20 +1,21 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
-const PModal: FC<{ heading?: string; description?: string }> = ({
-  heading,
-  description,
+interface IPModalProps {
+  isModalVisible?: boolean;
+  title?: string;
+  content: string;
+  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
+}
+
+const PModal: FC<IPModalProps> = ({
+  isModalVisible,
+  title,
+  content,
+  setIsModalVisible,
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = (e: any) => {
-    console.log(e.target, 'e');
-
-    setIsModalVisible(true);
-  };
-
   const handleOk = () => {
     setIsModalVisible(false);
   };
@@ -22,10 +23,11 @@ const PModal: FC<{ heading?: string; description?: string }> = ({
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
   return (
     <div>
       <StyledFilesModal
-        title={heading}
+        title={title}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -38,7 +40,7 @@ const PModal: FC<{ heading?: string; description?: string }> = ({
           </div>,
         ]}
       >
-        <p>{description}</p>
+        <p>{content}</p>
       </StyledFilesModal>
     </div>
   );

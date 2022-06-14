@@ -3,21 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 
-// const data = [
-//   {
-//     title: 'Ant Design Title 1',
-//   },
-//   {
-//     title: 'Ant Design Title 2',
-//   },
-//   {
-//     title: 'Ant Design Title 3',
-//   },
-//   {
-//     title: 'Ant Design Title 4',
-//   },
-// ];
-
 const PList: React.FC<{ data?: unknown[] | undefined }> = ({ data }) => {
   return (
     <List
@@ -27,7 +12,7 @@ const PList: React.FC<{ data?: unknown[] | undefined }> = ({ data }) => {
         <List.Item>
           <List.Item.Meta
             avatar={<Avatar src={item.avatar} />}
-            title={<a href="https://ant.design">{item.name}</a>}
+            title={<>{item.name}</>}
             description={
               <StyledDescription>
                 <div>{item.address}</div>

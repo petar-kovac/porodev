@@ -3,11 +3,13 @@ import { Spin } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-const Spinner: FC<{ size: number; color: string; speed: number }> = ({
-  size,
-  color,
-  speed,
-}) => {
+interface ISpinnerProps {
+  size: number;
+  color: string;
+  speed: number;
+}
+
+const Spinner: FC<ISpinnerProps> = ({ size, color, speed }) => {
   return (
     <div>
       <StyledSpin

@@ -1,5 +1,4 @@
 import { createContext, FC, useContext, useMemo, useState } from 'react';
-import { boolean } from 'yup';
 
 type AppContextProps = {
   testMessage: string;

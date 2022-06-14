@@ -3,19 +3,16 @@ import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { StyledLoginButton } from 'components/buttons/buttons';
 import PCard from 'components/card/PCard';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
 
-import { useAuthStateValue } from 'context/AuthContext';
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 
 const Home: FC = () => {
   const [data, setData] = useState<[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>();
-  const { isAuthenticated, testMessage } = useAuthStateValue();
 
   useEffect(() => {
     const fetchCards = async () => {
