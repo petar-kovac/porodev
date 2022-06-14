@@ -56,7 +56,7 @@ const Home: FC = () => {
           <StyledShowMoreButton>
             <Link to="/user-files">
               <PButton
-                text="Add user"
+                text="Show more files"
                 color="#fff"
                 borderRadius="12px"
                 background={theme.colors.primary}
