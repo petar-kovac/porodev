@@ -10,6 +10,7 @@ using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Contracts;
+using AutoMapper;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -19,6 +20,8 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
         private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
+
+        private readonly IMapper _mapper;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -34,12 +37,14 @@ namespace PoroDev.UserManagementService.Services
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
                            IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient,
                            IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient,
-                           IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient)
+                           IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient,
+                           IMapper mapper)
         {
             _createRequestClient = createRequestClient;
             _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
             _deleteUserRequestclient = deleteUserRequestClient;
+            _mapper = mapper;
             
         }
 
@@ -259,24 +264,28 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
+            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() {  Email = model.Email });
+
+            if(exists != null)
+            {
+                string exceptionType = nameof(UserExistsException);
+                string humanReadableMessage = "User with that email already exists";
+
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                return responseException;
+            }
+
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
-            UserCreateRequestServiceToDatabase temp = new()
-            {
-                Id = Guid.NewGuid(),
-                AvatarUrl = model.AvatarUrl,
-                Department = model.Department,
-                Email = model.Email,
-                Lastname = model.Lastname,
-                Name = model.Name,
-                Position = model.Position,
-                Role = model.Role,
-                Password = hash,
-                Salt = salt,
-                DateCreated = DateTime.Now
-            };
+            var modelToCreate = _mapper.Map<UserCreateRequestServiceToDatabase>(model);
 
-            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(temp);
+            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate);
 
             return response.Message;
         }
