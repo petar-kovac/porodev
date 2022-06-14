@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
 
 namespace PoroDev.Database.Consumers
 {
@@ -23,22 +22,10 @@ namespace PoroDev.Database.Consumers
         {
             var modelForDB = _mapper.Map<DataUserModel>(context.Message);
 
-            try
-            {
-                await _unitOfWork.Users.CreateAsync(modelForDB);
-                await _unitOfWork.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                string exceptionName = nameof(DatabaseException);
-                string humanReadableMessage = "There was a problem with the database!" + $" {ex.Message}";
+            var dbReturn = await _unitOfWork.Users.CreateAsync(modelForDB);
+            await _unitOfWork.SaveChanges();
 
-                var returnModelException = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(exceptionName, humanReadableMessage);
-
-                await context.RespondAsync(returnModelException);
-            }
-
-            var returnModel = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(modelForDB);
+            var returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(dbReturn);
 
             await context.RespondAsync(returnModel);
         }
