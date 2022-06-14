@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers
@@ -17,7 +19,7 @@ namespace PoroDev.UserManagementService.Consumers
         {
             var modelToReturn = await _userService.CreateUser(context.Message);
 
-            await context.RespondAsync<UserCreateResponseServiceToGateway>(modelToReturn);
+            await context.RespondAsync<CommunicationModel<DataUserModel>>(modelToReturn);
         }
     }
 }
