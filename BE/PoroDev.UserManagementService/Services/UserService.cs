@@ -267,7 +267,7 @@ namespace PoroDev.UserManagementService.Services
 
             var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() {  Email = model.Email });
 
-            if(exists != null)
+            if(exists.Message.Entity != null)
             {
                 string exceptionType = nameof(UserExistsException);
                 string humanReadableMessage = "User with that email already exists";
