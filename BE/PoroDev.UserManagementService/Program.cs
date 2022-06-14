@@ -1,4 +1,5 @@
 using PoroDev.Common.MassTransit;
+using PoroDev.UserManagementService.Mapper;
 using PoroDev.UserManagementService.Services;
 using PoroDev.UserManagementService.Services.Contracts;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddAutoMapper(typeof(MapperProfiles));
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddControllers();
