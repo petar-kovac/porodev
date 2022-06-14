@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.ReadUser;
+using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
 
 namespace PoroDev.Database.Consumers
@@ -20,7 +22,7 @@ namespace PoroDev.Database.Consumers
         {
             var fetchUser = await _unitOfWork.Users.FindAsync(user => user.Email.Equals(context.Message.Email.Trim()));
 
-            var returnUser = _mapper.Map<UserReadByEmailResponseDatabaseToService>(fetchUser);
+            var returnUser = _mapper.Map<CommunicationModel<DataUserModel>>(fetchUser);
 
             await context.RespondAsync(returnUser);
 

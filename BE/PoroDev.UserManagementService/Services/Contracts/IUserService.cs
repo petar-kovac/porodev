@@ -13,7 +13,7 @@ namespace PoroDev.UserManagementService.Services.Contracts
     {
         Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model);
 
-        Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
+        Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
 
         //Task<DataUserModel> GetUserByMail(string mail);
 

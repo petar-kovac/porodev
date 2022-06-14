@@ -80,7 +80,7 @@ namespace PoroDev.GatewayAPI.Services
                 Email = email
             };
 
-            var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<UserReadByEmailResponseServiceToGateway>(readUserByEmail);
+            var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readUserByEmail);
 
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);

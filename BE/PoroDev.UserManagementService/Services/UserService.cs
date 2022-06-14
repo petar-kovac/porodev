@@ -289,14 +289,14 @@ namespace PoroDev.UserManagementService.Services
 
 
 
-        public async Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
+        public async Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
         {
             if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
             {
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = "Email cannot be empty!";
 
-                var responseException = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+                var responseException = CreateResponseModel<CommunicationModel<DataUserModel>, DataUserModel>(exceptionType, humanReadableMessage);
 
                 return responseException;
             }
@@ -306,7 +306,7 @@ namespace PoroDev.UserManagementService.Services
                 Email = model.Email
             };
 
-            var response = await _readUserByEmailClient.GetResponse<UserReadByEmailResponseDatabaseToService>(readUser);
+            var response = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
 
             return response.Message;
         }

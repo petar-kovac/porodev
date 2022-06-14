@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.ReadUser;
+using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers
@@ -16,7 +18,8 @@ namespace PoroDev.UserManagementService.Consumers
         {
             var returnUser = await _userService.ReadUserByEmail(context.Message);
 
-            await context.RespondAsync<UserReadByEmailResponseServiceToGateway>(returnUser);
+            await context.RespondAsync<CommunicationModel<DataUserModel>>(returnUser);
+            //await context.RespondAsync<UserReadByEmailResponseServiceToGateway>(returnUser);
         }
     }
 }

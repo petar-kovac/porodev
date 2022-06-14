@@ -13,7 +13,7 @@ namespace PoroDev.Database.MapperProfiles
         {
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
-            CreateMap<UnitOfWorkResponseModel<DataUserModel>, UserReadByEmailResponseDatabaseToService>();
+            CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
         }
     }
 }
