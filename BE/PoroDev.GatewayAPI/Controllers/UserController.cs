@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -44,6 +45,12 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(returnModel);
         }
 
+        [HttpPut("UpdateUser")]
+        public async Task<ActionResult<DataUserModel>> UpdateUser([FromBody] UserUpdateRequestGatewayToService model)
+        {
+            var returnModel = await _userService.UpdateUser(model);
+            return Ok(returnModel);
+        }
 
         //private readonly IUserService _userService;
 

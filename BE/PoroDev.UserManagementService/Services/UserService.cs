@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using AutoMapper;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -20,6 +21,8 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
         private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
+
+        private readonly IMapper _mapper;
 
         private const int MIN_PASSWORD_LENGTH = 8;
         private const string EMAIL_DOMAIN = "boing.rs";
@@ -35,12 +38,14 @@ namespace PoroDev.UserManagementService.Services
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
                            IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient,
                            IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient,
-                           IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient)
+                           IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient,
+                           IMapper mapper)
         {
             _createRequestClient = createRequestClient;
             _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
             _deleteUserRequestclient = deleteUserRequestClient;
+            _mapper = mapper;
             
         }
 
@@ -244,36 +249,47 @@ namespace PoroDev.UserManagementService.Services
         //    return returnModel;
         //}
 
-        public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
+        public async Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model)
         {
             if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
             {
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = "Email cannot be empty!";
 
-                var responseException = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+                var responseException = new CommunicationModel<DataUserModel>() {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                return responseException;
+            }
+
+            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() {  Email = model.Email });
+
+            if(exists != null)
+            {
+                string exceptionType = nameof(UserExistsException);
+                string humanReadableMessage = "User with that email already exists";
+
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
 
                 return responseException;
             }
 
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
-            UserCreateRequestServiceToDatabase temp = new()
-            {
-                Id = Guid.NewGuid(),
-                AvatarUrl = model.AvatarUrl,
-                Department = model.Department,
-                Email = model.Email,
-                Lastname = model.Lastname,
-                Name = model.Name,
-                Position = model.Position,
-                Role = model.Role,
-                Password = hash,
-                Salt = salt,
-                DateCreated = DateTime.Now
-            };
+            var modelToCreate = _mapper.Map<UserCreateRequestServiceToDatabase>(model);
 
-            var response = await _createRequestClient.GetResponse<UserCreateResponseDatabaseToService>(temp);
+            modelToCreate.Password = hash;
+            modelToCreate.Salt = salt;
+
+            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate);
 
             return response.Message;
         }
@@ -286,14 +302,14 @@ namespace PoroDev.UserManagementService.Services
 
 
 
-        public async Task<UserReadByEmailResponseDatabaseToService> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
+        public async Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
         {
             if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
             {
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = "Email cannot be empty!";
 
-                var responseException = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+                var responseException = CreateResponseModel<CommunicationModel<DataUserModel>, DataUserModel>(exceptionType, humanReadableMessage);
 
                 return responseException;
             }
@@ -303,7 +319,7 @@ namespace PoroDev.UserManagementService.Services
                 Email = model.Email
             };
 
-            var response = await _readUserByEmailClient.GetResponse<UserReadByEmailResponseDatabaseToService>(readUser);
+            var response = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
 
             return response.Message;
         }
@@ -374,17 +390,10 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
         {
-            //da li je ovo potrebno uopste ovde provjeravati ili u database ?
-            if (model.Email.Trim() == null)
-            {
-                //should I pass some fault
-            }
-
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             UserUpdateRequestServiceToDatabase temp = new UserUpdateRequestServiceToDatabase()
             {
-                Id = Guid.NewGuid(),
                 AvatarUrl = model.AvatarUrl,
                 Department = model.Department,
                 Email = model.Email,
@@ -394,10 +403,9 @@ namespace PoroDev.UserManagementService.Services
                 Role = model.Role,
                 Password = hash,
                 Salt = salt,
-                DateCreated = DateTime.Now
             };
 
-            var response = await _createRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
+            var response = await _updateRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
 
             return response.Message;
         }
