@@ -1,6 +1,6 @@
 import axios from 'axios';
 import PCard from 'components/card/PCard';
-import { FC, useEffect, useState, useCallback } from 'react';
+import { FC, useEffect, useState, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 import { Button, DatePicker, Modal, Select, Slider } from 'antd';
@@ -22,36 +22,25 @@ const Files: FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState<any>();
 
-  const onClick = useCallback(
-    (e: any, value: any) => {
-      if (e.type === 'click') {
-        setShowSider(true);
-        console.log('click');
-      }
-      if (e.type === 'dblclick') {
-        console.log(e.type);
-        setShowSider(false);
-        setModalData(value);
-        setIsModalVisible(true);
-      }
-    },
-    [showSider],
-  );
+  const count = useRef(0);
 
-  const onDoubleClick = useCallback(
-    (e: any, value: any) => {
-      if (e.type === 'click') {
+  const onClick = useCallback((e: any, value: any) => {
+    count.current += 1;
+    setTimeout(() => {
+      if (count.current === 1) {
         setShowSider(true);
       }
-      if (e.type === 'dblclick') {
-        console.log(e.type);
+
+      if (count.current === 2) {
         setShowSider(false);
         setModalData(value);
         setIsModalVisible(true);
       }
-    },
-    [modalData, isModalVisible],
-  );
+
+      count.current = 0;
+    }, 300);
+  }, []);
+
   const handleOk = () => {
     setIsModalVisible(false);
   };
@@ -125,7 +114,7 @@ const Files: FC = () => {
               heading={value?.name}
               description={value?.description}
               onClick={(e: any) => onClick(e, value)}
-              onDoubleClick={(e: any) => onDoubleClick(e, value)}
+              // onDoubleClick={(e: any) => onDoubleClick(e, value)}
             />
           ))}
         </StyledFilesWrapper>
