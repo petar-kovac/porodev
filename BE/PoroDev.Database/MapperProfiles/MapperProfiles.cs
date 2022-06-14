@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
@@ -9,7 +10,7 @@ namespace PoroDev.Database.MapperProfiles
     {
         public MapperProfiles()
         {
-            CreateMap<UnitOfWorkResponseModel<DataUserModel>, UserCreateResponseDatabaseToService>();
+            CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
         }
     }

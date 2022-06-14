@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
@@ -24,7 +25,7 @@ namespace PoroDev.Database.Consumers
             var dbReturn = await _unitOfWork.Users.CreateAsync(modelForDB);
             await _unitOfWork.SaveChanges();
 
-            var returnModel = _mapper.Map<UserCreateResponseDatabaseToService>(dbReturn);
+            var returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(dbReturn);
 
             await context.RespondAsync(returnModel);
         }

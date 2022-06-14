@@ -12,6 +12,7 @@ using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.GatewayAPI.Constants.Constats;
+using PoroDev.Common.Contracts;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -40,7 +41,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
         {
-            var requestReturnContext = await _createRequestClient.GetResponse<UserCreateResponseServiceToGateway>(createModel);
+            var requestReturnContext = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(createModel);
 
             if (requestReturnContext.Message.ExceptionName != null)
                 ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);         

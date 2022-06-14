@@ -9,6 +9,7 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
+using PoroDev.Common.Contracts;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -242,14 +243,18 @@ namespace PoroDev.UserManagementService.Services
         //    return returnModel;
         //}
 
-        public async Task<UserCreateResponseDatabaseToService> CreateUser(UserCreateRequestGatewayToService model)
+        public async Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model)
         {
             if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
             {
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = "Email cannot be empty!";
 
-                var responseException = CreateResponseModel<UserCreateResponseDatabaseToService, DataUserModel>(exceptionType, humanReadableMessage);
+                var responseException = new CommunicationModel<DataUserModel>() {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
 
                 return responseException;
             }
@@ -271,7 +276,7 @@ namespace PoroDev.UserManagementService.Services
                 DateCreated = DateTime.Now
             };
 
-            var response = await _createRequestClient.GetResponse<UserCreateResponseDatabaseToService>(temp);
+            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(temp);
 
             return response.Message;
         }

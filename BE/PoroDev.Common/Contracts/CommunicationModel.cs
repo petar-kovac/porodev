@@ -1,6 +1,6 @@
 ﻿namespace PoroDev.Common.Contracts
 {
-    public abstract class CommunicationModel<T> where T : class, new()
+    public class CommunicationModel<T> where T : class, new()
     {
         public T? Entity { get; set; }
 
