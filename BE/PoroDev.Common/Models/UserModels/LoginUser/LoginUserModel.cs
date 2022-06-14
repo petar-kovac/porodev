@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Models.UserModels.LoginUser
+﻿namespace PoroDev.Common.Models.UserModels.LoginUser
 {
     public class LoginUserModel
     {
-
     }
 }

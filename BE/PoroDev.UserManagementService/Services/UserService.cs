@@ -1,17 +1,16 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
-using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
-using PoroDev.Common.Contracts;
-using PoroDev.Common.Models.UserModels.DeleteUser;
-using AutoMapper;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -46,7 +45,6 @@ namespace PoroDev.UserManagementService.Services
             _updateRequestClient = updateRequestClient;
             _deleteUserRequestclient = deleteUserRequestClient;
             _mapper = mapper;
-            
         }
 
         //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
@@ -256,7 +254,8 @@ namespace PoroDev.UserManagementService.Services
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = "Email cannot be empty!";
 
-                var responseException = new CommunicationModel<DataUserModel>() {
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
                     Entity = null,
                     ExceptionName = exceptionType,
                     HumanReadableMessage = humanReadableMessage
@@ -265,9 +264,9 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
-            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() {  Email = model.Email });
+            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = model.Email });
 
-            if(exists.Message.Entity != null)
+            if (exists.Message.Entity != null)
             {
                 string exceptionType = nameof(UserExistsException);
                 string humanReadableMessage = "User with that email already exists";
@@ -299,8 +298,6 @@ namespace PoroDev.UserManagementService.Services
             var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
-
-
 
         public async Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
         {

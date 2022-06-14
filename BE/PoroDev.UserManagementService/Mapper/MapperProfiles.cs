@@ -10,8 +10,6 @@ namespace PoroDev.UserManagementService.Mapper
             CreateMap<UserCreateRequestGatewayToService, UserCreateRequestServiceToDatabase>()
                 .ForMember(destination => destination.Id, options => options.MapFrom(src => Guid.NewGuid()))
                 .ForMember(destination => destination.DateCreated, options => options.MapFrom(src => DateTime.Now));
-
-            
         }
     }
 }

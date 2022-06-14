@@ -14,12 +14,12 @@ namespace PoroDev.UserManagementService.Consumers
         {
             _userService = userService;
         }
+
         public async Task Consume(ConsumeContext<UserReadByEmailRequestGatewayToService> context)
         {
             var returnUser = await _userService.ReadUserByEmail(context.Message);
 
             await context.RespondAsync<CommunicationModel<DataUserModel>>(returnUser);
-            //await context.RespondAsync<UserReadByEmailResponseServiceToGateway>(returnUser);
         }
     }
 }

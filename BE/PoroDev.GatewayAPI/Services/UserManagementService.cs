@@ -1,18 +1,17 @@
 ﻿using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Contracts.Update;
-using PoroDev.Common.Exceptions;
 using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
-using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.GatewayAPI.Constants.Constats;
-using PoroDev.Common.Contracts;
+using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -24,9 +23,9 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserReadByEmailRequestGatewayToService> _readUserByEmailRequestClient;
         private readonly IRequestClient<UserLoginRequestGatewayToService> _loginRequestClient;
 
-        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
-            IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient, 
-            IRequestClient<UserLoginRequestGatewayToService> loginRequestClient, 
+        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
+            IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient,
+            IRequestClient<UserLoginRequestGatewayToService> loginRequestClient,
             IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
             IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient)
         {
@@ -37,27 +36,24 @@ namespace PoroDev.GatewayAPI.Services
             _loginRequestClient = loginRequestClient;
         }
 
-
-
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
         {
             var requestReturnContext = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(createModel);
 
             if (requestReturnContext.Message.ExceptionName != null)
-                ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);         
+                ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);
 
             var returnModel = requestReturnContext.Message.Entity;
 
             return returnModel;
         }
-     
 
         public async Task<DeleteUserModel> DeleteUser(UserDeleteRequestGatewayToService deleteModel)
         {
-            if(string.IsNullOrEmpty(deleteModel.Email.Trim()))
+            if (string.IsNullOrEmpty(deleteModel.Email.Trim()))
             {
                 ThrowException(nameof(EmailFormatException), EmptyEmail);
-            }    
+            }
 
             var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(deleteModel);
 

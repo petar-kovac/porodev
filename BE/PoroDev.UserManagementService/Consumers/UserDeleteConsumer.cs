@@ -8,7 +8,6 @@ namespace PoroDev.UserManagementService.Consumers
 {
     public class UserDeleteConsumer : IConsumer<UserDeleteRequestGatewayToService>
     {
-
         private readonly IUserService _userService;
 
         public UserDeleteConsumer(IUserService userService)

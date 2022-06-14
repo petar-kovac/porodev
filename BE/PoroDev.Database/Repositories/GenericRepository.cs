@@ -3,7 +3,6 @@ using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Database.Repositories.Contracts;
 using System.Linq.Expressions;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
 using static PoroDev.Database.Constants.Constants;
 
 namespace PoroDev.Database.Repositories
@@ -46,7 +45,6 @@ namespace PoroDev.Database.Repositories
             };
 
             return response;
-
         }
 
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity)
@@ -71,7 +69,6 @@ namespace PoroDev.Database.Repositories
                 response.Entity = returnEntity;
                 response.ExceptionName = null;
                 response.HumanReadableMessage = null;
-
             }
             else
             {
@@ -80,7 +77,6 @@ namespace PoroDev.Database.Repositories
                 response.HumanReadableMessage = UserNotFoundExceptionMessage;
             }
             return response;
-
         }
 
         public async Task<ICollection<TemplateEntity>> GetAllAsync()
@@ -97,7 +93,7 @@ namespace PoroDev.Database.Repositories
         {
             TemplateEntity? entity;
             UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
-            
+
             try
             {
                 entity = await _context.Set<TemplateEntity>().FirstOrDefaultAsync(filter);
@@ -114,7 +110,6 @@ namespace PoroDev.Database.Repositories
                 response.Entity = entity;
                 response.ExceptionName = null;
                 response.HumanReadableMessage = null;
-                
             }
             else
             {
