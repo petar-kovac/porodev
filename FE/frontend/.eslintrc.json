@@ -23,7 +23,6 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
-    "react/no-array-index-key": "off",
     "jsx-a11y/label-has-associated-control": [
       "error",
       {
