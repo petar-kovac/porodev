@@ -1,8 +1,13 @@
 ﻿using PoroDev.Common.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PoroDev.UserManagementService.Models.UserModels
+namespace PoroDev.Common.Models.UserModels.RegisterUser
 {
-    public class UserRegisterResponseModel
+    public class RegisterUserResponse
     {
         public string Name { get; set; }
 
@@ -18,11 +23,12 @@ namespace PoroDev.UserManagementService.Models.UserModels
 
         public string AvatarUrl { get; set; }
 
-        public UserRegisterResponseModel()
+        public RegisterUserResponse()
         {
+
         }
 
-        public UserRegisterResponseModel(string name, string lastname, string email, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl)
+        public RegisterUserResponse(string name, string lastname, string email, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl)
         {
             Name = name;
             Lastname = lastname;

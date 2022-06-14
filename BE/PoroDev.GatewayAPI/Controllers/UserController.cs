@@ -5,9 +5,11 @@ using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.Net;
 
@@ -50,6 +52,13 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             var returnModel = await _userService.UpdateUser(model);
             return Ok(returnModel);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [HttpPost("register/user")]
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserRequestGatewayToService registerModel)
+        {
+            return Ok(await _userService.RegisterUser(registerModel));
         }
 
         //private readonly IUserService _userService;
@@ -100,13 +109,7 @@ namespace PoroDev.GatewayAPI.Controllers
         //    return Ok(user);
         //}
 
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesErrorResponseType(typeof(AppException))]
-        //[HttpPost("register/user")]
-        //public async Task<IActionResult> RegisterUser([FromBody] UserRegisterRequestModel registerModel)
-        //{
-        //    return Ok(await _userService.Register(registerModel, Enums.UserRole.User));
-        //}
+
 
         //[ProducesResponseType((int)HttpStatusCode.OK)]
         //[ProducesErrorResponseType(typeof(AppException))]

@@ -6,6 +6,7 @@ using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.Database.MapperProfiles
 {
@@ -18,6 +19,10 @@ namespace PoroDev.Database.MapperProfiles
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DeleteUserModel>>();
             CreateMap<DataUserModel, DeleteUserModel>()
                 .ForMember(destionation => destionation.Deleted, option => option.MapFrom(source => ValidateUserDeletion(source)));
+
+            CreateMap<RegisterUserRequestServiceToDatabase, DataUserModel>();
+
+            CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
         }
 
         private bool ValidateUserDeletion(DataUserModel src)

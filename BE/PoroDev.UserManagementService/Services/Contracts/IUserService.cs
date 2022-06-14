@@ -2,11 +2,11 @@
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Enums;
-using PoroDev.UserManagementService.Models.UserModels;
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.UserManagementService.Services.Contracts
 {
@@ -16,14 +16,11 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
         Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
 
-        //Task<DataUserModel> GetUserByMail(string mail);
-
-
         Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model);
 
         Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model);
 
-        //Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, UserEnums.UserRole role);
+        Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel);
 
         //Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel);
     }

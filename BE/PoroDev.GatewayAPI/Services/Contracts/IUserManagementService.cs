@@ -7,6 +7,7 @@ using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {
@@ -21,6 +22,8 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<DataUserModel> ReadUserByEmail(string email);
 
         Task<DataUserModel> UpdateUser(UserUpdateRequestGatewayToService updateModel);
+
+        Task<RegisterUserResponse> RegisterUser(RegisterUserRequestGatewayToService registerModel);
 
     }
 }
