@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
@@ -21,45 +22,32 @@ namespace PoroDev.Database.Consumers
 
         public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
         {
-            UserUpdateResponseDatabaseToService returnModel;
-            DataUserModel model = new()
-            {
-                AvatarUrl = context.Message.AvatarUrl,
-                Department = context.Message.Department,
-                Email = context.Message.Email,
-                Lastname = context.Message.Lastname,
-                Name = context.Message.Name,
-                Position = context.Message.Position,
-                Role = context.Message.Role,
-                Password = context.Message.Password,
-                Salt = context.Message.Salt,
-            };
+            var model = _mapper.Map<DataUserModel>(context.Message);
 
             var userToBeUpdated = await _unitOfWork.Users.FindAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
 
-            var updatedModel = _mapper.Map<DataUserModel>(model);
-            updatedModel.Id = userToBeUpdated.Entity.Id;
-            updatedModel.DateCreated = userToBeUpdated.Entity.DateCreated;
-
-            //I hash&salt password inside user service
-            updatedModel.Password = userToBeUpdated.Entity.Password;
-            updatedModel.Salt = userToBeUpdated.Entity.Salt;
-
-            try
+            CommunicationModel<DataUserModel> updatedModel = new()
             {
-                await _unitOfWork.Users.UpdateAsync(updatedModel, updatedModel.Id);
-                await _unitOfWork.SaveChanges();
-            }
-            catch (Exception exception)
-            {
-                returnModel = CreateResponseModel<UserUpdateResponseDatabaseToService, DataUserModel>(nameof(exception), InternalDatabaseError);
-                await context.RespondAsync(returnModel);
-            }
+                Entity = model,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+            
+            updatedModel.Entity.Id = userToBeUpdated.Entity.Id;
+            updatedModel.Entity.DateCreated = userToBeUpdated.Entity.DateCreated;
+            updatedModel.Entity.Password = userToBeUpdated.Entity.Password;
+            updatedModel.Entity.Salt = userToBeUpdated.Entity.Salt;
 
-            var updatedModelResponse = CreateResponseModel<UserUpdateResponseDatabaseToService, DataUserModel>(updatedModel);
-            await context.RespondAsync<UserUpdateResponseDatabaseToService>(updatedModelResponse);
+
+            var updatedUser = await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
+            await _unitOfWork.SaveChanges();
+
+            var returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(updatedUser);
+            await context.RespondAsync(returnModel);
         }
+
     }
+
 
     /* public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
      {

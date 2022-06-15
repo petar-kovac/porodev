@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.RegisterUser;
@@ -27,6 +28,8 @@ namespace PoroDev.UserManagementService.Mapper
             CreateMap<DataUserModel, RegisterUserResponse>()
                 .ForPath(dst => dst.Department, opt => opt.MapFrom(src => src.Department.ToString()))
                 .ForPath(dst => dst.Role, opt => opt.MapFrom(src => src.Role.ToString()));
+
+            CreateMap<UserUpdateRequestGatewayToService, UserUpdateRequestServiceToDatabase>();
         }
     }
 }
