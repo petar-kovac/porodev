@@ -12,6 +12,8 @@ using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -22,18 +24,21 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserUpdateRequestGatewayToService> _updateRequestClient;
         private readonly IRequestClient<UserReadByEmailRequestGatewayToService> _readUserByEmailRequestClient;
         private readonly IRequestClient<UserLoginRequestGatewayToService> _loginRequestClient;
+        private readonly IRequestClient<RegisterUserRequestGatewayToService> _registerClient;
 
-        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
+        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
             IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient,
             IRequestClient<UserLoginRequestGatewayToService> loginRequestClient,
             IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
-            IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient)
+            IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient,
+            IRequestClient<RegisterUserRequestGatewayToService> registerClient)
         {
             _createRequestClient = createRequestClient;
             _deleteRequestClient = deleteRequestClient;
             _updateRequestClient = updateRequestClient;
             _readUserByEmailRequestClient = readUserByEmailRequestClient;
             _loginRequestClient = loginRequestClient;
+            _registerClient = registerClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -90,6 +95,21 @@ namespace PoroDev.GatewayAPI.Services
             };
 
             var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readUserByEmail);
+
+            if (requestResponseContext.Message.ExceptionName != null)
+                ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
+
+            var returnUser = requestResponseContext.Message.Entity;
+
+            return returnUser;
+        }
+
+        public async Task<RegisterUserResponse> RegisterUser(RegisterUserRequestGatewayToService registerModel)
+        {
+            if (registerModel is null)
+                ThrowException(nameof(RequestNullException), NullRequest);
+
+            var requestResponseContext = await _registerClient.GetResponse<CommunicationModel<RegisterUserResponse>>(registerModel);
 
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);

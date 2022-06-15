@@ -5,6 +5,7 @@ using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using static PoroDev.Database.Constants.Constants;
 
@@ -19,9 +20,14 @@ namespace PoroDev.Database.MapperProfiles
 
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DeleteUserModel>>();
             CreateMap<DataUserModel, DeleteUserModel>()
-                .ForMember(destination => destination.Deleted, option => option.MapFrom(source => ValidateUserDeletion(source)));
+                .ForMember(destionation => destionation.Deleted, option => option.MapFrom(source => ValidateUserDeletion(source)));
+
+            CreateMap<RegisterUserRequestServiceToDatabase, DataUserModel>();
+
+            CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
 
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<LoginUserModel>>();
+
             CreateMap<DataUserModel, LoginUserModel>()
                 .ForMember(destination => destination.Role, option => option.MapFrom(source => source.Role.ToString()))
                 .ForMember(destination => destination.Department, option => option.MapFrom(source => source.Department.ToString()))

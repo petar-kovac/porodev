@@ -13,6 +13,11 @@ using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
+using static PoroDev.UserManagementService.Constants.Consts;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Models.UserModels.DeleteUser;
+using AutoMapper;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -21,33 +26,25 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
-        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestClient;
+        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
+        private readonly IRequestClient<RegisterUserRequestServiceToDatabase> _registerUserClient;
         private readonly IRequestClient<UserLoginRequestServiceToDatabase> _loginUserRequestClient;
 
         private readonly IMapper _mapper;
-
-        private const int MIN_PASSWORD_LENGTH = 8;
-        private const string EMAIL_DOMAIN = "boing.rs";
-        private const int MIN_UPPERCASE_LETTERS = 1;
-        private const int MIN_LOWERCASE_LETTERS = 1;
-        private const int MIN_NUMBERS = 1;
-        private const int MIN_SPECIAL_CHARACTERS = 1;
-        private const int MAX_EMAIL_LENGTH = 50;
-        private const int MAX_NAME_AND_LASTNAME_LENGTH = 20;
-        private const int MAX_POSITION_LENGTH = 50;
-        private const string SECRET_KEY = "this is a custom Secret Key for authentication";
 
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
                            IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient,
                            IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient,
                            IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient,
+                           IRequestClient<RegisterUserRequestServiceToDatabase> registerUserClient,
                            IRequestClient<UserLoginRequestServiceToDatabase> loginUserRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
             _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
-            _deleteUserRequestClient = deleteUserRequestClient;
+            _deleteUserRequestclient = deleteUserRequestClient;
+            _registerUserClient = registerUserClient;
             _loginUserRequestClient = loginUserRequestClient;
             _mapper = mapper;
         }
@@ -92,89 +89,71 @@ namespace PoroDev.UserManagementService.Services
         //    return jwt;
         //}
 
-        //private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        //{
-        //    using (var hmac = new HMACSHA512(passwordSalt))
-        //    {
-        //        var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        //        if (!computeHash.SequenceEqual(passwordHash))
-        //            throw new FailedToLogInException("Email or password is not valid.");
-        //    }
-        //}
+        private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                if (!computeHash.SequenceEqual(passwordHash))
+                    throw new FailedToLogInException(LOGIN_FAIL_ERROR);
+            }
+        }
 
-        //private void CheckPassword(string password)
-        //{
-        //    if (password.Length < MIN_PASSWORD_LENGTH)
-        //        throw new PasswordFormatException($"Password must be at least {MIN_PASSWORD_LENGTH} characters!");
+        private void CheckPassword(string password)
+        {
+            if (password.Length < MIN_PASSWORD_LENGTH)
+                throw new PasswordFormatException(PASSWORD_MIN_LENGTH_ERROR);
+            if (!password.Any(char.IsUpper))
+                throw new PasswordFormatException(PASSWORD_MIN_UPPERCASE_ERROR);
 
-        //    if (!password.Any(char.IsUpper))
-        //        throw new PasswordFormatException($"Password must contain at least {MIN_UPPERCASE_LETTERS} uppercase letter!");
+            if (!password.Any(char.IsLower))
+                throw new PasswordFormatException(PASSWORD_MIN_LOWERCASE_ERROR);
 
-        //    if (!password.Any(char.IsLower))
-        //        throw new PasswordFormatException($"Password must contain at least {MIN_LOWERCASE_LETTERS} lowercase letter!");
+            if (!password.Any(char.IsDigit))
+                throw new PasswordFormatException(PASSWORD_MIN_NUMBER_ERROR);
 
-        //    if (!password.Any(char.IsDigit))
-        //        throw new PasswordFormatException($"Password must contain at least {MIN_NUMBERS} number!");
+            if (!CheckStringForCharacters(password, SPECIAL_CHARACTERS_STRING))
+                throw new PasswordFormatException(PASSWORD_MIN_SPECIAL_ERROR);
+        }
 
-        //    if (!CheckForSpecialCharacters(password))
-        //        throw new PasswordFormatException($"Password must contain at least {MIN_SPECIAL_CHARACTERS} special character!");
-        //}
+        private async Task CheckEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new EmailFormatException(EMAIL_EMPTY_ERROR);
 
-        //private async Task CheckEmail(string email)
-        //{
-        //    if (string.IsNullOrWhiteSpace(email))
-        //        throw new EmailFormatException($"Email cannot be empty!");
+            if (email.Length > MAX_EMAIL_LENGTH)
+                throw new EmailFormatException(EMAIL_LENGTH_ERROR);
 
-        //    if (email.Length > MAX_EMAIL_LENGTH)
-        //        throw new EmailFormatException($"Email cannot contain more than {MAX_EMAIL_LENGTH} characters!");
+            var splitEmail = email.Split('@');
 
-        //    var splitEmail = email.Split('@');
+            if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
+                throw new EmailFormatException(EMAIL_FORMAT_ERROR);
 
-        //    if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
-        //        throw new EmailFormatException("Email format is invalid!");
+            if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
+                throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
 
-        //    if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
-        //        throw new EmailFormatException("Email cannot contain whitespace!");
+            if(CheckStringForCharacters(splitEmail[0],SPECIAL_CHARACTERS_EMAIL_STRING))
+                throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
 
-        //    CheckEmailSpecialCharaters(splitEmail[0]);
+            if (!splitEmail[1].Equals(EMAIL_DOMAIN))
+                throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
 
-        //    if (!splitEmail[1].Equals(EMAIL_DOMAIN))
-        //        throw new EmailFormatException("Email domain is invalid!");
+            if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email})).Message.Entity != null)
+                throw new EmailFormatException(EMAIL_EXISTS_ERROR);
+        }
 
-        //    if (await _unitOfWork.Users.FindSingleAsync(user => user.Email.Equals(email)) != null)
-        //        throw new EmailFormatException("User with that email already exists!");
-        //}
+        private bool CheckStringForCharacters(string stringToCheck, string specialCharacters)
+        {
+            char[] specialChArray = specialCharacters.ToCharArray();
+            bool flag = false;
 
-        //private void CheckEmailSpecialCharaters(string emailUsername)
-        //{
-        //    string specialCh = @"%!@#$%^&*()?/><,:;'\|}]{[~`+=" + "\"";
-        //    char[] specialChArray = specialCh.ToCharArray();
-        //    bool flag = false;
-
-        //    foreach (char ch in specialChArray)
-        //    {
-        //        if (emailUsername.Contains(ch))
-        //            flag = true;
-        //    }
-
-        //    if (flag)
-        //        throw new EmailFormatException("Email can only contain '.', '-' and '_' characters!");
-        //}
-
-        //private bool CheckForSpecialCharacters(string stringToCheck)
-        //{
-        //    string specialCh = @"%!@#$%^&*()?/>.<,:;'\|}]{[_~`+=-" + "\"";
-        //    char[] specialChArray = specialCh.ToCharArray();
-        //    bool flag = false;
-
-        //    foreach (char ch in specialChArray)
-        //    {
-        //        if (stringToCheck.Contains(ch))
-        //            flag = true;
-        //    }
-
-        //    return flag;
-        //}
+            foreach (char ch in specialChArray)
+            {
+                if (stringToCheck.Contains(ch))
+                    flag = true;
+            }
+            return flag;
+        }
 
         private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
         {
@@ -185,78 +164,108 @@ namespace PoroDev.UserManagementService.Services
             }
         }
 
-        //private void CheckFullName(string name, string lastname)
-        //{
-        //    if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastname) || name.Equals(string.Empty) || lastname.Equals(string.Empty))
-        //        throw new FullNameFormatException($"Name or lastname cannot be empty!");
+        private void CheckFullName(string name, string lastname)
+        {
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastname) || name.Equals(string.Empty) || lastname.Equals(string.Empty))
+                throw new FullNameFormatException(FULLNAME_EMPTY_ERROR);
 
-        //    if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
-        //        throw new FullNameFormatException($"Name or lastname cannot exceed {MAX_NAME_AND_LASTNAME_LENGTH} characters!");
+            if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
+                throw new FullNameFormatException(FULLNAME_TOO_LONG_ERROR);
 
-        //    if (name.Any(x => char.IsWhiteSpace(x)) || lastname.Any(x => char.IsWhiteSpace(x)))
-        //        throw new FullNameFormatException("Name or lastname cannot contain whitespace!");
+            if (name.Any(x => char.IsWhiteSpace(x)) || lastname.Any(x => char.IsWhiteSpace(x)))
+                throw new FullNameFormatException(FULLNAME_WHITESPACE_ERROR);
 
-        //    if (name.Any(x => char.IsNumber(x)) || lastname.Any(x => char.IsNumber(x)))
-        //        throw new FullNameFormatException("Name or lastname cannot contain numbers!");
+            if (name.Any(x => char.IsNumber(x)) || lastname.Any(x => char.IsNumber(x)))
+                throw new FullNameFormatException(FULLNAME_NUMBER_ERROR);
 
-        //    if (CheckForSpecialCharacters(name) || CheckForSpecialCharacters(lastname))
-        //        throw new FullNameFormatException("Name or lastname cannot contain special characters!");
-        //}
+            if (CheckStringForCharacters(name, SPECIAL_CHARACTERS_STRING) || CheckStringForCharacters(lastname, SPECIAL_CHARACTERS_STRING))
+                throw new FullNameFormatException(FULLNAME_SPECIAL_CHARACTER_ERORR);
+        }
 
-        //private void CheckPosition(string position)
-        //{
-        //    if (string.IsNullOrWhiteSpace(position) || position.Equals(string.Empty))
-        //        throw new PositionFormatException($"Postion cannot be empty!");
+        private void CheckPosition(string position)
+        {
+            if (string.IsNullOrWhiteSpace(position) || position.Equals(string.Empty))
+                throw new PositionFormatException(POSITION_EMPTY_ERROR);
 
-        //    if (position.Length > MAX_POSITION_LENGTH)
-        //        throw new PositionFormatException($"Postion cannot exceed {MAX_POSITION_LENGTH} characters!");
+            if (position.Length > MAX_POSITION_LENGTH)
+                throw new PositionFormatException(POSITION_TOO_LONG_ERROR);
 
-        //    if (position.Any(x => char.IsNumber(x)))
-        //        throw new PositionFormatException("Position cannot contain numbers!");
+            if (position.Any(x => char.IsNumber(x)))
+                throw new PositionFormatException(POSITION_NUMBER_ERROR);
 
-        //    if (CheckForSpecialCharacters(position))
-        //        throw new PositionFormatException("Position cannot contain special characters!");
-        //}
+            if (CheckStringForCharacters(position, SPECIAL_CHARACTERS_STRING))
+                throw new PositionFormatException(POSITION_SPECIAL_CHARACTER_ERROR);
+        }
 
-        //private async Task CheckUserFields(UserRegisterRequestModel registerModel)
-        //{
-        //    await CheckEmail(registerModel.Email);
+        private async Task<CommunicationModel<RegisterUserResponse>> CheckUserFields(RegisterUserRequestGatewayToService registerModel)
+        {
+            try
+            {
+                CheckFullName(registerModel.Name, registerModel.Lastname);
+                await CheckEmail(registerModel.Email);
+                CheckPassword(registerModel.Password);
+                CheckPosition(registerModel.Position);
+            }
+            catch (EmailFormatException ex) 
+            {
 
-        //    CheckPassword(registerModel.Password);
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-        //    CheckFullName(registerModel.Name, registerModel.Lastname);
+                var responseException = new CommunicationModel<RegisterUserResponse>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
 
-        //    CheckPosition(registerModel.Position);
-        //}
+                return responseException;
+            }
+            catch (PasswordFormatException ex)
+            {
+                string exceptionType = nameof(PasswordFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-        //public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
-        //{
-        //    await CheckUserFields(registerModel);
+                var responseException = new CommunicationModel<RegisterUserResponse>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
 
-        //    GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
+                return responseException;
+            }
+            catch (FullNameFormatException ex)
+            {
+                string exceptionType = nameof(FullNameFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-        //    DataUserModel userToAdd = new()
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Name = registerModel.Name,
-        //        Lastname = registerModel.Lastname,
-        //        Email = registerModel.Email,
-        //        Password = hash,
-        //        Salt = salt,
-        //        Department = Enums.UserDepartment.notDefined,
-        //        Role = role,
-        //        Position = registerModel.Position,
-        //        AvatarUrl = registerModel.AvatarUrl,
-        //        DateCreated = DateTime.Now
-        //    };
+                var responseException = new CommunicationModel<RegisterUserResponse>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
 
-        //    var newUser = await _unitOfWork.Users.CreateAsync(userToAdd);
-        //    await _unitOfWork.SaveChanges();
+                return responseException;
+            }
+            catch (PositionFormatException ex)
+            {
+                string exceptionType = nameof(PositionFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-        //    var returnModel = _mapper.Map<UserRegisterResponseModel>(newUser);
+                var responseException = new CommunicationModel<RegisterUserResponse>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
 
-        //    return returnModel;
-        //}
+                return responseException;
+            }
+
+            return new CommunicationModel<RegisterUserResponse>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
+        }
 
         public async Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model)
         {
@@ -306,7 +315,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 
@@ -332,70 +341,6 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
-        //public async Task<UserCreateRequestModel> DeleteUser(string mail)
-        //{
-        //    if (mail.Trim() == null)
-        //        throw new KeyNotFoundException("Mail is null.");
-
-        //    var userForDeletion = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(mail.Trim()));
-
-        //    if (userForDeletion == null)
-        //        throw new UserNotFoundException("User with that email doesn't exist.");
-
-        //    var userReturnModel = _mapper.Map<UserCreateRequestModel>(userForDeletion);
-
-        //    _unitOfWork.Users.Delete(userForDeletion);
-
-        //    await _unitOfWork.SaveChanges();
-
-        //    return userReturnModel;
-        //}
-
-        //public async Task<DataUserModel> GetUserByMail(string email)
-        //{
-        //    if (email.Trim() == null)
-        //    {
-        //        throw new KeyNotFoundException("User email has NULL value.");
-        //    }
-
-        //    var userForRead = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(email.Trim()));
-
-        //    if (userForRead == null)
-        //    {
-        //        throw new KeyNotFoundException("User with that email doesn't exist.");
-        //    }
-
-        //    return userForRead;
-        //}
-
-        //Task<UserCreateResponseDatabaseToService>
-        //public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
-        //{
-        //    if (model.Email.Trim() == null)
-        //        throw new KeyNotFoundException("User email has NULL value.");
-
-        //    if(model.Email.Trim() == null)
-        //    {
-        //    }
-
-        //    var userToBeUpdated = await _unitOfWork.Users.FindSingleAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
-        //    if (userToBeUpdated == null)
-        //        throw new KeyNotFoundException("User with this email doesn't exists!");
-
-        //    var mappedUser = _mapper.Map<DataUserModel>(model);
-        //    mappedUser.Id = userToBeUpdated.Id;
-        //    mappedUser.DateCreated = userToBeUpdated.DateCreated;
-
-        //    GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
-
-        //    mappedUser.Password = hash;
-        //    mappedUser.Salt = salt;
-
-        //    await _unitOfWork.Users.UpdateAsync(mappedUser, mappedUser.Id);
-        //    await _unitOfWork.SaveChanges();
-        //    return _mapper.Map<UserCreateRequestModel>(mappedUser);
-        //}
-
         public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
         {
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
@@ -416,6 +361,26 @@ namespace PoroDev.UserManagementService.Services
             var response = await _updateRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
 
             return response.Message;
+        }
+
+        public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
+        {
+            var isException = await CheckUserFields(registerModel);
+
+            if (isException.ExceptionName != null)
+                return isException;
+            
+            GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
+
+            var userToRegister = _mapper.Map<RegisterUserRequestServiceToDatabase>(registerModel);
+            userToRegister.Salt = salt;
+            userToRegister.Password = hash;
+
+            var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister);
+
+            var returnContext = _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);
+
+            return returnContext;
         }
     }
 }
