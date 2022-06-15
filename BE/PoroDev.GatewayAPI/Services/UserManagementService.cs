@@ -65,7 +65,20 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel)
         {
-            var responseContext = await _loginRequestClient.GetResponse<UserLoginResponseServiceToGateway>(loginModel);
+            if (string.IsNullOrEmpty(loginModel.Email.Trim()))
+            {
+                ThrowException(nameof(EmailFormatException), EmptyEmail);
+            }
+            if (string.IsNullOrEmpty(loginModel.Password.Trim()))
+            {
+                ThrowException(nameof(PasswordFormatException), EmptyPassword);
+            }
+            var responseContext = await _loginRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(loginModel);
+
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
+
             return responseContext.Message.Entity;
         }
 
@@ -103,5 +116,7 @@ namespace PoroDev.GatewayAPI.Services
             var returnModel = requestReturnContext.Message.Entity;
             return returnModel;
         }
+
+        
     }
 }

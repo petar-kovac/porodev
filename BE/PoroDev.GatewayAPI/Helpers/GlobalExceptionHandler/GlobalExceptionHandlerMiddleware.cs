@@ -34,6 +34,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, databaseException);
                         break;
 
+                    case InvalidCredentialsExceptions invalidCredentials:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = invalidCredentials.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, invalidCredentials);
+                        break;
+
+                    case PasswordFormatException passwordFormatException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = passwordFormatException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, passwordFormatException);
+                        break;
+
                     case UserNotFoundException userNotFound:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         HumanReadableErrorMessage = userNotFound.HumanReadableErrorMessage;
@@ -56,12 +68,6 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = emailFormatException.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, emailFormatException);
-                        break;
-
-                    case PasswordFormatException passwordFormatException:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        HumanReadableErrorMessage = passwordFormatException.HumanReadableErrorMessage;
-                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, passwordFormatException);
                         break;
 
                     case UserExistsException userExistsException:

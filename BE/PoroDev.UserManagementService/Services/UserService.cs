@@ -3,11 +3,13 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
+using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
@@ -19,7 +21,8 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
-        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
+        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestClient;
+        private readonly IRequestClient<UserLoginRequestServiceToDatabase> _loginUserRequestClient;
 
         private readonly IMapper _mapper;
 
@@ -38,13 +41,21 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<UserReadByEmailRequestServiceToDatabase> readByEmailRequestClient,
                            IRequestClient<UserUpdateRequestServiceToDatabase> updateRequestClient,
                            IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient,
+                           IRequestClient<UserLoginRequestServiceToDatabase> loginUserRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
             _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
-            _deleteUserRequestclient = deleteUserRequestClient;
+            _deleteUserRequestClient = deleteUserRequestClient;
+            _loginUserRequestClient = loginUserRequestClient;
             _mapper = mapper;
+        }
+
+        public async Task<CommunicationModel<LoginUserModel>> LoginUser(UserLoginRequestGatewayToService userToLoginModel)
+        {
+            var modelToReturn = await _loginUserRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(userToLoginModel);
+            return modelToReturn.Message;
         }
 
         //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
@@ -295,7 +306,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 
