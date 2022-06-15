@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Enums;
+using System.Text.Json.Serialization;
 
 namespace PoroDev.Common.Models.UserModels.Data
 {
@@ -12,8 +13,10 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         public string Email { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public byte[] Password { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public byte[] Salt { get; set; }
 
         public UserEnums.UserRole Role { get; set; }
@@ -24,6 +27,7 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         public string AvatarUrl { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DateTime DateCreated { get; set; }
 
         public DataUserModel()
