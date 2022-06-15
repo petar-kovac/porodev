@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Database", "PoroDev.Database\PoroDev.Database.csproj", "{6D7F51AE-3358-4E26-A355-AECDB563E80F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.UserManagementService", "PoroDev.UserManagementService\PoroDev.UserManagementService.csproj", "{B02645A0-9BC0-4DF5-8044-9FC224172888}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.GatewayAPI", "PoroDev.GatewayAPI\PoroDev.GatewayAPI.csproj", "{AD73231A-2F05-4E47-B90E-0073D5C801B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common", "PoroDev.Common\PoroDev.Common.csproj", "{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.DatabaseService", "PoroDev.Database\PoroDev.DatabaseService.csproj", "{5C3F1E37-33FE-4D41-B344-F44A851DAB3A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.UserService", "PoroDev.UserManagementService\PoroDev.UserService.csproj", "{C169C13A-30CF-4602-8A9E-81BB769BD14C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D7F51AE-3358-4E26-A355-AECDB563E80F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B02645A0-9BC0-4DF5-8044-9FC224172888}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD73231A-2F05-4E47-B90E-0073D5C801B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD73231A-2F05-4E47-B90E-0073D5C801B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD73231A-2F05-4E47-B90E-0073D5C801B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +25,14 @@ Global
 		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B82E129A-4E74-4CA1-BD34-F0BAA7D2A9A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3F1E37-33FE-4D41-B344-F44A851DAB3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3F1E37-33FE-4D41-B344-F44A851DAB3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3F1E37-33FE-4D41-B344-F44A851DAB3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3F1E37-33FE-4D41-B344-F44A851DAB3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C169C13A-30CF-4602-8A9E-81BB769BD14C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C169C13A-30CF-4602-8A9E-81BB769BD14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C169C13A-30CF-4602-8A9E-81BB769BD14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C169C13A-30CF-4602-8A9E-81BB769BD14C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
