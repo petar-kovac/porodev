@@ -25,38 +25,6 @@ namespace PoroDev.Database.Consumers
             var returnUser = _mapper.Map<CommunicationModel<DataUserModel>>(fetchUser);
 
             await context.RespondAsync(returnUser);
-
-            //try
-            //{
-            //    var fetchUser = await _unitOfWork.Users.FindAsync(user => user.Email.Equals(context.Message.Email.Trim()));
-
-            //    if (fetchUser == null)
-            //    {
-            //        throw new UserNotFoundException("User with this email does not exist.");
-            //    }
-
-            //    var returnUser = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(fetchUser.Entity);
-
-            //    await context.RespondAsync(returnUser);
-            //}
-            //catch (UserNotFoundException ex)
-            //{
-            //    string exceptionName = nameof(UserNotFoundException);
-            //    string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-            //    var returnUser = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(exceptionName, humanReadableMessage);
-
-            //    await context.RespondAsync(returnUser);
-            //}
-            //catch (Exception)
-            //{
-            //    string exceptionName = nameof(DatabaseException);
-            //    string humanReadableMessage = "Internal database error.";
-
-            //    var returnUser = CreateResponseModel<UserReadByEmailResponseDatabaseToService, DataUserModel>(exceptionName, humanReadableMessage);
-
-            //    await context.RespondAsync(returnUser);
-            //}
         }
     }
 }

@@ -22,8 +22,7 @@ namespace PoroDev.UserManagementService.Mapper
                 .ForMember(destination => destination.Role, options => options.MapFrom(src => (UserEnums.UserDepartment)src.Department))
                 .ForMember(dst => dst.Password, opt => opt.Ignore());
 
-            CreateMap<CommunicationModel<DataUserModel>, CommunicationModel<RegisterUserResponse>>();
-                //.ForMember(dst => dst.Entity, opt => opt.MapFrom(src => src.Entity))
+            CreateMap<CommunicationModel<DataUserModel>, CommunicationModel<RegisterUserResponse>>();            
 
             CreateMap<DataUserModel, RegisterUserResponse>()
                 .ForPath(dst => dst.Department, opt => opt.MapFrom(src => src.Department.ToString()))

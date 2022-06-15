@@ -1,5 +1,7 @@
 ﻿using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.LoginUser;
+using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers
@@ -13,9 +15,10 @@ namespace PoroDev.UserManagementService.Consumers
             _userService = userService;
         }
 
-        public Task Consume(ConsumeContext<UserLoginRequestGatewayToService> context)
+        public async Task Consume(ConsumeContext<UserLoginRequestGatewayToService> context)
         {
-            throw new NotImplementedException();
+            var modelToReturn = await _userService.LoginUser(context.Message);
+            await context.RespondAsync<CommunicationModel<LoginUserModel>>(modelToReturn);
         }
     }
 }

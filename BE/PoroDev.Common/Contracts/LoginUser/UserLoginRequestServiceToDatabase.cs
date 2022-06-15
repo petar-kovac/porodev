@@ -1,6 +1,6 @@
 ﻿namespace PoroDev.Common.Contracts.LoginUser
 {
-    public class UserLoginRequestGatewayToService
+    public class UserLoginRequestServiceToDatabase
     {
         public string Email { get; set; }
 

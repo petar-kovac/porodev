@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts.Update;
-using PoroDev.Common.Extensions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
@@ -36,7 +35,6 @@ namespace PoroDev.Database.Consumers
                 Salt = context.Message.Salt,
             };
 
-
             var userToBeUpdated = await _unitOfWork.Users.FindAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
 
             var updatedModel = _mapper.Map<DataUserModel>(model);
@@ -62,7 +60,6 @@ namespace PoroDev.Database.Consumers
             await context.RespondAsync<UserUpdateResponseDatabaseToService>(updatedModelResponse);
         }
     }
-
 
     /* public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
      {

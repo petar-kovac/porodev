@@ -4,7 +4,6 @@ using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers
 {
-  
     public class UserUpdateConsumer : IConsumer<UserUpdateRequestGatewayToService>
     {
         private readonly IUserService _userService;
@@ -12,7 +11,7 @@ namespace PoroDev.UserManagementService.Consumers
         public UserUpdateConsumer(IUserService userService)
         {
             _userService = userService;
-        }   
+        }
 
         public async Task Consume(ConsumeContext<UserUpdateRequestGatewayToService> context)
         {

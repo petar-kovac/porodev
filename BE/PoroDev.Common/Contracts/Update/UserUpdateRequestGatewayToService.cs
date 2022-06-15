@@ -2,7 +2,7 @@
 
 namespace PoroDev.Common.Contracts.Update
 {
-    public class UserUpdateRequestGatewayToService 
+    public class UserUpdateRequestGatewayToService
     {
         public string AvatarUrl { get; set; }
         public UserEnums.UserDepartment Department { get; set; }
