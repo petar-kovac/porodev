@@ -35,9 +35,9 @@ const PButton: FC<IPButtonProps> = ({
   );
 };
 
-const StyledButton = styled(Button).attrs({
-  'data-testid': 'button',
-})<IPButtonProps>`
+const StyledButton = styled(Button).attrs((props) => ({
+  'data-testid': `${props.form}-button`,
+}))<IPButtonProps>`
   color: ${(props) => props.color};
   border-radius: ${(props) => props.borderRadius};
   border: none;

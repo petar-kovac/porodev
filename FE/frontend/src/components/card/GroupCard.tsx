@@ -48,7 +48,7 @@ const GroupCard: FC<IGroupCardProps> = ({
           gap: '10px',
         }}
       >
-        <Avatar src="https://joeschmoe.io/api/v1/random" />
+        {/* <Avatar src="https://joeschmoe.io/api/v1/random" /> */}
       </div>
     </StyledCard>
   );

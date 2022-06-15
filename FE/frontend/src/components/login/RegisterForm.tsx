@@ -147,9 +147,6 @@ const RegisterForm: FC<ILoginFormProps> = ({
         />
       </StyledForm>
       <StyledButtonWrapper>
-        {/* <StyledLoginButton type="primary" htmlType="submit" form="registerForm">
-          Register
-        </StyledLoginButton> */}
         <PButton
           text="Register"
           color="#fff"

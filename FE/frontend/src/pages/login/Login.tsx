@@ -49,7 +49,7 @@ const Login: FC = () => {
           color="#777"
           borderRadius="8px"
           htmlType="submit"
-          form="registerForm"
+          form="toggle"
           background="#fcfcfc"
           onClick={handleFormChange}
         />
