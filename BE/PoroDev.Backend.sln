@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Common", "PoroDev.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.DatabaseService", "PoroDev.Database\PoroDev.DatabaseService.csproj", "{5C3F1E37-33FE-4D41-B344-F44A851DAB3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.UserService", "PoroDev.UserManagementService\PoroDev.UserService.csproj", "{C169C13A-30CF-4602-8A9E-81BB769BD14C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.UserManagementService", "PoroDev.UserManagementService\PoroDev.UserManagementService.csproj", "{C169C13A-30CF-4602-8A9E-81BB769BD14C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
