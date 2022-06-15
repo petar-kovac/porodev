@@ -8,6 +8,7 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using static PoroDev.Database.Constants.Constants;
+using PoroDev.Common.Contracts.Update;
 
 namespace PoroDev.Database.MapperProfiles
 {
@@ -17,6 +18,7 @@ namespace PoroDev.Database.MapperProfiles
         {
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
+            CreateMap<UserUpdateRequestServiceToDatabase, DataUserModel>();
 
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DeleteUserModel>>();
             CreateMap<DataUserModel, DeleteUserModel>()
