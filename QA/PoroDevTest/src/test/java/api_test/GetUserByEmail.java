@@ -14,12 +14,12 @@ public class GetUserByEmail extends ApiConfig {
 
 
     //Sending request for user with invalid email
-    @Test(dataProvider = "email", dataProviderClass = UserDetailsGenerator.class)
-    public void getUserByInvalidEmail(String val) {
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
+    public void getUserByInvalidEmail(String invalidEmailList) {
 
         given().relaxedHTTPSValidation()
                 .when()
-                .get(Endpoints.GET_USER_BY_EMAIL+val)
+                .get(Endpoints.GET_USER_BY_EMAIL + Endpoints.EMAIL_PATH + invalidEmailList)
                 .then()
                 .statusCode(anyOf(is(400), is(404), is(500)));
 
@@ -29,7 +29,7 @@ public class GetUserByEmail extends ApiConfig {
     public void getUserByNonExistingEmail() {
         given().relaxedHTTPSValidation()
                 .when()
-                .get(Endpoints.GET_USER_BY_EMAIL+"zivko@boing.rs")
+                .get(Endpoints.GET_USER_BY_EMAIL + Endpoints.EMAIL_PATH + "zivko@boing.rs")
                 .then()
                 .statusCode(anyOf(is(400), is(404), is(500)));
 

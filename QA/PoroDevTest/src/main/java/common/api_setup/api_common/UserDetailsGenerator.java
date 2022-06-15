@@ -32,30 +32,82 @@ public class UserDetailsGenerator {
         return user;
     }
 
-    @DataProvider(name = "name")
-    public Object[][] invalidNameList() {
-        Object[][] name = new Object[][]{{""}, {"iiiiiiiiiiiiiiiiiiiiii"},
-                {"StringWith space"}, {"String44"}, {"Sting 33"}, {"44"}, {"$$$$"}, {"String####"}, {"$$"}};
 
-        return name;
+
+
+    @DataProvider(name = "invalidNameOrLastNameList")
+    public Object[][] invalidNameList() {
+        return new Object[][]{
+                {""},
+                {"iiiiiiiiiiiiiiiiiiiiii"},
+                {"StringWith space"},
+                {"String44"},
+                {"Sting 33"},
+                {"44"},
+                {"$$$$"},
+                {"String####"},
+                {"$$"}
+        };
+
     }
 
-    @DataProvider(name = "email")
+
+    @DataProvider(name = "invalidEmailList")
     public Object[][] invalidEmailList() {
-        Object[][] email = new Object[][]{{""}, {"name@live.com"}, {"@boing.rs"}, {"@boing.rs@boing.rs"},
-                {"@boing.rs@live.com"}, {"iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii" +
-                "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii@boing.rs"}, {"%%%@boing.rs"}};
+        Object[][] email = new Object[][]{
+                {""},
+                {"name@live.com"},
+                {"@boing.rs"},
+                {"@boing.rs@boing.rs"},
+                {"@boing.rs@live.com"},
+                {"iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii" +
+                "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii@boing.rs"},
+                {"%%%@boing.rs"},
+                {"with space@boing.rs"}
+        };
 
         return email;
     }
 
-    @DataProvider(name = "password")
+    @DataProvider(name = "invalidPasswordList")
     public Object[][] invalidPasswordList() {
-        Object[][] password = new Object[][]{{""}, {"string"}, {"Pass1234"}, {"Passs!!!!"}, {"P1@"}, {"pass##@222"}};
+        Object[][] password = new Object[][]{
+                {""},
+                {"string"},
+                {"Pass1234"},
+                {"Passs!!!!"},
+                {"P1@"},
+                {"pass##@222"}
+        };
 
         return password;
     }
 
+
+    @DataProvider(name = "CombinationOfInvalidEntryList")
+    public Object[][] invalidEntryCombinationList() {
+        return new Object[][]{
+                {new User("Jadranko", "Jankovic", "jadranko@boing.rs", // existing password
+                "Pass##3", 2, 0, "string", "")},
+                {new User("Jadranko", "Jankovic", "", "", // Empty email and password field
+                        2, 0, "String", "")},
+                {new User("", "", "newuser1234@boing.rs", // empty name and lastname
+                        "Pass##3", 2, 0, "string", "")},
+                {new User("Jadranko Jankovic", "Jankoivc Jadranko", // white space in all fields
+                        "jadranko jankovic@boing.rs", "Pass 44#",
+                        2, 0, "stri ng", "ss ff")},
+                {new User("", "", "", "", // empty all string fields
+                        2, 0, "", "")}
+        };
+    }
+
+    @DataProvider(name = "PojoRegularEntry")
+    public Object[][] functionalTestPojo() {
+        return new Object[][]{
+                {new User("John", "Do", "john.dean@boing.rs", "stringString1!",
+                        0, 1, "string", "string")}
+        };
+    }
 
 
 

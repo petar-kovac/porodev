@@ -13,10 +13,10 @@ public class LogInUser extends ApiConfig {
 
 
     // Sending the request with invalid email
-    @Test(dataProvider = "email", dataProviderClass = UserDetailsGenerator.class)
-    public void logInInvalidEmail(String val) {
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
+    public void logInInvalidEmail(String invalidEmailList) {
         String userBodyJson = "{\n"+
-                "  \"email\": \""+val+"\",\n" +
+                "  \"email\": \""+invalidEmailList+"\",\n" +
                 "  \"password\": \"stringString1!\"\n" +
                 "}";
         given().relaxedHTTPSValidation()
@@ -29,11 +29,11 @@ public class LogInUser extends ApiConfig {
 
 
     // Sending request with invalid password
-    @Test(dataProvider = "email", dataProviderClass = UserDetailsGenerator.class)
-    public void logInInvalidPassword(String val) {
+    @Test(dataProvider = "invalidPasswordList", dataProviderClass = UserDetailsGenerator.class)
+    public void logInInvalidPassword(String invalidPasswordList) {
         String userBodyJson = "{\n"+
                 "  \"email\": \"jadranko@boing.rs\",\n" +
-                "  \"password\": \""+val+"\"\n" +
+                "  \"password\": \""+invalidPasswordList+"\"\n" +
                 "}";
         given().relaxedHTTPSValidation()
                 .body(userBodyJson)

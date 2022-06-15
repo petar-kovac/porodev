@@ -11,10 +11,10 @@ import static io.restassured.RestAssured.given;
 public class UpdateUser extends ApiConfig {
 
     //Updating the user with invalid name
-    @Test(dataProvider = "name", dataProviderClass = UserDetailsGenerator.class)
-    public void updateInvalidName(String val) {
+    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = UserDetailsGenerator.class)
+    public void updateInvalidName(String InvalidNameList) {
         String userBodyJson = "{\n" +
-                "  \"name\": \"" + val + "\",\n" +
+                "  \"name\": \"" + InvalidNameList + "\",\n" +
                 "  \"lastname\": \"Dean\",\n" +
                 "  \"email\": \"usertesting@boing.rs\",\n" +
                 "  \"passwordUnhashed\": \"pas@eeeG33\",\n" +
@@ -30,11 +30,11 @@ public class UpdateUser extends ApiConfig {
                 .then().statusCode(400);
     }
     //Updating user with invalid last name
-    @Test(dataProvider = "name", dataProviderClass = UserDetailsGenerator.class)
-    public void updateInvalidLastname(String val) {
+    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = UserDetailsGenerator.class)
+    public void updateInvalidLastname(String invalidLastNameList) {
         String userBodyJson = "{\n" +
                 "  \"name\": \"John\",\n" +
-                "  \"lastname\": \"" + val + "\",\n" +
+                "  \"lastname\": \"" + invalidLastNameList + "\",\n" +
                 "  \"email\": \"usertesting@boing.rs\",\n" +
                 "  \"passwordUnhashed\": \"pas@eeeG33\",\n" +
                 "  \"department\": 0,\n" +
@@ -49,12 +49,12 @@ public class UpdateUser extends ApiConfig {
                 .then().statusCode(400);
     }
     // Updating user with invalid email
-    @Test(dataProvider = "email", dataProviderClass = UserDetailsGenerator.class)
-    public void registerInvalidEmail(String val) {
+    @Test(dataProvider = "invalidEmailEntryList", dataProviderClass = UserDetailsGenerator.class)
+    public void registerInvalidEmail(String invalidEmailList) {
         String userBodyJson = "{\n" +
                 "  \"name\": \"John\",\n" +
                 "  \"lastname\": \"Dean\",\n" +
-                "  \"email\": \"" + val + "\",\n" +
+                "  \"email\": \"" + invalidEmailList + "\",\n" +
                 "  \"passwordUnhashed\": \"pas@eeeG33\",\n" +
                 "  \"department\": 0,\n" +
                 "  \"role\": 1,\n" +
@@ -68,13 +68,13 @@ public class UpdateUser extends ApiConfig {
                 .then().statusCode(404);
     }
     // Updating user with invalid password
-    @Test(dataProvider = "password", dataProviderClass = UserDetailsGenerator.class)
-    public void registerInvalidPass(String val) {
+    @Test(dataProvider = "invalidPasswordList", dataProviderClass = UserDetailsGenerator.class)
+    public void registerInvalidPass(String invalidPasswordList) {
         String userBodyJson = "{\n" +
                 "  \"name\": \"John\",\n" +
                 "  \"lastname\": \"Dean\",\n" +
                 "  \"email\": \"usertesting@boing.rs\",\n" +
-                "  \"passwordUnhashed\": \"" + val + "\",\n" +
+                "  \"passwordUnhashed\": \"" + invalidPasswordList + "\",\n" +
                 "  \"department\": 0,\n" +
                 "  \"role\": 1,\n" +
                 "  \"position\": \"string\",\n" +
