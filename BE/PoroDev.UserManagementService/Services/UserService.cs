@@ -14,9 +14,6 @@ using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using static PoroDev.UserManagementService.Constants.Consts;
-using PoroDev.Common.Contracts;
-using PoroDev.Common.Models.UserModels.DeleteUser;
-using AutoMapper;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.UserManagementService.Services

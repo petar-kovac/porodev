@@ -29,7 +29,7 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 switch (exception)
                 {
                     case DatabaseException databaseException:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = databaseException.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, databaseException);
                         break;

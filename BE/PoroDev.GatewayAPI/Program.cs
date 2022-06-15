@@ -2,6 +2,7 @@ using PoroDev.Common.MassTransit;
 using PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler;
 using PoroDev.GatewayAPI.Services;
 using PoroDev.GatewayAPI.Services.Contracts;
+using static PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler.GlobalExceptionHandlerExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +24,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+app.UseGlobalExceptionHandler();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
