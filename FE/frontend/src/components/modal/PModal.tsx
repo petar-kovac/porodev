@@ -46,7 +46,9 @@ const PModal: FC<IPModalProps> = ({
   );
 };
 
-const StyledFilesModal = styled(Modal)`
+const StyledFilesModal = styled(Modal).attrs({
+  'data-testid': 'modal',
+})`
   .ant-modal-header {
     border-radius: 1.2rem;
     background-color: rgba(220, 220, 220, 0.1);

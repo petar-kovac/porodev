@@ -48,9 +48,8 @@ const Files: FC = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/files`)
-          .then((res) => setData(res.data));
+        const res = await axios.get(`${process.env.REACT_APP_MOCK_URL}/files`);
+        setData(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -141,7 +140,7 @@ const Files: FC = () => {
           ))}
         </StyledFilesWrapper>
 
-        {showSider && <PFileSider />}
+        {/* {showSider && <PFileSider />} */}
       </StyledContent>
       <PModal
         isModalVisible={isModalVisible}

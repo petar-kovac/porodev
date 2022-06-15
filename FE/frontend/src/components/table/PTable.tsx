@@ -9,7 +9,9 @@ const PTable: FC<{ columns: object[]; dataSource: object[] | undefined }> = ({
   return <StyledTable dataSource={dataSource} columns={columns} />;
 };
 
-const StyledTable = styled(Table)`
+const StyledTable = styled(Table).attrs({
+  'data-testid': 'table',
+})`
   width: 100%;
   overflow: hidden;
 

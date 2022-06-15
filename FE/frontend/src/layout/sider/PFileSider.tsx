@@ -1,22 +1,68 @@
-import { Layout } from 'antd';
-import { FC, useState } from 'react';
+import { Button, Layout } from 'antd';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 
-import { useAuthStateValue } from 'context/AuthContext';
+import { CloseOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
-const PFileSider: FC = () => {
+interface IPFileSiderProps {
+  title?: string;
+  content?: string;
+  isSiderVisible?: boolean;
+  setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
+}
+
+const PFileSider: FC<IPFileSiderProps> = ({
+  title,
+  content,
+  isSiderVisible,
+  setIsSiderVisible,
+}) => {
+  const handleClose = () => {
+    setIsSiderVisible(false);
+  };
+
   return (
-    <StyledFileSider>
-      <div>a</div>
+    <StyledFileSider collapsedWidth={0} collapsed={!isSiderVisible} width={320}>
+      <StyledSiderWrapper>
+        <StyledHeading>
+          <StyledRow>
+            <div>{title}</div>
+            <CloseOutlined onClick={() => handleClose()} />
+          </StyledRow>
+        </StyledHeading>
+        <div>{content}</div>
+      </StyledSiderWrapper>
     </StyledFileSider>
   );
 };
 
-const StyledFileSider = styled(Sider)`
-  margin-top: 20px;
+const StyledRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const StyledSiderWrapper = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  padding: 20px;
+`;
+
+const StyledHeading = styled.div`
+  display: flex;
+  width: 100%;
+  font-size: 20px;
+`;
+const StyledFileSider = styled(Sider).attrs({
+  'data-testid': 'file-sider',
+})`
   background-color: #fff;
+  overflow-x: hidden;
   display: flex;
 
   flex-direction: column;
@@ -29,6 +75,7 @@ const StyledFileSider = styled(Sider)`
   .ant-layout-sider-children {
     display: flex;
     flex-direction: column;
+    width: 400px;
   }
 
   & li span {

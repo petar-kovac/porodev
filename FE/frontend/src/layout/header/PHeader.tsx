@@ -32,7 +32,9 @@ const StyledButtons = styled.div`
   align-items: center;
   gap: 10px;
 `;
-const StyledHeader = styled(Header)`
+const StyledHeader = styled(Header).attrs({
+  'data-testid': 'header',
+})`
   background-color: #1990ff;
   display: flex;
   justify-content: space-between;

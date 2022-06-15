@@ -2,6 +2,7 @@ import {
   FileOutlined,
   FontColorsOutlined,
   HomeOutlined,
+  TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Layout, Menu } from 'antd';
@@ -9,8 +10,8 @@ import { FC, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { useAuthStateValue } from 'context/AuthContext';
 import { Airplane } from '@styled-icons/ionicons-outline';
+import { useAuthStateValue } from 'context/AuthContext';
 
 const { Sider } = Layout;
 
@@ -63,6 +64,9 @@ const PSider: FC = () => {
             <Menu.Item key="/files" icon={<FileOutlined />}>
               <Link to="/files">Files</Link>
             </Menu.Item>
+            <Menu.Item key="/groups" icon={<TeamOutlined />}>
+              <Link to="/groups">Groups</Link>
+            </Menu.Item>
           </>
         )}
         {!isAdmin && ( // later change it to isUser when backend is implemented
@@ -72,6 +76,9 @@ const PSider: FC = () => {
             </Menu.Item>
             <Menu.Item key="/user-files" icon={<FileOutlined />}>
               <Link to="/user-files">Files</Link>
+            </Menu.Item>
+            <Menu.Item key="/user-groups" icon={<TeamOutlined />}>
+              <Link to="/user-groups">Groups</Link>
             </Menu.Item>
           </>
         )}
@@ -102,7 +109,9 @@ const StyledTriggerContainer = styled.div`
   align-items: center;
 `;
 
-const StyledSider = styled(Sider)`
+const StyledSider = styled(Sider).attrs({
+  'data-testid': 'sider',
+})`
   background-color: #fff;
   display: flex;
   flex-direction: column;

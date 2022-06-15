@@ -47,8 +47,9 @@ const PCard: FC<IPCardProps> = ({
     </>
   );
 };
-
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card).attrs({
+  'data-testid': 'files-card',
+})`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 25rem;
   border-radius: 1.5rem;

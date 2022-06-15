@@ -22,7 +22,9 @@ const Spinner: FC<ISpinnerProps> = ({ size, color, speed }) => {
 
 export default Spinner;
 
-const StyledSpin = styled(Spin)<{ speed: number }>`
+const StyledSpin = styled(Spin).attrs({
+  'data-testid': 'spinner',
+})<{ speed: number }>`
   animation: rotation ${(props) => props.speed}s infinite linear;
   @keyframes rotation {
     from {

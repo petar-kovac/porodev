@@ -3,4 +3,6 @@ export const PAGES = {
   users: 'Users',
   admins: 'Admins',
   files: 'Files',
+  groups: 'All groups',
+  userGroups: 'Your groups',
 };

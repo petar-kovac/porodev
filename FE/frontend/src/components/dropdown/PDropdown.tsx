@@ -27,7 +27,9 @@ const PDropdown: React.FC = () => {
   );
 };
 
-const StyledDropdown = styled(Dropdown)`
+const StyledDropdown = styled(Dropdown).attrs({
+  'data-testid': 'dropdrown',
+})`
   display: flex;
   justify-content: center;
   align-items: center;

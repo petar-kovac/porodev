@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
+import Groups from 'pages/admin/groups/Groups';
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
 
@@ -24,6 +25,7 @@ import Users from '../pages/admin/users/Users';
 import UserHome from '../pages/user/home/Home';
 import UserFiles from '../pages/user/files/Files';
 import Profile from '../pages/user/profile/Profile';
+import UserGroups from '../pages/user/groups/Groups';
 
 const PRouter: FC = () => {
   const { isAuthenticated, isLoading, isAdmin } = useAuthStateValue();
@@ -47,11 +49,13 @@ const PRouter: FC = () => {
                   <Route path="/files" element={<Files />} />
                   <Route path="/admins" element={<Admins />} />
                   <Route path="/users" element={<Users />} />
+                  <Route path="/groups" element={<Groups />} />
                 </Route>
                 <Route element={<UserRoutes isUser={!isAdmin} />}>
                   <Route path="/user-home" element={<UserHome />} />
                   <Route path="/user-files" element={<UserFiles />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/user-groups" element={<UserGroups />} />
                 </Route>
                 <Route
                   path="/notallowed"

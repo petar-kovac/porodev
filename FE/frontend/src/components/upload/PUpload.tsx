@@ -44,7 +44,9 @@ const PUpload: React.FC = () => {
   );
 };
 
-const StyledDragger = styled(Dragger)`
+const StyledDragger = styled(Dragger).attrs({
+  'data-testid': 'upload',
+})`
   display: flex;
   border-radius: 15px !important;
 `;
