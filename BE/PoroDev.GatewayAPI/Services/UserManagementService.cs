@@ -126,15 +126,14 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(EmailFormatException), EmptyEmail);
             }
 
-            var requestReturnContext = await _updateRequestClient.GetResponse<UserUpdateResponseServiceToGateway>(updateModel);
+            var requestReturnContext = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateModel);
 
             if (requestReturnContext.Message.ExceptionName != null)
             {
                 ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);
             }
 
-            var returnModel = requestReturnContext.Message.Entity;
-            return returnModel;
+            return requestReturnContext.Message.Entity;
         }
 
         

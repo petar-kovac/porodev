@@ -142,23 +142,22 @@ namespace PoroDev.Database.Repositories
                 response.Entity = null;
                 response.ExceptionName = nameof(DatabaseException);
                 response.HumanReadableMessage = InternalDatabaseError;
+                return response;
             }
 
             if (entity != null)
             {
-                UnitOfWorkResponseModel<TemplateEntity> responseEntity = new UnitOfWorkResponseModel<TemplateEntity>();
                 response.Entity = entity;
                 response.ExceptionName = null;
                 response.HumanReadableMessage = null;
-                return responseEntity;
+                return response;
             }
             else
             {
-                UnitOfWorkResponseModel<TemplateEntity> responseUserNotFound = new UnitOfWorkResponseModel<TemplateEntity>();
                 response.Entity = null;
                 response.ExceptionName = nameof(UserNotFoundException);
                 response.HumanReadableMessage = UserNotFoundExceptionMessage;
-                return responseUserNotFound;
+                return response;
             }
         }
     }

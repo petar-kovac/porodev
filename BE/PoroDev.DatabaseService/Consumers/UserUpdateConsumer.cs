@@ -22,50 +22,27 @@ namespace PoroDev.Database.Consumers
 
         public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
         {
-            CommunicationModel<DataUserModel> returnModel = new();
-            /*DataUserModel model = new()
-            {
-                AvatarUrl = context.Message.AvatarUrl,
-                Department = context.Message.Department,
-                Email = context.Message.Email,
-                Lastname = context.Message.Lastname,
-                Name = context.Message.Name,
-                Position = context.Message.Position,
-                Role = context.Message.Role,
-                Password = context.Message.Password,
-                Salt = context.Message.Salt,
-            };*/
             var model = _mapper.Map<DataUserModel>(context.Message);
-
 
             var userToBeUpdated = await _unitOfWork.Users.FindAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
 
-            /*DataUserModel updatedModel = new()
+            CommunicationModel<DataUserModel> updatedModel = new()
             {
-                AvatarUrl = model.AvatarUrl,
-                Department = model.Department,
-                Email = model.Email,
-                Lastname = model.Lastname,
-                Name = model.Name,
-                Position = model.Position,
-                Role = model.Role,
-                Password = model.Password,
-                Salt = model.Salt
-            };*/
-
-            var updatedModel = _mapper.Map<CommunicationModel<DataUserModel>>(model);
+                Entity = model,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+            
             updatedModel.Entity.Id = userToBeUpdated.Entity.Id;
             updatedModel.Entity.DateCreated = userToBeUpdated.Entity.DateCreated;
-
-            //I hash&salt password inside user service
             updatedModel.Entity.Password = userToBeUpdated.Entity.Password;
             updatedModel.Entity.Salt = userToBeUpdated.Entity.Salt;
 
 
-            await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
+            var updatedUser = await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
             await _unitOfWork.SaveChanges();
 
-            returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(updatedModel);
+            var returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(updatedUser);
             await context.RespondAsync(returnModel);
         }
 
