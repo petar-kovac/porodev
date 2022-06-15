@@ -106,7 +106,7 @@ namespace Business.Access.Layer.Services
 
             var splitEmail = email.Split('@');
 
-            if (splitEmail.Length != 2)
+            if (splitEmail.Length != 2 || String.IsNullOrWhiteSpace(splitEmail[0]))
                 throw new EmailFormatException("Email format is invalid!");
 
             if (splitEmail[0].Any(x => Char.IsWhiteSpace(x)))
@@ -164,7 +164,7 @@ namespace Business.Access.Layer.Services
 
         private void CheckFullName(string name, string lastname)
         {
-            if (String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(lastname))
+            if (String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(lastname) || name.Equals(String.Empty) || lastname.Equals(String.Empty))
                 throw new FullNameFormatException($"Name or lastname cannot be empty!");
 
             if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
@@ -182,7 +182,7 @@ namespace Business.Access.Layer.Services
 
         private void CheckPosition(string position)
         {
-            if (String.IsNullOrWhiteSpace(position))
+            if (String.IsNullOrWhiteSpace(position) || position.Equals(String.Empty))
                 throw new PositionFormatException($"Postion cannot be empty!");
 
             if (position.Length > MAX_POSITION_LENGTH)
@@ -196,7 +196,7 @@ namespace Business.Access.Layer.Services
         }
 
 
-        public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
+        private async Task CheckUserFields(UserRegisterRequestModel registerModel)
         {
             await CheckEmail(registerModel.Email);
 
@@ -205,6 +205,11 @@ namespace Business.Access.Layer.Services
             CheckFullName(registerModel.Name, registerModel.Lastname);
 
             CheckPosition(registerModel.Position);
+        }
+
+        public async Task<UserRegisterResponseModel> Register(UserRegisterRequestModel registerModel, Enums.UserRole role)
+        {
+            await CheckUserFields(registerModel);
 
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
