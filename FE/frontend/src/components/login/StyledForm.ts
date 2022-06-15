@@ -65,7 +65,9 @@ export const StyledFormBox = styled.div`
   position: relative;
 `;
 
-export const StyledFormSpan = styled.span`
+export const StyledFormSpan = styled.span.attrs({
+  'data-testid': 'error-message',
+})`
   position: absolute;
   bottom: -2rem;
   left: 50%;

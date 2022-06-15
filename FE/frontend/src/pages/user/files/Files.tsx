@@ -17,23 +17,23 @@ interface IModalData {}
 
 const Files: FC = () => {
   const [data, setData] = useState<[]>([]);
-  const [showSider, setShowSider] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalData, setModalData] = useState<any>();
+  const [cardData, setCardData] = useState<any>();
+  const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
 
   const count = useRef(0);
 
   const onClick = useCallback((value: any) => {
     count.current += 1;
+    setCardData(value);
     setTimeout(() => {
       if (count.current === 1) {
-        setShowSider(true);
+        setIsSiderVisible(true);
       }
 
       if (count.current === 2) {
-        setShowSider(false);
-        setModalData(value);
+        setIsSiderVisible(false);
         setIsModalVisible(true);
       }
 
@@ -59,65 +59,65 @@ const Files: FC = () => {
 
   return (
     <StyledPageWrapper>
-      <StyledFilesHeader
-        style={{
-          width: '70vw',
-          margin: '4rem auto',
-          display: 'flex',
-          alignItems: 'flex-end',
-          gap: '10px',
-          justifyContent: 'space-around',
-          flexWrap: 'wrap',
-        }}
-      >
-        <StyledFilesDateFilter>
-          <h4>Filter files by date:</h4>
-          <RangePicker />
-        </StyledFilesDateFilter>
-
-        <StyledFilesSlider>
-          <h4>Filter by size:</h4>
-          <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
-        </StyledFilesSlider>
-        <StyledFilesSelect>
-          <Select
-            defaultValue="Filter by type"
-            style={{ width: 160 }}
-            onChange={handleChange}
-          >
-            <Option value="jpg">.jpg</Option>
-            <Option value="png">.png</Option>
-            <Option value="txt">.txt</Option>
-            <Option value="pdf">.pdf</Option>
-          </Select>
-          <Select
-            defaultValue="Sort by"
-            style={{ width: 160 }}
-            onChange={handleChange}
-          >
-            <Option value="asc">Ascending</Option>
-            <Option value="desc">Descending</Option>
-            <Option value="newest" disabled>
-              Newest
-            </Option>
-            <Option value="oldest">Oldest</Option>
-          </Select>
-        </StyledFilesSelect>
-        <div>
-          {isList ? (
-            <AppstoreOutlined
-              style={{ fontSize: '2rem', cursor: 'pointer' }}
-              onClick={() => setIsList(!isList)}
-            />
-          ) : (
-            <BarsOutlined
-              style={{ fontSize: '2rem', cursor: 'pointer' }}
-              onClick={() => setIsList(!isList)}
-            />
-          )}
-        </div>
-      </StyledFilesHeader>
       <StyledContent>
+        <StyledFilesHeader
+          style={{
+            width: '70vw',
+            margin: '4rem auto',
+            display: 'flex',
+            alignItems: 'flex-end',
+            gap: '10px',
+            justifyContent: 'space-around',
+            flexWrap: 'wrap',
+          }}
+        >
+          <StyledFilesDateFilter>
+            <h4>Filter files by date:</h4>
+            <RangePicker />
+          </StyledFilesDateFilter>
+
+          <StyledFilesSlider>
+            <h4>Filter by size:</h4>
+            <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
+          </StyledFilesSlider>
+          <StyledFilesSelect>
+            <Select
+              defaultValue="Filter by type"
+              style={{ width: 160 }}
+              onChange={handleChange}
+            >
+              <Option value="jpg">.jpg</Option>
+              <Option value="png">.png</Option>
+              <Option value="txt">.txt</Option>
+              <Option value="pdf">.pdf</Option>
+            </Select>
+            <Select
+              defaultValue="Sort by"
+              style={{ width: 160 }}
+              onChange={handleChange}
+            >
+              <Option value="asc">Ascending</Option>
+              <Option value="desc">Descending</Option>
+              <Option value="newest" disabled>
+                Newest
+              </Option>
+              <Option value="oldest">Oldest</Option>
+            </Select>
+          </StyledFilesSelect>
+          <div>
+            {isList ? (
+              <AppstoreOutlined
+                style={{ fontSize: '2rem', cursor: 'pointer' }}
+                onClick={() => setIsList(!isList)}
+              />
+            ) : (
+              <BarsOutlined
+                style={{ fontSize: '2rem', cursor: 'pointer' }}
+                onClick={() => setIsList(!isList)}
+              />
+            )}
+          </div>
+        </StyledFilesHeader>
         <StyledFilesWrapper>
           {data?.map((value: any, index: number) => (
             <>
@@ -139,13 +139,18 @@ const Files: FC = () => {
             </>
           ))}
         </StyledFilesWrapper>
-
-        {/* {showSider && <PFileSider />} */}
+        <PFileSider
+          title={cardData?.name}
+          content={cardData?.description}
+          isSiderVisible={isSiderVisible}
+          setIsSiderVisible={setIsSiderVisible}
+        />
       </StyledContent>
+
       <PModal
         isModalVisible={isModalVisible}
-        title={modalData?.name}
-        content={modalData?.description}
+        title={cardData?.name}
+        content={cardData?.description}
         setIsModalVisible={setIsModalVisible}
       />
     </StyledPageWrapper>
@@ -159,7 +164,6 @@ const StyledPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 const StyledFilesWrapper = styled.div`
   padding: 20px;
   display: flex;
