@@ -83,73 +83,56 @@ namespace PoroDev.UserManagementService.Services
             {
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 if (!computeHash.SequenceEqual(passwordHash))
-                    throw new FailedToLogInException("Email or password is not valid.");
+                    throw new FailedToLogInException(LOGIN_FAIL_ERROR);
             }
         }
 
         private void CheckPassword(string password)
         {
             if (password.Length < MIN_PASSWORD_LENGTH)
-                
-
+                throw new PasswordFormatException(PASSWORD_MIN_LENGTH_ERROR);
             if (!password.Any(char.IsUpper))
-                throw new PasswordFormatException($"Password must contain at least {MIN_UPPERCASE_LETTERS} uppercase letter!");
+                throw new PasswordFormatException(PASSWORD_MIN_UPPERCASE_ERROR);
 
             if (!password.Any(char.IsLower))
-                throw new PasswordFormatException($"Password must contain at least {MIN_LOWERCASE_LETTERS} lowercase letter!");
+                throw new PasswordFormatException(PASSWORD_MIN_LOWERCASE_ERROR);
 
             if (!password.Any(char.IsDigit))
-                throw new PasswordFormatException($"Password must contain at least {MIN_NUMBERS} number!");
+                throw new PasswordFormatException(PASSWORD_MIN_NUMBER_ERROR);
 
-            if (!CheckForSpecialCharacters(password))
-                throw new PasswordFormatException($"Password must contain at least {MIN_SPECIAL_CHARACTERS} special character!");
+            if (!CheckStringForCharacters(password, SPECIAL_CHARACTERS_STRING))
+                throw new PasswordFormatException(PASSWORD_MIN_SPECIAL_ERROR);
         }
 
         private async Task CheckEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                throw new EmailFormatException($"Email cannot be empty!");
+                throw new EmailFormatException(EMAIL_EMPTY_ERROR);
 
             if (email.Length > MAX_EMAIL_LENGTH)
-                throw new EmailFormatException($"Email cannot contain more than {MAX_EMAIL_LENGTH} characters!");
+                throw new EmailFormatException(EMAIL_LENGTH_ERROR);
 
             var splitEmail = email.Split('@');
 
             if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
-                throw new EmailFormatException("Email format is invalid!");
+                throw new EmailFormatException(EMAIL_FORMAT_ERROR);
 
             if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
-                throw new EmailFormatException("Email cannot contain whitespace!");
+                throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
 
-            CheckEmailSpecialCharaters(splitEmail[0]);
+            if(CheckStringForCharacters(splitEmail[0],SPECIAL_CHARACTERS_EMAIL_STRING))
+                throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
 
             if (!splitEmail[1].Equals(EMAIL_DOMAIN))
-                throw new EmailFormatException("Email domain is invalid!");
+                throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
 
             if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email})).Message.Entity != null)
-                throw new EmailFormatException("User with that email already exists!");
+                throw new EmailFormatException(EMAIL_EXISTS_ERROR);
         }
 
-        private void CheckEmailSpecialCharaters(string emailUsername)
+        private bool CheckStringForCharacters(string stringToCheck, string specialCharacters)
         {
-            string specialCh = @"%!@#$%^&*()?/><,:;'\|}]{[~`+=" + "\"";
-            char[] specialChArray = specialCh.ToCharArray();
-            bool flag = false;
-
-            foreach (char ch in specialChArray)
-            {
-                if (emailUsername.Contains(ch))
-                    flag = true;
-            }
-
-            if (flag)
-                throw new EmailFormatException("Email can only contain '.', '-' and '_' characters!");
-        }
-
-        private bool CheckForSpecialCharacters(string stringToCheck)
-        {
-            string specialCh = @"%!@#$%^&*()?/>.<,:;'\|}]{[_~`+=-" + "\"";
-            char[] specialChArray = specialCh.ToCharArray();
+            char[] specialChArray = specialCharacters.ToCharArray();
             bool flag = false;
 
             foreach (char ch in specialChArray)
@@ -157,7 +140,6 @@ namespace PoroDev.UserManagementService.Services
                 if (stringToCheck.Contains(ch))
                     flag = true;
             }
-
             return flag;
         }
 
@@ -173,41 +155,44 @@ namespace PoroDev.UserManagementService.Services
         private void CheckFullName(string name, string lastname)
         {
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastname) || name.Equals(string.Empty) || lastname.Equals(string.Empty))
-                throw new FullNameFormatException($"Name or lastname cannot be empty!");
+                throw new FullNameFormatException(FULLNAME_EMPTY_ERROR);
 
             if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
-                throw new FullNameFormatException($"Name or lastname cannot exceed {MAX_NAME_AND_LASTNAME_LENGTH} characters!");
+                throw new FullNameFormatException(FULLNAME_TOO_LONG_ERROR);
 
             if (name.Any(x => char.IsWhiteSpace(x)) || lastname.Any(x => char.IsWhiteSpace(x)))
-                throw new FullNameFormatException("Name or lastname cannot contain whitespace!");
+                throw new FullNameFormatException(FULLNAME_WHITESPACE_ERROR);
 
             if (name.Any(x => char.IsNumber(x)) || lastname.Any(x => char.IsNumber(x)))
-                throw new FullNameFormatException("Name or lastname cannot contain numbers!");
+                throw new FullNameFormatException(FULLNAME_NUMBER_ERROR);
 
-            if (CheckForSpecialCharacters(name) || CheckForSpecialCharacters(lastname))
-                throw new FullNameFormatException("Name or lastname cannot contain special characters!");
+            if (CheckStringForCharacters(name, SPECIAL_CHARACTERS_STRING) || CheckStringForCharacters(lastname, SPECIAL_CHARACTERS_STRING))
+                throw new FullNameFormatException(FULLNAME_SPECIAL_CHARACTER_ERORR);
         }
 
         private void CheckPosition(string position)
         {
             if (string.IsNullOrWhiteSpace(position) || position.Equals(string.Empty))
-                throw new PositionFormatException($"Postion cannot be empty!");
+                throw new PositionFormatException(POSITION_EMPTY_ERROR);
 
             if (position.Length > MAX_POSITION_LENGTH)
-                throw new PositionFormatException($"Postion cannot exceed {MAX_POSITION_LENGTH} characters!");
+                throw new PositionFormatException(POSITION_TOO_LONG_ERROR);
 
             if (position.Any(x => char.IsNumber(x)))
-                throw new PositionFormatException("Position cannot contain numbers!");
+                throw new PositionFormatException(POSITION_NUMBER_ERROR);
 
-            if (CheckForSpecialCharacters(position))
-                throw new PositionFormatException("Position cannot contain special characters!");
+            if (CheckStringForCharacters(position, SPECIAL_CHARACTERS_STRING))
+                throw new PositionFormatException(POSITION_SPECIAL_CHARACTER_ERROR);
         }
 
         private async Task<CommunicationModel<RegisterUserResponse>> CheckUserFields(RegisterUserRequestGatewayToService registerModel)
         {
             try
             {
+                CheckFullName(registerModel.Name, registerModel.Lastname);
                 await CheckEmail(registerModel.Email);
+                CheckPassword(registerModel.Password);
+                CheckPosition(registerModel.Position);
             }
             catch (EmailFormatException ex) 
             {
@@ -224,11 +209,6 @@ namespace PoroDev.UserManagementService.Services
 
                 return responseException;
             }
-
-            try
-            {
-                CheckPassword(registerModel.Password);
-            }
             catch (PasswordFormatException ex)
             {
                 string exceptionType = nameof(PasswordFormatException);
@@ -243,11 +223,6 @@ namespace PoroDev.UserManagementService.Services
 
                 return responseException;
             }
-
-            try
-            {
-                CheckFullName(registerModel.Name, registerModel.Lastname);
-            }
             catch (FullNameFormatException ex)
             {
                 string exceptionType = nameof(FullNameFormatException);
@@ -261,11 +236,6 @@ namespace PoroDev.UserManagementService.Services
                 };
 
                 return responseException;
-            }
-
-            try
-            {
-                CheckPosition(registerModel.Position);
             }
             catch (PositionFormatException ex)
             {
@@ -284,8 +254,6 @@ namespace PoroDev.UserManagementService.Services
 
             return new CommunicationModel<RegisterUserResponse>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
         }
-
-       
 
         public async Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model)
         {

@@ -29,6 +29,9 @@ namespace PoroDev.GatewayAPI.Helpers
                 case nameof(UserExistsException):
                     throw new UserExistsException(errorMessage);
 
+                case nameof(FullNameFormatException):
+                    throw new FullNameFormatException(errorMessage);
+
                 default:
                     throw new Exception("Exception not found!");
             }
