@@ -12,7 +12,6 @@ using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.GatewayAPI.Services
@@ -26,12 +25,14 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserLoginRequestGatewayToService> _loginRequestClient;
         private readonly IRequestClient<RegisterUserRequestGatewayToService> _registerClient;
 
-        public UserManagementService(IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
+        public UserManagementService(
+            IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
             IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient,
             IRequestClient<UserLoginRequestGatewayToService> loginRequestClient,
             IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
             IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient,
-            IRequestClient<RegisterUserRequestGatewayToService> registerClient)
+            IRequestClient<RegisterUserRequestGatewayToService> registerClient
+            )
         {
             _createRequestClient = createRequestClient;
             _deleteRequestClient = deleteRequestClient;
@@ -82,7 +83,6 @@ namespace PoroDev.GatewayAPI.Services
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
-
 
             return responseContext.Message.Entity;
         }
