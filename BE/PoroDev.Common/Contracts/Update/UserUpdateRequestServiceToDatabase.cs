@@ -4,7 +4,7 @@ namespace PoroDev.Common.Contracts.Update
 {
     public class UserUpdateRequestServiceToDatabase
     {
-        public Guid Id;
+        public Guid Id { get; set; }
         public string Name { get; set; }
 
         public string Lastname { get; set; }

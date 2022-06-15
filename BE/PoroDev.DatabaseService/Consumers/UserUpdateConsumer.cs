@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
@@ -21,8 +22,8 @@ namespace PoroDev.Database.Consumers
 
         public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
         {
-            UserUpdateResponseDatabaseToService returnModel;
-            DataUserModel model = new()
+            CommunicationModel<DataUserModel> returnModel = new();
+            /*DataUserModel model = new()
             {
                 AvatarUrl = context.Message.AvatarUrl,
                 Department = context.Message.Department,
@@ -33,33 +34,43 @@ namespace PoroDev.Database.Consumers
                 Role = context.Message.Role,
                 Password = context.Message.Password,
                 Salt = context.Message.Salt,
-            };
+            };*/
+            var model = _mapper.Map<DataUserModel>(context.Message);
+
 
             var userToBeUpdated = await _unitOfWork.Users.FindAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
 
-            var updatedModel = _mapper.Map<DataUserModel>(model);
-            updatedModel.Id = userToBeUpdated.Entity.Id;
-            updatedModel.DateCreated = userToBeUpdated.Entity.DateCreated;
+            /*DataUserModel updatedModel = new()
+            {
+                AvatarUrl = model.AvatarUrl,
+                Department = model.Department,
+                Email = model.Email,
+                Lastname = model.Lastname,
+                Name = model.Name,
+                Position = model.Position,
+                Role = model.Role,
+                Password = model.Password,
+                Salt = model.Salt
+            };*/
+
+            var updatedModel = _mapper.Map<CommunicationModel<DataUserModel>>(model);
+            updatedModel.Entity.Id = userToBeUpdated.Entity.Id;
+            updatedModel.Entity.DateCreated = userToBeUpdated.Entity.DateCreated;
 
             //I hash&salt password inside user service
-            updatedModel.Password = userToBeUpdated.Entity.Password;
-            updatedModel.Salt = userToBeUpdated.Entity.Salt;
+            updatedModel.Entity.Password = userToBeUpdated.Entity.Password;
+            updatedModel.Entity.Salt = userToBeUpdated.Entity.Salt;
 
-            try
-            {
-                await _unitOfWork.Users.UpdateAsync(updatedModel, updatedModel.Id);
-                await _unitOfWork.SaveChanges();
-            }
-            catch (Exception exception)
-            {
-                returnModel = CreateResponseModel<UserUpdateResponseDatabaseToService, DataUserModel>(nameof(exception), InternalDatabaseError);
-                await context.RespondAsync(returnModel);
-            }
 
-            var updatedModelResponse = CreateResponseModel<UserUpdateResponseDatabaseToService, DataUserModel>(updatedModel);
-            await context.RespondAsync<UserUpdateResponseDatabaseToService>(updatedModelResponse);
+            await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
+            await _unitOfWork.SaveChanges();
+
+            returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(updatedModel);
+            await context.RespondAsync(returnModel);
         }
+
     }
+
 
     /* public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
      {

@@ -25,7 +25,7 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
 
 
-        Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model);
+        Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model);
 
         Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model);
 

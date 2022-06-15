@@ -13,7 +13,7 @@ namespace PoroDev.Database.Repositories.Contracts
 
         Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity);
 
-        Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id);
+        Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id);
 
         Task<UnitOfWorkResponseModel<TemplateEntity>> FindAsync(Expression<Func<TemplateEntity, bool>> filter);
 

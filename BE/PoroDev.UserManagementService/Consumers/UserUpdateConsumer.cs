@@ -16,9 +16,7 @@ namespace PoroDev.UserManagementService.Consumers
         public async Task Consume(ConsumeContext<UserUpdateRequestGatewayToService> context)
         {
             var modelToReturn = await _userService.UpdateUser(context.Message);
-            //modelToReturn.ExceptionName = null;
-            //modelToReturn.HumanReadableMessage = null;
-
+          
             await context.RespondAsync<UserUpdateResponseServiceToGateway>(modelToReturn);
         }
     }

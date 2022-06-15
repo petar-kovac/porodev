@@ -341,12 +341,13 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
-        public async Task<UserUpdateResponseDatabaseToService> UpdateUser(UserUpdateRequestGatewayToService model)
+        public async Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model)
         {
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             UserUpdateRequestServiceToDatabase temp = new UserUpdateRequestServiceToDatabase()
             {
+                Id = Guid.NewGuid(),
                 AvatarUrl = model.AvatarUrl,
                 Department = model.Department,
                 Email = model.Email,
@@ -356,9 +357,10 @@ namespace PoroDev.UserManagementService.Services
                 Role = model.Role,
                 Password = hash,
                 Salt = salt,
+                DateCreated = DateTime.Now,
             };
 
-            var response = await _updateRequestClient.GetResponse<UserUpdateResponseDatabaseToService>(temp);
+            var response = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(temp);
 
             return response.Message;
         }

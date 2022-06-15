@@ -125,19 +125,41 @@ namespace PoroDev.Database.Repositories
             return await _context.Set<TemplateEntity>().Where(filter).ToListAsync();
         }
 
-        public async Task<TemplateEntity?> UpdateAsync(TemplateEntity entity, Guid id)
+        public async Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id)
         {
-            if (entity == null)
-            {
-                return null;
-            }
+
             TemplateEntity? exist = await _context.Set<TemplateEntity>().FindAsync(id);
-            if (exist != null)
+            UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
+
+            try
             {
                 _context.Entry(exist).CurrentValues.SetValues(entity);
                 await _context.SaveChangesAsync();
             }
-            return exist;
+            catch (Exception)
+            {
+                UnitOfWorkResponseModel<TemplateEntity> responseDataBaseError = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = null;
+                response.ExceptionName = nameof(DatabaseException);
+                response.HumanReadableMessage = InternalDatabaseError;
+            }
+
+            if (entity != null)
+            {
+                UnitOfWorkResponseModel<TemplateEntity> responseEntity = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = entity;
+                response.ExceptionName = null;
+                response.HumanReadableMessage = null;
+                return responseEntity;
+            }
+            else
+            {
+                UnitOfWorkResponseModel<TemplateEntity> responseUserNotFound = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = null;
+                response.ExceptionName = nameof(UserNotFoundException);
+                response.HumanReadableMessage = UserNotFoundExceptionMessage;
+                return responseUserNotFound;
+            }
         }
     }
 }
