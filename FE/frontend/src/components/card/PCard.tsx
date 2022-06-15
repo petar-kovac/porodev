@@ -47,6 +47,7 @@ const PCard: FC<IPCardProps> = ({
     </>
   );
 };
+
 const StyledCard = styled(Card)`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 25rem;

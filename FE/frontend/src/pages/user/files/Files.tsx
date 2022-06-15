@@ -4,8 +4,11 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { Button, DatePicker, Modal, Select, Slider } from 'antd';
+import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
+
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
+import ListCard from 'components/card/ListCard';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -17,6 +20,7 @@ const Files: FC = () => {
   const [showSider, setShowSider] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalData, setModalData] = useState<any>();
+  const [isList, setIsList] = useState<boolean>(false);
 
   const count = useRef(0);
 
@@ -58,6 +62,8 @@ const Files: FC = () => {
     <StyledPageWrapper>
       <StyledFilesHeader
         style={{
+          width: '70vw',
+          margin: '4rem auto',
           display: 'flex',
           alignItems: 'flex-end',
           gap: '10px',
@@ -98,16 +104,40 @@ const Files: FC = () => {
             <Option value="oldest">Oldest</Option>
           </Select>
         </StyledFilesSelect>
+        <div>
+          {isList ? (
+            <AppstoreOutlined
+              style={{ fontSize: '2rem', cursor: 'pointer' }}
+              onClick={() => setIsList(!isList)}
+            />
+          ) : (
+            <BarsOutlined
+              style={{ fontSize: '2rem', cursor: 'pointer' }}
+              onClick={() => setIsList(!isList)}
+            />
+          )}
+        </div>
       </StyledFilesHeader>
       <StyledContent>
         <StyledFilesWrapper>
           {data?.map((value: any, index: number) => (
-            <PCard
-              image={value?.image}
-              heading={value?.name}
-              description={value?.description}
-              onClick={() => onClick(value)}
-            />
+            <>
+              {isList ? (
+                <ListCard
+                  image={value?.image}
+                  heading={value?.name}
+                  description={value?.description}
+                  onClick={() => onClick(value)}
+                />
+              ) : (
+                <PCard
+                  image={value?.image}
+                  heading={value?.name}
+                  description={value?.description}
+                  onClick={() => onClick(value)}
+                />
+              )}
+            </>
           ))}
         </StyledFilesWrapper>
 
@@ -146,6 +176,7 @@ const StyledFilesHeader = styled.div`
   border-radius: 30px;
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   margin-bottom: 5rem;
+  border-bottom: 2px solid #ddd;
 `;
 
 const StyledFilesSlider = styled.div`
