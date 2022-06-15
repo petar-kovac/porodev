@@ -315,7 +315,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 

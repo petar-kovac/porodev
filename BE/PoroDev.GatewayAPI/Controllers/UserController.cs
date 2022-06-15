@@ -9,6 +9,7 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
+using System.Net;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
