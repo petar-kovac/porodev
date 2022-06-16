@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import theme from 'theme/theme';
-import PCard from 'components/card/PCard';
+import GridCard from 'components/card/GridCard';
 import PList from 'components/list/List';
 import Spinner from 'components/spinner/Spinner';
 import PButton from 'components/buttons/PButton';
@@ -54,7 +54,7 @@ const Home: FC = () => {
           <StyledCardWrapper>
             {/* fix when backend is implemented */}
             {filesData?.slice(0, 5).map((value: any, index: any) => (
-              <PCard
+              <GridCard
                 heading={value?.name}
                 description={value?.description}
                 image={value?.image}

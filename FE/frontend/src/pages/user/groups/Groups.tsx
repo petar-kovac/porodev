@@ -1,26 +1,19 @@
 import axios from 'axios';
-import PCard from 'components/card/PCard';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button, DatePicker, Modal, Select, Slider } from 'antd';
+import GroupCard from 'components/card/GroupCard';
+import ListCard from 'components/card/ListCard';
+import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
-import GroupCard from 'components/card/GroupCard';
-import { PAGES } from 'util/constants/constants';
-import PButton from 'components/buttons/PButton';
-import theme from 'theme/theme';
-
-const { RangePicker } = DatePicker;
-const { Option } = Select;
-
-interface IModalData {}
 
 const Groups: FC = () => {
   const [data, setData] = useState<[]>([]);
-  const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cardData, setCardData] = useState<any>();
+  const [isSiderVisible, setIsSiderVisible] = useState(false);
+  const [isList, setIsList] = useState<boolean>(false);
 
   const count = useRef(0);
 
@@ -56,32 +49,33 @@ const Groups: FC = () => {
   return (
     <StyledPageWrapper>
       <StyledContent>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <StyledHeadingWrapper>
-            <StyledHeading>{PAGES.userGroups}:</StyledHeading>
-            <PButton
-              text="Create group"
-              color="#fff"
-              borderRadius="8px"
-              htmlType="submit"
-              form="loginForm"
-              background="#2b1553"
-            />
-          </StyledHeadingWrapper>
+        <StyledStaticContent>
+          <PFilter isList={isList} setIsList={setIsList} />
           <StyledFilesWrapper>
-            {data?.map((value: any, index: number) => (
-              <GroupCard
-                groupName={value.groupName}
-                isModerator={value.isModerator}
-                moderatorName={value.moderatorName}
-                numberOfFiles={value.numberOfFiles}
-                numberOfUsers={value.numberOfUsers}
-                onClick={() => onClick(value)}
-                uuid={value.uuid}
-              />
+            {data?.map((value: any) => (
+              <>
+                {isList ? (
+                  <ListCard
+                    image={value?.image}
+                    heading={value?.name}
+                    description={value?.description}
+                    onClick={() => onClick(value)}
+                  />
+                ) : (
+                  <GroupCard
+                    groupName={value.groupName}
+                    isModerator={value.isModerator}
+                    moderatorName={value.moderatorName}
+                    numberOfFiles={value.numberOfFiles}
+                    numberOfUsers={value.numberOfUsers}
+                    onClick={() => onClick(value)}
+                    uuid={value.uuid}
+                  />
+                )}
+              </>
             ))}
           </StyledFilesWrapper>
-        </div>
+        </StyledStaticContent>
 
         <PFileSider
           title={cardData?.groupName}
@@ -90,40 +84,47 @@ const Groups: FC = () => {
           setIsSiderVisible={setIsSiderVisible}
         />
       </StyledContent>
+
       <PModal
-        title={cardData?.name}
-        content={cardData?.description}
         isModalVisible={isModalVisible}
+        title={cardData?.groupName}
+        content={cardData?.moderatorName}
         setIsModalVisible={setIsModalVisible}
       />
     </StyledPageWrapper>
   );
 };
-export const StyledHeadingWrapper = styled.div`
-  display: flex;
-  padding: 20px;
-  align-items: center;
-  gap: 10px;
-  /* justify-content: space-between; */
-`;
-export const StyledHeading = styled.div`
-  font-size: 24px;
-  color: ${({ theme: { colors } }) => colors.primary};
-  font-weight: 600;
-`;
-const StyledContent = styled.div`
-  display: flex;
-`;
+
 const StyledPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
+const StyledContent = styled.div`
+  display: flex;
+`;
+
+const StyledStaticContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+  align-items: flex-start;
+  gap: 5rem;
+`;
+
+const StyledFoldersContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  gap: 2rem;
+`;
+
 const StyledFilesWrapper = styled.div`
-  padding: 20px;
+  padding: 0 2rem;
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 2.5rem;
   flex-wrap: wrap;
 `;
 

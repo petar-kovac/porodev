@@ -3,7 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 const { Meta } = Card;
-interface IPCardProps {
+interface IGridCardProps {
   heading: string;
   description: string;
   image: string;
@@ -11,7 +11,7 @@ interface IPCardProps {
   onDoubleClick?: any;
 }
 
-const PCard: FC<IPCardProps> = ({
+const GridCard: FC<IGridCardProps> = ({
   heading,
   description,
   image,
@@ -70,4 +70,4 @@ const StyledMetaCardDescription = styled.div`
   }
 `;
 
-export default PCard;
+export default GridCard;

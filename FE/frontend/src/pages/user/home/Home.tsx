@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import PCard from 'components/card/PCard';
+import GridCard from 'components/card/GridCard';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
 
@@ -43,7 +43,7 @@ const Home: FC = () => {
           </StyledCardHeading>
           <StyledCardWrapper>
             {data?.splice(0, 5).map((value: any, index: any) => (
-              <PCard
+              <GridCard
                 heading={value?.name}
                 description={value?.description}
                 image={value?.image}

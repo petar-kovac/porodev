@@ -1,16 +1,17 @@
-import { FC } from 'react';
 import { FolderFilled } from '@ant-design/icons';
+import { Card } from 'antd';
+import { FC } from 'react';
 import styled from 'styled-components';
-import { Descriptions, Card } from 'antd';
 
 interface IPFoldersProps {
   heading: string;
   description: string;
+  onClick?: any;
 }
 
-const PFolders: FC<IPFoldersProps> = ({ heading, description }) => {
+const PFolders: FC<IPFoldersProps> = ({ heading, description, onClick }) => {
   return (
-    <StyledCard hoverable>
+    <StyledCard onClick={onClick} hoverable>
       <FolderFilled />
       <StyledFolderHeading>{heading}</StyledFolderHeading>
       <p>{description.slice(0, 10)}</p>

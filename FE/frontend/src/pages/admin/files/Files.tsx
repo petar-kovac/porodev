@@ -1,26 +1,45 @@
 import axios from 'axios';
-import PCard from 'components/card/PCard';
-import { FC, useEffect, useState } from 'react';
+import GridCard from 'components/card/GridCard';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { DatePicker, Select, Slider } from 'antd';
-
-const { RangePicker } = DatePicker;
-const { Option } = Select;
-
-const handleChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
+import ListCard from 'components/card/ListCard';
+import PFilter from 'components/filter/PFilter';
+import PFolders from 'components/folders/PFolders';
+import PModal from 'components/modal/PModal';
+import PFileSider from 'layout/sider/PFileSider';
 
 const Files: FC = () => {
   const [data, setData] = useState<[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cardData, setCardData] = useState<any>();
+  const [isSiderVisible, setIsSiderVisible] = useState(false);
+  const [isList, setIsList] = useState<boolean>(false);
+
+  const count = useRef(0);
+
+  const onClick = useCallback((value: any) => {
+    count.current += 1;
+    setCardData(value);
+    setTimeout(() => {
+      if (count.current === 1) {
+        setIsSiderVisible(true);
+      }
+
+      if (count.current === 2) {
+        setIsSiderVisible(false);
+        setIsModalVisible(true);
+      }
+
+      count.current = 0;
+    }, 300);
+  }, []);
 
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/files`)
-          .then((res) => setData(res.data));
+        const res = await axios.get(`${process.env.REACT_APP_MOCK_URL}/files`);
+        setData(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -29,105 +48,91 @@ const Files: FC = () => {
   }, []);
 
   return (
-    <>
-      <StyledFilesWrapper>
-        <StyledFilesHeader style={{}}>
-          <StyledFilesDateFilter>
-            <h4>Filter files by date:</h4>
-            <RangePicker />
-          </StyledFilesDateFilter>
+    <StyledPageWrapper>
+      <StyledContent>
+        <StyledStaticContent>
+          <StyledFoldersContainer>
+            {data?.slice(0, 4).map((value: any) => (
+              <PFolders
+                heading={value?.name}
+                description={value?.description}
+                onClick={() => onClick(value)}
+              />
+            ))}
+          </StyledFoldersContainer>
+          <PFilter isList={isList} setIsList={setIsList} />
+          <StyledFilesWrapper>
+            {data?.map((value: any) => (
+              <>
+                {isList ? (
+                  <ListCard
+                    image={value?.image}
+                    heading={value?.name}
+                    description={value?.description}
+                    onClick={() => onClick(value)}
+                  />
+                ) : (
+                  <GridCard
+                    image={value?.image}
+                    heading={value?.name}
+                    description={value?.description}
+                    onClick={() => onClick(value)}
+                  />
+                )}
+              </>
+            ))}
+          </StyledFilesWrapper>
+        </StyledStaticContent>
 
-          <StyledFilesSlider>
-            <h4>Filter by size:</h4>
-            <Slider range defaultValue={[0, 30]} />
-          </StyledFilesSlider>
-          <StyledFilesSelect>
-            <Select defaultValue="Filter by type" onChange={handleChange}>
-              <Option value="jpg">.jpg</Option>
-              <Option value="png">.png</Option>
-              <Option value="txt">.txt</Option>
-              <Option value="pdf">.pdf</Option>
-            </Select>
+        <PFileSider
+          title={cardData?.name}
+          content={cardData?.description}
+          isSiderVisible={isSiderVisible}
+          setIsSiderVisible={setIsSiderVisible}
+        />
+      </StyledContent>
 
-            <Select defaultValue="Sort by" onChange={handleChange}>
-              <Option value="asc">Ascending</Option>
-              <Option value="desc">Descending</Option>
-              <Option value="newest" disabled>
-                Newest
-              </Option>
-              <Option value="oldest">Oldest</Option>
-            </Select>
-          </StyledFilesSelect>
-        </StyledFilesHeader>
-
-        {data?.map((value: any, index: any) => (
-          <PCard
-            image={value?.image}
-            heading={value?.name}
-            description={value?.description}
-          />
-        ))}
-      </StyledFilesWrapper>
-    </>
+      <PModal
+        isModalVisible={isModalVisible}
+        title={cardData?.name}
+        content={cardData?.description}
+        setIsModalVisible={setIsModalVisible}
+      />
+    </StyledPageWrapper>
   );
 };
 
+const StyledPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledContent = styled.div`
+  display: flex;
+`;
+
+const StyledStaticContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+  align-items: flex-start;
+  gap: 5rem;
+`;
+
+const StyledFoldersContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+  gap: 2rem;
+`;
+
 const StyledFilesWrapper = styled.div`
-  padding: 2rem;
+  padding: 0 2rem;
   display: flex;
   justify-content: center;
   gap: 2.5rem;
   flex-wrap: wrap;
-`;
-
-const StyledFilesHeader = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  padding: 2rem 0;
-  background-color: #fcfcfc;
-  border-radius: 3rem;
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  margin-bottom: 5rem;
-`;
-
-const StyledFilesSlider = styled.div`
-  width: 32rem;
-  .ant-slider {
-    margin: 22px 6px 10px;
-    padding: 0 !important;
-    width: 30rem;
-  }
-`;
-
-const StyledFilesDateFilter = styled.div`
-  width: 32rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  .ant-picker {
-    border-radius: 10px;
-  }
-`;
-
-const StyledFilesSelect = styled.div`
-  width: 32rem;
-  align-self: flex-end;
-  display: flex;
-  gap: 1rem;
-
-  .ant-select {
-    width: 16rem;
-  }
-
-  .ant-select-selector {
-    border-radius: 10px !important;
-    color: #999;
-  }
 `;
 
 export default Files;
