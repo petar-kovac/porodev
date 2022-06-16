@@ -60,7 +60,19 @@ const Files: FC = () => {
               />
             ))}
           </StyledFoldersContainer>
-          <PFilter isList={isList} setIsList={setIsList} />
+          <PFilterWrapper>
+            <PFilter
+              isList={isList}
+              setIsList={setIsList}
+              activeFilters={{
+                showFilterByDate: true,
+                showSortByTime: true,
+                showSortByType: true,
+                showFilterBySize: true,
+                showToggleButton: true,
+              }}
+            />
+          </PFilterWrapper>
           <StyledFilesWrapper>
             {data?.map((value: any) => (
               <>
@@ -101,6 +113,19 @@ const Files: FC = () => {
     </StyledPageWrapper>
   );
 };
+const PFilterWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  padding: 2rem 0;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  background-color: #fcfcfc;
+  border-radius: 3rem;
+  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
+  border-bottom: 2px solid #ddd;
+`;
 
 const StyledPageWrapper = styled.div`
   display: flex;

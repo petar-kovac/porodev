@@ -1,9 +1,7 @@
-import {
-  AppstoreOutlined,
-  BarsOutlined,
-  FolderFilled,
-} from '@ant-design/icons';
-import { DatePicker, Select, Slider, Card } from 'antd';
+import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
+import { DatePicker, Select, Slider } from 'antd';
+import { DefaultOptionType } from 'antd/lib/select';
+import PSelect from 'components/select/PSelect';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
@@ -13,65 +11,96 @@ const { Option } = Select;
 interface IPFilterProps {
   isList: boolean;
   setIsList: Dispatch<SetStateAction<boolean>>;
+  activeFilters?: IACtiveFilters;
+}
+interface IACtiveFilters {
+  showSortByTime?: boolean;
+  showSortByType?: boolean;
+  showFilterBySize?: boolean;
+  showFilterByDate?: boolean;
+  showToggleButton?: boolean;
 }
 
-const PFilter: FC<IPFilterProps> = ({ isList, setIsList }) => {
-  const handleChange = (value: string) => {
+const PFilter: FC<IPFilterProps> = ({
+  isList,
+  setIsList,
+  activeFilters = {},
+}) => {
+  const propsObj = { ...activeFilters };
+
+  // mocked select data until backed is ready
+  const data = [
+    { value: '1', key: '1', children: '.jpg' },
+    { value: '2', key: '2', children: '.png' },
+    { value: '3', key: '3', children: '.txt' },
+    { value: '4', key: '4', children: '.cscs' },
+  ];
+
+  const handleChange = (
+    value: string,
+    option: DefaultOptionType | DefaultOptionType[],
+  ) => {
     console.log(`selected ${value}`);
+    console.log('options ', option);
   };
+
   return (
     <StyledFilesHeader>
-      <StyledFilesDateFilter>
-        <h4>Filter files by date:</h4>
-        <RangePicker />
-      </StyledFilesDateFilter>
+      {propsObj.showFilterByDate && (
+        <StyledFilesDateFilter>
+          <h4>Filter files by date:</h4>
+          <RangePicker />
+        </StyledFilesDateFilter>
+      )}
 
-      <StyledFilesSlider>
-        <h4>Filter by size:</h4>
-        <Slider range defaultValue={[0, 30]} />
-      </StyledFilesSlider>
+      {propsObj.showFilterBySize && (
+        <StyledFilesSlider>
+          <h4>Filter by size:</h4>
+          <Slider range defaultValue={[0, 30]} />
+        </StyledFilesSlider>
+      )}
+
       <StyledFilesSelect>
-        <Select defaultValue="Filter by type" onChange={handleChange}>
-          <Option value="jpg">.jpg</Option>
-          <Option value="png">.png</Option>
-          <Option value="txt">.txt</Option>
-          <Option value="pdf">.pdf</Option>
-        </Select>
-        <Select defaultValue="Sort by" onChange={handleChange}>
-          <Option value="asc">Ascending</Option>
-          <Option value="desc">Descending</Option>
-          <Option value="newest" disabled>
-            Newest
-          </Option>
-          <Option value="oldest">Oldest</Option>
-        </Select>
-        <StyledToggleIcons>
-          {isList ? (
-            <StyledAppstoreOutlined onClick={() => setIsList(!isList)} />
-          ) : (
-            <StyledBarsOutlined onClick={() => setIsList(!isList)} />
-          )}
-        </StyledToggleIcons>
+        {propsObj.showSortByType && (
+          <>
+            <PSelect
+              defaultValue="File type"
+              onChange={handleChange}
+              data={data}
+            />
+          </>
+        )}
+        {propsObj.showSortByTime && (
+          <Select defaultValue="Sort by" onChange={handleChange}>
+            <Option value="asc">Ascending</Option>
+            <Option value="desc">Descending</Option>
+            <Option value="newest" disabled>
+              Newest
+            </Option>
+            <Option value="oldest">Oldest</Option>
+          </Select>
+        )}
+        {propsObj.showToggleButton && (
+          <StyledToggleButton>
+            {isList ? (
+              <StyledAppstoreOutlined onClick={() => setIsList(!isList)} />
+            ) : (
+              <StyledBarsOutlined onClick={() => setIsList(!isList)} />
+            )}
+          </StyledToggleButton>
+        )}
       </StyledFilesSelect>
     </StyledFilesHeader>
   );
 };
 
 const StyledFilesHeader = styled.div`
-  width: 100%;
   display: flex;
-  align-items: flex-end;
-  gap: 1rem;
   justify-content: space-around;
-  flex-wrap: wrap;
-  padding: 2rem 0;
-  background-color: #fcfcfc;
-  border-radius: 3rem;
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  border-bottom: 2px solid #ddd;
+  width: 100%;
 `;
 
-const StyledToggleIcons = styled.div`
+const StyledToggleButton = styled.div`
   margin-left: auto;
 `;
 const StyledFilesSlider = styled.div`

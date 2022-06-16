@@ -50,7 +50,14 @@ const Groups: FC = () => {
     <StyledPageWrapper>
       <StyledContent>
         <StyledStaticContent>
-          <PFilter isList={isList} setIsList={setIsList} />
+          <PFilter
+            isList={isList}
+            setIsList={setIsList}
+            activeFilters={{
+              showSortByType: true,
+              showSortByTime: true,
+            }}
+          />
           <StyledFilesWrapper>
             {data?.map((value: any) => (
               <>
