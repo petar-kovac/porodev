@@ -54,7 +54,7 @@ public class LogInUser extends ApiConfig {
                 .body(userBodyJson)
                 .when()
                 .post(Endpoints.USER_LOGIN)
-                .then().statusCode(401);
+                .then().statusCode(400);
     }
 
     // Existing email, invalid password
@@ -69,7 +69,7 @@ public class LogInUser extends ApiConfig {
                 .body(userBodyJson)
                 .when()
                 .post(Endpoints.USER_LOGIN)
-                .then().statusCode(401);
+                .then().statusCode(400);
     }
 
 

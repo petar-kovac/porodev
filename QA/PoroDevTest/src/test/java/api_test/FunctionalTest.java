@@ -65,10 +65,14 @@ public class FunctionalTest extends ApiConfig {
     // sending the request for deleting the user with sending email
     @Test (priority = 5)
     public void deleteUser() {
+        String jsonRequestWithEmail = "{\n" +
+                "  \"email\": \"john.dean@boing.rs\"\n" +
+                "}";
         given().relaxedHTTPSValidation()
                 .when()
-                .delete(Endpoints.USER_DELETE + Endpoints.EMAIL_PATH + "john.dean@boing.rs")
-                .then().body("name", equalTo("John"));
+                .body(jsonRequestWithEmail)
+                .delete(Endpoints.USER_DELETE)
+                .then();
     }
 
 

@@ -17,10 +17,13 @@ public class DeleteUser extends ApiConfig {
     // Sending the
     @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
     public void deleteUserByInvalidEmail(String invalidEmailList) {
-
+        String jsonRequestWithEmail = "{\n" +
+                "  \"email\": \""+invalidEmailList+"\"\n" +
+                "}";
         given().relaxedHTTPSValidation()
                 .when()
-                .delete(Endpoints.USER_DELETE + Endpoints.EMAIL_PATH + invalidEmailList)
+                .body(jsonRequestWithEmail)
+                .delete(Endpoints.USER_DELETE)
                 .then()
                 .statusCode(anyOf(is(400), is(404), is(500)));
 
@@ -29,9 +32,13 @@ public class DeleteUser extends ApiConfig {
     // Sending delete request with valid but non-existing email
     @Test
     public void deleteUserByNonExistingEmail() {
+        String jsonRequestWithEmail = "{\n" +
+                "  \"email\": \"zivko@boing.rs\"\n" +
+                "}";
         given().relaxedHTTPSValidation()
                 .when()
-                .delete(Endpoints.USER_DELETE + Endpoints.EMAIL_PATH + "zivko@boing.rs")
+                .body(jsonRequestWithEmail)
+                .delete(Endpoints.USER_DELETE)
                 .then()
                 .statusCode(404);
     }

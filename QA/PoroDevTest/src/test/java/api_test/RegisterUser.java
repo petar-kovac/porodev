@@ -32,7 +32,7 @@ public class RegisterUser extends ApiConfig {
                 .body(userBodyJson)
                 .when()
                 .post(Endpoints.REGISTER_USER)
-                .then().statusCode(500);
+                .then().statusCode(400);
     }
     //Register user with invalid entry in the name field
     @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = UserDetailsGenerator.class)
@@ -51,7 +51,7 @@ public class RegisterUser extends ApiConfig {
                 .body(userBodyJson)
                 .when()
                 .post(Endpoints.REGISTER_USER)
-                .then().statusCode(500);
+                .then().statusCode(400);
     }
     // Register user with invalid entry in email field
     @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
