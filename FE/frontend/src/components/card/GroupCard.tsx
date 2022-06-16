@@ -41,6 +41,7 @@ const GroupCard: FC<IGroupCardProps> = ({
         <div>Number of users:</div>
         <div>{numberOfUsers}</div>
       </StyledTextWrapper>
+<<<<<<< Updated upstream
 
       <div
         style={{
@@ -50,6 +51,8 @@ const GroupCard: FC<IGroupCardProps> = ({
       >
         {/* <Avatar src="https://joeschmoe.io/api/v1/random" /> */}
       </div>
+=======
+>>>>>>> Stashed changes
     </StyledCard>
   );
 };

@@ -9,6 +9,7 @@ import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import ListCard from 'components/card/ListCard';
+import PFolders from 'components/folders/PFolders';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -60,85 +61,72 @@ const Files: FC = () => {
   return (
     <StyledPageWrapper>
       <StyledContent>
-        <StyledFilesHeader
-          style={{
-            width: '70vw',
-            margin: '4rem auto',
-            display: 'flex',
-            alignItems: 'flex-end',
-            gap: '10px',
-            justifyContent: 'space-around',
-            flexWrap: 'wrap',
-          }}
-        >
-          <StyledFilesDateFilter>
-            <h4>Filter files by date:</h4>
-            <RangePicker />
-          </StyledFilesDateFilter>
+        <StyledStaticContent>
+          <StyledFoldersContainer>
+            {data?.slice(0, 4).map((value: any) => (
+              <PFolders
+                heading={value?.name}
+                description={value?.description}
+              />
+            ))}
+          </StyledFoldersContainer>
+          <StyledFilesHeader>
+            <StyledFilesDateFilter>
+              <h4>Filter files by date:</h4>
+              <RangePicker />
+            </StyledFilesDateFilter>
 
-          <StyledFilesSlider>
-            <h4>Filter by size:</h4>
-            <Slider style={{ width: '300px' }} range defaultValue={[0, 30]} />
-          </StyledFilesSlider>
-          <StyledFilesSelect>
-            <Select
-              defaultValue="Filter by type"
-              style={{ width: 160 }}
-              onChange={handleChange}
-            >
-              <Option value="jpg">.jpg</Option>
-              <Option value="png">.png</Option>
-              <Option value="txt">.txt</Option>
-              <Option value="pdf">.pdf</Option>
-            </Select>
-            <Select
-              defaultValue="Sort by"
-              style={{ width: 160 }}
-              onChange={handleChange}
-            >
-              <Option value="asc">Ascending</Option>
-              <Option value="desc">Descending</Option>
-              <Option value="newest" disabled>
-                Newest
-              </Option>
-              <Option value="oldest">Oldest</Option>
-            </Select>
-          </StyledFilesSelect>
-          <div>
-            {isList ? (
-              <AppstoreOutlined
-                style={{ fontSize: '2rem', cursor: 'pointer' }}
-                onClick={() => setIsList(!isList)}
-              />
-            ) : (
-              <BarsOutlined
-                style={{ fontSize: '2rem', cursor: 'pointer' }}
-                onClick={() => setIsList(!isList)}
-              />
-            )}
-          </div>
-        </StyledFilesHeader>
-        <StyledFilesWrapper>
-          {data?.map((value: any, index: number) => (
-            <>
-              {isList ? (
-                <ListCard
-                  image={value?.image}
-                  heading={value?.name}
-                  description={value?.description}
-                  onClick={() => onClick(value)}
-                />
-              ) : (
-                <PCard
-                  image={value?.image}
-                  heading={value?.name}
-                  description={value?.description}
-                  onClick={() => onClick(value)}
-                />
-              )}
-            </>
-          ))}
-        </StyledFilesWrapper>
+            <StyledFilesSlider>
+              <h4>Filter by size:</h4>
+              <Slider range defaultValue={[0, 30]} />
+            </StyledFilesSlider>
+            <StyledFilesSelect>
+              <Select defaultValue="Filter by type" onChange={handleChange}>
+                <Option value="jpg">.jpg</Option>
+                <Option value="png">.png</Option>
+                <Option value="txt">.txt</Option>
+                <Option value="pdf">.pdf</Option>
+              </Select>
+              <Select defaultValue="Sort by" onChange={handleChange}>
+                <Option value="asc">Ascending</Option>
+                <Option value="desc">Descending</Option>
+                <Option value="newest" disabled>
+                  Newest
+                </Option>
+                <Option value="oldest">Oldest</Option>
+              </Select>
+              <StyledToggleIcons>
+                {isList ? (
+                  <StyledAppstoreOutlined onClick={() => setIsList(!isList)} />
+                ) : (
+                  <StyledBarsOutlined onClick={() => setIsList(!isList)} />
+                )}
+              </StyledToggleIcons>
+            </StyledFilesSelect>
+          </StyledFilesHeader>
+          <StyledFilesWrapper>
+            {data?.map((value: any, index: number) => (
+              <>
+                {isList ? (
+                  <ListCard
+                    image={value?.image}
+                    heading={value?.name}
+                    description={value?.description}
+                    onClick={() => onClick(value)}
+                  />
+                ) : (
+                  <PCard
+                    image={value?.image}
+                    heading={value?.name}
+                    description={value?.description}
+                    onClick={() => onClick(value)}
+                  />
+                )}
+              </>
+            ))}
+          </StyledFilesWrapper>
+        </StyledStaticContent>
+
         <PFileSider
           title={cardData?.name}
           content={cardData?.description}
@@ -157,72 +145,63 @@ const Files: FC = () => {
   );
 };
 
-const StyledContent = styled.div`
-  display: flex;
-`;
 const StyledPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const StyledFilesWrapper = styled.div`
-  padding: 20px;
+
+const StyledContent = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 25px;
+`;
+
+const StyledStaticContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+  align-items: flex-start;
+  gap: 5rem;
+`;
+
+const StyledFoldersContainer = styled.div`
+  display: flex;
   flex-wrap: wrap;
+  margin-top: 3rem;
+  gap: 2rem;
 `;
 
 const StyledFilesHeader = styled.div`
   width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  justify-content: space-around;
+  flex-wrap: wrap;
   padding: 2rem 0;
   background-color: #fcfcfc;
-  border-radius: 30px;
+  border-radius: 3rem;
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  margin-bottom: 5rem;
   border-bottom: 2px solid #ddd;
+`;
+
+const StyledToggleIcons = styled.div`
+  margin-left: auto;
+`;
+
+const StyledFilesWrapper = styled.div`
+  padding: 0 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
 `;
 
 const StyledFilesSlider = styled.div`
   width: 32rem;
   .ant-slider {
-    margin: 22px 6px 10px;
+    margin: 2.2rem 0.6rem 1rem;
     padding: 0 !important;
   }
-`;
-
-const StyledFilesModal = styled(Modal)`
-  .ant-modal-header {
-    border-radius: 1.2rem;
-    background-color: rgba(220, 220, 220, 0.1);
-    border: 1px solid #fff;
-    border-bottom: 1px solid #eee;
-  }
-
-  .ant-modal-title {
-    color: #555;
-    letter-spacing: 0.5px;
-    font-size: 1.8rem;
-  }
-
-  .ant-modal-content {
-    border-radius: 1.2rem;
-    box-shadow: 1px 3px 4px rgba(255, 255, 255, 0.4);
-  }
-
-  .ant-modal-footer {
-    padding: 1.4rem 2.2rem;
-    border-radius: 1.6rem;
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  }
-`;
-
-const StyledFilesButton = styled(Button)`
-  border-radius: 0.8rem;
 `;
 
 const StyledFilesDateFilter = styled.div`
@@ -232,7 +211,7 @@ const StyledFilesDateFilter = styled.div`
   justify-content: space-between;
 
   .ant-picker {
-    border-radius: 10px;
+    border-radius: 1rem;
   }
 `;
 
@@ -241,11 +220,24 @@ const StyledFilesSelect = styled.div`
   align-self: flex-end;
   display: flex;
   gap: 1rem;
+  align-items: center;
 
   .ant-select-selector {
     border-radius: 10px !important;
     color: #999;
   }
+`;
+
+const StyledAppstoreOutlined = styled(AppstoreOutlined)`
+  font-size: 2rem;
+  cursor: pointer;
+  color: #555;
+`;
+
+const StyledBarsOutlined = styled(BarsOutlined)`
+  font-size: 2rem;
+  cursor: pointer;
+  color: #555;
 `;
 
 export default Files;

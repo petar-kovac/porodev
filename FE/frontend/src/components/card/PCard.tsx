@@ -30,23 +30,17 @@ const PCard: FC<IPCardProps> = ({
         <Meta
           title={heading}
           description={[
-            <div>
+            <StyledMetaCardDescription>
               <span>{description.slice(0, 60)}...</span>
-              <span
-                style={{
-                  fontWeight: 'bold',
-                  marginLeft: '2rem',
-                }}
-              >
-                &rarr; Show more
-              </span>
-            </div>,
+              <span className="show-more">&rarr; Show more</span>
+            </StyledMetaCardDescription>,
           ]}
         />
       </StyledCard>
     </>
   );
 };
+
 const StyledCard = styled(Card).attrs({
   'data-testid': 'files-card',
 })`
@@ -66,6 +60,13 @@ const StyledCard = styled(Card).attrs({
 
   .ant-card-body {
     padding: 1rem 2rem;
+  }
+`;
+
+const StyledMetaCardDescription = styled.div`
+  .show-more {
+    font-weight: bold;
+    margin-left: 2rem;
   }
 `;
 

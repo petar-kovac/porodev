@@ -22,50 +22,48 @@ const ListCard: FC<IListCardProps> = ({
 }) => {
   return (
     <>
-      <StyledCard
-        hoverable
-        role="button"
-        onDoubleClick={onDoubleClick}
-        onClick={onClick}
-      >
-        <Meta
-          description={[
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingTop: '5px',
-              }}
-            >
-              <div>
-                <h3>{heading}</h3>
-                <span>Click/DoubleClick for more!</span>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <h4>Uploaded:</h4>
-                <span>{description.slice(0, 15)}</span>
-              </div>
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <StyledFilesButton>Remove file</StyledFilesButton>
-                <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-                  Download
-                </StyledFilesButton>
-              </div>
-            </div>,
-          ]}
-        />
-      </StyledCard>
+      <StyledCardContainer>
+        <StyledCard
+          hoverable
+          role="button"
+          onDoubleClick={onDoubleClick}
+          onClick={onClick}
+        >
+          <Meta
+            description={[
+              <StyledMetaDescription>
+                <div>
+                  <h3>{heading}</h3>
+                  <span>Click/DoubleClick for more!</span>
+                </div>
+                <StyledDescriptionUploadDetails>
+                  <h4>Uploaded:</h4>
+                  <span>{description.slice(0, 15)}</span>
+                </StyledDescriptionUploadDetails>
+                <StyledDescriptionButtons>
+                  <StyledFilesButton>Remove file</StyledFilesButton>
+                  <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
+                    Download
+                  </StyledFilesButton>
+                </StyledDescriptionButtons>
+              </StyledMetaDescription>,
+            ]}
+          />
+        </StyledCard>
+      </StyledCardContainer>
     </>
   );
 };
+
+const StyledCardContainer = styled.div`
+  width: 100%;
+`;
 
 const StyledCard = styled(Card)`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 7.5rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  width: 70vw;
 
   .ant-card-cover {
     height: 14rem;
@@ -82,6 +80,22 @@ const StyledCard = styled(Card)`
 
 const StyledFilesButton = styled(Button)`
   border-radius: 0.8rem;
+`;
+
+const StyledMetaDescription = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+`;
+
+const StyledDescriptionButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const StyledDescriptionUploadDetails = styled.div`
+  text-align: center;
 `;
 
 export default ListCard;
