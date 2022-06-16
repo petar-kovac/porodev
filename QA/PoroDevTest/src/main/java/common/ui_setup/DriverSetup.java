@@ -33,7 +33,7 @@ public class DriverSetup {
         driver.manage().deleteAllCookies();
     }
 
-    public static void navigateToUrl(String url, WebDriver driver) {
+    public static void navigateToUrl(WebDriver driver, String url) {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
         driver.get(url);

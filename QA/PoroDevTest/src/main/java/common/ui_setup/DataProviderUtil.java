@@ -40,10 +40,11 @@ public class DataProviderUtil {
     @DataProvider(name = "validEmailForms")
     public static Object[][] validEmailForms() {
         return new Object[][]{
+                {"markomarko@boing.rs"},
                 {"marko-ilic@boing.rs"},
                 {"marko.ilic@boing.rs"},
                 {"marko_ilic@boing.rs"},
         };
-
     }
+
 }

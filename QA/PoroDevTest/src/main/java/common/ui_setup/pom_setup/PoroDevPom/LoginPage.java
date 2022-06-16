@@ -18,7 +18,7 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver, String url) {
         super(driver);
-        DriverSetup.navigateToUrl(SetupConstants.BASE_URL, driver);
+        DriverSetup.navigateToUrl(driver, url);
     }
 
     //element section
@@ -26,22 +26,15 @@ public class LoginPage extends BasePage {
     WebElement we_emailInputField;
     @FindBy(name = "password")
     WebElement we_passInputField;
-    @FindBy(className = "ant-btn-primary")
+    @FindBy(className = "ant-btn-default")
     WebElement we_loginButton;
+
     //ASSERTION ELEMENTS
-    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[1]/span[2]")
-    WebElement we_email_requiredMsg;
-    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[2]/span[3]")
-    WebElement we_pass_requiredMsg;
-    @FindBy(xpath = "//span[contains(text(),'Email is invalid')]")
-    WebElement we_email_invalidMsg;
-    @FindBy(xpath = "//span[contains(text(),'Wrong password')]")
-    WebElement we_pass_invalidMsg;
     @FindBy(xpath = "//span[contains(text(),'Successful login')]")
     WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
     WebElement we_badRequestError;
-    @FindBy(className = "sc-hHLeRK")
+    @FindBy(xpath = "//span[@data-testid='error-message']")
     List<WebElement> we_listOfErrors;
 
     //functional methods section

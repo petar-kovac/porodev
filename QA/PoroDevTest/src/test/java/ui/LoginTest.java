@@ -37,12 +37,12 @@ public class LoginTest extends BaseTest {
     }
 
     @Test(priority = 2)
-    public void login_with_valid_notExistingUserPassword() throws InterruptedException {
+    public void login_with_valid_notMatchingUserPassword() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
         loginPage.login(
                 fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
-                fileControlUtil.getValue("VALID_NOT_EXISTING_USER_PASSWORD"));
+                fileControlUtil.getValue("VALID_NOT_MATCHING_USER_PASSWORD"));
 
         loginPage.assert_login_with_valid_notExistingCredentials("Cannot read properties of undefined (reading 'data')");
     }
@@ -64,7 +64,7 @@ public class LoginTest extends BaseTest {
 
         loginPage.login(
                 fileControlUtil.getValue("VALID_NOT_EXISTING_USER_EMAIL"),
-                fileControlUtil.getValue("VALID_NOT_EXISTING_USER_PASSWORD"));
+                fileControlUtil.getValue("VALID_FORM_PASS"));
 
         loginPage.assert_login_with_valid_notExistingCredentials("Cannot read properties of undefined (reading 'data')");
     }

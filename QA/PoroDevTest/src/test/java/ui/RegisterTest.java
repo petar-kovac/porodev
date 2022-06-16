@@ -18,7 +18,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 1)
-    public void register_with_valid_credentials() throws InterruptedException {
+    public void register_with_valid_credentials() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -37,7 +37,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 2, dataProvider = "validEmailForms", dataProviderClass = DataProviderUtil.class)
-    public void register_with_valid_emailForms(String validEmailForms) throws InterruptedException {
+    public void register_with_valid_emailForms(String validEmailForms) {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -56,7 +56,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 3)
-    public void register_without_firstName() throws InterruptedException {
+    public void register_without_firstName() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -72,7 +72,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 4)
-    public void register_without_lastName() throws InterruptedException {
+    public void register_without_lastName() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -88,7 +88,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 5)
-    public void register_without_email() throws InterruptedException {
+    public void register_without_email() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -104,7 +104,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 6)
-    public void register_without_password() throws InterruptedException {
+    public void register_without_password() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -120,7 +120,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 7)
-    public void register_without_confirmationPassword() throws InterruptedException {
+    public void register_without_confirmationPassword() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -136,7 +136,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 8)
-    public void register_without_department() throws InterruptedException {
+    public void register_without_department() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -152,7 +152,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 9)
-    public void register_without_position() throws InterruptedException {
+    public void register_without_position() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -168,7 +168,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 10)
-    public void register_with_invalidForm_firstName() throws InterruptedException {
+    public void register_with_invalidForm_firstName() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -184,7 +184,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 11)
-    public void register_with_invalidForm_lastName() throws InterruptedException {
+    public void register_with_invalidForm_lastName() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -200,7 +200,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 12)
-    public void register_with_invalidForm_firstName_moreThan20Char() throws InterruptedException {
+    public void register_with_invalidForm_firstName_moreThan20Char() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -216,7 +216,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 13)
-    public void register_with_invalidForm_lastName_moreThan20Char() throws InterruptedException {
+    public void register_with_invalidForm_lastName_moreThan20Char() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -234,7 +234,7 @@ public class RegisterTest extends BaseTest{
 
 
     @Test(priority = 14, dataProvider = "invalidFormEmail", dataProviderClass = DataProviderUtil.class)
-    public void register_with_invalidForm_email(String invalidEmailForm) throws InterruptedException {
+    public void register_with_invalidForm_email(String invalidEmailForm) {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -250,7 +250,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 15)
-    public void register_with_invalidForm_email_moreThan50Char() throws InterruptedException {
+    public void register_with_invalidForm_email_moreThan50Char() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -266,7 +266,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 16)
-    public void register_with_already_existing_email() throws InterruptedException {
+    public void register_with_already_existing_email() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -284,7 +284,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 17, dataProvider = "invalidPasswordForm", dataProviderClass = DataProviderUtil.class)
-    public void register_with_invalidFormPass(String invalidPasswordForms) throws InterruptedException {
+    public void register_with_invalidFormPass(String invalidPasswordForms) {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -300,7 +300,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 18, dataProvider = "invalidPassForm_with_whitespace", dataProviderClass = DataProviderUtil.class)
-    public void register_with_invalidFormPass_whitespace_betweenChar(String pass_with_whiteSpace) throws InterruptedException {
+    public void register_with_invalidFormPass_whitespace_betweenChar(String pass_with_whiteSpace) {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -316,7 +316,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 19)
-    public void register_withNotMatching_confirmPassword()throws InterruptedException {
+    public void register_withNotMatching_confirmPassword() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -332,7 +332,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 20)
-    public void register_with_wrongFormat_department() throws InterruptedException {
+    public void register_with_wrongFormat_department() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(
@@ -348,7 +348,7 @@ public class RegisterTest extends BaseTest{
     }
 
     @Test(priority = 21)
-    public void register_with_wrongFormat_position() throws InterruptedException {
+    public void register_with_wrongFormat_position() {
         RegistrationPage registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
 
         registrationPage.registerUser(

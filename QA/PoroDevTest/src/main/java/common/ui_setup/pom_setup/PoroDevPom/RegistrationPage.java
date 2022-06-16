@@ -15,7 +15,6 @@ import java.util.List;
 
 public class RegistrationPage extends BasePage {
     private WebDriverWait wait;
-    private WebElement element;
 
     public RegistrationPage(WebDriver driver) {
         super(driver);
@@ -23,7 +22,7 @@ public class RegistrationPage extends BasePage {
 
     public RegistrationPage(WebDriver driver, String url) {
         super(driver);
-        DriverSetup.navigateToUrl(SetupConstants.BASE_URL, driver);
+        DriverSetup.navigateToUrl(driver, url);
     }
 
     //FIELD SECTION
@@ -49,51 +48,18 @@ public class RegistrationPage extends BasePage {
     WebElement we_createNewAccount_button;
 
     //ERROR MESSAGE SECTION
-    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[1]/span[2]")
-    public WebElement we_firstName_errorMsg;
-    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[2]/span[2]")
-    public WebElement we_lastName_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Email is invalid')]")
-    public WebElement we_email_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Wrong password')]")
-    public WebElement we_password_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Whitespace not allowed')]")
-    public WebElement we_password_whiteSpace_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Passwords should match')]")
-    public WebElement we_confirmPass_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Must be a number')]")
-    public WebElement we_department_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Letters & whitespace only')]")
-    public WebElement we_position_errorMsg;
-    @FindBy(xpath = "//span[contains(text(),'Request failed with status code 500')]")
-    public WebElement we_requestFailed_statusCode500;
     @FindBy(xpath = "//span[contains(text(),'Request failed with status code 400')]")
     public WebElement we_requestFailed_statusCode400;
 
     //REQUIRED MESSAGE SECTION
-    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[1]/span[2]")
-    public WebElement we_firstName_requiredMsg;
-    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[2]/span[2]")
-    public WebElement we_lastName_requiredMsg;
-    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[3]/span[2]")
-    public WebElement we_email_requiredMsg;
-    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[4]/span[3]")
-    public WebElement we_password_requiredMsg;
-    @FindBy(xpath = "//body/div[@id='root']/div[1]/div[1]/form[1]/div[5]/span[3]")
-    public WebElement we_confirmPass_requiredMsg;
-    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[6]/span[2]")
-    public WebElement we_department_requiredMsg;
-    @FindBy(xpath = "//*[@id=\"registerForm\"]/div[7]/span[2]")
-    public WebElement we_position_requiredMsg;
-    @FindBy(className = "sc-hHLeRK")
+    @FindBy(xpath = "//span[@data-testid='error-message']")
     List<WebElement> we_errorFields;
 
     //SUCCESSFUL MESSAGE SECTION
     @FindBy(xpath = "//span[contains(text(),'Successful registration')]")
     public WebElement we_successful_registrationMsg;
 
-    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) throws InterruptedException {
-
+    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) {
 
         BasePage.clickElement(we_createNewAccount_button);
         BasePage.sendText(we_firstName_inputField, firstName);
