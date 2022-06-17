@@ -1,13 +1,15 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
+import { IFilesCard, IGroupCard } from 'layout/sider/PFileSider';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 interface IPModalProps {
   isModalVisible?: boolean;
   title?: string;
-  content: string;
+  content?: string;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
+  cardData?: IGroupCard | IFilesCard;
 }
 
 const PModal: FC<IPModalProps> = ({

@@ -7,14 +7,14 @@ import ListCard from 'components/card/ListCard';
 import PFilter from 'components/filter/PFilter';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
-import PFileSider from 'layout/sider/PFileSider';
+import PFileSider, { IFilesCard } from 'layout/sider/PFileSider';
 
 const Files: FC = () => {
-  const [data, setData] = useState<[]>([]);
+  const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [cardData, setCardData] = useState<any>();
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
+  const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
 
   const count = useRef(0);
 
@@ -32,7 +32,7 @@ const Files: FC = () => {
       }
 
       count.current = 0;
-    }, 300);
+    }, 250);
   }, []);
 
   useEffect(() => {
@@ -61,7 +61,17 @@ const Files: FC = () => {
             ))}
           </StyledFoldersContainer>
           <PFilterWrapper>
-            <PFilter isList={isList} setIsList={setIsList} />
+            <PFilter
+              isList={isList}
+              setIsList={setIsList}
+              activeFilters={{
+                showFilterByDate: true,
+                showSortByTime: true,
+                showSortByType: true,
+                showFilterBySize: true,
+                showToggleButton: true,
+              }}
+            />
           </PFilterWrapper>
           <StyledFilesWrapper>
             {data?.map((value: any) => (
@@ -87,23 +97,21 @@ const Files: FC = () => {
         </StyledStaticContent>
 
         <PFileSider
-          title={cardData?.name}
-          content={cardData?.description}
+          cardData={cardData}
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
+          type="folder"
         />
       </StyledContent>
 
       <PModal
         isModalVisible={isModalVisible}
-        title={cardData?.name}
-        content={cardData?.description}
+        cardData={cardData}
         setIsModalVisible={setIsModalVisible}
       />
     </StyledPageWrapper>
   );
 };
-
 const PFilterWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -117,6 +125,7 @@ const PFilterWrapper = styled.div`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   border-bottom: 2px solid #ddd;
 `;
+
 const StyledPageWrapper = styled.div`
   display: flex;
   flex-direction: column;

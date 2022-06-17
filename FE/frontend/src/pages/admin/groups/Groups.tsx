@@ -6,14 +6,14 @@ import GroupCard from 'components/card/GroupCard';
 import ListCard from 'components/card/ListCard';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
-import PFileSider from 'layout/sider/PFileSider';
+import PFileSider, { IGroupCard } from 'layout/sider/PFileSider';
 
 const Groups: FC = () => {
-  const [data, setData] = useState<[]>([]);
+  const [data, setData] = useState<IGroupCard[] | undefined>();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [cardData, setCardData] = useState<any>();
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
+  const [cardData, setCardData] = useState<IGroupCard | undefined>(undefined);
 
   const count = useRef(0);
 
@@ -31,7 +31,7 @@ const Groups: FC = () => {
       }
 
       count.current = 0;
-    }, 300);
+    }, 250);
   }, []);
 
   useEffect(() => {
@@ -48,56 +48,85 @@ const Groups: FC = () => {
 
   return (
     <StyledPageWrapper>
-      <StyledContent>
-        <StyledStaticContent>
-          <PFilter isList={isList} setIsList={setIsList} />
-          <StyledFilesWrapper>
-            {data?.map((value: any) => (
-              <>
-                {isList ? (
-                  <ListCard
-                    image={value?.image}
-                    heading={value?.name}
-                    description={value?.description}
-                    onClick={() => onClick(value)}
-                  />
-                ) : (
-                  <GroupCard
-                    groupName={value.groupName}
-                    isModerator={value.isModerator}
-                    moderatorName={value.moderatorName}
-                    numberOfFiles={value.numberOfFiles}
-                    numberOfUsers={value.numberOfUsers}
-                    onClick={() => onClick(value)}
-                    uuid={value.uuid}
-                  />
-                )}
-              </>
-            ))}
-          </StyledFilesWrapper>
-        </StyledStaticContent>
-
-        <PFileSider
-          title={cardData?.groupName}
-          content={cardData?.moderatorName}
-          isSiderVisible={isSiderVisible}
-          setIsSiderVisible={setIsSiderVisible}
-        />
-      </StyledContent>
-
+      <StyledStaticContent>
+        <StyledHeadingWrapper>
+          <StyledHeading>
+            <StyledHeadingText>Your groups: </StyledHeadingText>
+          </StyledHeading>
+          <StyledFilterWrapper>
+            <PFilter
+              isList={isList}
+              setIsList={setIsList}
+              activeFilters={{
+                showSortByType: true,
+                showSortByTime: true,
+              }}
+            />
+          </StyledFilterWrapper>
+        </StyledHeadingWrapper>
+        <StyledFilesWrapper>
+          {data?.map((value: any) => (
+            <>
+              {isList ? (
+                <ListCard
+                  image={value?.image}
+                  heading={value?.name}
+                  description={value?.description}
+                  onClick={() => onClick(value)}
+                />
+              ) : (
+                <GroupCard
+                  groupName={value.groupName}
+                  isModerator={value.isModerator}
+                  moderatorName={value.moderatorName}
+                  numberOfFiles={value.numberOfFiles}
+                  numberOfUsers={value.numberOfUsers}
+                  onClick={() => onClick(value)}
+                  uuid={value.uuid}
+                />
+              )}
+            </>
+          ))}
+        </StyledFilesWrapper>
+      </StyledStaticContent>
+      <PFileSider
+        isSiderVisible={isSiderVisible}
+        setIsSiderVisible={setIsSiderVisible}
+        cardData={cardData}
+        type="file"
+      />
       <PModal
         isModalVisible={isModalVisible}
-        title={cardData?.groupName}
-        content={cardData?.moderatorName}
         setIsModalVisible={setIsModalVisible}
+        cardData={cardData}
       />
     </StyledPageWrapper>
   );
 };
 
+const StyledFilterWrapper = styled.div`
+  display: flex;
+  flex: 1;
+`;
+const StyledHeading = styled.div`
+  display: flex;
+  flex: 1;
+`;
+export const StyledHeadingText = styled.div`
+  font-size: 24px;
+  color: ${({ theme: { colors } }) => colors.primary};
+  font-weight: 600;
+`;
+
+const StyledHeadingWrapper = styled.div`
+  width: 100%;
+  padding: 20px;
+  align-items: center;
+  display: flex;
+`;
+
 const StyledPageWrapper = styled.div`
   display: flex;
-  flex-direction: column;
 `;
 
 const StyledContent = styled.div`
@@ -109,7 +138,6 @@ const StyledStaticContent = styled.div`
   flex-direction: column;
   width: 80%;
   margin: 0 auto;
-  align-items: flex-start;
   gap: 5rem;
 `;
 

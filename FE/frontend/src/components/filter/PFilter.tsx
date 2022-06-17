@@ -6,7 +6,6 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 const { RangePicker } = DatePicker;
-const { Option } = Select;
 
 interface IPFilterProps {
   isList: boolean;
@@ -36,6 +35,13 @@ const PFilter: FC<IPFilterProps> = ({
     { value: '4', key: '4', children: '.cscs' },
   ];
 
+  const data2 = [
+    { value: '1', key: '1', children: 'Ascending' },
+    { value: '2', key: '2', children: 'Descending' },
+    { value: '3', key: '3', children: 'Newest' },
+    { value: '4', key: '4', children: 'Oldest' },
+  ];
+
   const handleChange = (
     value: string,
     option: DefaultOptionType | DefaultOptionType[],
@@ -62,24 +68,21 @@ const PFilter: FC<IPFilterProps> = ({
 
       <StyledFilesSelect>
         {propsObj.showSortByType && (
-          <>
-            <PSelect
-              defaultValue="File type"
-              onChange={handleChange}
-              data={data}
-            />
-          </>
+          <PSelect
+            defaultValue="File type"
+            onChange={handleChange}
+            data={data}
+          />
         )}
+
         {propsObj.showSortByTime && (
-          <Select defaultValue="Sort by" onChange={handleChange}>
-            <Option value="asc">Ascending</Option>
-            <Option value="desc">Descending</Option>
-            <Option value="newest" disabled>
-              Newest
-            </Option>
-            <Option value="oldest">Oldest</Option>
-          </Select>
+          <PSelect
+            defaultValue="File type"
+            onChange={handleChange}
+            data={data2}
+          />
         )}
+
         {propsObj.showToggleButton && (
           <StyledToggleButton>
             {isList ? (

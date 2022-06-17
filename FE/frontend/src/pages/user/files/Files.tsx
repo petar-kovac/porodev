@@ -7,14 +7,14 @@ import ListCard from 'components/card/ListCard';
 import PFilter from 'components/filter/PFilter';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
-import PFileSider from 'layout/sider/PFileSider';
+import PFileSider, { IFilesCard } from 'layout/sider/PFileSider';
 
 const Files: FC = () => {
-  const [data, setData] = useState<[]>([]);
+  const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [cardData, setCardData] = useState<any>();
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
+  const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
 
   const count = useRef(0);
 
@@ -32,7 +32,7 @@ const Files: FC = () => {
       }
 
       count.current = 0;
-    }, 300);
+    }, 250);
   }, []);
 
   useEffect(() => {
@@ -97,17 +97,16 @@ const Files: FC = () => {
         </StyledStaticContent>
 
         <PFileSider
-          title={cardData?.name}
-          content={cardData?.description}
+          cardData={cardData}
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
+          type="folder"
         />
       </StyledContent>
 
       <PModal
         isModalVisible={isModalVisible}
-        title={cardData?.name}
-        content={cardData?.description}
+        cardData={cardData}
         setIsModalVisible={setIsModalVisible}
       />
     </StyledPageWrapper>
