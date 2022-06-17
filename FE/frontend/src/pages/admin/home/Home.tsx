@@ -1,18 +1,29 @@
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import theme from 'theme/theme';
-import GridCard from 'components/card/GridCard';
-import PList from 'components/list/List';
-import Spinner from 'components/spinner/Spinner';
-import PButton from 'components/buttons/PButton';
-
+import DashboardCard from 'components/card/DashboardCard';
+import StackedArea from 'components/dashboard/StackedArea';
 import useAdminsData from '../admins/hooks/useAdminsData';
 
+const stackedAreaData = [
+  { department: 'Department 1', date: 2010, value: 24 },
+  { department: 'Department 1', date: 2011, value: 293 },
+  { department: 'Department 2', date: 2012, value: 34 },
+  { department: 'Department 1', date: 2013, value: 340 },
+  { department: 'Department 2', date: 2014, value: 395 },
+  { department: 'Department 2', date: 2015, value: 412 },
+  { department: 'Department 2', date: 2016, value: 204 },
+  { department: 'Department 1', date: 2017, value: 250 },
+  { department: 'Department 1', date: 2018, value: 450 },
+  { department: 'Department 2', date: 2019, value: 524 },
+  { department: 'Department 1', date: 2020, value: 653 },
+  { department: 'Department 2', date: 2021, value: 694 },
+  { department: 'Department 1', date: 2022, value: 459 },
+];
+
 const Home: FC = () => {
-  const [filesData, setFilesData] = useState<[]>([]);
+  const [dashboardData, setDashboardData] = useState<[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>();
 
   const { findData, data } = useAdminsData();
@@ -24,7 +35,7 @@ const Home: FC = () => {
         const res = await axios.get(
           `${process.env.REACT_APP_MOCK_URL_2}/dashboard`,
         );
-        setFilesData(res.data);
+        setDashboardData(res.data);
       } catch (err) {
         console.log(err);
       } finally {
@@ -36,111 +47,31 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <StyledPage>
-      <StyledUploadWrapper>
-        <StyledListWrapper>
-          <StyledHeading>Admins</StyledHeading>
-          <PList data={data?.slice(0, 4)} />
-        </StyledListWrapper>
-        <StyledListWrapper>
-          <StyledHeading>Users</StyledHeading>
-          <PList data={data?.reverse().slice(0, 4)} />
-        </StyledListWrapper>
-      </StyledUploadWrapper>
-      {!isLoading ? (
-        <StyledCardListWrapper>
-          <StyledCardHeading>
-            Here is the preview of the latest uploaded files
-          </StyledCardHeading>
-          <StyledCardWrapper>
-            {/* fix when backend is implemented */}
-            {filesData?.slice(0, 5).map((value: any, index: any) => (
-              <GridCard
-                heading={value?.name}
-                description={value?.description}
-                image={value?.image}
-              />
-            ))}
-          </StyledCardWrapper>
-          <StyledShowMoreButton>
-            <Link to="/files">
-              <PButton
-                text="Show more files"
-                color="#fff"
-                borderRadius="12px"
-                background={theme.colors.primary}
-              />
-            </Link>
-          </StyledShowMoreButton>
-        </StyledCardListWrapper>
-      ) : (
-        <StyledSpinnerWrappper>
-          <Spinner color="#000" size={42} speed={1.2} />
-        </StyledSpinnerWrappper>
-      )}
-    </StyledPage>
+    <StyledHome>
+      <StyledDashboardCardContainer>
+        {dashboardData?.slice(0, 4).map((value: any) => (
+          <DashboardCard
+            title={value?.title}
+            numberOfAdmins={value?.numberOfAdmins}
+            numberOfFiles={value?.numberOfFiles}
+          />
+        ))}
+      </StyledDashboardCardContainer>
+      <div className="charts">
+        <StackedArea data={stackedAreaData} />
+      </div>
+    </StyledHome>
   );
 };
 
-const StyledSpinnerWrappper = styled.div`
-  display: flex;
-  flex: 1.1;
-  justify-content: center;
-  align-items: center;
-`;
-const StyledHeading = styled.div`
-  font-size: 42px;
-  display: flex;
-  font-weight: 600;
-  margin: 20px 0;
-`;
-const StyledPage = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+const StyledHome = styled.div`
+  margin: 3rem;
 `;
 
-const StyledListWrapper = styled.div`
+const StyledDashboardCardContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex: 1;
-`;
-const StyledUploadWrapper = styled.div`
-  display: flex;
-  flex: 1.1;
-  justify-content: center;
-  align-items: center;
-  margin: 0 100px;
-`;
-const StyledCardListWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 20px;
-`;
-const StyledCardWrapper = styled.div`
-  flex: 1;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-x: auto;
-  height: 100px;
-`;
-const StyledCardHeading = styled.div`
-  font-size: 20px;
-  display: flex;
-  justify-content: center;
-  font-weight: 300;
-  color: #555;
-`;
-const StyledShowMoreButton = styled.div`
-  display: flex;
-  justify-content: center;
-  font-weight: 300;
-  color: #555;
-  margin-bottom: 5%;
+  flex-wrap: wrap;
+  gap: 2rem;
 `;
 
 export default Home;
