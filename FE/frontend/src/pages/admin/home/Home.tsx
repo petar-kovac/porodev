@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import DashboardCard from 'components/card/DashboardCard';
 import StackedArea from 'components/dashboard/StackedArea';
+import ColumnChart from 'components/dashboard/ColumnChart';
 import useAdminsData from '../admins/hooks/useAdminsData';
 
 const stackedAreaData = [
@@ -20,6 +21,29 @@ const stackedAreaData = [
   { department: 'Department 1', date: 2020, value: 653 },
   { department: 'Department 2', date: 2021, value: 694 },
   { department: 'Department 1', date: 2022, value: 459 },
+];
+
+const columnChartData = [
+  {
+    day: 'Monday',
+    value: 3,
+  },
+  {
+    day: 'Tuesday',
+    value: 5,
+  },
+  {
+    day: 'Wednesday',
+    value: 2,
+  },
+  {
+    day: 'Thursday',
+    value: 3,
+  },
+  {
+    day: 'Friday',
+    value: 4,
+  },
 ];
 
 const Home: FC = () => {
@@ -57,9 +81,10 @@ const Home: FC = () => {
           />
         ))}
       </StyledDashboardCardContainer>
-      <div className="charts">
+      <StyledChartsContainer>
         <StackedArea data={stackedAreaData} />
-      </div>
+        <ColumnChart columnData={columnChartData} />
+      </StyledChartsContainer>
     </StyledHome>
   );
 };
@@ -72,6 +97,10 @@ const StyledDashboardCardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
+`;
+
+const StyledChartsContainer = styled.div`
+  display: flex;
 `;
 
 export default Home;
