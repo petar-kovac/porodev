@@ -21,9 +21,10 @@ const Home: FC = () => {
     const fetchCards = async () => {
       setIsLoading(true);
       try {
-        await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/files`)
-          .then((res) => setFilesData(res.data));
+        const res = await axios.get(
+          `${process.env.REACT_APP_MOCK_URL_2}/dashboard`,
+        );
+        setFilesData(res.data);
       } catch (err) {
         console.log(err);
       } finally {
