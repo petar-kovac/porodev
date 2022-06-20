@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Layout } from 'antd';
 
 import GroupCard from 'components/card/GroupCard';
 import ListCard from 'components/card/ListCard';
@@ -8,6 +9,8 @@ import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import { IGroupCard } from 'types/card-data';
+
+const { Sider, Content } = Layout;
 
 const Groups: FC = () => {
   const [data, setData] = useState<IGroupCard[] | undefined>();
@@ -48,12 +51,10 @@ const Groups: FC = () => {
   }, []);
 
   return (
-    <StyledPageWrapper>
-      <StyledStaticContent>
+    <Layout>
+      <StyledContent>
         <StyledHeadingWrapper>
-          <StyledHeading>
-            <StyledHeadingText>Your groups: </StyledHeadingText>
-          </StyledHeading>
+          <StyledHeadingText>Your groups: </StyledHeadingText>
           <StyledFilterWrapper>
             <PFilter
               isList={isList}
@@ -65,53 +66,64 @@ const Groups: FC = () => {
             />
           </StyledFilterWrapper>
         </StyledHeadingWrapper>
-        <StyledFilesWrapper>
-          {data?.map((value: any) => (
-            <>
-              {isList ? (
-                <ListCard
-                  image={value?.image}
-                  heading={value?.name}
-                  description={value?.description}
-                  onClick={() => onClick(value)}
-                />
-              ) : (
-                <GroupCard
-                  groupName={value.groupName}
-                  isModerator={value.isModerator}
-                  moderatorName={value.moderatorName}
-                  numberOfFiles={value.numberOfFiles}
-                  numberOfUsers={value.numberOfUsers}
-                  onClick={() => onClick(value)}
-                  uuid={value.uuid}
-                />
-              )}
-            </>
-          ))}
-        </StyledFilesWrapper>
-      </StyledStaticContent>
+        <StyledStaticContent>
+          <StyledFilesWrapper>
+            {data?.map((value: any) => (
+              <>
+                {isList ? (
+                  <ListCard
+                    image={value?.image}
+                    heading={value?.name}
+                    description={value?.description}
+                    onClick={() => onClick(value)}
+                  />
+                ) : (
+                  <GroupCard
+                    groupName={value.groupName}
+                    isModerator={value.isModerator}
+                    moderatorName={value.moderatorName}
+                    numberOfFiles={value.numberOfFiles}
+                    numberOfUsers={value.numberOfUsers}
+                    onClick={() => onClick(value)}
+                    uuid={value.uuid}
+                  />
+                )}
+              </>
+            ))}
+          </StyledFilesWrapper>
+        </StyledStaticContent>
+
+        <PModal
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          cardData={cardData}
+        />
+      </StyledContent>
       <PFileSider
         isSiderVisible={isSiderVisible}
         setIsSiderVisible={setIsSiderVisible}
         cardData={cardData}
         type="file"
       />
-      <PModal
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
-        cardData={cardData}
-      />
-    </StyledPageWrapper>
+    </Layout>
   );
 };
+const StyledContent = styled(Content)`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
 
 const StyledFilterWrapper = styled.div`
   display: flex;
   flex: 1;
+  align-items: flex-end;
+  justify-content: flex-end;
 `;
 const StyledHeading = styled.div`
   display: flex;
   flex: 1;
+  justify-content: flex-end;
 `;
 export const StyledHeadingText = styled.div`
   font-size: 24px;
@@ -130,15 +142,16 @@ const StyledPageWrapper = styled.div`
   display: flex;
 `;
 
-const StyledContent = styled.div`
-  display: flex;
-`;
+// const StyledContent = styled.div`
+//   display: flex;
+// `;
 
 const StyledStaticContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
   margin: 0 auto;
+  align-items: flex-start;
   gap: 5rem;
 `;
 
@@ -154,6 +167,7 @@ const StyledFilesWrapper = styled.div`
   display: flex;
   justify-content: center;
   gap: 2.5rem;
+  width: 90%; // fix not to break card until grid has been implemented
   flex-wrap: wrap;
 `;
 

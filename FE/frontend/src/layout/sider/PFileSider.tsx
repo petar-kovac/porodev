@@ -7,8 +7,8 @@ import { CloseOutlined, FileOutlined, FolderFilled } from '@ant-design/icons';
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import StyledIcon from 'styles/icons/StyledIcons';
-import SiderData from './util/SiderData';
 import { StyledClose } from 'styles/icons/styled-icons';
+import SiderData from './util/SiderData';
 
 const { Sider } = Layout;
 
