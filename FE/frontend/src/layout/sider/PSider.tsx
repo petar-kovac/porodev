@@ -119,6 +119,7 @@ const StyledSider = styled(Sider).attrs({
 
   .ant-layout-sider-trigger {
     box-shadow: 1px 0px 6px rgba(34, 25, 25, 0.1);
+    border-top-right-radius: 0.8rem;
   }
 
   .ant-layout-sider-children {

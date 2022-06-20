@@ -94,13 +94,17 @@ const StyledHome = styled.div`
 `;
 
 const StyledDashboardCardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  grid-column-gap: 2rem;
+  grid-row-gap: 3rem;
 `;
 
 const StyledChartsContainer = styled.div`
-  display: flex;
+  margin-top: 7rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+  grid-column-gap: 2rem;
 `;
 
 export default Home;
