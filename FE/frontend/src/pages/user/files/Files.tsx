@@ -7,7 +7,8 @@ import ListCard from 'components/card/ListCard';
 import PFilter from 'components/filter/PFilter';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
-import PFileSider, { IFilesCard } from 'layout/sider/PFileSider';
+import PFileSider from 'layout/sider/PFileSider';
+import { IFilesCard } from 'types/card-data';
 
 const Files: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);

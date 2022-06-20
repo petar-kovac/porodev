@@ -4,6 +4,10 @@ import { DefaultOptionType } from 'antd/lib/select';
 import PSelect from 'components/select/PSelect';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
+import {
+  StyledAppstoreOutlined,
+  StyledBarsOutlined,
+} from 'styles/icons/styled-icons';
 
 const { RangePicker } = DatePicker;
 
@@ -137,18 +141,6 @@ const StyledFilesSelect = styled.div`
     border-radius: 10px !important;
     color: #999;
   }
-`;
-
-const StyledAppstoreOutlined = styled(AppstoreOutlined)`
-  font-size: 2rem;
-  cursor: pointer;
-  color: #555;
-`;
-
-const StyledBarsOutlined = styled(BarsOutlined)`
-  font-size: 2rem;
-  cursor: pointer;
-  color: #555;
 `;
 
 export default PFilter;

@@ -6,7 +6,8 @@ import GroupCard from 'components/card/GroupCard';
 import ListCard from 'components/card/ListCard';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
-import PFileSider, { IGroupCard } from 'layout/sider/PFileSider';
+import PFileSider from 'layout/sider/PFileSider';
+import { IGroupCard } from 'types/card-data';
 
 const Groups: FC = () => {
   const [data, setData] = useState<IGroupCard[] | undefined>();

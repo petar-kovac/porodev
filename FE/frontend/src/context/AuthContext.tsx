@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { StorageKey } from 'util/enums/storage-keys';
 
 import { loginApi, registerApi } from '../service/authorization/authorization';
 import {
@@ -18,7 +19,6 @@ import {
   IRegisterRequest,
   IRegisterResponse,
 } from '../service/authorization/authorization.props';
-import { StorageKey } from '../util/enums/enums';
 
 type AuthContextProps = {
   isAuthenticated: boolean;

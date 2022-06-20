@@ -1,8 +1,8 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { IFilesCard, IGroupCard } from 'layout/sider/PFileSider';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { IFilesCard, IGroupCard } from 'types/card-data';
 
 interface IPModalProps {
   isModalVisible?: boolean;

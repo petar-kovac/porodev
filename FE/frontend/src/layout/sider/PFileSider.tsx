@@ -1,16 +1,14 @@
-import { Button, Layout } from 'antd';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Layout } from 'antd';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
-import {
-  CloseOutlined,
-  CreditCardOutlined,
-  FileOutlined,
-  FolderFilled,
-} from '@ant-design/icons';
-import dayjs from 'dayjs';
+import { IGroupCard, IFilesCard } from 'types/card-data';
+import { CloseOutlined, FileOutlined, FolderFilled } from '@ant-design/icons';
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
+import StyledIcon from 'styles/icons/StyledIcons';
+import SiderData from './util/SiderData';
+import { StyledClose } from 'styles/icons/styled-icons';
 
 const { Sider } = Layout;
 
@@ -19,45 +17,6 @@ interface IPFileSiderProps {
   cardData?: IGroupCard | IFilesCard;
   type: 'folder' | 'file';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
-}
-export interface IGroupCard {
-  titleGroup?: string;
-  title: string;
-  avatar?: string;
-  createdAt?: string;
-  groupName?: string;
-  id?: number;
-  isModerator?: boolean;
-  moderatorName?: string;
-  numberOfFiles?: number;
-  numberOfUsers?: number;
-  uuid?: string;
-}
-export interface IFilesCard {
-  titleString?: string;
-  title: string;
-  avatar?: string;
-  createdAt?: string;
-  description?: string;
-  id?: number;
-  image?: string;
-  name?: string;
-}
-
-enum ApiTranslation {
-  createdAt = 'Created at',
-  groupName = 'Group name',
-  isModerator = 'Is user moderator',
-  numberOfFiles = 'Number of files',
-  numberOfUsers = 'Number of users',
-  moderatorName = 'Moderator name',
-  uuid = 'UUID',
-  title = 'Title',
-  id = 'ID',
-  name = 'Name',
-  description = 'Description',
-  image = 'Image',
-  ERROR = 4,
 }
 
 const PFileSider: FC<IPFileSiderProps> = ({
@@ -74,31 +33,15 @@ const PFileSider: FC<IPFileSiderProps> = ({
     <StyledFileSider collapsedWidth={0} collapsed={!isSiderVisible} width={320}>
       <StyledColumn>
         <StyledRow>
-          {type === 'folder' ? <StyledFolder /> : <StyledFile />}
+          <StyledIcon type={type} />
           <StyledClose onClick={() => handleClose()} />
         </StyledRow>
         <StyledTitle>{cardData?.title}</StyledTitle>
         <StyledContent>
-          {cardData &&
-            Object.entries(cardData as object).map((value: any) => {
-              if (value[0] === 'createdAt') {
-                value[1] = dayjs.unix(Date.parse(value[1])).format('D MMMM');
-              }
-              if (Object.keys(ApiTranslation).includes(value[0])) {
-                value[0] = ApiTranslation[value[0]];
-              }
-
-              // ApiTranslation[value[0]] !== null
-              return (
-                <StyledContentRow>
-                  <StyledText>{value[0]}:</StyledText>
-                  <StyledText>{value[1]}</StyledText>
-                </StyledContentRow>
-              );
-            })}
+          {cardData && <SiderData data={cardData} />}
         </StyledContent>
         <PButton
-          text={type === 'folder' ? 'Show folder' : 'Show file'}
+          text={`Show ${type}`}
           color="#fff"
           borderRadius="12px"
           background={theme.colors.primary}
@@ -108,13 +51,6 @@ const PFileSider: FC<IPFileSiderProps> = ({
   );
 };
 
-const StyledText = styled.div`
-  display: flex;
-  flex: 1;
-`;
-const StyledContentRow = styled.div`
-  display: flex;
-`;
 const StyledContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -140,17 +76,7 @@ const StyledColumn = styled.div`
   flex: 1;
   gap: 15px;
 `;
-const StyledFolder = styled(FolderFilled)`
-  color: ${({ theme: { colors } }) => colors.primary};
-  font-size: 100px;
-`;
-const StyledFile = styled(FileOutlined)`
-  color: ${({ theme: { colors } }) => colors.primary};
-  font-size: 100px;
-`;
-const StyledClose = styled(CloseOutlined)`
-  color: ${({ theme: { colors } }) => colors.primary};
-`;
+
 const StyledFileSider = styled(Sider).attrs({
   'data-testid': 'file-sider',
 })`

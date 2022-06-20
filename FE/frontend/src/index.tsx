@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'antd/dist/antd.css';
-import './index.css';
+
 import Error from './pages/error/ErrorPage';
 
 const root = ReactDOM.createRoot(

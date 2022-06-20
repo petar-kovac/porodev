@@ -4,8 +4,8 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-
-import { StatusCode, StorageKey } from '../util/enums/enums';
+import { StorageKey } from 'util/enums/storage-keys';
+import { StatusCode } from '../util/enums/status-codes';
 
 interface Config {
   baseURL: string | undefined;

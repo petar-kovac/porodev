@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-
-import { StorageKey } from 'util/enums/enums';
+import { StorageKey } from 'util/enums/storage-keys';
 
 const Profile: FC = () => {
   return (

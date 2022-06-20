@@ -5,6 +5,8 @@ import theme from 'theme/theme';
 import AuthProvider from './context/AuthContext';
 import ApplicationProvider from './context/ApplicationContext';
 import PRouter from './router/PRouter';
+import 'antd/dist/antd.min.css';
+import './index.css';
 
 const App: FC = () => {
   return (
