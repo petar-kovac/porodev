@@ -1,14 +1,12 @@
 import axios from 'axios';
-import GridCard from 'components/card/GridCard';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import ListCard from 'components/card/ListCard';
-import PFilter from 'components/filter/PFilter';
-import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
+import RuntimeCard from 'components/card/RuntimeCard';
+import { startRuntimeService } from 'service/runtime/runtime';
 
 const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
@@ -36,6 +34,11 @@ const Runtime: FC = () => {
     }, 250);
   }, []);
 
+  const startRuntime = async () => {
+    const res = await startRuntimeService({ uuid: 'saddsa' });
+    console.log(res);
+  };
+
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -52,46 +55,14 @@ const Runtime: FC = () => {
     <StyledPageWrapper>
       <StyledContent>
         <StyledStaticContent>
-          <StyledFoldersContainer>
-            {data?.slice(0, 4).map((value: any) => (
-              <PFolders
-                heading={value?.name}
-                description={value?.description}
-                onClick={() => onClick(value)}
-              />
-            ))}
-          </StyledFoldersContainer>
-          <PFilterWrapper>
-            <PFilter
-              isList={isList}
-              setIsList={setIsList}
-              activeFilters={{
-                showFilterByDate: true,
-                showSortByTime: true,
-                showSortByType: true,
-                showFilterBySize: true,
-                showToggleButton: true,
-              }}
-            />
-          </PFilterWrapper>
           <StyledFilesWrapper>
-            {data?.map((value: any) => (
+            {data?.slice(0, 3).map((value: any) => (
               <>
-                {isList ? (
-                  <ListCard
-                    image={value?.image}
-                    heading={value?.name}
-                    description={value?.description}
-                    onClick={() => onClick(value)}
-                  />
-                ) : (
-                  <GridCard
-                    image={value?.image}
-                    heading={value?.name}
-                    description={value?.description}
-                    onClick={() => onClick(value)}
-                  />
-                )}
+                <RuntimeCard
+                  title={value?.title}
+                  createdAt={value?.createdAt}
+                  onClick={() => onClick(value)}
+                />
               </>
             ))}
           </StyledFilesWrapper>
@@ -102,6 +73,7 @@ const Runtime: FC = () => {
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
           type="folder"
+          onButtonClick={startRuntime}
         />
       </StyledContent>
 
@@ -113,19 +85,6 @@ const Runtime: FC = () => {
     </StyledPageWrapper>
   );
 };
-const PFilterWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  padding: 2rem 0;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  background-color: #fcfcfc;
-  border-radius: 3rem;
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  border-bottom: 2px solid #ddd;
-`;
 
 const StyledPageWrapper = styled.div`
   display: flex;
@@ -140,16 +99,11 @@ const StyledStaticContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
+  height: 100vh;
   margin: 0 auto;
   align-items: flex-start;
   gap: 5rem;
-`;
-
-const StyledFoldersContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-  gap: 2rem;
+  padding: 4rem 0;
 `;
 
 const StyledFilesWrapper = styled.div`
