@@ -19,8 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Consumers\" />
-    <Folder Include="Constants\" />
-    <Folder Include="Services\Contracts\" />
+    <Folder Include="Runtime\" />
   </ItemGroup>
 
 </Project>

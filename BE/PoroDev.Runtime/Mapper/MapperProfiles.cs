@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace RuntimeService.Maper
+namespace PoroDev.Runtime.Mapper
 {
     public class MapperProfiles : Profile
     {

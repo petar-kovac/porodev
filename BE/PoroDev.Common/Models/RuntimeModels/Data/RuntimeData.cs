@@ -24,5 +24,7 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
 
         public DataUserModel User { get; set; }
 
+
+
     }
 }
