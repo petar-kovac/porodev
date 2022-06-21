@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import { IGroupCard, IFilesCard } from 'types/card-data';
@@ -17,6 +17,7 @@ interface IPFileSiderProps {
   cardData?: IGroupCard | IFilesCard;
   type: 'folder' | 'file';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
+  onButtonClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const PFileSider: FC<IPFileSiderProps> = ({
@@ -24,6 +25,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
   setIsSiderVisible,
   cardData,
   type,
+  onButtonClick,
 }) => {
   const handleClose = () => {
     setIsSiderVisible(false);
@@ -45,6 +47,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
           color="#fff"
           borderRadius="12px"
           background={theme.colors.primary}
+          onClick={onButtonClick}
         />
       </StyledColumn>
     </StyledFileSider>

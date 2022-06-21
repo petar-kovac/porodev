@@ -6,6 +6,7 @@ import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import RuntimeCard from 'components/card/RuntimeCard';
+import { startRuntimeService } from 'service/runtime/runtime';
 
 const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
@@ -33,6 +34,11 @@ const Runtime: FC = () => {
     }, 250);
   }, []);
 
+  const startRuntime = async () => {
+    const res = await startRuntimeService({ uuid: 'saddsa' });
+    console.log(res);
+  };
+
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -44,8 +50,6 @@ const Runtime: FC = () => {
     };
     fetchFiles();
   }, []);
-
-  console.log(data);
 
   return (
     <StyledPageWrapper>
@@ -69,6 +73,7 @@ const Runtime: FC = () => {
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
           type="folder"
+          onButtonClick={startRuntime}
         />
       </StyledContent>
 
