@@ -21,6 +21,8 @@ builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddAutoMapper(typeof(MapperProfiles));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRuntimeDataRepository, RuntimeDataRepository>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
