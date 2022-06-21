@@ -13,6 +13,7 @@ using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.Common.Contracts.UserMenagement.ReadById;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -24,6 +25,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserReadByEmailRequestGatewayToService> _readUserByEmailRequestClient;
         private readonly IRequestClient<UserLoginRequestGatewayToService> _loginRequestClient;
         private readonly IRequestClient<RegisterUserRequestGatewayToService> _registerClient;
+        private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserByIdRequestClient;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
@@ -31,7 +33,8 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<UserLoginRequestGatewayToService> loginRequestClient,
             IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
             IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient,
-            IRequestClient<RegisterUserRequestGatewayToService> registerClient
+            IRequestClient<RegisterUserRequestGatewayToService> registerClient,
+            IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient
             )
         {
             _createRequestClient = createRequestClient;
@@ -40,6 +43,7 @@ namespace PoroDev.GatewayAPI.Services
             _readUserByEmailRequestClient = readUserByEmailRequestClient;
             _loginRequestClient = loginRequestClient;
             _registerClient = registerClient;
+            _readUserByIdRequestClient = readUserByIdRequestClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -101,6 +105,16 @@ namespace PoroDev.GatewayAPI.Services
 
             var returnUser = requestResponseContext.Message.Entity;
 
+            return returnUser;
+        }
+
+        public async Task<DataUserModel> ReadUserById(UserReadByIdRequestGatewayToService model)
+        {
+            var requestResponseContext = await _readUserByIdRequestClient.GetResponse<CommunicationModel<DataUserModel>>(model);
+            if (requestResponseContext.Message.ExceptionName != null)
+                ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
+
+            var returnUser = requestResponseContext.Message.Entity;
             return returnUser;
         }
 

@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Contracts.LoginUser;
 using PoroDev.Common.Contracts.ReadUser;
 using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Contracts.UserMenagement.ReadById;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -17,17 +18,14 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
         Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
 
-        //Task<DataUserModel> GetUserByMail(string mail);
-
-
-
+        Task<CommunicationModel<DataUserModel>> ReadUserById(UserReadByIdRequestGatewayToService model);
+        
         Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model);
 
         Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model);
 
         Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel);
 
-        //Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel);
         Task<CommunicationModel<LoginUserModel>> LoginUser(UserLoginRequestGatewayToService userToLoginModel);
     }
 }
