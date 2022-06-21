@@ -89,6 +89,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         message.success('Successful login');
         localStorage.setItem(StorageKey.NAME, res.name);
         localStorage.setItem(StorageKey.LASTNAME, res.lastname);
+        localStorage.setItem(StorageKey.EMAIL, res.email);
         localStorage.setItem(StorageKey.ACCESS_TOKEN, res.jwt);
 
         // mocked this until backend has been implemented

@@ -1,13 +1,13 @@
-import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { UserOutlined } from '@ant-design/icons';
+import { Button, Modal, Input } from 'antd';
+import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
 import styled from 'styled-components';
 import { IFilesCard, IGroupCard } from 'types/card-data';
 
 interface IPModalProps {
   isModalVisible?: boolean;
   title?: string;
-  content?: string;
+  content?: ReactNode;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   cardData?: IGroupCard | IFilesCard;
 }
@@ -27,24 +27,24 @@ const PModal: FC<IPModalProps> = ({
   };
 
   return (
-    <div>
+    <>
       <StyledFilesModal
         title={title}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        footer={[
-          <div className="footer-content">
-            <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
-            <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-              Download
-            </StyledFilesButton>
-          </div>,
-        ]}
+        // footer={[
+        //   <div className="footer-content">
+        //     <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
+        //     <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
+        //       Download
+        //     </StyledFilesButton>
+        //   </div>,
+        // ]}
       >
-        <p>{content}</p>
+        <div>{content}</div>
       </StyledFilesModal>
-    </div>
+    </>
   );
 };
 

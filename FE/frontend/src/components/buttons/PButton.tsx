@@ -9,6 +9,14 @@ interface IPButtonProps {
   background?: string;
   htmlType?: 'button' | 'submit' | 'reset' | undefined;
   form?: string;
+  type?:
+    | 'link'
+    | 'text'
+    | 'default'
+    | 'ghost'
+    | 'primary'
+    | 'dashed'
+    | undefined;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
@@ -19,6 +27,7 @@ const PButton: FC<IPButtonProps> = ({
   background,
   htmlType,
   form,
+  type,
   onClick,
 }) => {
   return (
@@ -28,6 +37,7 @@ const PButton: FC<IPButtonProps> = ({
       background={background}
       htmlType={htmlType}
       form={form}
+      type={type}
       onClick={onClick}
     >
       {text}
