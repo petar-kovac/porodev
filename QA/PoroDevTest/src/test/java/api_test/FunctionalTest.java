@@ -5,6 +5,10 @@ import common.api_setup.Endpoints;
 import common.api_setup.api_common.User;
 import common.api_setup.api_common.UserDetailsGenerator;
 import common.api_setup.api_common.UserSerialization;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import jdk.jfr.Description;
 import org.testng.annotations.Test;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -12,12 +16,15 @@ import static org.hamcrest.Matchers.equalTo;
 
 import static io.restassured.RestAssured.given;
 
+    @Feature("CRUD operations")
+    @Severity(SeverityLevel.BLOCKER)
 public class FunctionalTest extends ApiConfig {
 
 
 
     //Register user
-    @Test(priority = 1, dataProvider = "PojoRegularEntry", dataProviderClass = UserDetailsGenerator.class)
+    @Test(priority = 0, dataProvider = "PojoRegularEntry", dataProviderClass = UserDetailsGenerator.class,
+            description = "Sending the request for user register with regular input")
     public void registerUserByJSON(User providedUser) {
         given().relaxedHTTPSValidation()
                 .body(providedUser)
@@ -28,7 +35,8 @@ public class FunctionalTest extends ApiConfig {
 
     // Update user (change any of the details)
 
-    @Test (priority = 2, dataProvider = "PojoRegularEntry", dataProviderClass = UserDetailsGenerator.class)
+    @Test (priority = 1, dataProvider = "PojoRegularEntry", dataProviderClass = UserDetailsGenerator.class,
+    description = "Sending the request for update the users information with regular input")
     public void updateUserByJson(User providedUser) {
         given().relaxedHTTPSValidation()
                 .body(providedUser)
@@ -39,7 +47,8 @@ public class FunctionalTest extends ApiConfig {
 
     // Get the user details with sending the email in request
 
-    @Test (priority = 3)
+    @Test (priority = 2, description = "Sending the request for getting the user information with " +
+            "the regular email")
     public void getUserByEmail() {
         given().relaxedHTTPSValidation()
                 .when()
@@ -48,7 +57,7 @@ public class FunctionalTest extends ApiConfig {
     }
 
     //Sending the log in request
-    @Test (priority = 4)
+    @Test (priority = 3, description = "Sending the request for log in with regular email and password entry")
     public void logInUser() {
         String logInJSONObject = "{\n" +
                 "  \"email\": \"john.dean@boing.rs\",\n" +
@@ -63,7 +72,7 @@ public class FunctionalTest extends ApiConfig {
     }
 
     // sending the request for deleting the user with sending email
-    @Test (priority = 5)
+    @Test (priority = 4, description = "Sending the request for deleting the user with regular email")
     public void deleteUser() {
         String jsonRequestWithEmail = "{\n" +
                 "  \"email\": \"john.dean@boing.rs\"\n" +

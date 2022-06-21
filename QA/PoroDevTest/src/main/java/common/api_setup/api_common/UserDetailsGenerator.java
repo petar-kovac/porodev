@@ -56,6 +56,7 @@ public class UserDetailsGenerator {
     public Object[][] invalidEmailList() {
         Object[][] email = new Object[][]{
                 {""},
+                {"noDomain"},
                 {"name@live.com"},
                 {"@boing.rs"},
                 {"@boing.rs@boing.rs"},
@@ -63,7 +64,8 @@ public class UserDetailsGenerator {
                 {"iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii" +
                 "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii@boing.rs"},
                 {"%%%@boing.rs"},
-                {"with space@boing.rs"}
+                {"with space@boing.rs"},
+                {"boing.rs@gmail.com"}
         };
 
         return email;

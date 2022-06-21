@@ -7,10 +7,13 @@ import common.api_setup.api_common.UserDetailsGenerator;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
 
 public class UpdateUser extends ApiConfig {
 
     //Updating the user with invalid name
+
     @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = UserDetailsGenerator.class)
     public void updateInvalidName(String InvalidNameList) {
         String userBodyJson = "{\n" +
@@ -49,8 +52,8 @@ public class UpdateUser extends ApiConfig {
                 .then().statusCode(400);
     }
     // Updating user with invalid email
-    @Test(dataProvider = "invalidEmailEntryList", dataProviderClass = UserDetailsGenerator.class)
-    public void registerInvalidEmail(String invalidEmailList) {
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
+    public void updateInvalidEmail(String invalidEmailList) {
         String userBodyJson = "{\n" +
                 "  \"name\": \"John\",\n" +
                 "  \"lastname\": \"Dean\",\n" +
@@ -65,11 +68,11 @@ public class UpdateUser extends ApiConfig {
                 .body(userBodyJson)
                 .when()
                 .put(Endpoints.UPDATE_USER)
-                .then().statusCode(404);
+                .then().statusCode(anyOf(is(400), is(404)));
     }
     // Updating user with invalid password
     @Test(dataProvider = "invalidPasswordList", dataProviderClass = UserDetailsGenerator.class)
-    public void registerInvalidPass(String invalidPasswordList) {
+    public void updateInvalidPass(String invalidPasswordList) {
         String userBodyJson = "{\n" +
                 "  \"name\": \"John\",\n" +
                 "  \"lastname\": \"Dean\",\n" +
