@@ -65,6 +65,8 @@ const PRouter: FC = () => {
                   path="*"
                   element={<Error message="Router error 404" />}
                 />
+                {/* if user is logged in cant get /login route */}
+                <Route path="/login" element={<Navigate to="/" />} />
               </Routes>
             </PContent>
           </Layout>

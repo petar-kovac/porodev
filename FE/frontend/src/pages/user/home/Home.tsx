@@ -80,12 +80,13 @@ const StyledHeading = styled.div`
   display: flex;
   justify-content: center;
   font-weight: 600;
-  margin: 20px 0;
+  margin: 10px 0;
 `;
 const StyledPage = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 20px;
 `;
 const StyledUploadWrapper = styled.div`
   display: flex;
@@ -107,6 +108,7 @@ const StyledCardWrapper = styled.div`
   align-items: flex-start;
   overflow-x: auto;
   height: 100px;
+  padding-bottom: 10px;
 `;
 const StyledCardHeading = styled.div`
   font-size: 20px;

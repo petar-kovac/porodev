@@ -5,6 +5,8 @@ const AdminRoutes: FC<{
   isAdmin: boolean;
   location: any;
 }> = ({ isAdmin, location }) => {
+  console.log(location.pathname);
+
   return isAdmin ? (
     <Outlet />
   ) : location.pathname === '/' ? (

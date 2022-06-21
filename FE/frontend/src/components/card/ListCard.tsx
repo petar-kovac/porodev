@@ -2,6 +2,7 @@ import { Card, Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import { FC } from 'react';
 import styled from 'styled-components';
+import DownloadButton from 'components/buttons/DownloadButton';
 
 const { Meta } = Card;
 
@@ -41,10 +42,11 @@ const ListCard: FC<IListCardProps> = ({
                   <span>{description.slice(0, 15)}</span>
                 </StyledDescriptionUploadDetails>
                 <StyledDescriptionButtons>
-                  <StyledFilesButton>Remove file</StyledFilesButton>
-                  <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
+                  <StyledFilesButton>Remove filee</StyledFilesButton>
+                  {/* <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
                     Download
-                  </StyledFilesButton>
+                  </StyledFilesButton> */}
+                  <DownloadButton />
                 </StyledDescriptionButtons>
               </StyledMetaDescription>,
             ]}

@@ -22,7 +22,9 @@ const props: UploadProps = {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
-  onDrop(e) {},
+  onDrop(e) {
+    console.log(e);
+  },
 };
 
 const PUpload: React.FC = () => {
@@ -51,8 +53,15 @@ const StyledDragger = styled(Dragger).attrs({
   border-radius: 15px !important;
 `;
 const StyledUpload = styled.div`
+  height: 250px;
   margin: 0px 20vw;
-  height: 300px;
+  span {
+  }
+  .ant-upload-list-text {
+    max-height: 120px;
+    overflow-y: scroll;
+    padding-left: 10px;
+  }
 `;
 
 export default PUpload;
