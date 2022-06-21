@@ -1,6 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Tue Jun 21 08:29:15 CEST 2022","Tue Jun 21 08:29:15 CEST 2022","72","Suite1","FunctionalTests","api_test.FunctionalTest","api_test.FunctionalTest","updateUserByJson","Sending the request for update the users information with regular input",""
-"passed","Tue Jun 21 08:29:15 CEST 2022","Tue Jun 21 08:29:17 CEST 2022","1331","Suite1","FunctionalTests","api_test.FunctionalTest","api_test.FunctionalTest","getUserByEmail","Sending the request for getting the user information with sendingthe regular email",""
-"passed","Tue Jun 21 08:29:17 CEST 2022","Tue Jun 21 08:29:17 CEST 2022","179","Suite1","FunctionalTests","api_test.FunctionalTest","api_test.FunctionalTest","deleteUser","Sending the request for deleting the user with regular email",""
-"passed","Tue Jun 21 08:29:13 CEST 2022","Tue Jun 21 08:29:15 CEST 2022","2603","Suite1","FunctionalTests","api_test.FunctionalTest","api_test.FunctionalTest","registerUserByJSON","Sending the request for user register with regular input",""
-"passed","Tue Jun 21 08:29:17 CEST 2022","Tue Jun 21 08:29:17 CEST 2022","184","Suite1","FunctionalTests","api_test.FunctionalTest","api_test.FunctionalTest","logInUser","Sending the request for log in with regular email and password entry",""

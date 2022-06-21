@@ -213,3 +213,6 @@ $RECYCLE.BIN/
 
 /target
 /PoroDevTest.iml
+
+allure-results
+allure-report
