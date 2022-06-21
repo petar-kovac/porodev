@@ -2,6 +2,7 @@ import { FileZipOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 
 const { Meta } = Card;
 
@@ -18,10 +19,6 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
   onClick,
   onDoubleClick,
 }) => {
-  const splitCreatedAt = createdAt.split('T');
-  const [createdAtDate, createdAtTimeLong] = splitCreatedAt;
-  const createdAtTime = createdAtTimeLong.slice(0, 8);
-
   return (
     <>
       <StyledCard
@@ -39,8 +36,7 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
           title={title}
           description={[
             <StyledMetaCardDescription>
-              <span>Date: {createdAtDate}</span>
-              <span style={{ display: 'block' }}>Time: {createdAtTime}</span>
+              {dayjs.unix(Date.parse(createdAt)).format('D MMMM')}
               <span className="show-more">&rarr; Show more</span>
             </StyledMetaCardDescription>,
           ]}
