@@ -1,4 +1,5 @@
 import {
+  FieldTimeOutlined,
   FileOutlined,
   FontColorsOutlined,
   HomeOutlined,
@@ -67,6 +68,9 @@ const PSider: FC = () => {
             <Menu.Item key="/groups" icon={<TeamOutlined />}>
               <Link to="/groups">Groups</Link>
             </Menu.Item>
+            <Menu.Item key="/runtime" icon={<FieldTimeOutlined />}>
+              <Link to="/runtime">Runtime</Link>
+            </Menu.Item>
           </>
         )}
         {!isAdmin && ( // later change it to isUser when backend is implemented
@@ -79,6 +83,9 @@ const PSider: FC = () => {
             </Menu.Item>
             <Menu.Item key="/user-groups" icon={<TeamOutlined />}>
               <Link to="/user-groups">Groups</Link>
+            </Menu.Item>
+            <Menu.Item key="/user-runtime" icon={<FieldTimeOutlined />}>
+              <Link to="/user-runtime">Runtime</Link>
             </Menu.Item>
           </>
         )}

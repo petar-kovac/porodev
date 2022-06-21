@@ -4,6 +4,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Groups from 'pages/admin/groups/Groups';
+import Runtime from 'pages/admin/runtime/Runtime';
+import UserRuntime from 'pages/user/runtime/Runtime';
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
 
@@ -50,12 +52,14 @@ const PRouter: FC = () => {
                   <Route path="/admins" element={<Admins />} />
                   <Route path="/users" element={<Users />} />
                   <Route path="/groups" element={<Groups />} />
+                  <Route path="/runtime" element={<Runtime />} />
                 </Route>
                 <Route element={<UserRoutes isUser={!isAdmin} />}>
                   <Route path="/user-home" element={<UserHome />} />
                   <Route path="/user-files" element={<UserFiles />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/user-groups" element={<UserGroups />} />
+                  <Route path="/user-runtime" element={<UserRuntime />} />
                 </Route>
                 <Route
                   path="/notallowed"
@@ -65,7 +69,7 @@ const PRouter: FC = () => {
                   path="*"
                   element={<Error message="Router error 404" />}
                 />
-                {/* if user is logged in cant get /login route */}
+                {/* if user is logged in, user cant get /login route */}
                 <Route path="/login" element={<Navigate to="/" />} />
               </Routes>
             </PContent>
