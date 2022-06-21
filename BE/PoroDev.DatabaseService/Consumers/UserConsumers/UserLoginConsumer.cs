@@ -2,51 +2,46 @@
 using MassTransit;
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.LoginUser;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using static PoroDev.Database.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
 
-namespace PoroDev.Database.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
-    public class UserLoginConsumer : IConsumer<UserLoginRequestServiceToDatabase>
+    public class UserLoginConsumer : BaseDbConsumer, IConsumer<UserLoginRequestServiceToDatabase>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UserLoginConsumer(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserLoginConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserLoginRequestServiceToDatabase> context)
         {
             CommunicationModel<LoginUserModel> returnModel;
             var userToLogIn = await _unitOfWork.Users.FindAsync(user => user.Email.Equals(context.Message.Email));
-            
+
             returnModel = _mapper.Map<CommunicationModel<LoginUserModel>>(userToLogIn);
             if (userToLogIn.ExceptionName != null)
             {
                 CheckAndChangeErrorType(returnModel);
-                await context.RespondAsync<CommunicationModel<LoginUserModel>>(returnModel);
+                await context.RespondAsync(returnModel);
                 return;
             }
 
-            if(!CheckPasswordAndProcessError(returnModel, userToLogIn.Entity, context.Message))
+            if (!CheckPasswordAndProcessError(returnModel, userToLogIn.Entity, context.Message))
             {
-                await context.RespondAsync<CommunicationModel<LoginUserModel>>(returnModel);
+                await context.RespondAsync(returnModel);
                 return;
             }
             returnModel.Entity.Jwt = CreateToken(userToLogIn.Entity);
 
-            await context.RespondAsync<CommunicationModel<LoginUserModel>>(returnModel);
+            await context.RespondAsync(returnModel);
 
         }
 
@@ -69,7 +64,7 @@ namespace PoroDev.Database.Consumers
 
         private void CheckAndChangeErrorType(CommunicationModel<LoginUserModel> model)
         {
-            if(model.ExceptionName == nameof(UserNotFoundException))
+            if (model.ExceptionName == nameof(UserNotFoundException))
             {
                 ProcessInvalidCredentialsException(model);
             }
@@ -78,7 +73,7 @@ namespace PoroDev.Database.Consumers
         private bool CheckPasswordAndProcessError(CommunicationModel<LoginUserModel> returnModel, DataUserModel dataModel, UserLoginRequestServiceToDatabase loginModel)
         {
             var passwordsMatches = VerifyPasswordHash(loginModel.Password, dataModel.Password, dataModel.Salt);
-            if(passwordsMatches == false)
+            if (passwordsMatches == false)
             {
                 ProcessInvalidCredentialsException(returnModel);
                 return false;

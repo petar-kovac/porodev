@@ -1,6 +1,6 @@
 ﻿using PoroDev.Common.Enums;
 
-namespace PoroDev.Common.Contracts.Update
+namespace PoroDev.Common.Contracts.UserManagement.Update
 {
     public class UserUpdateRequestGatewayToService
     {

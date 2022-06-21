@@ -1,21 +1,16 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Models.UserModels.Data;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.Database.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
-    public class UserReadByEmailConsumer : IConsumer<UserReadByEmailRequestServiceToDatabase>
+    public class UserReadByEmailConsumer : BaseDbConsumer, IConsumer<UserReadByEmailRequestServiceToDatabase>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UserReadByEmailConsumer(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserReadByEmailConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserReadByEmailRequestServiceToDatabase> context)

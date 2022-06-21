@@ -1,4 +1,4 @@
-﻿namespace PoroDev.Common.Contracts.ReadUser
+﻿namespace PoroDev.Common.Contracts.UserManagement.ReadUser
 {
     public class UserReadByEmailRequestGatewayToService
     {

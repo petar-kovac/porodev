@@ -1,7 +1,7 @@
-﻿using PoroDev.Database.Data;
-using PoroDev.Database.Repositories.Contracts;
+﻿using PoroDev.DatabaseService.Data;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.Database.Repositories
+namespace PoroDev.DatabaseService.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -10,10 +10,13 @@ namespace PoroDev.Database.Repositories
 
         public IUserRepository Users { get; }
 
-        public UnitOfWork(SqlDataContext context, IUserRepository users)
+        public IRuntimeDataRepository RuntimeData { get; }
+
+        public UnitOfWork(SqlDataContext context, IUserRepository users, IRuntimeDataRepository runtimeData)
         {
             _context = context;
             Users = users;
+            RuntimeData = runtimeData;
         }
 
         public async Task<int> SaveChanges()

@@ -1,4 +1,4 @@
-﻿namespace PoroDev.Common.Contracts.LoginUser
+﻿namespace PoroDev.Common.Contracts.UserManagement.LoginUser
 {
     public class UserLoginRequestGatewayToService
     {

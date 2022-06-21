@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 

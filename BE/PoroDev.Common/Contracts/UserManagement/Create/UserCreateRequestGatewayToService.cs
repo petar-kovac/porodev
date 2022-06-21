@@ -1,6 +1,6 @@
 ﻿using PoroDev.Common.Enums;
 
-namespace PoroDev.Common.Contracts.Create
+namespace PoroDev.Common.Contracts.UserManagement.Create
 {
     public class UserCreateRequestGatewayToService
     {

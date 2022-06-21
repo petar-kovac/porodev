@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.UserManagementService.Services.Contracts;
 
