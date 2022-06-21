@@ -1,10 +1,5 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Contracts.LoginUser;
-using PoroDev.Common.Contracts.ReadUser;
-using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -13,6 +8,11 @@ using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadUser;
 
 namespace PoroDev.GatewayAPI.Services
 {

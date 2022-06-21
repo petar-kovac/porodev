@@ -1,8 +1,8 @@
 ﻿using PoroDev.Common.Enums;
 
-namespace PoroDev.Common.Contracts.Create
+namespace PoroDev.Common.Contracts.UserManagement.Update
 {
-    public class UserCreateRequestGatewayToService
+    public class UserUpdateRequestGatewayToService
     {
         public string AvatarUrl { get; set; }
         public UserEnums.UserDepartment Department { get; set; }

@@ -1,7 +1,7 @@
-﻿using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Contracts.LoginUser;
-using PoroDev.Common.Contracts.Update;
+﻿using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;

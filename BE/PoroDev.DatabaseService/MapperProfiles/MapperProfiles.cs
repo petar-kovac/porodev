@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
@@ -8,7 +7,9 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using static PoroDev.DatabaseService.Constants.Constants;
-using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Models.RuntimeModels.Data;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {
@@ -16,7 +17,10 @@ namespace PoroDev.DatabaseService.MapperProfiles
     {
         public MapperProfiles()
         {
+            CreateMap<UnitOfWorkResponseModel<RuntimeData>, CommunicationModel<RuntimeData>>();
+
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
+
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
             CreateMap<UserUpdateRequestServiceToDatabase, DataUserModel>();
 

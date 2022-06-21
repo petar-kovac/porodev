@@ -1,4 +1,4 @@
-﻿namespace PoroDev.Common.Contracts.DeleteUser
+﻿namespace PoroDev.Common.Contracts.UserManagement.DeleteUser
 {
     public class UserDeleteRequestGatewayToService
     {

@@ -28,8 +28,4 @@
     <ProjectReference Include="..\PoroDev.UserManagementService\PoroDev.UserManagementService.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Configuration\" />
-  </ItemGroup>
-
 </Project>

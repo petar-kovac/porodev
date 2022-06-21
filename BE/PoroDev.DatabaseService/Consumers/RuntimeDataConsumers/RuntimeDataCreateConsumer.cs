@@ -6,14 +6,19 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.RuntimeDataConsumers
 {
-    public class RuntimeDataCreateConsumer : BaseDbConsumer ,IConsumer<CommunicationModel<RuntimeData>>
+    public class RuntimeDataCreateConsumer : BaseDbConsumer ,IConsumer<RuntimeData>
     {
         public RuntimeDataCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
-        public Task Consume(ConsumeContext<CommunicationModel<RuntimeData>> context)
+        public async Task Consume(ConsumeContext<RuntimeData> context)
         {
-            throw new NotImplementedException();
+            var dbResponse = await _unitOfWork.RuntimeData.CreateAsync(context.Message);
+            await _unitOfWork.SaveChanges();
+
+            var responseModel = _mapper.Map<CommunicationModel<RuntimeData>>(dbResponse);
+
+            await context.RespondAsync(responseModel);
         }
     }
 }

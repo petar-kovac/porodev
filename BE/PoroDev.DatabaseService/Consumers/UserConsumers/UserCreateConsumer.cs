@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.Create;
+using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 

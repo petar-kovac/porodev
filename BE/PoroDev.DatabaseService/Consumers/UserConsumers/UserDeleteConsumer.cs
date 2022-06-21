@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.DatabaseService.Repositories.Contracts;
 

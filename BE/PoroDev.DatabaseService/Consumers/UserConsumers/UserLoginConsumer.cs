@@ -2,7 +2,7 @@
 using MassTransit;
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
