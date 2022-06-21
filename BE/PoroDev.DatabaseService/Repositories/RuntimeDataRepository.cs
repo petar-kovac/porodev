@@ -1,6 +1,5 @@
 ﻿using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Database.Data;
-using PoroDev.Database.Repositories;
+using PoroDev.DatabaseService.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Repositories

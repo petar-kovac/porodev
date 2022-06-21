@@ -3,19 +3,14 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DeleteUser;
 using PoroDev.Common.Models.UserModels.DeleteUser;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.Database.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
-    public class UserDeleteConsumer : IConsumer<UserDeleteRequestServiceToDatabase>
+    public class UserDeleteConsumer : BaseDbConsumer, IConsumer<UserDeleteRequestServiceToDatabase>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UserDeleteConsumer(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserDeleteConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserDeleteRequestServiceToDatabase> context)

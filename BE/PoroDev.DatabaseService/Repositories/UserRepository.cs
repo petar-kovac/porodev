@@ -1,8 +1,8 @@
 ﻿using PoroDev.Common.Models.UserModels.Data;
-using PoroDev.Database.Data;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Data;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.Database.Repositories
+namespace PoroDev.DatabaseService.Repositories
 {
     public class UserRepository : GenericRepository<DataUserModel, SqlDataContext>, IUserRepository
     {

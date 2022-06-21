@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 using System.Linq.Expressions;
-using static PoroDev.Database.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
 
-namespace PoroDev.Database.Repositories
+namespace PoroDev.DatabaseService.Repositories
 {
     public class GenericRepository<TemplateEntity, TemplateDatabaseContext> :
         IGenericRepository<TemplateEntity> where TemplateEntity : class, new()

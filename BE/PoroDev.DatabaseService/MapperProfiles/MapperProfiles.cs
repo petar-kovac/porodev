@@ -7,10 +7,10 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
-using static PoroDev.Database.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
 using PoroDev.Common.Contracts.Update;
 
-namespace PoroDev.Database.MapperProfiles
+namespace PoroDev.DatabaseService.MapperProfiles
 {
     public class MapperProfiles : Profile
     {

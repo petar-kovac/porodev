@@ -3,21 +3,16 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Models.UserModels.Data;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
-using static PoroDev.Database.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
 
-namespace PoroDev.Database.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
-    public class UserUpdateConsumer : IConsumer<UserUpdateRequestServiceToDatabase>
+    public class UserUpdateConsumer : BaseDbConsumer, IConsumer<UserUpdateRequestServiceToDatabase>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UserUpdateConsumer(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserUpdateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
@@ -32,7 +27,7 @@ namespace PoroDev.Database.Consumers
                 ExceptionName = null,
                 HumanReadableMessage = null
             };
-            
+
             updatedModel.Entity.Id = userToBeUpdated.Entity.Id;
             updatedModel.Entity.DateCreated = userToBeUpdated.Entity.DateCreated;
             updatedModel.Entity.Password = userToBeUpdated.Entity.Password;

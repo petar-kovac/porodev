@@ -1,4 +1,4 @@
-﻿namespace PoroDev.Database.Constants
+﻿namespace PoroDev.DatabaseService.Constants
 {
     public static class Constants
     {

@@ -2,7 +2,7 @@
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 
-namespace PoroDev.Database.Data
+namespace PoroDev.DatabaseService.Data
 {
     public class SqlDataContext : DbContext
     {

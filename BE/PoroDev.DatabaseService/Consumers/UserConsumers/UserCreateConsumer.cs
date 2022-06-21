@@ -3,19 +3,14 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.Create;
 using PoroDev.Common.Models.UserModels.Data;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.Database.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
-    public class UserCreateConsumer : IConsumer<UserCreateRequestServiceToDatabase>
+    public class UserCreateConsumer : BaseDbConsumer, IConsumer<UserCreateRequestServiceToDatabase>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UserCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserCreateRequestServiceToDatabase> context)
