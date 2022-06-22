@@ -16,8 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import static io.restassured.RestAssured.given;
 
-    @Feature("CRUD operations")
-    @Severity(SeverityLevel.BLOCKER)
+
 public class FunctionalTest extends ApiConfig {
 
 

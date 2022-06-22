@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class DriverSetup {
@@ -31,9 +32,9 @@ public class DriverSetup {
         driver.manage().deleteAllCookies();
     }
 
-    public void navigateToUrl(String url) {
-        driver.manage().timeouts().pageLoadTimeout(SetupConstants.PAGE_LOAD_TIME, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(SetupConstants.ELEMENT_DETECTION_TIMEOUT, TimeUnit.SECONDS);
+    public static void navigateToUrl(WebDriver driver, String url) {
+        driver.manage().timeouts().pageLoadTimeout(Duration.ZERO.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
         driver.get(url);
     }
 

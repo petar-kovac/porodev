@@ -2,10 +2,7 @@ package ui;
 
 import common.ui_setup.DriverSetup;
 import common.ui_setup.DriverType;
-import common.ui_setup.ElementControl;
-import common.ui_setup.SetupConstants;
-import common.ui_setup.pom_setup.PoroDevPom.LoginPage;
-import common.ui_setup.pom_setup.PoroDevPom.RegistrationPage;
+
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -17,9 +14,6 @@ import java.io.IOException;
 public class BaseTest {
     protected DriverSetup driverSetup;
     protected WebDriver driver;
-    protected LoginPage loginPage;
-    protected RegistrationPage registrationPage;
-    protected ElementControl elementControl;
 
     @BeforeClass
     public void setupBeforeTestClass() {
@@ -31,15 +25,12 @@ public class BaseTest {
         System.out.println("BEFORE METHOD");
         driverSetup = new DriverSetup(DriverType.CHROME);
         driver = driverSetup.getDriver();
-        loginPage = new LoginPage(driver);
-        registrationPage = new RegistrationPage(driver);
-        elementControl = new ElementControl(driver);
     };
 
     @AfterMethod
     public void tearDownAfterMethod() {
-        driverSetup.closeBrowserTab();
         System.out.println("AFTER METHOD");
+        driverSetup.closeBrowserTab();
     };
 
     @AfterClass

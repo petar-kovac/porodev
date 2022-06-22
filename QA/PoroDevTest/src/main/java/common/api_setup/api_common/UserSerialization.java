@@ -23,7 +23,7 @@ public class UserSerialization {
     public UserSerialization() {
 
     }
-    public UserSerialization(String name, String lastname, String email, String password, int department,
+    private UserSerialization(String name, String lastname, String email, String password, int department,
                              int role, String position, String avatarUrl) {
         User user = new User();
         user.setName(name);
