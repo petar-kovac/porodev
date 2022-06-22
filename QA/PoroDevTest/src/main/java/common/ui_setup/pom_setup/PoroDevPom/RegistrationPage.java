@@ -46,7 +46,7 @@ public class RegistrationPage extends BasePage {
     WebElement we_position_inputField;
 
     //BUTTONS SECTION
-    @FindBy(xpath = "//span[contains(text(),'Register')]")
+    @FindBy(css = "[data-testid='registerForm-button']")
     WebElement we_register_button;
     @FindBy(xpath = "//span[contains(text(),'Create new account')]")
     WebElement we_createNewAccount_button;
@@ -63,7 +63,7 @@ public class RegistrationPage extends BasePage {
     @FindBy(xpath = "//span[contains(text(),'Successful registration')]")
     public WebElement we_successful_registrationMsg;
 
-    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) {
+    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) throws InterruptedException {
 
         BasePage.clickElement(we_createNewAccount_button);
         BasePage.sendText(we_firstName_inputField, firstName);
@@ -84,7 +84,6 @@ public class RegistrationPage extends BasePage {
     //ASSERT METHODS
     public void assert_user_registration(WebElement element, String expectedResults) {
         logger.info("Element text: {}",  BasePage.getTextFromElement(element));
-        System.out.println(element);
         Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults);
     }
 
@@ -99,6 +98,5 @@ public class RegistrationPage extends BasePage {
         }
         logger.info("Expected error message: {}", currentError);
         Assert.assertEquals(currentError, expectedResults);
-        System.out.println("expected: "+expectedResults);
     }
 }
