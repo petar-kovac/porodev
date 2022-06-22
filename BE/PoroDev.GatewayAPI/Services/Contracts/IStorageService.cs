@@ -5,8 +5,8 @@ namespace PoroDev.GatewayAPI.Services.Contracts
 {
     public interface IStorageService
     {
-        Task<FileUploadModel> Upload(FileUploadModel uploadModel);
+        Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel);
 
-        Task<FileDownloadModel> Download(FileDownloadModel downloadModel);
+        Task<FileDownloadModel> DownloadFile(FileDownloadModel downloadModel);
     }
 }

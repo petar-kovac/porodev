@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.StorageModels.UploadFile;
 using PoroDev.DatabaseService.Data.Configuration;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Repositories
 {
-    public class StorageRepository
+    public class StorageRepository : IStorageRepository
     {
         private readonly IGridFSBucket<Guid> _bucket;
 
@@ -20,7 +23,6 @@ namespace PoroDev.DatabaseService.Repositories
 
         public async Task UploadFile(Stream stream, string fileName, Guid id)
         {
-            
             var options = new GridFSUploadOptions()
             {
                 Metadata = new MongoDB.Bson.BsonDocument()
@@ -28,16 +30,15 @@ namespace PoroDev.DatabaseService.Repositories
                     { "latest" , true }
                 }
             };
-           
 
             try
             {
                 await _bucket.UploadFromStreamAsync(id, fileName, stream, options);
-            }catch(Exception e)
-            {
-                throw FileUploadException("File isn't uploaded");
             }
-            
+            catch (Exception e)
+            {
+                throw new FileUploadException("File isn't uploaded");
+            }
         }
     }
 }

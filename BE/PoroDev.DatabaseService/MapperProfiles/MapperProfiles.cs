@@ -9,6 +9,7 @@ using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using static PoroDev.Database.Constants.Constants;
 using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Models.StorageModels.UploadFile;
 
 namespace PoroDev.Database.MapperProfiles
 {
@@ -37,6 +38,8 @@ namespace PoroDev.Database.MapperProfiles
                 .ForSourceMember(source => source.Password, option => option.DoNotValidate())
                 .ForSourceMember(source => source.Salt, option => option.DoNotValidate())
                 .ForSourceMember(source => source.DateCreated, option => option.DoNotValidate());
+
+            CreateMap<UnitOfWorkResponseModel<FileUploadModel>, CommunicationModel<FileUploadModel>>();
         }
 
         private bool ValidateUserDeletion(DataUserModel src)

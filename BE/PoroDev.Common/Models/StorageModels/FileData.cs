@@ -18,7 +18,7 @@ namespace PoroDev.Common.Models.StorageModels
         // We just need UserID from this model
         public DataUserModel User { get; set; }
 
-        public FileData(ObjectId fileId, Guid userId)
+        public FileData(Guid fileId, Guid userId)
         {
             FileId = fileId;
             UserId = userId;

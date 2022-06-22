@@ -8,22 +8,17 @@ namespace PoroDev.GatewayAPI.Controllers
     [ApiController]
     public class StorageController : ControllerBase
     {
-        private readonly IStorageService _service;
-        public StorageController(IStorageService service)
+        private readonly IStorageService _storageService;
+        public StorageController(IStorageService storageService)
         {
-            _service = service;
+            _storageService = storageService;
         }
 
         [HttpPost("Upload")]
-        public async Task<ActionResult<FileUploadModel>> Upload(IFormFile file, [FromForm] Guid UserId)
+        public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file, [FromForm] Guid UserId)
         {
-            var returnModel = new FileUploadModel(file, UserId);
-            var checkModel = await _service.Upload(returnModel);
-
-            
-
-           // _service.Upload(returnModel);
-           // await _service.Download();
+            var returnModel = new FileUploadRequestGatewayToService(file, UserId);
+            await _storageService.UploadFile(returnModel);
             return Ok();
         }
     }

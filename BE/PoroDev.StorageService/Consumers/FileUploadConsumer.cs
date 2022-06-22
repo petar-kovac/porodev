@@ -1,6 +1,26 @@
-﻿namespace PoroDev.StorageService.Consumers
+﻿using MassTransit;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Models.StorageModels.UploadFile;
+using PoroDev.StorageService.Services.Contracts;
+
+namespace PoroDev.StorageService.Consumers
 {
-    public class FileUploadConsumer
-    {
+    //IConsumer<ExecuteProjectRequestGatewayToService>
+    
+    public class FileUploadConsumer : IConsumer<FileUploadRequestGatewayToService>
+    {   
+        private readonly IStorageService _storageService;
+
+        public FileUploadConsumer(IStorageService storageService)
+        {
+            _storageService = storageService;
+        }
+
+        public async Task Consume(ConsumeContext<FileUploadRequestGatewayToService> context)
+        {
+            var modelToReturn = await _storageService.UploadFile(context.Message);
+
+            await context.RespondAsync<CommunicationModel<FileUploadModel>>(modelToReturn);
+        }
     }
 }

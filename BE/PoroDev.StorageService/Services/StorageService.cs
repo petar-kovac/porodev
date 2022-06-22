@@ -1,7 +1,28 @@
-﻿namespace PoroDev.StorageService.Services
-{
-    public class StorageService
-    {
+﻿using MassTransit;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Models.StorageModels.DownloadFile;
+using PoroDev.Common.Models.StorageModels.UploadFile;
+using PoroDev.StorageService.Services.Contracts;
 
+namespace PoroDev.StorageService.Services
+{
+    public class StorageService : IStorageService
+    {
+        private readonly IRequestClient<FileUploadRequestServiceToDatabase> _uploadRequestClient;
+        private readonly IRequestClient<FileDownloadModel> _downloadRequestClient;
+      
+        public StorageService(IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, IRequestClient<FileDownloadModel> downloadRequestClient)
+        {
+            _uploadRequestClient = uploadRequestClient;
+            _downloadRequestClient = downloadRequestClient;
+        }
+
+        public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestGatewayToService uploadModel)
+        {
+            FileUploadModel model = new(uploadModel.File, uploadModel.UserId);
+        
+            var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(model);
+            return response.Message;
+        }
     }
 }

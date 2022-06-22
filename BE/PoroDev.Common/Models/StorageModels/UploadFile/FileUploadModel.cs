@@ -9,13 +9,24 @@ namespace PoroDev.Common.Models.StorageModels.UploadFile
 {
     public class FileUploadModel
     {
-        public IFormFile File;
+        public byte[] File { get; set; }
 
-        public Guid UserId;
+        public Guid UserId { get; set; }
+
+        public FileUploadModel()
+        {
+
+        }
 
         public FileUploadModel(IFormFile file, Guid userId)
         {
-            File = file;//izmjeniti na end point-u
+            using Stream stream = file.OpenReadStream();
+            var memoryStream = new MemoryStream();
+            stream.CopyTo(memoryStream);
+            File = memoryStream.ToArray();
+
+            // var content = file.OpenReadStream().
+            //File = file;//izmjeniti na end point-u
             UserId = userId;
 
         }
