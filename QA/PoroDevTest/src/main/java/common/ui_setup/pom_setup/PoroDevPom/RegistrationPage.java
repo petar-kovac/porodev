@@ -48,7 +48,7 @@ public class RegistrationPage extends BasePage {
     //BUTTONS SECTION
     @FindBy(css = "[data-testid='registerForm-button']")
     WebElement we_register_button;
-    @FindBy(xpath = "//span[contains(text(),'Create new account')]")
+    @FindBy(css = "[data-testid='toggle-button']")
     WebElement we_createNewAccount_button;
 
     //ERROR MESSAGE SECTION
@@ -59,11 +59,7 @@ public class RegistrationPage extends BasePage {
     @FindBy(xpath = "//span[@data-testid='error-message']")
     List<WebElement> we_errorFields;
 
-    //SUCCESSFUL MESSAGE SECTION
-    @FindBy(xpath = "//span[contains(text(),'Successful registration')]")
-    public WebElement we_successful_registrationMsg;
-
-    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position) throws InterruptedException {
+    public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position)  {
 
         BasePage.clickElement(we_createNewAccount_button);
         BasePage.sendText(we_firstName_inputField, firstName);
