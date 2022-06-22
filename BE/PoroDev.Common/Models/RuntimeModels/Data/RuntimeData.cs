@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PoroDev.Common.Models.RuntimeModels.Data
@@ -24,6 +25,7 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
 
         public bool ExceptionHappened { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DataUserModel User { get; set; }
 
     }

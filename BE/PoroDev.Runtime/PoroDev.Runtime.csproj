@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Consumers\" />
+    <Folder Include="Extensions\Contracts\" />
     <Folder Include="Runtime\" />
   </ItemGroup>
 
