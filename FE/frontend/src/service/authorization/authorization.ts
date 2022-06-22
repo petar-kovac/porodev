@@ -11,7 +11,7 @@ export const loginApi: (payload: ILoginRequest) => Promise<ILoginResponse> = (
 ) => {
   return api
     .service()
-    .post('/api/User/login', payload)
+    .post('/api/User/LoginUser', payload)
     .then((response) => response.data);
 };
 export const registerApi: (
