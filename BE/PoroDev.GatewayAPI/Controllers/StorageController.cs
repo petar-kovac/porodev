@@ -6,7 +6,7 @@ namespace PoroDev.GatewayAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StorageController : BaseController
+    public class StorageController : ControllerBase
     {
         private readonly IStorageService _service;
         public StorageController(IStorageService service)
@@ -14,8 +14,7 @@ namespace PoroDev.GatewayAPI.Controllers
             _service = service;
         }
 
-        [HttpPost]
-        [Route("Upload")]
+        [HttpPost("Upload")]
         public async Task<ActionResult> Upload(IFormFile file, [FromForm] Guid UserId)
         {
             var returnModel = new FileUploadModel(file, UserId);

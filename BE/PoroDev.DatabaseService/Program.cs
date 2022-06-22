@@ -4,6 +4,7 @@ using PoroDev.Database.Data;
 using PoroDev.Database.MapperProfiles;
 using PoroDev.Database.Repositories;
 using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Data.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,9 @@ builder.Services.AddDbContext<SqlDataContext>(options =>
                    ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
                    );
             });
+
+builder.Services.Configure<MongoDBSettings>(
+    builder.Configuration.GetSection("MongoDB"));
 
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddAutoMapper(typeof(MapperProfiles));
