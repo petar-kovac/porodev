@@ -5,6 +5,6 @@ namespace PoroDev.Runtime.Services.Contracts
 {
     public interface IRuntimeService
     {
-        Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid projectId);
+        Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId);
     }
 }

@@ -1,13 +1,12 @@
-﻿using PoroDev.Runtime.Extensions.Contracts;
-using static PoroDev.Runtime.Constants.Consts;
+﻿using static PoroDev.Runtime.Constants.Consts;
 
 namespace PoroDev.Runtime.Extensions
 {
-    public class DockerWriter : IDockerWriter
+    public static class DockerWriter
     {
-        public async Task CreateDockerfile()
+        public static async Task CreateDockerfile(string creationPath)
         {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(Environment.CurrentDirectory, "Dockerfile")))
+            using (StreamWriter writer = new StreamWriter(Path.Combine(creationPath, "Dockerfile")))
             {
                 await writer.WriteLineAsync(@"FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env");
                 await writer.WriteLineAsync(@"WORKDIR /app");
