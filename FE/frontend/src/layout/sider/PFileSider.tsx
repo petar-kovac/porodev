@@ -15,7 +15,7 @@ const { Sider } = Layout;
 interface IPFileSiderProps {
   isSiderVisible?: boolean;
   cardData?: IGroupCard | IFilesCard;
-  type: 'folder' | 'file';
+  type: 'folder' | 'file' | 'runtime';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -43,7 +43,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
           {cardData && <SiderData data={cardData} />}
         </StyledContent>
         <PButton
-          text={`Show ${type}`}
+          text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
           color="#fff"
           borderRadius="12px"
           background={theme.colors.primary}

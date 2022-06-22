@@ -3,6 +3,7 @@ import {
   AppstoreOutlined,
   BarsOutlined,
   CloseOutlined,
+  FieldTimeOutlined,
   FileImageOutlined,
   FolderFilled,
 } from '@ant-design/icons';
@@ -10,6 +11,10 @@ import { Airplane } from '@styled-icons/ionicons-outline';
 import { Spin } from 'antd';
 
 export const StyledFolder = styled(FolderFilled)`
+  color: ${({ theme: { colors } }) => colors.primary};
+  font-size: 100px;
+`;
+export const StyledRuntimeIcon = styled(FieldTimeOutlined)`
   color: ${({ theme: { colors } }) => colors.primary};
   font-size: 100px;
 `;

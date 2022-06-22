@@ -1,6 +1,7 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Modal, Input } from 'antd';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
+import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import styled from 'styled-components';
 import { IFilesCard, IGroupCard } from 'types/card-data';
 

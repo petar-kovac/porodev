@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import PModal from 'components/modal/PModal';
@@ -7,14 +7,16 @@ import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import RuntimeCard from 'components/card/RuntimeCard';
 import { startRuntimeService } from 'service/runtime/runtime';
+import { IRuntimeRsponse } from 'service/runtime/runtime.props';
+import { Input } from 'antd';
+import dayjs from 'dayjs';
 
 const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState(false);
-  const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
-
+  const [content, setContent] = useState<ReactNode>(undefined);
   const count = useRef(0);
 
   const onClick = useCallback((value: any) => {
@@ -35,8 +37,25 @@ const Runtime: FC = () => {
   }, []);
 
   const startRuntime = async () => {
-    const res = await startRuntimeService({ uuid: 'saddsa' });
-    console.log(res);
+    const res = await startRuntimeService({
+      fileID: 'b22a0496-ded5-4fe5-bbb3-e20280b70a03',
+      jwt: localStorage.getItem('accessToken'),
+    });
+
+    // hardcoded for backend demo
+    setContent(
+      <div>
+        <p>Execution has happened : {`${res.exceptionHappened}`}</p>
+        <p>Execution output : {res.executionOutput}</p>
+        <p>Execution time : {res.executionTime}</p>
+        <p>
+          Execution start :
+          {dayjs.unix(Date.parse(res.executionStart)).format('D MMMM')}
+        </p>
+      </div>,
+    );
+    setIsSiderVisible(false);
+    setIsModalVisible(true);
   };
 
   useEffect(() => {
@@ -72,15 +91,17 @@ const Runtime: FC = () => {
           cardData={cardData}
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
-          type="folder"
+          type="runtime"
           onButtonClick={startRuntime}
         />
       </StyledContent>
 
       <PModal
+        title="Result of you action: "
         isModalVisible={isModalVisible}
         cardData={cardData}
         setIsModalVisible={setIsModalVisible}
+        content={content}
       />
     </StyledPageWrapper>
   );
