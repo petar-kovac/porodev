@@ -1,5 +1,6 @@
 using PoroDev.Common.MassTransit;
 using PoroDev.Runtime.Extensions;
+using PoroDev.Runtime.Extensions.Contracts;
 using PoroDev.Runtime.Mapper;
 using PoroDev.Runtime.Services;
 using PoroDev.Runtime.Services.Contracts;
@@ -15,6 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRuntimeService, RuntimeService>();
+builder.Services.AddScoped<IDockerImageService, DockerImageService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

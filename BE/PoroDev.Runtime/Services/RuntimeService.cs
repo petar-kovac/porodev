@@ -2,6 +2,7 @@
 using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Runtime.Extensions.Contracts;
 using PoroDev.Runtime.Services.Contracts;
 using System.Diagnostics;
 using static PoroDev.Runtime.Constants.Consts;
@@ -14,11 +15,13 @@ namespace PoroDev.Runtime.Services
 
         private readonly IRequestClient<RuntimeData> _createRequestClient;
         private readonly IMapper _mapper;
+        private readonly IDockerImageService _dockerImageService;
 
-        public RuntimeService(IRequestClient<RuntimeData> createRequestClient, IMapper mapper)
+        public RuntimeService(IRequestClient<RuntimeData> createRequestClient, IMapper mapper, IDockerImageService dockerImageService)
         {
             _createRequestClient = createRequestClient;
             _mapper = mapper;
+            _dockerImageService = dockerImageService;
         }
 
         public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId)
@@ -27,66 +30,29 @@ namespace PoroDev.Runtime.Services
 
             await CreateDockerfile(PROJECT_PATH);
 
-            var imageName = Guid.NewGuid();
+            var imageName = Guid.NewGuid().ToString();
 
-            using (var processTest = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "CMD.exe",
-                    Arguments = $"/C docker build -t {imageName} -f Dockerfile .",
-                    UseShellExecute = false,
-                    WorkingDirectory = PROJECT_PATH
-                }
-            })
-            {
-                processTest.Start();
-                processTest.WaitForExit();
-            }
-
-            string outPut = "";
+            await _dockerImageService.CreateDockerImage(imageName, PROJECT_PATH);
 
             DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
             Stopwatch stopwatch = new();
             stopwatch.Start();
 
-            using (var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                FileName = "CMD.exe",
-                Arguments = $"/C docker run --name runtime-container {imageName}",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
-                WorkingDirectory = PROJECT_PATH
-                }
-            })
-            {
-
-                proc.Start();
-                while (!proc.StandardOutput.EndOfStream)
-                {
-                    outPut = await proc.StandardOutput.ReadLineAsync();
-                }
-                proc.WaitForExit();
-            }
+            var imageOutput = await _dockerImageService.RunDockerImage(imageName, PROJECT_PATH);
 
             stopwatch.Stop();
 
-            Process.Start("CMD.exe", "/C docker rm runtime-container").WaitForExit();
-
-            Process.Start("CMD.exe", $"/C docker image rm {imageName}").WaitForExit();
+            await _dockerImageService.DeleteDockerImage(imageName);
 
             RuntimeData newRuntimeData = new()
             {
-                ExceptionHappened = outPut == "" ? true : false,
+                ExceptionHappened = imageOutput == "" ? true : false,
                 ExecutionStart = dateStarted,
-                ExecutionTime = stopwatch.ElapsedMilliseconds,
+                ExecutionTime = imageOutput == String.Empty ? 0 : stopwatch.ElapsedMilliseconds,
                 UserId = userId,
                 FileId = projectId,
                 Id = Guid.NewGuid(),
-                ExecutionOutput = outPut
+                ExecutionOutput = imageOutput
             };
 
             var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(newRuntimeData);
