@@ -6,13 +6,9 @@ namespace PoroDev.Runtime.Services
 {
     public class RuntimeService : IRuntimeService
     {
-
-
         public Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid projectId)
         {
             throw new NotImplementedException();
         }
-
-
     }
 }
