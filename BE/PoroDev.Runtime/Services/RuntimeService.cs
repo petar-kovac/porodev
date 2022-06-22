@@ -25,9 +25,9 @@ namespace PoroDev.Runtime.Services
         {
             System.IO.Compression.ZipFile.ExtractToDirectory(ZIPPED_FILE_ROUTE, RUNTIME_FOLDER_ROUTE);
 
-            await CreateDockerfile(RUNTIME_FOLDER_ROUTE);
+            await CreateDockerfile(PROJECT_PATH);
 
-            var imageName = Guid.NewGuid;
+            var imageName = Guid.NewGuid();
 
             using (var processTest = new Process
             {
@@ -85,11 +85,14 @@ namespace PoroDev.Runtime.Services
                 ExecutionTime = stopwatch.ElapsedMilliseconds,
                 UserId = userId,
                 FileId = projectId,
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                ExecutionOutput = outPut
             };
 
             var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(newRuntimeData);
-            
+
+            Directory.Delete(Path.Combine(RUNTIME_FOLDER_ROUTE, ZIPPED_FILE_NAME), true);
+
             return dbResponse.Message;
 
         }

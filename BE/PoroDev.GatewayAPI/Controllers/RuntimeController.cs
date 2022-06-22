@@ -5,6 +5,8 @@ using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class RuntimeController : ControllerBase
     {
         private readonly IRunTimeService _runTimeService;
