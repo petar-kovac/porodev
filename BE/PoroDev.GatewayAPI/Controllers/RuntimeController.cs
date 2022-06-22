@@ -18,8 +18,9 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpPost("ExecuteProject")]
         public async Task<ActionResult<RuntimeData>> Execute([FromBody] ExecuteProjectRequestClientToGatewayWithHeader model)
         {
-            var jwtFromHeader = Request.Headers["Bearer"];
-            var modelWithJWT = new ExecuteProjectRequestClientToGateway() { FileID = model.FileId, Jwt = jwtFromHeader };
+            string jwtFromHeader = Request.Headers["authorization"];
+            string accessTokenWithoutBearerPrefix = jwtFromHeader.Substring("Bearer ".Length);
+            var modelWithJWT = new ExecuteProjectRequestClientToGateway() { FileID = model.FileId, Jwt = accessTokenWithoutBearerPrefix };
             var returnModel = await _runTimeService.ExecuteProgram(modelWithJWT);
             return Ok(returnModel);
         }
