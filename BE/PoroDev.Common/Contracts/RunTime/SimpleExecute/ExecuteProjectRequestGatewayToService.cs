@@ -8,7 +8,7 @@ namespace PoroDev.Common.Contracts.RunTime.SimpleExecute
 {
     public class ExecuteProjectRequestGatewayToService
     {
-        public string UserId { get; set; }
-        public string FileID { get; set; }
+        public Guid UserId { get; set; }
+        public Guid FileID { get; set; }
     }
 }

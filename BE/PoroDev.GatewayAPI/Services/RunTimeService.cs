@@ -33,7 +33,7 @@ namespace PoroDev.GatewayAPI.Services
             if (readUserByIdResponseContext.Message.ExceptionName != null)
                 ThrowException(readUserByIdResponseContext.Message.ExceptionName, readUserByIdResponseContext.Message.HumanReadableMessage);
 
-            var modelWithUserId = new ExecuteProjectRequestGatewayToService() { UserId = id, FileID = model.FileID };
+            var modelWithUserId = new ExecuteProjectRequestGatewayToService() { UserId = Guid.Parse(id), FileID = Guid.Parse(model.FileID) };
 
             var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(modelWithUserId);
             if (requestResponsecontext.Message.ExceptionName != null)
