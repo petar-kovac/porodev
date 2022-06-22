@@ -2,6 +2,6 @@
 {
     public interface IStorageRepository
     {
-        public Task<string> InsertFile(Stream stream, string fileName);
+        public Task UploadFile(Stream stream, string fileName);
     }
 }

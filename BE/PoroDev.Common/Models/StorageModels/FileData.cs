@@ -11,7 +11,7 @@ namespace PoroDev.Common.Models.StorageModels
 {
     public class FileData
     {
-        public ObjectId FileId { get; set; }
+        public Guid FileId { get; set; }
 
         public Guid UserId { get; set; }
 

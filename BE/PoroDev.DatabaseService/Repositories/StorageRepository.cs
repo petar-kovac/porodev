@@ -7,7 +7,7 @@ namespace PoroDev.DatabaseService.Repositories
 {
     public class StorageRepository
     {
-        private readonly IGridFSBucket _bucket;
+        private readonly IGridFSBucket<Guid> _bucket;
 
         public StorageRepository(IOptions<MongoDBSettings> mongoDBSettings)
         {
@@ -15,11 +15,12 @@ namespace PoroDev.DatabaseService.Repositories
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
-            _bucket = new GridFSBucket(mongoDatabase);
+            _bucket = new GridFSBucket<Guid>(mongoDatabase);
         }
 
-        public async Task<string> InsertFile(Stream stream, string fileName)
+        public async Task UploadFile(Stream stream, string fileName, Guid id)
         {
+            
             var options = new GridFSUploadOptions()
             {
                 Metadata = new MongoDB.Bson.BsonDocument()
@@ -27,10 +28,16 @@ namespace PoroDev.DatabaseService.Repositories
                     { "latest" , true }
                 }
             };
+           
 
-            var id = await _bucket.UploadFromStreamAsync(fileName, stream, options);
-
-            return "Success uploading";
+            try
+            {
+                await _bucket.UploadFromStreamAsync(id, fileName, stream, options);
+            }catch(Exception e)
+            {
+                throw FileUploadException("File isn't uploaded");
+            }
+            
         }
     }
 }

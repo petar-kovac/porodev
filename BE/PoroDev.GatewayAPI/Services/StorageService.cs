@@ -23,7 +23,10 @@ namespace PoroDev.GatewayAPI.Services
 
         public Task<FileUploadModel> Upload(FileUploadModel uploadModel)
         {
-            throw new NotImplementedException();
+           if(uploadModel.File == null || uploadModel.UserId == null)
+            {
+
+            }
         }
     }
 }
