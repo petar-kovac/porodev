@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.RunTime.SimpleExecute;
-using PoroDev.Common.Contracts.UserMenagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
