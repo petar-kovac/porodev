@@ -1,7 +1,7 @@
 ﻿using PoroDev.Common.Models.UnitOfWorkResponse;
 using System.Linq.Expressions;
 
-namespace PoroDev.Database.Repositories.Contracts
+namespace PoroDev.DatabaseService.Repositories.Contracts
 {
     public interface IGenericRepository<TemplateEntity> where TemplateEntity : class, new()
     {

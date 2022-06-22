@@ -1,6 +1,6 @@
 ﻿using PoroDev.Common.Models.UserModels.Data;
 
-namespace PoroDev.Database.Repositories.Contracts
+namespace PoroDev.DatabaseService.Repositories.Contracts
 {
     public interface IUserRepository : IGenericRepository<DataUserModel>
     {

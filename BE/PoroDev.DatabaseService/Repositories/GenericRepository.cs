@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 using System.Linq.Expressions;
-using static PoroDev.Database.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
 
-namespace PoroDev.Database.Repositories
+namespace PoroDev.DatabaseService.Repositories
 {
     public class GenericRepository<TemplateEntity, TemplateDatabaseContext> :
         IGenericRepository<TemplateEntity> where TemplateEntity : class, new()
@@ -128,7 +128,7 @@ namespace PoroDev.Database.Repositories
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id)
         {
 
-            TemplateEntity? exist = await _context.Set<TemplateEntity>().FindAsync(id);
+            TemplateEntity exist = await _context.Set<TemplateEntity>().FindAsync(id);
             UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
 
             try
