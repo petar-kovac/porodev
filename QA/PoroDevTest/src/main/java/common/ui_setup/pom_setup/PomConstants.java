@@ -13,4 +13,6 @@ public class PomConstants {
     public static final String POSITION_ERROR = "Letters & whitespace only";
     public static final String SUCCESSFUL_REGISTRATION = "Successful registration";
     public static final String REQUEST_FAIL_STATUS_CODE_400 = "Request failed with status code 400";
+    public static final String HOME_PAGE_USER_FILE_UPLOAD = "User file upload:";
+    public static final String LOGIN_PAGE_BAD_REQUEST = "Cannot read properties of undefined (reading 'data')";
 }

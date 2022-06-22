@@ -3,6 +3,7 @@ package common.ui_setup.pom_setup.PoroDevPom;
 import common.ui_setup.DriverSetup;
 import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -82,7 +83,8 @@ public class RegistrationPage extends BasePage {
 
     //ASSERT METHODS
     public void assert_user_registration(WebElement element, String expectedResults) {
-        logger.info("message: {}",  BasePage.getTextFromElement(element));
+        logger.info("Element text: {}",  BasePage.getTextFromElement(element));
+        System.out.println(element);
         Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults);
     }
 
@@ -95,7 +97,8 @@ public class RegistrationPage extends BasePage {
                 break;
             }
         }
-        logger.info("Error message: {}", currentError);
+        logger.info("Expected error message: {}", currentError);
         Assert.assertEquals(currentError, expectedResults);
+        System.out.println("expected: "+expectedResults);
     }
 }

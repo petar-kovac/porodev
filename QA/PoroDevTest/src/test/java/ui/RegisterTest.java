@@ -5,13 +5,17 @@ import common.ui_setup.FileControlUtil;
 import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
 import common.ui_setup.pom_setup.PomConstants;
+import common.ui_setup.pom_setup.PoroDevPom.HomePage;
 import common.ui_setup.pom_setup.PoroDevPom.RegistrationPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 public class RegisterTest extends BaseTest{
     protected FileControlUtil fileControlUtil;
+    private final Logger logger = LoggerFactory.getLogger(RegisterTest.class);
 
     public RegisterTest() throws IOException {
         fileControlUtil = new FileControlUtil(FileControlUtil.REGISTRATION_DATA_PROPERTIES);
@@ -30,10 +34,11 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.explicitWait(registrationPage.we_successful_registrationMsg);
+        HomePage homePage = new HomePage(driver);
+
         registrationPage.assert_user_registration(
-                registrationPage.we_successful_registrationMsg,
-                PomConstants.SUCCESSFUL_REGISTRATION);
+                homePage.we_userFileUpload_message,
+                PomConstants.HOME_PAGE_USER_FILE_UPLOAD);
     }
 
     @Test(priority = 2, dataProvider = "validEmailForms", dataProviderClass = DataProviderUtil.class)
@@ -49,10 +54,11 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.explicitWait(registrationPage.we_successful_registrationMsg);
+        HomePage homePage = new HomePage(driver);
+
         registrationPage.assert_user_registration(
-                registrationPage.we_successful_registrationMsg,
-                PomConstants.SUCCESSFUL_REGISTRATION);
+                homePage.we_userFileUpload_message,
+                PomConstants.HOME_PAGE_USER_FILE_UPLOAD);
     }
 
     @Test(priority = 3)

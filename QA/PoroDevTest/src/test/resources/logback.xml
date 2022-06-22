@@ -7,10 +7,9 @@
     </appender>
 
     <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <param name="file" value="target/rollback/logback.log"/>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>logFile.%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
+            <fileNamePattern>logs/logFile.%d{MM-dd-yyyy-HH-mm}.log</fileNamePattern>
 
             <!-- keep 30 days worth of history capped at 3gb total size -->
             <maxFileSize>10MB</maxFileSize>
@@ -23,11 +22,8 @@
         </encoder>
     </appender>
 
-    <root level="ERROR">
-            <appender-ref ref="STDOUT" />
+    <root level="info">
+        <appender-ref ref="ROLLING_FILE"/>
     </root>
 
-    <root level="INFO">
-        <appender-ref ref="ROLLING_FILE" />
-    </root>
 </configuration>
