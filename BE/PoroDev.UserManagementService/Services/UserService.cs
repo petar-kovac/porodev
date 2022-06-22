@@ -312,7 +312,7 @@ namespace PoroDev.UserManagementService.Services
         {
             if (model.Id.ToString().Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Id.ToString()))
             {
-                string exceptionType = nameof(IdFormatexception);
+                string exceptionType = nameof(IdFormatException);
                 string humanReadableMessage = "Id cannot be empty!";
 
                 var responseException = CreateResponseModel<CommunicationModel<DataUserModel>, DataUserModel>(exceptionType, humanReadableMessage);

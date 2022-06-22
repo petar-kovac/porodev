@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace PoroDev.Common.Exceptions
 {
-    public class IdFormatexception : Exception
+    public class IdFormatException : Exception
     {
         public string HumanReadableErrorMessage { get; set; }
 
-        public IdFormatexception() : base()
+        public IdFormatException() : base()
         {
             HumanReadableErrorMessage = "Internal server error occurred";
         }
 
-        public IdFormatexception(string message) : base()
+        public IdFormatException(string message) : base()
         {
             HumanReadableErrorMessage = message;
         }
 
-        public IdFormatexception(string message, params object[] args) : base()
+        public IdFormatException(string message, params object[] args) : base()
         {
             HumanReadableErrorMessage = string.Format(CultureInfo.CurrentCulture, message, args);
         }
