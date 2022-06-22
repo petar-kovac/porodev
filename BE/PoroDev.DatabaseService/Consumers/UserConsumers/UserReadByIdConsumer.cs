@@ -3,9 +3,9 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserMenagement.ReadById;
 using PoroDev.Common.Models.UserModels.Data;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.DatabaseService.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserReadByIdConsumer : IConsumer<UserReadByIdRequestServiceToDataBase>
     {
