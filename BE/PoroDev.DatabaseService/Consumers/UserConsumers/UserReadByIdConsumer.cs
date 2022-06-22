@@ -5,7 +5,7 @@ using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
-namespace PoroDev.DatabaseService.Consumers
+namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserReadByIdConsumer : IConsumer<UserReadByIdRequestServiceToDataBase>
     {
