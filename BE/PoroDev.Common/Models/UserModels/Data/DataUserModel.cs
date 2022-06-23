@@ -31,8 +31,8 @@ namespace PoroDev.Common.Models.UserModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DateTime DateCreated { get; set; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-        public ICollection<FileData> fileDatas { get; set; }
+      //  [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+      //  public ICollection<FileData> fileDatas { get; set; }
 
         public DataUserModel()
         {

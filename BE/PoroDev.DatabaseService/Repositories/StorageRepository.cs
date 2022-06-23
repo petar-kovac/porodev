@@ -12,10 +12,10 @@ namespace PoroDev.DatabaseService.Repositories
     {
         //private readonly IGridFSBucket<Guid> _bucket;
         private readonly IGridFSBucket _bucket;
-
+        
         public StorageRepository(IOptions<MongoDBSettings> mongoDBSettings)
         {
-            var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString);
+            var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString) ;
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
