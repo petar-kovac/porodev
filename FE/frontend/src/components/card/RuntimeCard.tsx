@@ -2,7 +2,7 @@ import { FileZipOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
-import dayjs from 'dayjs';
+import { formatDate } from 'util/helpers/date-formaters';
 
 const { Meta } = Card;
 
@@ -36,7 +36,7 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
           title={title}
           description={[
             <StyledMetaCardDescription>
-              {dayjs.unix(Date.parse(createdAt)).format('D MMMM')}
+              {formatDate(createdAt)}
               <span className="show-more">&rarr; Show more</span>
             </StyledMetaCardDescription>,
           ]}

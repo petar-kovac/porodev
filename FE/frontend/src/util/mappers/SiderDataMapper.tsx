@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { FC } from 'react';
 import { IFilesCard, IGroupCard } from 'types/card-data';
 import { ApiTranslation } from 'util/enums/api-translation-data';
+import { formatDate } from 'util/helpers/date-formaters';
 
 interface MappedCardData {
   [key: string]: string;
@@ -10,10 +11,6 @@ interface EntryType {
   [key: string]: string | number | boolean;
 }
 
-const convertUnixTime = (value: string) => {
-  return dayjs.unix(Date.parse(value)).format('D MMMM');
-};
-
 const mapResponseToCardData = (
   response: IGroupCard | IFilesCard,
 ): MappedCardData => {
@@ -21,7 +18,7 @@ const mapResponseToCardData = (
   // eslint-disable-next-line array-callback-return
   Object.entries(response).map(([key, value]: any) => {
     if (key === 'createdAt') {
-      obj = { ...obj, [ApiTranslation.createdAt]: convertUnixTime(value) };
+      obj = { ...obj, [ApiTranslation.createdAt]: formatDate(value) };
     } else {
       obj = {
         ...obj,

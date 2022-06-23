@@ -2,6 +2,7 @@ import { Avatar, List } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
+import { formatDate } from 'util/helpers/date-formaters';
 
 const PList: React.FC<{ data?: unknown[] | undefined }> = ({ data }) => {
   return (
@@ -17,7 +18,7 @@ const PList: React.FC<{ data?: unknown[] | undefined }> = ({ data }) => {
               <StyledDescription>
                 <div>{item.address}</div>
                 <div style={{ marginRight: 450, textAlign: 'left' }}>
-                  {dayjs.unix(Date.parse(item.createdAt)).format('D MMMM')}
+                  {formatDate(item.createdAt)}
                 </div>
               </StyledDescription>
             }
