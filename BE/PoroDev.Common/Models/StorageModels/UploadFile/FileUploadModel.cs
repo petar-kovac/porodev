@@ -9,6 +9,7 @@ namespace PoroDev.Common.Models.StorageModels.UploadFile
 {
     public class FileUploadModel
     {
+        public string FileName { get; set; }
         public byte[] File { get; set; }
 
         public Guid UserId { get; set; }
@@ -24,6 +25,7 @@ namespace PoroDev.Common.Models.StorageModels.UploadFile
             var memoryStream = new MemoryStream();
             stream.CopyTo(memoryStream);
             File = memoryStream.ToArray();
+            FileName = file.FileName;
 
             // var content = file.OpenReadStream().
             //File = file;//izmjeniti na end point-u

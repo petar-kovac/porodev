@@ -4,6 +4,6 @@ namespace PoroDev.DatabaseService.Repositories.Contracts
 {
     public interface IStorageRepository
     {
-        public Task UploadFile(Stream stream, string fileName, Guid id);
+        public Task UploadFile(byte[] fileArray, string fileName, Guid id);
     }
 }

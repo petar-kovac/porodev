@@ -24,6 +24,14 @@ namespace PoroDev.GatewayAPI.Services
             _uploadRequestClient = uploadRequestClient;
         }
 
+        /* Some additional things which we have to implement
+              da li cemo dodati ovaj model za citanje ID-a
+              private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
+            var modelWithUserId = new ExecuteProjectRequestGatewayToService() { UserId = Guid.Parse(id), FileID = Guid.Parse(model.FileID) };
+           var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(modelWithUserId);
+           if (requestResponsecontext.Message.ExceptionName != null)
+               ThrowException(requestResponsecontext.Message.ExceptionName, requestResponsecontext.Message.HumanReadableMessage);
+           //return requestResponsecontext.Message.Entity;*/
 
         public async Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel)
         {
@@ -35,15 +43,9 @@ namespace PoroDev.GatewayAPI.Services
             }
 
             FileUploadModel model = new FileUploadModel(uploadModel.File, uploadModel.UserId);
-            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
+            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(model);
 
-            // Some additional things which we have to implement
-            // var modelWithUserId = new ExecuteProjectRequestGatewayToService() { UserId = Guid.Parse(id), FileID = Guid.Parse(model.FileID) };
-            //var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(modelWithUserId);
-            //if (requestResponsecontext.Message.ExceptionName != null)
-            //    ThrowException(requestResponsecontext.Message.ExceptionName, requestResponsecontext.Message.HumanReadableMessage);
-
-            //return requestResponsecontext.Message.Entity;
+           
 
             return responseContext.Message.Entity;
         }

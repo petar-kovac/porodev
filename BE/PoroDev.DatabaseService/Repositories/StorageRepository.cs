@@ -21,19 +21,21 @@ namespace PoroDev.DatabaseService.Repositories
             _bucket = new GridFSBucket<Guid>(mongoDatabase);
         }
 
-        public async Task UploadFile(Stream stream, string fileName, Guid id)
+        public async Task UploadFile(byte[] fileArray, string fileName, Guid id)
         {
             var options = new GridFSUploadOptions()
             {
                 Metadata = new MongoDB.Bson.BsonDocument()
                 {
+                    
                     { "latest" , true }
                 }
             };
 
             try
             {
-                await _bucket.UploadFromStreamAsync(id, fileName, stream, options);
+                //Nece da upise kada se salje isti ID koji je vec upisan
+                await _bucket.UploadFromBytesAsync(id, fileName, fileArray, options);
             }
             catch (Exception e)
             {
