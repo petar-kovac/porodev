@@ -125,22 +125,23 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           position: registerData.position,
           avatarUrl: 'aurl',
         });
+        navigate('/login');
         localStorage.setItem(StorageKey.NAME, res.name);
         localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         message.success('Successful registration');
 
-        // mocked this until backend has been implemented
-        if (res.lastname === 'Admin') {
-          setIsAdmin(true);
-        }
-        setAuthenticated(true);
-        setIsLoading(false);
+        // // mocked this until backend has been implemented
+        // if (res.lastname === 'Admin') {
+        //   setIsAdmin(true);
+        // }
+        // setAuthenticated(true);
+        // setIsLoading(false);
 
-        if (res.lastname === 'Admin') {
-          navigate('/');
-        } else {
-          navigate('/user-home');
-        }
+        // if (res.lastname === 'Admin') {
+        //   navigate('/');
+        // } else {
+        //   navigate('/user-home');
+        // }
       } catch (err: any) {
         message.error(err.message);
         navigate('/login');

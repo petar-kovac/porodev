@@ -12,9 +12,15 @@ import {
 
 import PModal from 'components/modal/PModal';
 
+interface IModalTitleProps {
+  title: string;
+}
+
 const Profile: FC = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [modalTitle, setModalTitle] = useState<string>('');
+  const [modalTitle, setModalTitle] = useState<IModalTitleProps | undefined>(
+    undefined,
+  );
 
   return (
     <>
@@ -32,14 +38,28 @@ const Profile: FC = () => {
             <StyledProfileCardItem>
               <p className="name">First name: </p>
               <p> {localStorage.getItem(StorageKey.NAME)}</p>
-              <StyledProfileIcon onClick={() => setIsModalVisible(true)}>
+              <StyledProfileIcon
+                onClick={() => {
+                  setIsModalVisible(true);
+                  setModalTitle({
+                    title: 'Change Your Firstname',
+                  });
+                }}
+              >
                 <EditOutlined />
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
               <p>Last name: </p>
               <p> {localStorage.getItem(StorageKey.LASTNAME)}</p>
-              <StyledProfileIcon onClick={() => setIsModalVisible(true)}>
+              <StyledProfileIcon
+                onClick={() => {
+                  setIsModalVisible(true);
+                  setModalTitle({
+                    title: 'Change Your Lastname',
+                  });
+                }}
+              >
                 <EditOutlined />
               </StyledProfileIcon>
             </StyledProfileCardItem>
@@ -53,7 +73,14 @@ const Profile: FC = () => {
             <StyledProfileCardItem>
               <p>Password</p>
               <p>random</p>
-              <StyledProfileIcon onClick={() => setIsModalVisible(true)}>
+              <StyledProfileIcon
+                onClick={() => {
+                  setIsModalVisible(true);
+                  setModalTitle({
+                    title: 'Change Your Password',
+                  });
+                }}
+              >
                 <EditOutlined />
               </StyledProfileIcon>
             </StyledProfileCardItem>
@@ -61,7 +88,7 @@ const Profile: FC = () => {
         </StyledProfileCard>
       </StyledPage>
       <PModal
-        title="change"
+        title={modalTitle?.title}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         content={<Input />}
