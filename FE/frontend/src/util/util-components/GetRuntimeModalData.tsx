@@ -1,7 +1,10 @@
 import dayjs from 'dayjs';
 import { ReactNode } from 'react';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
-import { formatDate } from 'util/helpers/date-formater';
+import {
+  formatDate,
+  millisToMinutesAndSeconds,
+} from 'util/helpers/date-formaters';
 
 export const GetRuntimeModalData = ({
   exceptionHappened,
@@ -15,7 +18,7 @@ export const GetRuntimeModalData = ({
         <p>Exception has happened : {`${exceptionHappened}`}</p>
       ) : null}
       <p>Execution output : {executionOutput}</p>
-      <p>Execution time : {executionTime}</p>
+      <p>Execution time : {millisToMinutesAndSeconds(executionTime)}</p>
       <p>Execution start : {formatDate(executionStart)}</p>
     </div>
   );

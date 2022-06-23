@@ -6,5 +6,5 @@ export interface IRuntimeRsponse {
   exceptionHappened: boolean;
   executionOutput: string;
   executionStart: string;
-  executionTime: string;
+  executionTime: number;
 }
