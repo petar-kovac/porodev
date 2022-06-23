@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Models.StorageModels.DownloadFile
+namespace PoroDev.Common.Contracts.StorageService.DownloadFile
 {
     public class FileDownloadModel
     {

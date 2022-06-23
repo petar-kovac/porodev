@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Models.StorageModels.UploadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers

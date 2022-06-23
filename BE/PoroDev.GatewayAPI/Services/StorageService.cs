@@ -1,11 +1,11 @@
 ﻿using MassTransit;
 using PoroDev.Common.Exceptions;
-using PoroDev.Common.Models.StorageModels.DownloadFile;
-using PoroDev.Common.Models.StorageModels.UploadFile;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -13,12 +13,12 @@ namespace PoroDev.GatewayAPI.Services
     {
         //da li bi trebali ovde dodavati ove standardne RequestFromGatewayToService i slicno ? 
         private readonly IRequestClient<FileDownloadModel> _downloadRequestClient;
-        private readonly IRequestClient<FileUploadModel> _uploadRequestClient;
+        private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
 
         // da li cemo dodati ovaj model za citanje ID-a
         //       private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
 
-        public StorageService(IRequestClient<FileDownloadModel> downloadRequestClient, IRequestClient<FileUploadModel> uploadRequestClient)
+        public StorageService(IRequestClient<FileDownloadModel> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
@@ -42,10 +42,9 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
             }
 
-            FileUploadModel model = new FileUploadModel(uploadModel.File, uploadModel.UserId);
-            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(model);
+            //FileUploadModel model = new FileUploadModel(uploadModel.FileName, uploadModel.File, uploadModel.UserId);
 
-           
+            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
 
             return responseContext.Message.Entity;
         }

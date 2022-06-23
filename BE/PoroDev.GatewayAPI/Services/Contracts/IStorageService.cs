@@ -1,5 +1,6 @@
-﻿using PoroDev.Common.Models.StorageModels.DownloadFile;
-using PoroDev.Common.Models.StorageModels.UploadFile;
+﻿using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
+
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {

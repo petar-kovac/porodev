@@ -5,21 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Models.StorageModels.UploadFile
+namespace PoroDev.Common.Contracts.StorageService.UploadFile
 {
-    public class FileUploadModel
+    public class FileUploadRequestGatewayToService
     {
         public string FileName { get; set; }
         public byte[] File { get; set; }
 
         public Guid UserId { get; set; }
 
-        public FileUploadModel()
+        public FileUploadRequestGatewayToService()
         {
 
         }
 
-        public FileUploadModel(IFormFile file, Guid userId)
+        public FileUploadRequestGatewayToService(IFormFile file, Guid userId)
         {
             using Stream stream = file.OpenReadStream();
             var memoryStream = new MemoryStream();

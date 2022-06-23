@@ -1,7 +1,8 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Models.StorageModels.DownloadFile;
-using PoroDev.Common.Models.StorageModels.UploadFile;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
+
 using PoroDev.StorageService.Services.Contracts;
 
 namespace PoroDev.StorageService.Services
@@ -19,7 +20,7 @@ namespace PoroDev.StorageService.Services
 
         public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestGatewayToService uploadModel)
         {
-            FileUploadModel model = new(uploadModel.File, uploadModel.UserId);
+            FileUploadModel model = new(uploadModel.FileName, uploadModel.File, uploadModel.UserId);
         
             var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(model);
             return response.Message;

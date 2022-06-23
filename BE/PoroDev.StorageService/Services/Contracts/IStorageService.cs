@@ -1,5 +1,5 @@
 ﻿using PoroDev.Common.Contracts;
-using PoroDev.Common.Models.StorageModels.UploadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
 
 namespace PoroDev.StorageService.Services.Contracts
 {

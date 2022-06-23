@@ -1,5 +1,5 @@
-﻿using PoroDev.Common.Enums;
-using PoroDev.Common.Models.StorageModels;
+﻿using PoroDev.Common.Contracts.StorageService;
+using PoroDev.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -9,7 +9,7 @@ using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using static PoroDev.Database.Constants.Constants;
 using PoroDev.Common.Contracts.Update;
-using PoroDev.Common.Models.StorageModels.UploadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
 
 namespace PoroDev.Database.MapperProfiles
 {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Models.StorageModels
+namespace PoroDev.Common.Contracts.StorageService
 {
     public class FileData
     {
