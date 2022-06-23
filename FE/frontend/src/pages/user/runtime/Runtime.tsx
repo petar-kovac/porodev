@@ -17,6 +17,7 @@ const Runtime: FC = () => {
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
   const [content, setContent] = useState<ReactNode>(undefined);
+  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false);
   const count = useRef(0);
 
   const onClick = useCallback((value: any) => {
@@ -37,6 +38,7 @@ const Runtime: FC = () => {
   }, []);
 
   const startRuntime = async () => {
+    setIsDisabledButton(true);
     const res = await startRuntimeService({
       fileID: 'b22a0496-ded5-4fe5-bbb3-e20280b70a03',
       jwt: localStorage.getItem('accessToken'),
@@ -54,8 +56,10 @@ const Runtime: FC = () => {
         </p>
       </div>,
     );
+
     setIsSiderVisible(false);
     setIsModalVisible(true);
+    setIsDisabledButton(false);
   };
 
   useEffect(() => {
@@ -93,6 +97,7 @@ const Runtime: FC = () => {
           setIsSiderVisible={setIsSiderVisible}
           type="runtime"
           onButtonClick={startRuntime}
+          isDisabledButton={isDisabledButton}
         />
       </StyledContent>
 

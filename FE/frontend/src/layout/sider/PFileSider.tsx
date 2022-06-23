@@ -14,6 +14,7 @@ const { Sider } = Layout;
 
 interface IPFileSiderProps {
   isSiderVisible?: boolean;
+  isDisabledButton?: boolean;
   cardData?: IGroupCard | IFilesCard;
   type: 'folder' | 'file' | 'runtime';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
   cardData,
   type,
   onButtonClick,
+  isDisabledButton,
 }) => {
   const handleClose = () => {
     setIsSiderVisible(false);
@@ -48,6 +50,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
           borderRadius="12px"
           background={theme.colors.primary}
           onClick={onButtonClick}
+          isDisabledButton={isDisabledButton}
         />
       </StyledColumn>
     </StyledFileSider>
