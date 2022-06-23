@@ -8,7 +8,7 @@ import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import StyledIcon from 'styles/icons/StyledIcons';
 import { StyledClose } from 'styles/icons/styled-icons';
-import SiderData from './util/SiderData';
+import SiderDataMapper from '../../util/mappers/SiderDataMapper';
 
 const { Sider } = Layout;
 
@@ -42,7 +42,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
         </StyledRow>
         <StyledTitle>{cardData?.title}</StyledTitle>
         <StyledContent>
-          {cardData && <SiderData data={cardData} />}
+          {cardData && <SiderDataMapper data={cardData} />}
         </StyledContent>
         <PButton
           text={type === 'runtime' ? 'Start execution' : `Show ${type}`}

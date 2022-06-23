@@ -2,14 +2,12 @@ import axios from 'axios';
 import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import RuntimeCard from 'components/card/RuntimeCard';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
-import { IFilesCard } from 'types/card-data';
-import RuntimeCard from 'components/card/RuntimeCard';
 import { startRuntimeService } from 'service/runtime/runtime';
-import { IRuntimeRsponse } from 'service/runtime/runtime.props';
-import { Input } from 'antd';
-import dayjs from 'dayjs';
+import { IFilesCard } from 'types/card-data';
+import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
 
 const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
@@ -43,20 +41,9 @@ const Runtime: FC = () => {
       fileID: 'b22a0496-ded5-4fe5-bbb3-e20280b70a03',
       jwt: localStorage.getItem('accessToken'),
     });
+    const modalDataToRender: ReactNode = GetRuntimeModalData(res);
 
-    // hardcoded for backend demo
-    setContent(
-      <div>
-        <p>Execution has happened : {`${res.exceptionHappened}`}</p>
-        <p>Execution output : {res.executionOutput}</p>
-        <p>Execution time : {res.executionTime}</p>
-        <p>
-          Execution start :
-          {dayjs.unix(Date.parse(res.executionStart)).format('D MMMM')}
-        </p>
-      </div>,
-    );
-
+    setContent(modalDataToRender);
     setIsSiderVisible(false);
     setIsModalVisible(true);
     setIsDisabledButton(false);
@@ -100,7 +87,6 @@ const Runtime: FC = () => {
           isDisabledButton={isDisabledButton}
         />
       </StyledContent>
-
       <PModal
         title="Result of you action: "
         isModalVisible={isModalVisible}
