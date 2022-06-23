@@ -74,15 +74,16 @@ const StyledFilesModal = styled(Modal).attrs({
     padding: 1.4rem 2.2rem;
     border-radius: 1.6rem;
 
+    button {
+      border-radius: 0.8rem;
+    }
+
     .footer-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
   }
-`;
-const StyledFilesButton = styled(Button)`
-  border-radius: 0.8rem;
 `;
 
 export default PModal;
