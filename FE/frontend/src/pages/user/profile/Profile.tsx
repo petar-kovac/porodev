@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, ReactNode, ReactElement } from 'react';
 import styled from 'styled-components';
 import { StorageKey } from 'util/enums/storage-keys';
 
@@ -13,12 +13,13 @@ import {
 import PModal from 'components/modal/PModal';
 
 interface IModalTitleProps {
-  title: string;
+  title?: string;
+  content?: ReactNode;
 }
 
 const Profile: FC = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [modalTitle, setModalTitle] = useState<IModalTitleProps | undefined>(
+  const [modalData, setModalData] = useState<IModalTitleProps | undefined>(
     undefined,
   );
 
@@ -41,8 +42,9 @@ const Profile: FC = () => {
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
-                  setModalTitle({
+                  setModalData({
                     title: 'Change Your Firstname',
+                    content: localStorage.getItem(StorageKey.NAME) as string,
                   });
                 }}
               >
@@ -52,11 +54,15 @@ const Profile: FC = () => {
             <StyledProfileCardItem>
               <p>Last name: </p>
               <p> {localStorage.getItem(StorageKey.LASTNAME)}</p>
+
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
-                  setModalTitle({
+                  setModalData({
                     title: 'Change Your Lastname',
+                    content: localStorage.getItem(
+                      StorageKey.LASTNAME,
+                    ) as string,
                   });
                 }}
               >
@@ -72,11 +78,11 @@ const Profile: FC = () => {
             </StyledProfileCardItem>
             <StyledProfileCardItem>
               <p>Password</p>
-              <p>random</p>
+              <p>******</p>
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
-                  setModalTitle({
+                  setModalData({
                     title: 'Change Your Password',
                   });
                 }}
@@ -88,10 +94,17 @@ const Profile: FC = () => {
         </StyledProfileCard>
       </StyledPage>
       <PModal
-        title={modalTitle?.title}
+        title={modalData?.title}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
-        content={<Input />}
+        content={
+          <Input
+            onChange={(e) =>
+              setModalData({ ...modalData, content: e.target.value })
+            }
+            value={modalData?.content as string}
+          />
+        }
       />
     </>
   );
