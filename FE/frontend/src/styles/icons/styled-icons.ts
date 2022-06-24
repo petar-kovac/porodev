@@ -6,6 +6,7 @@ import {
   FieldTimeOutlined,
   FileImageOutlined,
   FolderFilled,
+  UserOutlined,
 } from '@ant-design/icons';
 import { Airplane } from '@styled-icons/ionicons-outline';
 import { Spin } from 'antd';
@@ -53,4 +54,15 @@ export const StyledIcon = styled(Airplane)<{ size: number; color: string }>`
 `;
 export const StyledClose = styled(CloseOutlined)`
   color: ${({ theme: { colors } }) => colors.primary};
+`;
+
+export const StyledUserOutlined = styled(UserOutlined)`
+  color: red;
+`;
+
+export const StyledLogo = styled.img`
+  position: absolute;
+  top: 5rem;
+  right: 10rem;
+  width: 25rem;
 `;

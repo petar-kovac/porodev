@@ -13,6 +13,7 @@ import {
 
 import PButton from 'components/buttons/PButton';
 import { useAuthStateValue } from 'context/AuthContext';
+import { StyledLogo } from 'styles/icons/styled-icons';
 
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -61,10 +62,3 @@ const Login: FC = () => {
 };
 
 export default Login;
-
-const StyledLogo = styled.img`
-  position: absolute;
-  top: 5rem;
-  right: 10rem;
-  width: 25rem;
-`;

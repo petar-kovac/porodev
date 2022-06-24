@@ -6,6 +6,11 @@ import DashboardCard from 'components/card/DashboardCard';
 import StackedArea from 'components/dashboard/StackedArea';
 import ColumnChart from 'components/dashboard/ColumnChart';
 import useAdminsData from '../admins/hooks/useAdminsData';
+import {
+  StyledChartsContainer,
+  StyledDashboardCardContainer,
+  StyledHome,
+} from './home-styled';
 
 const stackedAreaData = [
   { department: 'Department 1', date: 2010, value: 24 },
@@ -88,23 +93,5 @@ const Home: FC = () => {
     </StyledHome>
   );
 };
-
-const StyledHome = styled.div`
-  margin: 3rem;
-`;
-
-const StyledDashboardCardContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-  grid-column-gap: 2rem;
-  grid-row-gap: 3rem;
-`;
-
-const StyledChartsContainer = styled.div`
-  margin-top: 7rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
-  grid-column-gap: 2rem;
-`;
 
 export default Home;

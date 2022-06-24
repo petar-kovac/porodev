@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { StyledDashboardCard } from './card-styled';
 
 interface IDashboardCardProps {
   title: string;
@@ -22,14 +23,5 @@ const DashboardCard: FC<IDashboardCardProps> = ({
     </StyledDashboardCard>
   );
 };
-
-const StyledDashboardCard = styled.div`
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 2rem;
-  padding: 2rem;
-  min-width: 22rem;
-  flex-grow: 1;
-`;
 
 export default DashboardCard;

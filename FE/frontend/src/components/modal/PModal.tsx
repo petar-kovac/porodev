@@ -19,6 +19,8 @@ const PModal: FC<IPModalProps> = ({
   content,
   setIsModalVisible,
 }) => {
+  console.log(content, 'Ct');
+
   const handleOk = () => {
     setIsModalVisible(false);
   };

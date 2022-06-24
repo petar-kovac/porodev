@@ -3,6 +3,14 @@ import { DownloadOutlined } from '@ant-design/icons';
 import { FC } from 'react';
 import styled from 'styled-components';
 import DownloadButton from 'components/buttons/DownloadButton';
+import {
+  StyledDescriptionButtons,
+  StyledDescriptionUploadDetails,
+  StyledFilesButton,
+  StyledListCard,
+  StyledListCardContainer,
+  StyledMetaDescription,
+} from './card-styled';
 
 const { Meta } = Card;
 
@@ -23,8 +31,8 @@ const ListCard: FC<IListCardProps> = ({
 }) => {
   return (
     <>
-      <StyledCardContainer>
-        <StyledCard
+      <StyledListCardContainer>
+        <StyledListCard
           hoverable
           role="button"
           onDoubleClick={onDoubleClick}
@@ -51,53 +59,10 @@ const ListCard: FC<IListCardProps> = ({
               </StyledMetaDescription>,
             ]}
           />
-        </StyledCard>
-      </StyledCardContainer>
+        </StyledListCard>
+      </StyledListCardContainer>
     </>
   );
 };
-
-const StyledCardContainer = styled.div`
-  width: 100%;
-`;
-
-const StyledCard = styled(Card)`
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 7.5rem;
-  border-radius: 1.5rem;
-  overflow: hidden;
-
-  .ant-card-cover {
-    height: 14rem;
-    width: 24rem;
-    overflow: hidden;
-    border-top-left-radius: 1.5rem;
-    border-top-right-radius: 1.5rem;
-  }
-
-  .ant-card-body {
-    padding: 1rem 2rem;
-  }
-`;
-
-const StyledFilesButton = styled(Button)`
-  border-radius: 0.8rem;
-`;
-
-const StyledMetaDescription = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.5rem;
-`;
-
-const StyledDescriptionButtons = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const StyledDescriptionUploadDetails = styled.div`
-  text-align: center;
-`;
 
 export default ListCard;

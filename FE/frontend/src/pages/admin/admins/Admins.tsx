@@ -2,12 +2,12 @@ import { FC, useEffect } from 'react';
 
 import PButton from 'components/buttons/PButton';
 import PTable from 'components/table/PTable';
+import { PAGES } from 'util/constants/constants';
 import {
   StyledHeading,
   StyledHeadingWrapper,
   StyledPage,
-} from 'styles/commonStyles';
-import { PAGES } from 'util/constants/constants';
+} from './admins-styled';
 
 import useAdminsColumns from './hooks/useAdminsColumns';
 import useAdminsData from './hooks/useAdminsData';
