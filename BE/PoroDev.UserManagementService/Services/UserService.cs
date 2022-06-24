@@ -450,25 +450,37 @@ namespace PoroDev.UserManagementService.Services
 
         private async Task CheckEmailUpdate(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email)) 
+            { 
                 throw new EmailFormatException(EMAIL_EMPTY_ERROR);
+            }
 
             if (email.Length > MAX_EMAIL_LENGTH)
+            {
                 throw new EmailFormatException(EMAIL_LENGTH_ERROR);
+            }
 
             var splitEmail = email.Split('@');
 
             if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
+            { 
                 throw new EmailFormatException(EMAIL_FORMAT_ERROR);
+            }
 
             if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
+            {
                 throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
+            }
 
             if (CheckStringForCharacters(splitEmail[0], SPECIAL_CHARACTERS_EMAIL_STRING))
+            {
                 throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
+            }
 
             if (!splitEmail[1].Equals(EMAIL_DOMAIN))
+            {
                 throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
+            }
 
         }
     }
