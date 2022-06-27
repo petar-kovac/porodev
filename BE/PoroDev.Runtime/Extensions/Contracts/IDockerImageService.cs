@@ -7,5 +7,7 @@
         Task<string> RunDockerImage(string imageName, string runtimePath);
 
         Task DeleteDockerImage(string imageName);
+
+        Exception SetFolderPath(string runtimeFolderPath)
     }
 }

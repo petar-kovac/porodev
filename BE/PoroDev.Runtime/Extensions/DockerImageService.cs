@@ -3,8 +3,13 @@ using System.Diagnostics;
 
 namespace PoroDev.Runtime.Extensions
 {
-    public class DockerImageService : IDockerImageService
+    public class DockerImageService : RuntimePathsAbstract, IDockerImageService
     {
+        public DockerImageService() : base()
+        {
+
+        }
+
         public async Task CreateDockerImage(string imageName, string runtimePath)
         {
             try

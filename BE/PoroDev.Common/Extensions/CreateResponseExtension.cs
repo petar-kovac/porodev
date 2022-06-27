@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Exceptions.Contract;
 
 namespace PoroDev.Common.Extensions
 {
@@ -23,6 +24,18 @@ namespace PoroDev.Common.Extensions
                 Entity = null,
                 ExceptionName = exceptionName,
                 HumanReadableMessage = humanReadableMessage
+            };
+
+            return response;
+        }
+
+        public static CommunicationModel<CreatedEntity> CreateResponseModel<CreatedEntity>(ICustomException exception) where CreatedEntity : class, new()
+        {
+            CommunicationModel<CreatedEntity> response = new ()
+            {
+                Entity = null,
+                ExceptionName =  exception.GetType().Name,
+                HumanReadableMessage = exception.HumanReadableErrorMessage
             };
 
             return response;

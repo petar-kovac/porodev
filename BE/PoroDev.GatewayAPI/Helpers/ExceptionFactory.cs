@@ -17,6 +17,9 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(UserExistsException) => new UserExistsException(errorMessage),
                 nameof(InvalidCredentialsExceptions) => new InvalidCredentialsExceptions(errorMessage),
                 nameof(FullNameFormatException) => new FullNameFormatException(errorMessage),
+                nameof(IdFormatException) => new IdFormatException(errorMessage),
+                nameof(RequestNullException) => new RequestNullException(errorMessage),
+                nameof(ZippedFileException) => new ZippedFileException(errorMessage),
                 _ => new Exception("Exception not found!"),
             };
         }
