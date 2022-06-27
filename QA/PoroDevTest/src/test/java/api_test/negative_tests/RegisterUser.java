@@ -1,4 +1,4 @@
-package api_test;
+package api_test.negative_tests;
 
 
 import common.api_setup.ApiConfig;

@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
 <suite name="FunctionalTest" verbose="1" >
-    <test name="FunctionalTests">
+    <test name="UserTest">
         <classes>
-            <class name="api_test.FunctionalTest" />
+            <class name="api_test.functional_tests.UserTests" />
         </classes>
     </test>
 

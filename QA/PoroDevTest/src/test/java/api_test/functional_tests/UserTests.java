@@ -1,23 +1,18 @@
-package api_test;
+package api_test.functional_tests;
 
+import com.jayway.jsonpath.JsonPath;
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
 import common.api_setup.api_common.User;
 import common.api_setup.api_common.UserDetailsGenerator;
-import common.api_setup.api_common.UserSerialization;
 import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import jdk.jfr.Description;
 import org.testng.annotations.Test;
 import static org.hamcrest.Matchers.equalTo;
-
-
-
 import static io.restassured.RestAssured.given;
 
 
-public class FunctionalTest extends ApiConfig {
+@Feature("CRUD")
+public class UserTests extends ApiConfig {
 
 
 
@@ -31,6 +26,7 @@ public class FunctionalTest extends ApiConfig {
                 .post(Endpoints.REGISTER_USER)
                 .then();
     }
+
 
     // Update user (change any of the details)
 
@@ -53,10 +49,22 @@ public class FunctionalTest extends ApiConfig {
                 .when()
                 .get(Endpoints.GET_USER_BY_EMAIL+ Endpoints.EMAIL_PATH + "john.dean@boing.rs")
                 .then().body("name", equalTo("John"));
+
+    }
+
+    // Fetching the id attribute with method takeValueFromJsonResp and sending the request for getting the user with id
+    @Test(priority = 3, description = "Sending the request for getting the user with that id value")
+    public void getUserById() {
+        String userIdFromJson = UserDetailsGenerator.takeValueFromJsonResp
+                (Endpoints.GET_USER_BY_EMAIL+ Endpoints.EMAIL_PATH + "john.dean@boing.rs", "id");
+        given().relaxedHTTPSValidation()
+                .when()
+                .get(Endpoints.GET_USER_BY_ID + Endpoints.ID_PATH + userIdFromJson)
+                .then().body("name", equalTo("John"));
     }
 
     //Sending the log in request
-    @Test (priority = 3, description = "Sending the request for log in with regular email and password entry")
+    @Test (priority = 4, description = "Sending the request for log in with regular email and password entry")
     public void logInUser() {
         String logInJSONObject = "{\n" +
                 "  \"email\": \"john.dean@boing.rs\",\n" +
@@ -70,8 +78,26 @@ public class FunctionalTest extends ApiConfig {
                 .then().body("name", equalTo("John"));
     }
 
-    // sending the request for deleting the user with sending email
-    @Test (priority = 4, description = "Sending the request for deleting the user with regular email")
+    // Taking the jwt token value with takeTokenValueFromJson method and sending the runtime request
+    @Test(priority = 5, description = "Sending the request for runtime with jwt token in header")
+    public void runtime() {
+        String token = UserDetailsGenerator
+                .takeTokenValueFromJson("john.dean@boing.rs", "stringString1!");
+        String jsonRequestWithFileId = "{\n" +
+                "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
+                "}";
+        given().relaxedHTTPSValidation()
+                .header("authorization", "Bearer "+token)
+                .when()
+                .body(jsonRequestWithFileId)
+                .post(Endpoints.RUNTIME)
+                .then().statusCode(200);
+    }
+
+
+
+    // Sending the request for deleting the user with sending email
+    @Test (priority = 6, description = "Sending the request for deleting the user with regular email")
     public void deleteUser() {
         String jsonRequestWithEmail = "{\n" +
                 "  \"email\": \"john.dean@boing.rs\"\n" +
@@ -82,7 +108,6 @@ public class FunctionalTest extends ApiConfig {
                 .delete(Endpoints.USER_DELETE)
                 .then();
     }
-
 
 }
 
