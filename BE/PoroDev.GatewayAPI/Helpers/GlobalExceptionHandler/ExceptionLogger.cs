@@ -20,7 +20,7 @@
 
         private static void WriteLog(string hrmessage, Exception e)
         {
-            string newLog = DateTime.Now.ToString() + ',' + hrmessage + ',' + e.GetType() + ',' + e.Message;
+            string newLog = DateTime.Now.ToString() + ',' + hrmessage + ',' + e.GetType() + ',' + e.Message + ',' +e.StackTrace + "\n";
             using (StreamWriter sw = new StreamWriter(filePath, true))
             {
                 sw.WriteLine(newLog);
@@ -29,7 +29,7 @@
 
         private static void WriteHeaders()
         {
-            string headers = "Time,HumanReadableMessage,Exception,ExceptionMessage";
+            string headers = "Time,HumanReadableMessage,Exception,ExceptionMessage,StackTrace";
             using (StreamWriter sw = new StreamWriter(filePath))
             {
                 sw.WriteLine(headers);

@@ -1,72 +1,93 @@
 package ui;
 
-import common.ui_setup.FileControl;
+import common.ui_setup.FileControlUtil;
+import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.PoroDevPom.LoginPage;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 
 public class LoginTest extends BaseTest {
-    protected FileControl fileControl = new FileControl(FileControl.LOGIN_DATA_PROPERTIES);
+    protected FileControlUtil fileControlUtil;
 
     public LoginTest() throws IOException {
+        fileControlUtil = new FileControlUtil(FileControlUtil.LOGIN_DATA_PROPERTIES);
     }
 
     @Test(priority = 0)
-    public void login_with_validCredentials() throws IOException, InterruptedException {
-        System.out.println("first test");
+    public void login_with_validCredentials() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.login_and_assert(fileControl.getValue("VALID_EMAIL"), fileControl.getValue("VALID_PASS"));
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.successfulLogin), "Successful login");
+        loginPage.login(
+                fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
+                fileControlUtil.getValue("VALID_PASS_CREATED_USER"));
+
+        loginPage.assert_valid_login("Successful login");
     }
 
     @Test(priority = 1)
-    public void login_with_invalidPassword() throws IOException, InterruptedException {
-        System.out.println("second test");
+    public void login_with_invalidFormPassword() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.login_and_assert(fileControl.getValue("VALID_EMAIL"), fileControl.getValue("INVALID_PASS"));
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.errorAfterBadCredentials), "Request failed with status code 401");
+        loginPage.login(
+                fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
+                fileControlUtil.getValue("INVALID_FORM_PASS"));
+
+        loginPage.assert_login("Wrong password");
     }
 
     @Test(priority = 2)
-    public void login_with_invalidEmail() throws InterruptedException {
-        System.out.println("Third test");
+    public void login_with_valid_notMatchingUserPassword() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.login_and_assert(fileControl.getValue("INVALID_EMAIL"), fileControl.getValue("VALID_PASS"));
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.errorAfterBadCredentials), "Request failed with status code 401");
+        loginPage.login(
+                fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
+                fileControlUtil.getValue("VALID_NOT_MATCHING_USER_PASSWORD"));
+
+        loginPage.assert_login_with_valid_notExistingCredentials("Cannot read properties of undefined (reading 'data')");
     }
 
     @Test(priority = 3)
-    public void login_without_email() throws InterruptedException {
-        System.out.println("Fourth test");
+    public void login_with_invalidFormEmail() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.login_and_assert("", fileControl.getValue("VALID_PASS"));
-        System.out.println(elementControl.getTextFromElement(loginPage.emailErrorMsg));
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.emailErrorMsg), "Please input your username");
+        loginPage.login(
+                fileControlUtil.getValue("INVALID_FORM_EMAIL"),
+                "");
+
+        loginPage.assert_login("Email is invalid");
     }
 
     @Test(priority = 4)
-    public void login_without_password() throws InterruptedException {
-        System.out.println("Fifth test");
+    public void login_with_notExistingUserEmail() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.login_and_assert(fileControl.getValue("VALID_EMAIL"), "");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.passErrorMsg), "Please input your password");
+        loginPage.login(
+                fileControlUtil.getValue("VALID_NOT_EXISTING_USER_EMAIL"),
+                fileControlUtil.getValue("VALID_FORM_PASS"));
+
+        loginPage.assert_login_with_valid_notExistingCredentials("Cannot read properties of undefined (reading 'data')");
     }
 
     @Test(priority = 5)
-    public void login_without_bothCredentials() throws InterruptedException {
-        System.out.println("Sixth test");
+    public void login_without_email() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.login_and_assert("", "");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.emailErrorMsg), "Please input your username");
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.passErrorMsg), "Please input your password");
+        loginPage.login(
+                "",
+                fileControlUtil.getValue("VALID_PASS_CREATED_USER"));
+
+        loginPage.assert_login("This field is required");
     }
 
     @Test(priority = 6)
-    public void login_with_invalidEmail_invalidPassword() throws InterruptedException {
-        loginPage.login_and_assert(fileControl.getValue("INVALID_EMAIL"), fileControl.getValue("INVALID_PASS"));
-        Assert.assertEquals(elementControl.getTextFromElement(loginPage.errorAfterBadCredentials), "Request failed with status code 401");
+    public void login_without_password() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
+
+        loginPage.login(
+                fileControlUtil.getValue("VALID_EMAIL_CREATED_USER"),
+                "");
+
+        loginPage.assert_login("This field is required");
     }
 }
