@@ -17,7 +17,6 @@ interface IPButtonProps {
     | 'primary'
     | 'dashed'
     | undefined;
-  isDisabledButton?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
@@ -29,12 +28,11 @@ const PButton: FC<IPButtonProps> = ({
   htmlType,
   form,
   type,
-  isDisabledButton,
+
   onClick,
 }) => {
   return (
     <StyledButton
-      disabled={isDisabledButton}
       color={color}
       borderRadius={borderRadius}
       background={background}

@@ -9,12 +9,10 @@ interface ISpinnerProps {
 
 const Spinner: FC<ISpinnerProps> = ({ size, color, speed }) => {
   return (
-    <div>
-      <StyledSpin
-        speed={speed}
-        indicator={<StyledIcon color={color} size={size} />}
-      />
-    </div>
+    <StyledSpin
+      speed={speed}
+      indicator={<StyledIcon color={color} size={size} />}
+    />
   );
 };
 

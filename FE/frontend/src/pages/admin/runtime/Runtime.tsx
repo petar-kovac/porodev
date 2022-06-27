@@ -74,11 +74,11 @@ const Runtime: FC = () => {
           <StyledFilesWrapper>
             {data?.slice(0, 3).map((value: any) => (
               <>
-                <RuntimeCard
+                {/* <RuntimeCard
                   title={value?.title}
                   createdAt={value?.createdAt}
                   onClick={() => onClick(value)}
-                />
+                /> */}
               </>
             ))}
           </StyledFilesWrapper>

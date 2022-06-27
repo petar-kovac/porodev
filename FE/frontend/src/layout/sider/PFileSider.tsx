@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { IGroupCard, IFilesCard } from 'types/card-data';
 import { CloseOutlined, FileOutlined, FolderFilled } from '@ant-design/icons';
 import PButton from 'components/buttons/PButton';
+import Spinner from 'components/spinner/Spinner';
 import theme from 'theme/theme';
 import StyledIcon from 'styles/icons/StyledIcons';
 import { StyledClose } from 'styles/icons/styled-icons';
@@ -15,6 +16,7 @@ const { Sider } = Layout;
 interface IPFileSiderProps {
   isSiderVisible?: boolean;
   isDisabledButton?: boolean;
+  isLoading?: boolean;
   cardData?: IGroupCard | IFilesCard;
   type: 'folder' | 'file' | 'runtime';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
@@ -28,6 +30,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
   type,
   onButtonClick,
   isDisabledButton,
+  isLoading,
 }) => {
   const handleClose = () => {
     setIsSiderVisible(false);
@@ -44,14 +47,17 @@ const PFileSider: FC<IPFileSiderProps> = ({
         <StyledContent>
           {cardData && <SiderDataMapper data={cardData} />}
         </StyledContent>
-        <PButton
-          text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
-          color="#fff"
-          borderRadius="12px"
-          background={theme.colors.primary}
-          onClick={onButtonClick}
-          isDisabledButton={isDisabledButton}
-        />
+        {isLoading ? (
+          <Spinner color="#000" size={26} speed={1.3} />
+        ) : (
+          <PButton
+            text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
+            color="#fff"
+            borderRadius="12px"
+            background={theme.colors.primary}
+            onClick={onButtonClick}
+          />
+        )}
       </StyledColumn>
     </StyledFileSider>
   );

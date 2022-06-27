@@ -1,7 +1,9 @@
-import { FileZipOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
-import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
+import { FileZipOutlined } from '@ant-design/icons';
+import { FC, ReactNode, RefObject, useRef } from 'react';
+
+import useDoubleClick from 'hooks/useDoubleClick';
 import { formatDate } from 'util/helpers/date-formaters';
 
 const { Meta } = Card;
@@ -9,46 +11,55 @@ const { Meta } = Card;
 interface IRuntimeCardProps {
   title: ReactNode;
   createdAt: string;
-  onClick?: any;
-  onDoubleClick?: any;
+  selected?: boolean;
+  onClick?: (event: MouseEvent) => unknown;
+  onDoubleClick?: (event: MouseEvent) => unknown;
+  keyless: string;
 }
 
 const RuntimeCard: FC<IRuntimeCardProps> = ({
   title,
   createdAt,
   onClick,
-  onDoubleClick,
+  selected = false,
+  onDoubleClick = () => undefined,
+  keyless,
 }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
+
   return (
-    <>
-      <StyledCard
-        hoverable
-        cover={
-          <div className="card-cover">
-            <FileZipOutlined />
-          </div>
-        }
-        role="button"
-        onDoubleClick={onDoubleClick}
-        onClick={onClick}
-      >
-        <Meta
-          title={title}
-          description={[
-            <StyledMetaCardDescription>
-              {formatDate(createdAt)}
-              <span className="show-more">&rarr; Show more</span>
-            </StyledMetaCardDescription>,
-          ]}
-        />
-      </StyledCard>
-    </>
+    <StyledCard
+      ref={ref}
+      selected={selected}
+      key={keyless}
+      hoverable
+      cover={
+        <div className="card-cover">
+          <FileZipOutlined />
+        </div>
+      }
+      role="button"
+    >
+      <Meta
+        data-testid="title"
+        title={title}
+        description={[
+          <StyledMetaCardDescription>
+            {formatDate(createdAt)}
+            <span className="show-more">&rarr; Show more</span>
+          </StyledMetaCardDescription>,
+        ]}
+      />
+    </StyledCard>
   );
 };
 
 const StyledCard = styled(Card).attrs({
   'data-testid': 'files-card',
-})`
+})<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
+  background-color: ${({ selected }) => (selected ? 'red' : 'blue')};
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 25rem;
   border-radius: 1.5rem;
