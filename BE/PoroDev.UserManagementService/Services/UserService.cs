@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Contracts.LoginUser;
-using PoroDev.Common.Contracts.ReadUser;
-using PoroDev.Common.Contracts.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -15,6 +10,12 @@ using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using static PoroDev.UserManagementService.Constants.Consts;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.ReadById;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -22,6 +23,7 @@ namespace PoroDev.UserManagementService.Services
     {
         private readonly IRequestClient<UserCreateRequestServiceToDatabase> _createRequestClient;
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
+        private readonly IRequestClient<UserReadByIdRequestServiceToDataBase> _readUserByIdClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
         private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
         private readonly IRequestClient<RegisterUserRequestServiceToDatabase> _registerUserClient;
@@ -35,6 +37,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<UserDeleteRequestServiceToDatabase> deleteUserRequestClient,
                            IRequestClient<RegisterUserRequestServiceToDatabase> registerUserClient,
                            IRequestClient<UserLoginRequestServiceToDatabase> loginUserRequestClient,
+                           IRequestClient<UserReadByIdRequestServiceToDataBase> readByIdRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
@@ -43,6 +46,7 @@ namespace PoroDev.UserManagementService.Services
             _deleteUserRequestclient = deleteUserRequestClient;
             _registerUserClient = registerUserClient;
             _loginUserRequestClient = loginUserRequestClient;
+            _readUserByIdClient = readByIdRequestClient;
             _mapper = mapper;
         }
 
@@ -51,40 +55,6 @@ namespace PoroDev.UserManagementService.Services
             var modelToReturn = await _loginUserRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(userToLoginModel);
             return modelToReturn.Message;
         }
-
-        //public async Task<UserLoginResponseModel> Login(UserLoginRequestModel loginModel)
-        //{
-        //    DataUserModel dataUserModel;
-        //    try
-        //    {
-        //        dataUserModel = await GetUserByMail(loginModel.Email);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new FailedToLogInException("Login credentials don't match");
-        //    }
-        //    VerifyPasswordHash(loginModel.Password, dataUserModel.Password, dataUserModel.Salt);
-        //    UserLoginResponseModel response = _mapper.Map<UserLoginResponseModel>(dataUserModel);
-        //    response.Jwt = CreateToken(dataUserModel);
-        //    return response;
-        //}
-
-        //public string CreateToken(DataUserModel user)
-        //{
-        //    List<Claim> claims = new List<Claim>
-        //    {
-        //        new Claim("Id", user.Id.ToString()),
-        //    };
-        //    var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SECRET_KEY));
-        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-        //    var token = new JwtSecurityToken(
-        //        claims: claims,
-        //        expires: DateTime.Now.AddHours(1),
-        //        signingCredentials: creds);
-        //    var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        //    return jwt;
-        //}
 
         private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -338,12 +308,34 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
+        public async Task<CommunicationModel<DataUserModel>> ReadUserById(UserReadByIdRequestGatewayToService model)
+        {
+            if (model.Id.ToString().Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Id.ToString()))
+            {
+                string exceptionType = nameof(IdFormatException);
+                string humanReadableMessage = "Id cannot be empty!";
+
+                var responseException = CreateResponseModel<CommunicationModel<DataUserModel>, DataUserModel>(exceptionType, humanReadableMessage);
+
+                return responseException;
+            }
+
+            UserReadByIdRequestServiceToDataBase readUser = new()
+            {
+                Id = model.Id
+            };
+
+            var response = await _readUserByIdClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
+            return response.Message;
+
+        }
+
         public async Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model)
         {
             var isException = await CheckUserFieldsUpdate(model);
 
-            if (isException.ExceptionName != null) 
-            { 
+            if (isException.ExceptionName != null)
+            {
                 return isException;
             }
 
@@ -450,8 +442,8 @@ namespace PoroDev.UserManagementService.Services
 
         private async Task CheckEmailUpdate(string email)
         {
-            if (string.IsNullOrWhiteSpace(email)) 
-            { 
+            if (string.IsNullOrWhiteSpace(email))
+            {
                 throw new EmailFormatException(EMAIL_EMPTY_ERROR);
             }
 
@@ -463,7 +455,7 @@ namespace PoroDev.UserManagementService.Services
             var splitEmail = email.Split('@');
 
             if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
-            { 
+            {
                 throw new EmailFormatException(EMAIL_FORMAT_ERROR);
             }
 
@@ -483,5 +475,7 @@ namespace PoroDev.UserManagementService.Services
             }
 
         }
+
+
     }
 }

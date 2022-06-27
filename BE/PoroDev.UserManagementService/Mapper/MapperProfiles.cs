@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Enums;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.RegisterUser;

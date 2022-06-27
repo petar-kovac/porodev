@@ -33,9 +33,9 @@ public class DriverSetup {
         driver.manage().deleteAllCookies();
     }
 
-    public void navigateToUrl(String url) {
-        driver.manage().timeouts().pageLoadTimeout(SetupConstants.PAGE_LOAD_TIME, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(SetupConstants.ELEMENT_DETECTION_TIMEOUT, TimeUnit.SECONDS);
+    public static void navigateToUrl(WebDriver driver, String url) {
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(SetupConstants.PAGE_LOAD_TIME));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
         driver.get(url);
     }
 
