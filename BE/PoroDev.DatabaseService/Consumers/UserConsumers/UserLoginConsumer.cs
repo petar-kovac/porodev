@@ -51,7 +51,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             {
                 new Claim("Id", user.Id.ToString()),
             };
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(SecretKey));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Common.Constants.Constants.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,

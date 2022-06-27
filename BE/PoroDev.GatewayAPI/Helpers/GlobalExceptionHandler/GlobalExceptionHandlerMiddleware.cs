@@ -28,6 +28,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case NoHeaderWithJwtException noHeaderWithJwtException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = noHeaderWithJwtException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, noHeaderWithJwtException);
+                        break;
+
+                    case JWTValidationException jwtValidationException:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = jwtValidationException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, jwtValidationException);
+                        break;
+
                     case DatabaseException databaseException:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = databaseException.HumanReadableErrorMessage;
