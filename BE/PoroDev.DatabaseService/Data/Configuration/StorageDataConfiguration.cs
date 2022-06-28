@@ -13,7 +13,7 @@ namespace PoroDev.DatabaseService.Data.Configuration
 
             builder.HasOne<DataUserModel>(x => x.CurrentUser)
                 .WithMany(x => x.fileDatas)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.CurrentUser.Id);
 
 
         }
