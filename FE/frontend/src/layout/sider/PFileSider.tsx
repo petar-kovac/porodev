@@ -1,5 +1,11 @@
-import { Layout } from 'antd';
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
+import { Layout, Button } from 'antd';
+import {
+  Dispatch,
+  FC,
+  MouseEventHandler,
+  SetStateAction,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 
 import { IGroupCard, IFilesCard } from 'types/card-data';
@@ -32,6 +38,24 @@ const PFileSider: FC<IPFileSiderProps> = ({
   isDisabledButton,
   isLoading,
 }) => {
+  const [loadings, setLoadings] = useState<boolean[]>([]);
+
+  const enterLoading = (index: number) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 6000);
+  };
+
   const handleClose = () => {
     setIsSiderVisible(false);
   };
@@ -48,7 +72,9 @@ const PFileSider: FC<IPFileSiderProps> = ({
           {cardData && <SiderDataMapper data={cardData} />}
         </StyledContent>
         {isLoading ? (
-          <Spinner color="#000" size={26} speed={1.3} />
+          <Button type="primary" loading>
+            Loading
+          </Button>
         ) : (
           <PButton
             text={type === 'runtime' ? 'Start execution' : `Show ${type}`}

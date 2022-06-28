@@ -14,7 +14,6 @@ interface IRuntimeCardProps {
   selected?: boolean;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
-  keyless: string;
 }
 
 const RuntimeCard: FC<IRuntimeCardProps> = ({
@@ -23,7 +22,6 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
   onClick,
   selected = false,
   onDoubleClick = () => undefined,
-  keyless,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -33,7 +31,6 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
     <StyledCard
       ref={ref}
       selected={selected}
-      key={keyless}
       hoverable
       cover={
         <div className="card-cover">

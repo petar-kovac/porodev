@@ -59,7 +59,6 @@ const Runtime: FC = () => {
               <>
                 <RuntimeCard
                   key={value.id}
-                  keyless={value?.id}
                   title={value?.title}
                   selected={value?.id === cardData?.id}
                   createdAt={value?.createdAt}

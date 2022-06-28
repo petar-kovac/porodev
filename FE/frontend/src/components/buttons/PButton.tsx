@@ -1,5 +1,6 @@
+import { FC, MouseEventHandler, ReactNode } from 'react';
 import { Button } from 'antd';
-import { FC, MouseEventHandler } from 'react';
+import { PoweroffOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 interface IPButtonProps {
@@ -17,6 +18,7 @@ interface IPButtonProps {
     | 'primary'
     | 'dashed'
     | undefined;
+  icon?: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
@@ -28,7 +30,7 @@ const PButton: FC<IPButtonProps> = ({
   htmlType,
   form,
   type,
-
+  icon,
   onClick,
 }) => {
   return (
@@ -40,6 +42,7 @@ const PButton: FC<IPButtonProps> = ({
       form={form}
       type={type}
       onClick={onClick}
+      icon={icon}
     >
       {text}
     </StyledButton>
