@@ -109,7 +109,7 @@ namespace PoroDev.Runtime.Services
 
             if(deleteException != null)
             {
-                var responseModel = new CommunicationModel<RuntimeData>(extractionException);
+                var responseModel = new CommunicationModel<RuntimeData>(deleteException);
 
                 return responseModel;
             }
