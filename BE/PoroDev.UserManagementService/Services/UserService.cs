@@ -174,7 +174,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
         {
-            var isException = await Helpers.UserManagementValidator.CheckUserFields(registerModel, _readUserByEmailClient);
+            var isException = await Helpers.UserManagementValidator.Validate(registerModel, _readUserByEmailClient);
 
             if (isException.ExceptionName != null)
                 return isException;

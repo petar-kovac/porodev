@@ -109,7 +109,7 @@ namespace PoroDev.UserManagementService.Helpers
                 throw new PositionFormatException(POSITION_SPECIAL_CHARACTER_ERROR);
         }
 
-        public static async Task<CommunicationModel<RegisterUserResponse>> CheckUserFields(RegisterUserRequestGatewayToService registerModel, IRequestClient<UserReadByEmailRequestServiceToDatabase> requestClient)
+        public static async Task<CommunicationModel<RegisterUserResponse>> Validate(RegisterUserRequestGatewayToService registerModel, IRequestClient<UserReadByEmailRequestServiceToDatabase> requestClient)
         {
             try
             {
