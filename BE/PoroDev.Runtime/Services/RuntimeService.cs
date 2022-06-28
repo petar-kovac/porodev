@@ -7,7 +7,6 @@ using PoroDev.Runtime.Extensions.Contracts;
 using PoroDev.Runtime.Services.Contracts;
 using System.Diagnostics;
 using static PoroDev.Runtime.Constants.Consts;
-using static PoroDev.Runtime.Extensions.DockerWriter;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Runtime.Extensions;
 
@@ -38,7 +37,16 @@ namespace PoroDev.Runtime.Services
 
             if (pathException != null)
             {
-                var responseModel = CreateResponseModel<RuntimeData>(pathException);
+                var responseModel = new CommunicationModel<RuntimeData>(pathException);
+
+                return responseModel;
+            }
+
+            DockerRuntimeException dockerException = _dockerImageService.Initialize(RUNTIME_FOLDER_ROUTE);
+
+            if (dockerException != null)
+            {
+                var responseModel = new CommunicationModel<RuntimeData>(dockerException);
 
                 return responseModel;
             }
@@ -47,7 +55,7 @@ namespace PoroDev.Runtime.Services
 
             if(extractionException != null)
             {
-                var responseModel = CreateResponseModel<RuntimeData>(extractionException);
+                var responseModel = new CommunicationModel<RuntimeData>(extractionException);
 
                 return responseModel;
             }
@@ -55,15 +63,32 @@ namespace PoroDev.Runtime.Services
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
 
-            await CreateDockerfile(PROJECT_PATH);          
+            await _dockerImageService.CreateDockerfile();          
 
-            await _dockerImageService.CreateDockerImage(imageName, PROJECT_PATH);
+            await _dockerImageService.CreateDockerImage(imageName);
 
             DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
             
             stopwatch.Start();
 
-            string imageOutput = await _dockerImageService.RunDockerImage(imageName, PROJECT_PATH);
+            string imageOutput = String.Empty;
+
+            try
+            {
+                imageOutput = await _dockerImageService.RunDockerImageUnsafe(imageName);
+            }
+            catch (DockerRuntimeException ex)
+            {
+                stopwatch.Stop();
+
+                await _dockerImageService.DeleteDockerImage(imageName);
+
+                _zipManipulator.DeleteUnzippedFile();
+
+                var responseModel = new CommunicationModel<RuntimeData>(ex);
+
+                return responseModel;
+            }
 
             stopwatch.Stop();
 
@@ -84,7 +109,7 @@ namespace PoroDev.Runtime.Services
 
             if(deleteException != null)
             {
-                var responseModel = CreateResponseModel<RuntimeData>(extractionException);
+                var responseModel = new CommunicationModel<RuntimeData>(extractionException);
 
                 return responseModel;
             }

@@ -88,6 +88,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, positionFormatException);
                         break;
 
+                    case DockerRuntimeException dockerRuntimeException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = dockerRuntimeException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, dockerRuntimeException);
+                        break;
+
+                    case ZippedFileException zippedFileException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = zippedFileException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, zippedFileException);
+                        break;
+
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = "Internal server error";

@@ -28,17 +28,5 @@ namespace PoroDev.Common.Extensions
 
             return response;
         }
-
-        public static CommunicationModel<CreatedEntity> CreateResponseModel<CreatedEntity>(ICustomException exception) where CreatedEntity : class, new()
-        {
-            CommunicationModel<CreatedEntity> response = new ()
-            {
-                Entity = null,
-                ExceptionName =  exception.GetType().Name,
-                HumanReadableMessage = exception.HumanReadableErrorMessage
-            };
-
-            return response;
-        }
     }
 }

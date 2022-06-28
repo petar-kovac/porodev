@@ -1,13 +1,17 @@
-﻿namespace PoroDev.Runtime.Extensions.Contracts
+﻿using PoroDev.Common.Exceptions;
+
+namespace PoroDev.Runtime.Extensions.Contracts
 {
     public interface IDockerImageService
     {
-        Task CreateDockerImage(string imageName, string runtimePath);
+        Task<DockerRuntimeException> CreateDockerImage(string imageName);
 
-        Task<string> RunDockerImage(string imageName, string runtimePath);
+        Task<DockerRuntimeException> CreateDockerfile();
 
-        Task DeleteDockerImage(string imageName);
+        Task<string> RunDockerImageUnsafe(string imageName);
 
-        Exception SetFolderPath(string runtimeFolderPath)
+        Task<DockerRuntimeException> DeleteDockerImage(string imageName);
+
+        DockerRuntimeException Initialize(string runtimeFolderPath);
     }
 }
