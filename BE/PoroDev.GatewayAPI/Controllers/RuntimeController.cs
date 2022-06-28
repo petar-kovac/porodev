@@ -47,15 +47,24 @@ namespace PoroDev.GatewayAPI.Controllers
             var key = Encoding.ASCII.GetBytes(SecretKey);
             try
             {
-                tokenHandler.ValidateToken(requestExecute.Jwt = Request.Headers["Bearer"].ToString(),
-                                                                new TokenValidationParameters
-                                                                {
-                                                                    ValidateIssuerSigningKey = true,
-                                                                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                                                                    ValidateIssuer = false,
-                                                                    ValidateAudience = false,
-                                                                    ClockSkew = TimeSpan.Zero
-                                                                }, out SecurityToken validatedToken);
+                var tokenParam = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero,
+                };
+
+                tokenHandler.ValidateToken(requestExecute.Jwt, tokenParam, out SecurityToken validatedToken);
+            }
+            catch (NullReferenceException nre)
+            {
+                JWTValidationException jWTValidationException2 = new JWTValidationException()
+                {   
+                    HumanReadableErrorMessage = "Token not valid",
+                };
+                ThrowException(nameof(JWTValidationException), jWTValidationException2.HumanReadableErrorMessage);
             }
             catch (Exception ex)
             {
