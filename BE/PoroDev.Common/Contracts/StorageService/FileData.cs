@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using PoroDev.Common.Models.UserModels.Data;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,16 +12,22 @@ namespace PoroDev.Common.Contracts.StorageService
 {
     public class FileData
     {
-        public Guid FileDataId { get; set; }
-        public Guid UserId { get; set; }
+        [Key]
+        public Guid FileId { get; set; }
 
-        // We just need UserID from this model
-        public DataUserModel User { get; set; }
+        public string FileName { get; set; }
 
-        public FileData(Guid userId)
+        public DataUserModel CurrentUser { get; set; }
+
+        public FileData()
         {
-            UserId = userId;
 
+        }
+
+        public FileData(Guid fileId,  string fileName)
+        {
+            FileId = fileId;
+            FileName = fileName;
         }
     }
 }

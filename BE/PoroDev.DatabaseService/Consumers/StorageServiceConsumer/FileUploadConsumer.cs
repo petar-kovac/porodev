@@ -11,12 +11,12 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
-        private IStorageRepository _storageRepository;
+        private IFileRepository _storageRepository;
         /*using Stream stream = uploadModel.File.OpenReadStream();
             string fileName = uploadModel.File.FileName;
             Guid id = uploadModel.UserId;*/
 
-        public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IStorageRepository storageRepository)
+        public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository storageRepository)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

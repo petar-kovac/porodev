@@ -9,11 +9,13 @@ namespace PoroDev.DatabaseService.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<FileData> builder)
         {
-            builder.HasKey(x => x.FileDataId);
+            builder.HasKey(x => x.FileId);
 
-            builder.HasOne<DataUserModel>(x => x.User)
+            builder.HasOne<DataUserModel>(x => x.CurrentUser)
                 .WithMany(x => x.fileDatas)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.CurrentUser.Id);
+
+
         }
     }
 }
