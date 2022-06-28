@@ -11,18 +11,24 @@ namespace PoroDev.Common.Contracts.StorageService
 {
     public class FileData
     {
-        public Guid FileId { get; set; }
-
         public Guid UserId { get; set; }
 
-        // We just need UserID from this model
-        public DataUserModel User { get; set; }
+        public Guid FileId { get; set; }
 
-        public FileData(Guid fileId, Guid userId)
+        public string FileName { get; set; }
+
+        public DataUserModel CurrentUser { get; set; }
+
+        public FileData()
         {
-            FileId = fileId;
-            UserId = userId;
 
+        }
+
+        public FileData(Guid userId, Guid fileId,  string fileName)
+        {
+            UserId = userId;
+            FileId = fileId;
+            FileName = fileName;
         }
     }
 }

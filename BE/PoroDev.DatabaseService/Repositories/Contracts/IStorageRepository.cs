@@ -1,9 +1,9 @@
-﻿
+﻿using PoroDev.Common.Contracts.StorageService;
+using PoroDev.Database.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Repositories.Contracts
 {
-    public interface IStorageRepository
+    public interface IStorageRepository : IGenericRepository<FileData>
     {
-        public Task UploadFile(string fileName, byte[] fileArray, Guid id);
     }
 }
