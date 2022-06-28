@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Runtime.Extensions.Contracts;
 using PoroDev.Runtime.Services.Contracts;
 using System.Diagnostics;
 using static PoroDev.Runtime.Constants.Consts;
-using static PoroDev.Runtime.Extensions.DockerWriter;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
+using PoroDev.Runtime.Extensions;
 
 namespace PoroDev.Runtime.Services
 {
@@ -14,84 +17,104 @@ namespace PoroDev.Runtime.Services
 
         private readonly IRequestClient<RuntimeData> _createRequestClient;
         private readonly IMapper _mapper;
+        private readonly IDockerImageService _dockerImageService;
+        private readonly IZipManipulator _zipManipulator;
 
-        public RuntimeService(IRequestClient<RuntimeData> createRequestClient, IMapper mapper)
+        public RuntimeService(IRequestClient<RuntimeData> createRequestClient, 
+            IMapper mapper, 
+            IDockerImageService dockerImageService, 
+            IZipManipulator  zipManipulator)
         {
             _createRequestClient = createRequestClient;
             _mapper = mapper;
+            _dockerImageService = dockerImageService;
+            _zipManipulator = zipManipulator;
         }
 
         public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId)
         {
-            System.IO.Compression.ZipFile.ExtractToDirectory(ZIPPED_FILE_ROUTE, RUNTIME_FOLDER_ROUTE);
+            ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
 
-            await CreateDockerfile(PROJECT_PATH);
-
-            var imageName = Guid.NewGuid();
-
-            using (var processTest = new Process
+            if (pathException != null)
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "CMD.exe",
-                    Arguments = $"/C docker build -t {imageName} -f Dockerfile .",
-                    UseShellExecute = false,
-                    WorkingDirectory = PROJECT_PATH
-                }
-            })
-            {
-                processTest.Start();
-                processTest.WaitForExit();
+                var responseModel = new CommunicationModel<RuntimeData>(pathException);
+
+                return responseModel;
             }
 
-            string outPut = "";
+            DockerRuntimeException dockerException = _dockerImageService.Initialize(RUNTIME_FOLDER_ROUTE);
+
+            if (dockerException != null)
+            {
+                var responseModel = new CommunicationModel<RuntimeData>(dockerException);
+
+                return responseModel;
+            }
+
+            ZippedFileException extractionException = _zipManipulator.ExtractZipToPath();
+
+            if(extractionException != null)
+            {
+                var responseModel = new CommunicationModel<RuntimeData>(extractionException);
+
+                return responseModel;
+            }
+
+            var imageName = Guid.NewGuid().ToString();
+            Stopwatch stopwatch = new();
+
+            await _dockerImageService.CreateDockerfile();          
+
+            await _dockerImageService.CreateDockerImage(imageName);
 
             DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
-            Stopwatch stopwatch = new();
+            
             stopwatch.Start();
 
-            using (var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                FileName = "CMD.exe",
-                Arguments = $"/C docker run --name runtime-container {imageName}",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true,
-                WorkingDirectory = PROJECT_PATH
-                }
-            })
-            {
+            string imageOutput = String.Empty;
 
-                proc.Start();
-                while (!proc.StandardOutput.EndOfStream)
-                {
-                    outPut = await proc.StandardOutput.ReadLineAsync();
-                }
-                proc.WaitForExit();
+            try
+            {
+                imageOutput = await _dockerImageService.RunDockerImageUnsafe(imageName);
+            }
+            catch (DockerRuntimeException ex)
+            {
+                stopwatch.Stop();
+
+                await _dockerImageService.DeleteDockerImage(imageName);
+
+                _zipManipulator.DeleteUnzippedFile();
+
+                var responseModel = new CommunicationModel<RuntimeData>(ex);
+
+                return responseModel;
             }
 
             stopwatch.Stop();
 
-            Process.Start("CMD.exe", "/C docker rm runtime-container").WaitForExit();
-
-            Process.Start("CMD.exe", $"/C docker image rm {imageName}").WaitForExit();
+            await _dockerImageService.DeleteDockerImage(imageName);
 
             RuntimeData newRuntimeData = new()
             {
-                ExceptionHappened = outPut == "" ? true : false,
+                ExceptionHappened = imageOutput == "" ? true : false,
                 ExecutionStart = dateStarted,
-                ExecutionTime = stopwatch.ElapsedMilliseconds,
+                ExecutionTime = imageOutput == String.Empty ? 0 : stopwatch.ElapsedMilliseconds,
                 UserId = userId,
                 FileId = projectId,
                 Id = Guid.NewGuid(),
-                ExecutionOutput = outPut
+                ExecutionOutput = imageOutput
             };
 
-            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(newRuntimeData);
+            var deleteException = _zipManipulator.DeleteUnzippedFile();
 
-            Directory.Delete(Path.Combine(RUNTIME_FOLDER_ROUTE, ZIPPED_FILE_NAME), true);
+            if(deleteException != null)
+            {
+                var responseModel = new CommunicationModel<RuntimeData>(deleteException);
+
+                return responseModel;
+            }
+
+            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(newRuntimeData);
 
             return dbResponse.Message;
 
