@@ -72,7 +72,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
           {cardData && <SiderDataMapper data={cardData} />}
         </StyledContent>
         {isLoading ? (
-          <Button type="primary" loading>
+          <Button type="primary" loading style={{ borderRadius: '12px' }}>
             Loading
           </Button>
         ) : (

@@ -53,7 +53,11 @@ const Runtime: FC = () => {
   return (
     <StyledPageWrapper>
       <StyledContent>
-        <StyledStaticContent onClick={() => setIsSiderVisible(false)}>
+        <StyledStaticContent
+          onClick={() => {
+            setIsSiderVisible(false);
+          }}
+        >
           <StyledFilesWrapper>
             {data?.slice(0, 3).map((value: any, index) => (
               <>

@@ -11,7 +11,7 @@ const { Meta } = Card;
 interface IRuntimeCardProps {
   title: ReactNode;
   createdAt: string;
-  selected?: boolean;
+  selected: boolean;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
 }
@@ -19,8 +19,8 @@ interface IRuntimeCardProps {
 const RuntimeCard: FC<IRuntimeCardProps> = ({
   title,
   createdAt,
-  onClick,
   selected = false,
+  onClick,
   onDoubleClick = () => undefined,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,12 +55,20 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
 const StyledCard = styled(Card).attrs({
   'data-testid': 'files-card',
 })<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
-  background-color: ${({ selected }) => (selected ? 'red' : 'blue')};
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
+  box-shadow: 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 25rem;
   border-radius: 1.5rem;
   overflow: hidden;
   max-width: 24rem;
+  border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+  background-color: ${({ selected }) =>
+    selected ? 'rgba(167, 187, 224, 0.1)' : '#fff'};
+
+  &:hover,
+  &:active,
+  &:focus {
+    border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+  }
 
   .ant-card-cover {
     height: 14rem;
