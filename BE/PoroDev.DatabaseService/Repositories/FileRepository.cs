@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Exceptions;
@@ -46,6 +47,13 @@ namespace PoroDev.DatabaseService.Repositories
             {
                 throw new FileUploadException("File isn't uploaded");
             }
+        }
+        //not sure if this should be ObjectId or Guid for fileId
+        public async Task DownloadFile (ObjectId fileId, string fileName, byte[] file)
+        {
+            var downloadFile = await _bucket.DownloadAsBytesAsync(fileId);
+
+            //return Ok(downloadFile);
         }
     }
 }

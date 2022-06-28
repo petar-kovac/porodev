@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.GatewayAPI.Services.Contracts;
 
@@ -23,11 +25,11 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpPost("Download")]
-        //public async Task<ActionResult<FileUploadRequestGatewayToService>> Download(IFormFile file, [FromForm] Guid UserId)
-        //{
-        //    var returnModel = new FileUploadRequestGatewayToService(file, UserId);
-        //    await _storageService.UploadFile(returnModel);
-        //    return Ok();
-        //}
+        public async Task<ActionResult<FileDownloadRequestGatewayToService>> Download(ObjectId fileId)
+        {
+            var returnModel = new FileDownloadRequestGatewayToService(fileId);
+            await _storageService.DownloadFile(returnModel);
+            return Ok(returnModel);
+        }
     }
 }

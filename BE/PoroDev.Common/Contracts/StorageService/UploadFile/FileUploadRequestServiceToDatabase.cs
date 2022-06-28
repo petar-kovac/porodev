@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoroDev.Common.Contracts.StorageService.UploadFile
 {
@@ -16,7 +11,6 @@ namespace PoroDev.Common.Contracts.StorageService.UploadFile
 
         public FileUploadRequestServiceToDatabase()
         {
-
         }
 
         public FileUploadRequestServiceToDatabase(IFormFile file, Guid userId)
@@ -30,7 +24,6 @@ namespace PoroDev.Common.Contracts.StorageService.UploadFile
             // var content = file.OpenReadStream().
             //File = file;//izmjeniti na end point-u
             UserId = userId;
-
         }
     }
 }
