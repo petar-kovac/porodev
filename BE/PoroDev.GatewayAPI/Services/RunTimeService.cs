@@ -28,12 +28,6 @@ namespace PoroDev.GatewayAPI.Services
             var tokenS = jsonToken as JwtSecurityToken;
 
             var id = tokenS.Claims.First(claim => claim.Type == "Id").Value;
-
-
-
-
-
-
             var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService() { Id = Guid.Parse(id) });
             if (readUserByIdResponseContext.Message.ExceptionName != null)
                 ThrowException(readUserByIdResponseContext.Message.ExceptionName, readUserByIdResponseContext.Message.HumanReadableMessage);
