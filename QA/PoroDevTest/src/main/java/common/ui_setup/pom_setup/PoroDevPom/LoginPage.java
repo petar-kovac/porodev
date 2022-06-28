@@ -29,7 +29,7 @@ public class LoginPage extends BasePage {
     WebElement we_loginButton;
 
     //ASSERTION ELEMENTS
-    @FindBy(xpath = "//span[contains(text(),'Successful logInUser')]")
+    @FindBy(xpath = "//span[contains(text(),'Successful login')]")
     public WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
     public WebElement we_badRequestError;
