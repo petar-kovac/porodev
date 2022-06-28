@@ -70,6 +70,7 @@ namespace PoroDev.UserManagementService.Services
         {
             if (password.Length < MIN_PASSWORD_LENGTH)
                 throw new PasswordFormatException(PASSWORD_MIN_LENGTH_ERROR);
+
             if (!password.Any(char.IsUpper))
                 throw new PasswordFormatException(PASSWORD_MIN_UPPERCASE_ERROR);
 
@@ -83,30 +84,58 @@ namespace PoroDev.UserManagementService.Services
                 throw new PasswordFormatException(PASSWORD_MIN_SPECIAL_ERROR);
         }
 
-        private async Task CheckEmail(string email)
+        private async Task<CommunicationModel<RegisterUserResponse>> CheckEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                throw new EmailFormatException(EMAIL_EMPTY_ERROR);
+            CommunicationModel<DataUserModel> resposneUpdateExceptionModel = new();
+            try
+            {
+                await CheckEmailIsNullOrWhiteSpace(email);
+                await CheckEmailLength(email);
 
-            if (email.Length > MAX_EMAIL_LENGTH)
-                throw new EmailFormatException(EMAIL_LENGTH_ERROR);
+                var splitEmail = email.Split('@');
 
-            var splitEmail = email.Split('@');
+                await CheckEmailFormat(splitEmail);
+                await CheckEmailContainsWhitespace(splitEmail);
+                await CheckEmailSpecialCharacters(splitEmail);
+                await CheckEmailDomainError(splitEmail);
+                await CheckEmailIsExist(email);
+            }
+            catch (EmailFormatException ex)
+            {
+                var responseException = new CommunicationModel<RegisterUserResponse>()
+                {
+                    Entity = null,
+                    ExceptionName = nameof(EmailFormatException),
+                    HumanReadableMessage = ex.HumanReadableErrorMessage,
+                };
 
-            if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
-                throw new EmailFormatException(EMAIL_FORMAT_ERROR);
+                return responseException;
+            }
 
-            if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
-                throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
+            return new CommunicationModel<RegisterUserResponse>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
 
-            if(CheckStringForCharacters(splitEmail[0],SPECIAL_CHARACTERS_EMAIL_STRING))
-                throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
+            //if (string.IsNullOrWhiteSpace(email))
+            //    throw new EmailFormatException(EMAIL_EMPTY_ERROR);
 
-            if (!splitEmail[1].Equals(EMAIL_DOMAIN))
-                throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
+            //if (email.Length > MAX_EMAIL_LENGTH)
+            //    throw new EmailFormatException(EMAIL_LENGTH_ERROR);
 
-            if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email})).Message.Entity != null)
-                throw new EmailFormatException(EMAIL_EXISTS_ERROR);
+            //var splitEmail = email.Split('@');
+
+            //if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
+            //    throw new EmailFormatException(EMAIL_FORMAT_ERROR);
+
+            //if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
+            //    throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
+
+            //if (CheckStringForCharacters(splitEmail[0], SPECIAL_CHARACTERS_EMAIL_STRING))
+            //    throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
+
+            //if (!splitEmail[1].Equals(EMAIL_DOMAIN))
+            //    throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
+
+            //if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email })).Message.Entity != null)
+            //    throw new EmailFormatException(EMAIL_EXISTS_ERROR);
         }
 
         private bool CheckStringForCharacters(string stringToCheck, string specialCharacters)
@@ -166,14 +195,20 @@ namespace PoroDev.UserManagementService.Services
 
         private async Task<CommunicationModel<RegisterUserResponse>> CheckUserFields(RegisterUserRequestGatewayToService registerModel)
         {
+            var isException = await CheckEmail(registerModel.Email);
+            if (isException.ExceptionName != null)
+            {
+                return isException;
+            }
+
             try
             {
                 CheckFullName(registerModel.Name, registerModel.Lastname);
-                await CheckEmail(registerModel.Email);
+                //await CheckEmail(registerModel.Email);
                 CheckPassword(registerModel.Password);
                 CheckPosition(registerModel.Position);
             }
-            catch (EmailFormatException ex) 
+            catch (EmailFormatException ex)
             {
 
                 string exceptionType = nameof(EmailFormatException);
@@ -356,7 +391,7 @@ namespace PoroDev.UserManagementService.Services
 
             if (isException.ExceptionName != null)
                 return isException;
-            
+
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
             var userToRegister = _mapper.Map<RegisterUserRequestServiceToDatabase>(registerModel);
@@ -372,10 +407,15 @@ namespace PoroDev.UserManagementService.Services
 
         private async Task<CommunicationModel<DataUserModel>> CheckUserFieldsUpdate(UserUpdateRequestGatewayToService updateModel)
         {
+            var isException = await CheckEmailUpdate(updateModel.Email);
+            if (isException.ExceptionName != null)
+            {
+                return isException;
+            }
+
             try
             {
                 CheckFullName(updateModel.Name, updateModel.Lastname);
-                await CheckEmailUpdate(updateModel.Email);
                 CheckPassword(updateModel.PasswordUnhashed);
                 CheckPosition(updateModel.Position);
             }
@@ -432,42 +472,122 @@ namespace PoroDev.UserManagementService.Services
             return responseUpdateExceptionModel;
         }
 
-        private async Task CheckEmailUpdate(string email)
+        private async Task<CommunicationModel<DataUserModel>> CheckEmailUpdate(string email)
+        {
+            CommunicationModel<DataUserModel> resposneUpdateExceptionModel = new();
+
+            try
+            {
+                await CheckEmailIsNullOrWhiteSpace(email);
+                await CheckEmailLength(email);
+
+                var splitEmail = email.Split('@');
+
+                await CheckEmailFormat(splitEmail);
+                await CheckEmailContainsWhitespace(splitEmail);
+                await CheckEmailSpecialCharacters(splitEmail);
+                await CheckEmailDomainError(splitEmail);
+            }
+            catch (EmailFormatException ex)
+            {
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
+
+                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
+
+                return responseUpdateExceptionModel;
+            }
+
+            return new CommunicationModel<DataUserModel>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
+
+            //if (string.IsNullOrWhiteSpace(email))
+            //{
+            //    throw new EmailFormatException(EMAIL_EMPTY_ERROR);
+            //}
+
+            //if (email.Length > MAX_EMAIL_LENGTH)
+            //{
+            //    throw new EmailFormatException(EMAIL_LENGTH_ERROR);
+            //}
+
+            //var splitEmail = email.Split('@');
+
+            //if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
+            //{
+            //    throw new EmailFormatException(EMAIL_FORMAT_ERROR);
+            //}
+
+            //if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
+            //{
+            //    throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
+            //}
+
+            //if (CheckStringForCharacters(splitEmail[0], SPECIAL_CHARACTERS_EMAIL_STRING))
+            //{
+            //    throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
+            //}
+
+            //if (!splitEmail[1].Equals(EMAIL_DOMAIN))
+            //{
+            //    throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
+            //}
+        }
+
+        private async Task CheckEmailIsNullOrWhiteSpace(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
                 throw new EmailFormatException(EMAIL_EMPTY_ERROR);
             }
+        }
 
+        private async Task CheckEmailLength(string email)
+        {
             if (email.Length > MAX_EMAIL_LENGTH)
             {
                 throw new EmailFormatException(EMAIL_LENGTH_ERROR);
             }
+        }
 
-            var splitEmail = email.Split('@');
+        private async Task CheckEmailFormat(string[] splitEmail)
+        {
 
             if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
             {
                 throw new EmailFormatException(EMAIL_FORMAT_ERROR);
             }
+        }
 
+        private async Task CheckEmailContainsWhitespace(string[] splitEmail)
+        {
             if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
             {
                 throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
             }
+        }
 
+        private async Task CheckEmailSpecialCharacters(string[] splitEmail)
+        {
             if (CheckStringForCharacters(splitEmail[0], SPECIAL_CHARACTERS_EMAIL_STRING))
             {
                 throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
             }
+        }
 
+        private async Task CheckEmailDomainError(string[] splitEmail)
+        {
             if (!splitEmail[1].Equals(EMAIL_DOMAIN))
             {
                 throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
             }
-
         }
 
-
+        private async Task CheckEmailIsExist(string email)
+        {
+            if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email })).Message.Entity != null)
+            {
+                throw new EmailFormatException(EMAIL_EXISTS_ERROR);
+            }
+        }
     }
 }
