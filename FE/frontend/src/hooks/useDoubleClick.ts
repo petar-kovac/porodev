@@ -20,15 +20,17 @@ const useDoubleClick = ({
       event.stopPropagation();
     }
     count.current += 1;
+
     if (count.current === 2 && onDoubleClick) {
       onDoubleClick(event);
     }
+
     setTimeout(() => {
       if (count.current === 1 && onClick) {
         onClick(event);
       }
       count.current = 0;
-    }, 300);
+    }, 250);
   };
 
   useEffect(() => {

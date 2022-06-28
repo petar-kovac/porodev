@@ -71,6 +71,7 @@ const Runtime: FC = () => {
                   onDoubleClick={(e) => {
                     e.stopPropagation();
                     setCardData(value);
+                    setIsSiderVisible(false);
                     setIsModalVisible(true);
                   }}
                 />

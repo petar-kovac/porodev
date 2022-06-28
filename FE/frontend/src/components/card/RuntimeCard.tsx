@@ -40,7 +40,6 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
           <FileZipOutlined />
         </div>
       }
-      role="button"
     >
       <Meta
         data-testid="title"
