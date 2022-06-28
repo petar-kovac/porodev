@@ -84,6 +84,7 @@ const Runtime: FC = () => {
 
         <PFileSider
           cardData={cardData}
+          setCardData={setCardData}
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
           type="runtime"

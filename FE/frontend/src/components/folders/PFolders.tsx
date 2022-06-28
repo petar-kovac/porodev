@@ -38,7 +38,7 @@ const StyledCard = styled(Card)<{
 }>`
   border: 1px solid #ccc;
   padding: 2rem;
-  width: 22rem;
+  width: 23rem;
   box-shadow: 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 14rem;
   border-radius: 1.5rem;
@@ -48,18 +48,18 @@ const StyledCard = styled(Card)<{
   transition: all 0.3s;
   border: none;
   cursor: pointer;
-  border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+  border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : 'transparent')};
   background-color: ${({ selected }) =>
     selected ? 'rgba(167, 187, 224, 0.1)' : '#fff'};
   &:hover,
   &:active,
   &:focus {
-    border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+    border: 2px solid
+      ${({ selected }) => (selected ? '#47a6ff' : 'transparent')};
   }
 
   &:hover {
     background-color: ${({ theme: { colors } }) => colors.primary};
-    border: none;
   }
 
   &:hover .ant-card-body > * {
