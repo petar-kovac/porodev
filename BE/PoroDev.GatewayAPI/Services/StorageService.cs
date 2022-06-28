@@ -12,13 +12,13 @@ namespace PoroDev.GatewayAPI.Services
     public class StorageService : IStorageService
     {
         //da li bi trebali ovde dodavati ove standardne RequestFromGatewayToService i slicno ? 
-        private readonly IRequestClient<FileDownloadModel> _downloadRequestClient;
+        private readonly IRequestClient<FileDownloadRequestGatewayToService> _downloadRequestClient;
         private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
 
         // da li cemo dodati ovaj model za citanje ID-a
         //       private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
 
-        public StorageService(IRequestClient<FileDownloadModel> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
+        public StorageService(IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
@@ -49,9 +49,11 @@ namespace PoroDev.GatewayAPI.Services
             return responseContext.Message.Entity;
         }
 
-        public Task<FileDownloadModel> DownloadFile(FileDownloadModel downloadModel)
+        public async Task<FileDownloadModel> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
-            throw new NotImplementedException();
+            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadModel>>(downloadModel);
+
+            return responseContext.Message.Entity;
         }
     }
 }

@@ -21,5 +21,13 @@ namespace PoroDev.GatewayAPI.Controllers
             await _storageService.UploadFile(returnModel);
             return Ok();
         }
+
+        [HttpPost("Download")]
+        //public async Task<ActionResult<FileUploadRequestGatewayToService>> Download(IFormFile file, [FromForm] Guid UserId)
+        //{
+        //    var returnModel = new FileUploadRequestGatewayToService(file, UserId);
+        //    await _storageService.UploadFile(returnModel);
+        //    return Ok();
+        //}
     }
 }

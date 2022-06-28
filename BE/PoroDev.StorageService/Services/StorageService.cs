@@ -11,7 +11,7 @@ namespace PoroDev.StorageService.Services
     {
         private readonly IRequestClient<FileUploadRequestServiceToDatabase> _uploadRequestClient;
         private readonly IRequestClient<FileDownloadModel> _downloadRequestClient;
-      
+
         public StorageService(IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, IRequestClient<FileDownloadModel> downloadRequestClient)
         {
             _uploadRequestClient = uploadRequestClient;
@@ -21,9 +21,15 @@ namespace PoroDev.StorageService.Services
         public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestGatewayToService uploadModel)
         {
             FileUploadModel model = new(uploadModel.FileName, uploadModel.File, uploadModel.UserId);
-        
+
             var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(model);
             return response.Message;
+        }
+
+        public Task<CommunicationModel<FileDownloadModel>> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
+        {
+            FileDownloadModel model = new(downloadModel.fileId);
+
         }
     }
 }
