@@ -26,9 +26,12 @@ namespace PoroDev.StorageService.Services
             return response.Message;
         }
 
-        public Task<CommunicationModel<FileDownloadModel>> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
+        public async Task<CommunicationModel<FileDownloadModel>> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
-            FileDownloadModel model = new(downloadModel.fileId);
+            FileDownloadModel model = new(downloadModel.FileId, downloadModel.FileName, downloadModel.File);
+
+            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadModel>>(model);
+            return response.Message;
 
         }
     }
