@@ -57,6 +57,7 @@ const Home: FC = () => {
                 heading={value?.name}
                 description={value?.description}
                 image={value?.image}
+                selected={false}
               />
             ))}
           </StyledCardWrapper>

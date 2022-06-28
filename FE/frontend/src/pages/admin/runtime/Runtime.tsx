@@ -18,31 +18,14 @@ import {
 const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSiderVisible, setIsSiderVisible] = useState(false);
+  const [isSiderVisible, setIsSiderVisible] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
   const [content, setContent] = useState<ReactNode>(undefined);
-  const [isDisabledButton, setIsDisabledButton] = useState<boolean>(false);
-  const count = useRef(0);
-
-  const onClick = useCallback((value: any) => {
-    count.current += 1;
-    setCardData(value);
-    setTimeout(() => {
-      if (count.current === 1) {
-        setIsSiderVisible(true);
-      }
-
-      if (count.current === 2) {
-        setIsSiderVisible(false);
-        setIsModalVisible(true);
-      }
-
-      count.current = 0;
-    }, 250);
-  }, []);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const startRuntime = async () => {
-    setIsDisabledButton(true);
+    setIsLoading(true);
+
     const res = await startRuntimeService({
       fileID: 'b22a0496-ded5-4fe5-bbb3-e20280b70a03',
       jwt: localStorage.getItem('accessToken'),
@@ -52,7 +35,7 @@ const Runtime: FC = () => {
     setContent(modalDataToRender);
     setIsSiderVisible(false);
     setIsModalVisible(true);
-    setIsDisabledButton(false);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -70,16 +53,31 @@ const Runtime: FC = () => {
   return (
     <StyledPageWrapper>
       <StyledContent>
-        <StyledStaticContent>
+        <StyledStaticContent
+          onClick={() => {
+            setIsSiderVisible(false);
+            setCardData(undefined); // to trigger rerender, simulating onBlur effect
+          }}
+        >
           <StyledFilesWrapper>
-            {data?.slice(0, 3).map((value: any) => (
-              <>
-                {/* <RuntimeCard
-                  title={value?.title}
-                  createdAt={value?.createdAt}
-                  onClick={() => onClick(value)}
-                /> */}
-              </>
+            {data?.slice(0, 3).map((value: any, index) => (
+              <RuntimeCard
+                key={value.id}
+                title={value?.title}
+                createdAt={value?.createdAt}
+                selected={value?.id === cardData?.id}
+                onClick={(e) => {
+                  setCardData(value);
+                  e.stopPropagation();
+                  setIsSiderVisible(true);
+                }}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  setCardData(value);
+                  setIsSiderVisible(false);
+                  setIsModalVisible(true);
+                }}
+              />
             ))}
           </StyledFilesWrapper>
         </StyledStaticContent>
@@ -90,13 +88,14 @@ const Runtime: FC = () => {
           setIsSiderVisible={setIsSiderVisible}
           type="runtime"
           onButtonClick={startRuntime}
-          isDisabledButton={isDisabledButton}
+          isLoading={isLoading}
         />
       </StyledContent>
       <PModal
         title="Result of you action: "
         isModalVisible={isModalVisible}
         cardData={cardData}
+        setCardData={setCardData}
         setIsModalVisible={setIsModalVisible}
         content={content}
       />

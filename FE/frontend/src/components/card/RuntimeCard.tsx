@@ -5,6 +5,7 @@ import { FC, ReactNode, RefObject, useRef } from 'react';
 
 import useDoubleClick from 'hooks/useDoubleClick';
 import { formatDate } from 'util/helpers/date-formaters';
+import theme from 'theme/theme';
 
 const { Meta } = Card;
 
@@ -19,7 +20,7 @@ interface IRuntimeCardProps {
 const RuntimeCard: FC<IRuntimeCardProps> = ({
   title,
   createdAt,
-  selected = false,
+  selected,
   onClick,
   onDoubleClick = () => undefined,
 }) => {
@@ -53,21 +54,23 @@ const RuntimeCard: FC<IRuntimeCardProps> = ({
 };
 
 const StyledCard = styled(Card).attrs({
-  'data-testid': 'files-card',
+  'data-testid': 'runtime-card',
 })<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
-  box-shadow: 1px 3px 8px rgba(34, 25, 25, 0.2);
+  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 25rem;
   border-radius: 1.5rem;
   overflow: hidden;
   max-width: 24rem;
-  border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+  border: 2px solid
+    ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};
   background-color: ${({ selected }) =>
-    selected ? 'rgba(167, 187, 224, 0.1)' : '#fff'};
+    selected ? `${theme.colors.selectedBackground}` : '#fff'};
 
   &:hover,
   &:active,
   &:focus {
-    border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+    border: 2px solid
+      ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};
   }
 
   .ant-card-cover {

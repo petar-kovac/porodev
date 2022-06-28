@@ -74,7 +74,12 @@ const Groups: FC = () => {
             />
           </StyledFilterWrapper>
         </StyledHeadingWrapper>
-        <StyledStaticContent>
+        <StyledStaticContent
+          onClick={() => {
+            setIsSiderVisible(false);
+            setCardData(undefined); // to trigger rerender, simulating onBlur effect
+          }}
+        >
           <StyledFilesWrapper>
             {data?.map((value: any) => (
               <>
@@ -83,7 +88,18 @@ const Groups: FC = () => {
                     image={value?.image}
                     heading={value?.name}
                     description={value?.description}
-                    onClick={() => onClick(value)}
+                    selected={value?.id === cardData?.id}
+                    onClick={(e) => {
+                      setCardData(value);
+                      e.stopPropagation();
+                      setIsSiderVisible(true);
+                    }}
+                    onDoubleClick={(e) => {
+                      e.stopPropagation();
+                      setCardData(value);
+                      setIsSiderVisible(false);
+                      setIsModalVisible(true);
+                    }}
                   />
                 ) : (
                   <GroupCard
@@ -92,7 +108,18 @@ const Groups: FC = () => {
                     moderatorName={value.moderatorName}
                     numberOfFiles={value.numberOfFiles}
                     numberOfUsers={value.numberOfUsers}
-                    onClick={() => onClick(value)}
+                    selected={value?.id === cardData?.id}
+                    onClick={(e) => {
+                      setCardData(value);
+                      e.stopPropagation();
+                      setIsSiderVisible(true);
+                    }}
+                    onDoubleClick={(e) => {
+                      e.stopPropagation();
+                      setCardData(value);
+                      setIsSiderVisible(false);
+                      setIsModalVisible(true);
+                    }}
                     uuid={value.uuid}
                   />
                 )}
@@ -105,6 +132,7 @@ const Groups: FC = () => {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           cardData={cardData}
+          setCardData={setCardData}
         />
       </StyledContent>
       <PFileSider

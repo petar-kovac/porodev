@@ -1,17 +1,30 @@
 import { FolderFilled } from '@ant-design/icons';
 import { Card } from 'antd';
-import { FC } from 'react';
+import useDoubleClick from 'hooks/useDoubleClick';
+import { FC, RefObject, useRef } from 'react';
 import styled from 'styled-components';
 
 interface IPFoldersProps {
   heading: string;
   description: string;
-  onClick?: any;
+  selected: boolean;
+  onClick?: (event: MouseEvent) => unknown;
+  onDoubleClick?: (event: MouseEvent) => unknown;
 }
 
-const PFolders: FC<IPFoldersProps> = ({ heading, description, onClick }) => {
+const PFolders: FC<IPFoldersProps> = ({
+  heading,
+  description,
+  selected,
+  onClick,
+  onDoubleClick,
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
+
   return (
-    <StyledCard onClick={onClick} hoverable>
+    <StyledCard ref={ref} selected={selected} hoverable>
       <FolderFilled />
       <StyledFolderHeading>{heading}</StyledFolderHeading>
       <p>{description.slice(0, 10)}</p>
@@ -19,11 +32,14 @@ const PFolders: FC<IPFoldersProps> = ({ heading, description, onClick }) => {
   );
 };
 
-const StyledCard = styled(Card)`
+const StyledCard = styled(Card)<{
+  selected: boolean;
+  ref: RefObject<HTMLDivElement | null>;
+}>`
   border: 1px solid #ccc;
   padding: 2rem;
   width: 22rem;
-  box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
+  box-shadow: 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 14rem;
   border-radius: 1.5rem;
   overflow: hidden;
@@ -31,6 +47,15 @@ const StyledCard = styled(Card)`
   cursor: pointer;
   transition: all 0.3s;
   border: none;
+  cursor: pointer;
+  border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+  background-color: ${({ selected }) =>
+    selected ? 'rgba(167, 187, 224, 0.1)' : '#fff'};
+  &:hover,
+  &:active,
+  &:focus {
+    border: 2px solid ${({ selected }) => (selected ? '#47a6ff' : '#fff')};
+  }
 
   &:hover {
     background-color: ${({ theme: { colors } }) => colors.primary};

@@ -56,29 +56,28 @@ const Runtime: FC = () => {
         <StyledStaticContent
           onClick={() => {
             setIsSiderVisible(false);
+            setCardData(undefined); // to trigger rerender, simulating onBlur effect
           }}
         >
           <StyledFilesWrapper>
             {data?.slice(0, 3).map((value: any, index) => (
-              <>
-                <RuntimeCard
-                  key={value.id}
-                  title={value?.title}
-                  selected={value?.id === cardData?.id}
-                  createdAt={value?.createdAt}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCardData(value);
-                    setIsSiderVisible(true);
-                  }}
-                  onDoubleClick={(e) => {
-                    e.stopPropagation();
-                    setCardData(value);
-                    setIsSiderVisible(false);
-                    setIsModalVisible(true);
-                  }}
-                />
-              </>
+              <RuntimeCard
+                key={value.id}
+                title={value?.title}
+                createdAt={value?.createdAt}
+                selected={value?.id === cardData?.id}
+                onClick={(e) => {
+                  setCardData(value);
+                  e.stopPropagation();
+                  setIsSiderVisible(true);
+                }}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  setCardData(value);
+                  setIsSiderVisible(false);
+                  setIsModalVisible(true);
+                }}
+              />
             ))}
           </StyledFilesWrapper>
         </StyledStaticContent>
@@ -96,6 +95,7 @@ const Runtime: FC = () => {
         title="Result of you action: "
         isModalVisible={isModalVisible}
         cardData={cardData}
+        setCardData={setCardData}
         setIsModalVisible={setIsModalVisible}
         content={content}
       />

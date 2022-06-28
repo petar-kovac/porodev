@@ -25,25 +25,6 @@ const Files: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
 
-  const count = useRef(0);
-
-  const onClick = useCallback((value: any) => {
-    count.current += 1;
-    setCardData(value);
-    setTimeout(() => {
-      if (count.current === 1) {
-        setIsSiderVisible(true);
-      }
-
-      if (count.current === 2) {
-        setIsSiderVisible(false);
-        setIsModalVisible(true);
-      }
-
-      count.current = 0;
-    }, 250);
-  }, []);
-
   useEffect(() => {
     const fetchFiles = async () => {
       try {
@@ -59,13 +40,29 @@ const Files: FC = () => {
   return (
     <StyledPageWrapper>
       <StyledContent>
-        <StyledStaticContent>
+        <StyledStaticContent
+          onClick={() => {
+            setIsSiderVisible(false);
+            setCardData(undefined); // to trigger rerender, simulating onBlur effect
+          }}
+        >
           <StyledFoldersContainer>
             {data?.slice(0, 4).map((value: any) => (
               <PFolders
                 heading={value?.name}
                 description={value?.description}
-                onClick={() => onClick(value)}
+                selected={value?.id === cardData?.id}
+                onClick={(e) => {
+                  setCardData(value);
+                  e.stopPropagation();
+                  setIsSiderVisible(true);
+                }}
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  setCardData(value);
+                  setIsSiderVisible(false);
+                  setIsModalVisible(true);
+                }}
               />
             ))}
           </StyledFoldersContainer>
@@ -90,14 +87,36 @@ const Files: FC = () => {
                     image={value?.image}
                     heading={value?.name}
                     description={value?.description}
-                    onClick={() => onClick(value)}
+                    selected={value?.id === cardData?.id}
+                    onClick={(e) => {
+                      setCardData(value);
+                      e.stopPropagation();
+                      setIsSiderVisible(true);
+                    }}
+                    onDoubleClick={(e) => {
+                      e.stopPropagation();
+                      setCardData(value);
+                      setIsSiderVisible(false);
+                      setIsModalVisible(true);
+                    }}
                   />
                 ) : (
                   <GridCard
                     image={value?.image}
                     heading={value?.name}
                     description={value?.description}
-                    onClick={() => onClick(value)}
+                    selected={value?.id === cardData?.id}
+                    onClick={(e) => {
+                      setCardData(value);
+                      e.stopPropagation();
+                      setIsSiderVisible(true);
+                    }}
+                    onDoubleClick={(e) => {
+                      e.stopPropagation();
+                      setCardData(value);
+                      setIsSiderVisible(false);
+                      setIsModalVisible(true);
+                    }}
                   />
                 )}
               </>
@@ -117,6 +136,7 @@ const Files: FC = () => {
         isModalVisible={isModalVisible}
         cardData={cardData}
         setIsModalVisible={setIsModalVisible}
+        setCardData={setCardData}
       />
     </StyledPageWrapper>
   );
