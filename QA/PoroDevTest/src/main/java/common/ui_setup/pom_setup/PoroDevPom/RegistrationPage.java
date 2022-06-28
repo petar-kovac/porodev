@@ -66,12 +66,12 @@ public class RegistrationPage extends BasePage {
     }
 
     //ASSERT METHODS
-    public void assert_user_registration(WebElement element, String expectedResults) {
+    public void assert_user_registration(WebElement element, String expectedResults, String customErrorMessage) {
         logger.info("Element text: {}",  BasePage.getTextFromElement(element));
-        Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults);
+        Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults, customErrorMessage);
     }
 
-    public void assert_errorMessage(String expectedResults) {
+    public void assert_errorMessage(String expectedResults, String customErrorMessage) {
         String currentError = "";
 
         for (WebElement element : we_errorFields) {
@@ -81,6 +81,6 @@ public class RegistrationPage extends BasePage {
             }
         }
         logger.info("Expected error message: {}", currentError);
-        Assert.assertEquals(currentError, expectedResults);
+        Assert.assertEquals(currentError, expectedResults, customErrorMessage);
     }
 }

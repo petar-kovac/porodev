@@ -38,7 +38,8 @@ public class RegisterTest extends BaseTest{
 
         registrationPage.assert_user_registration(
                 homePage.we_userFileUpload_message,
-                PomConstants.HOME_PAGE_USER_FILE_UPLOAD);
+                PomConstants.HOME_PAGE_USER_FILE_UPLOAD,
+                "User registration was not successful");
     }
 
     @Test(priority = 2, dataProvider = "validEmailForms", dataProviderClass = DataProviderUtil.class)
@@ -58,7 +59,8 @@ public class RegisterTest extends BaseTest{
 
         registrationPage.assert_user_registration(
                 homePage.we_userFileUpload_message,
-                PomConstants.HOME_PAGE_USER_FILE_UPLOAD);
+                PomConstants.HOME_PAGE_USER_FILE_UPLOAD,
+                "Email form is not valid");
     }
 
     @Test(priority = 3)
@@ -74,7 +76,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 4)
@@ -90,7 +93,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 5)
@@ -106,7 +110,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 6)
@@ -122,7 +127,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 7)
@@ -138,7 +144,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 8)
@@ -154,7 +161,8 @@ public class RegisterTest extends BaseTest{
                 "",
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 9)
@@ -170,7 +178,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 "");
 
-        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.REQUIRED_FIELD_ERROR,
+                "'This field is required' message should pop up.");
     }
 
     @Test(priority = 10)
@@ -186,7 +195,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_ONLY_LETTERS);
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_ONLY_LETTERS,
+                "'Only letters allowed' error message should pop up.");
     }
 
     @Test(priority = 11)
@@ -202,7 +212,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_ONLY_LETTERS);
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_ONLY_LETTERS,
+                "'Only letters allowed' error message should pop up.");
     }
 
     @Test(priority = 12)
@@ -218,7 +229,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_MORE_THAN_20);
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_MORE_THAN_20,
+                "'Must be < 20 characters' error message should pop up.");
     }
 
     @Test(priority = 13)
@@ -234,7 +246,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_MORE_THAN_20);
+        registrationPage.assert_errorMessage(PomConstants.FULL_NAME_ERROR_MORE_THAN_20,
+                "'Must be < 20 characters' error message should pop up.");
     }
 
 
@@ -252,7 +265,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR_INVALID);
+        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR_INVALID,
+                "'Email is invalid' message should pop up.");
     }
 
     @Test(priority = 15)
@@ -268,7 +282,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR_MORE_THAN_50);
+        registrationPage.assert_errorMessage(PomConstants.EMAIL_ERROR_MORE_THAN_50,
+                "'Must be < 50 characters' error message should pop up.");
     }
 
     @Test(priority = 16)
@@ -286,7 +301,8 @@ public class RegisterTest extends BaseTest{
 
         registrationPage.assert_user_registration(
                 registrationPage.we_requestFailed_statusCode400,
-                PomConstants.REQUEST_FAIL_STATUS_CODE_400);
+                PomConstants.REQUEST_FAIL_STATUS_CODE_400,
+                "'Request failed with status code 400' error message should pop up.");
     }
 
     @Test(priority = 17, dataProvider = "invalidPasswordForm", dataProviderClass = DataProviderUtil.class)
@@ -302,7 +318,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.WRONG_PASSWORD_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.WRONG_PASSWORD_ERROR,
+                "'Wrong password' error message should pop up.");
     }
 
     @Test(priority = 18, dataProvider = "invalidPassForm_with_whitespace", dataProviderClass = DataProviderUtil.class)
@@ -318,7 +335,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.PASSWORD_SPACE_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.PASSWORD_SPACE_ERROR,
+                "'Whitespace not allowed' error message should pop up.");
     }
 
     @Test(priority = 19)
@@ -334,7 +352,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.PASSWORD_MATCH);
+        registrationPage.assert_errorMessage(PomConstants.PASSWORD_MATCH,
+                "'Password should match' error message should pop up.");
     }
 
     @Test(priority = 20)
@@ -350,7 +369,8 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("INVALID_DEPARTMENT"),
                 fileControlUtil.getValue("VALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.DEPARTMENT_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.DEPARTMENT_ERROR,
+                "'Must be a number' error message should pop up.");
     }
 
     @Test(priority = 21)
@@ -366,6 +386,7 @@ public class RegisterTest extends BaseTest{
                 fileControlUtil.getValue("VALID_DEPARTMENT"),
                 fileControlUtil.getValue("INVALID_POSITION"));
 
-        registrationPage.assert_errorMessage(PomConstants.POSITION_ERROR);
+        registrationPage.assert_errorMessage(PomConstants.POSITION_ERROR,
+                "'Letters & whitespace only' error message should pop up.");
     }
 }

@@ -48,7 +48,7 @@ public class HomePage extends BasePage {
         BasePage.clickElement(we_profile_button);
     }
 
-    public void assert_profileInfo_isDisplayed() {
-        Assert.assertTrue(BasePage.isDisplayed(we_profileInfo_message));
+    public void assert_profileInfo_isDisplayed(String customErrorMessage) {
+        Assert.assertTrue(customErrorMessage, BasePage.isDisplayed(we_profileInfo_message));
     }
 }

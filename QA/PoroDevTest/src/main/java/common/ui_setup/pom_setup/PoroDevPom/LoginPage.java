@@ -47,7 +47,7 @@ public class LoginPage extends BasePage {
     }
 
     //ASSERT METHODS
-    public void assert_login_errorMessages(String expectedResults) {
+    public void assert_login_errorMessages(String expectedResults, String customErrorMessage) {
 
         String currentError = "";
         for (WebElement element : we_listOfErrors) {
@@ -56,14 +56,14 @@ public class LoginPage extends BasePage {
                 break;
             }
         }
-        Assert.assertEquals(currentError, expectedResults);
+        Assert.assertEquals(currentError, expectedResults, customErrorMessage);
     }
 
-    public void assert_login(WebElement element, String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults);
+    public void assert_login(WebElement element, String expectedResults, String customErrorMessage) {
+        Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults, customErrorMessage);
     }
 
-    public void assert_thatElement_isDisplayed(WebElement element) {
-        Assert.assertTrue(BasePage.isDisplayed(element));
+    public void assert_thatElement_isDisplayed(WebElement element, String customErrorMessage) {
+        Assert.assertTrue(BasePage.isDisplayed(element), customErrorMessage);
     }
 }

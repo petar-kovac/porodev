@@ -72,7 +72,7 @@ public class BasePage {
         return salt + "@boing.rs";
     }
 
-    public static void explicitWait(WebElement element, WebDriver driver) {
+    public static void waitForElementVisibility(WebElement element, WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
         wait.until(ExpectedConditions.visibilityOf(element));
     }
