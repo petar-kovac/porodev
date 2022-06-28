@@ -18,13 +18,15 @@ public class BaseTest {
     @BeforeClass
     public void setupBeforeTestClass() {
         System.out.println("BEFORE CLASS");
+        driverSetup = new DriverSetup(DriverType.CHROME);
+        driver = driverSetup.getDriver();
     };
 
     @BeforeMethod
-    public void setupBeforeMethod() throws IOException {
+    public void setupBeforeMethod() {
         System.out.println("BEFORE METHOD");
-        driverSetup = new DriverSetup(DriverType.CHROME);
-        driver = driverSetup.getDriver();
+        /*driverSetup = new DriverSetup(DriverType.CHROME);
+        driver = driverSetup.getDriver();*/
     };
 
     @AfterMethod

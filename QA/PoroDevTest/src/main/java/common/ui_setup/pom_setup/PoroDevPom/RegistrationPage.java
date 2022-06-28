@@ -1,23 +1,16 @@
 package common.ui_setup.pom_setup.PoroDevPom;
 
 import common.ui_setup.DriverSetup;
-import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-
-import java.time.Duration;
 import java.util.List;
 
 public class RegistrationPage extends BasePage {
-    private WebDriverWait wait;
     private final Logger logger = LoggerFactory.getLogger(RegistrationPage.class);
 
     public RegistrationPage(WebDriver driver) {
@@ -70,11 +63,6 @@ public class RegistrationPage extends BasePage {
         BasePage.sendText(we_department_inputField, department);
         BasePage.sendText(we_position_inputField, position);
         BasePage.clickElement(we_register_button);
-    }
-
-    public void explicitWait(WebElement element) {
-        wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
-        wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     //ASSERT METHODS

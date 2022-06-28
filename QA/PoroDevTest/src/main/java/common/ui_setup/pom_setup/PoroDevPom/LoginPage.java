@@ -29,20 +29,21 @@ public class LoginPage extends BasePage {
     WebElement we_loginButton;
 
     //ASSERTION ELEMENTS
-    @FindBy(xpath = "//span[contains(text(),'Successful logIn')]")
+    @FindBy(xpath = "//span[contains(text(),'Successful logInUser')]")
     public WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
     public WebElement we_badRequestError;
     @FindBy(xpath = "//span[@data-testid='error-message']")
     List<WebElement> we_listOfErrors;
+    @FindBy(id = "loginForm")
+    public WebElement we_login_form;
 
     //functional methods section
 
-    public void logIn(String email, String password) throws InterruptedException {
+    public void logInUser(String email, String password) {
         BasePage.sendText(we_emailInputField,email);
         BasePage.sendText(we_passInputField, password);
         BasePage.clickElement(we_loginButton);
-        Thread.sleep(2000);
     }
 
     //ASSERT METHODS
@@ -55,10 +56,14 @@ public class LoginPage extends BasePage {
                 break;
             }
         }
-        System.out.println(currentError);
         Assert.assertEquals(currentError, expectedResults);
     }
+
     public void assert_login(WebElement element, String expectedResults) {
         Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults);
+    }
+
+    public void assert_thatElement_isDisplayed(WebElement element) {
+        Assert.assertTrue(BasePage.isDisplayed(element));
     }
 }

@@ -32,13 +32,14 @@ public class LoginTest extends BaseTest {
                 fileControlRegister.getValue("VALID_DEPARTMENT"),
                 fileControlRegister.getValue("VALID_POSITION"));
 
-        HomePage homePage = new HomePage(driver);
-        homePage.logOut();
 
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.logIn(
+        loginPage.logInUser(
                 fileControlLogin.getValue("VALID_EMAIL_CREATED_USER"),
                 fileControlLogin.getValue("VALID_PASS_CREATED_USER"));
+
+        HomePage homePage = new HomePage(driver);
+        homePage.logOutUser();
 
         loginPage.assert_login(homePage.we_userFileUpload_message, PomConstants.HOME_PAGE_USER_FILE_UPLOAD);
     }
@@ -47,7 +48,7 @@ public class LoginTest extends BaseTest {
     public void login_with_invalidFormPassword() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.logIn(
+        loginPage.logInUser(
                 fileControlLogin.getValue("VALID_EMAIL_CREATED_USER"),
                 fileControlLogin.getValue("INVALID_FORM_PASS"));
 
@@ -58,7 +59,7 @@ public class LoginTest extends BaseTest {
     public void login_with_valid_notMatchingUserPassword() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.logIn(
+        loginPage.logInUser(
                 fileControlLogin.getValue("VALID_EMAIL_CREATED_USER"),
                 fileControlLogin.getValue("VALID_NOT_MATCHING_USER_PASSWORD"));
 
@@ -69,7 +70,7 @@ public class LoginTest extends BaseTest {
     public void login_with_invalidFormEmail() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.logIn(
+        loginPage.logInUser(
                 fileControlLogin.getValue("INVALID_FORM_EMAIL"),
                 "");
 
@@ -80,7 +81,7 @@ public class LoginTest extends BaseTest {
     public void login_with_notExistingUserEmail() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.logIn(
+        loginPage.logInUser(
                 fileControlLogin.getValue("VALID_NOT_EXISTING_USER_EMAIL"),
                 fileControlLogin.getValue("VALID_FORM_PASS"));
 
@@ -91,7 +92,7 @@ public class LoginTest extends BaseTest {
     public void login_without_email() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.logIn(
+        loginPage.logInUser(
                 "",
                 fileControlLogin.getValue("VALID_PASS_CREATED_USER"));
 
@@ -102,7 +103,7 @@ public class LoginTest extends BaseTest {
     public void login_without_password() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, SetupConstants.BASE_URL);
 
-        loginPage.logIn(
+        loginPage.logInUser(
                 fileControlLogin.getValue("VALID_EMAIL_CREATED_USER"),
                 "");
 
