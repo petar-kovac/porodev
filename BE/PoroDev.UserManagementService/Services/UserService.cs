@@ -385,59 +385,51 @@ namespace PoroDev.UserManagementService.Services
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-                var responseException = new CommunicationModel<DataUserModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
+                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
 
-                return responseException;
+                return responseUpdateExceptionModel;
             }
             catch (PasswordFormatException ex)
             {
                 string exceptionType = nameof(PasswordFormatException);
                 string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-                var responseException = new CommunicationModel<DataUserModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
+                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
 
-                return responseException;
+                return responseUpdateExceptionModel;
             }
             catch (FullNameFormatException ex)
             {
                 string exceptionType = nameof(FullNameFormatException);
                 string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-                var responseException = new CommunicationModel<DataUserModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
+                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
 
-                return responseException;
+                return responseUpdateExceptionModel;
             }
             catch (PositionFormatException ex)
             {
                 string exceptionType = nameof(PositionFormatException);
                 string humanReadableMessage = ex.HumanReadableErrorMessage;
 
-                var responseException = new CommunicationModel<DataUserModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
+                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
 
-                return responseException;
+                return responseUpdateExceptionModel;
             }
 
             return new CommunicationModel<DataUserModel>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
+        }
+
+        private CommunicationModel<DataUserModel> CreateUpdateExceptionModel(string exceptionType, string humanReadableMessage)
+        {
+            var responseUpdateExceptionModel = new CommunicationModel<DataUserModel>()
+            {
+                Entity = null,
+                ExceptionName = exceptionType,
+                HumanReadableMessage = humanReadableMessage
+            };
+
+            return responseUpdateExceptionModel;
         }
 
         private async Task CheckEmailUpdate(string email)
