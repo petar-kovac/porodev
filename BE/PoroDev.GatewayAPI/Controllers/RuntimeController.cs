@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.RunTime;
+using PoroDev.Common.Contracts.RunTime.ParametersExecute;
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts.RunTime.SimpleExecute;
 using PoroDev.Common.Models.RuntimeModels.Data;
@@ -25,55 +27,28 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpPost("ExecuteProject")]
-        public async Task<ActionResult<RuntimeData>> Execute([FromBody] ExecuteProjectRequestClientToGatewayWithHeader model)
+        public async Task<ActionResult<RuntimeData>> Execute([FromBody] ArgumentListRuntime model)
         {
-            var requestExecute = _mapper.Map<ExecuteProjectRequestClientToGateway>(model);
-            ValidateRecievedToken(requestExecute);
-            var returnModel = await _runTimeService.ExecuteProgram(requestExecute);
-            return Ok(returnModel);
-        }
+            string jwtFromHeader = Request.Headers["authorization"];
+            string accessTokenWithoutBearerPrefix = jwtFromHeader.Substring("Bearer ".Length);
 
+            if (model.Arguments.Count == 0)
+            {
+                var modelWithJWT = new ExecuteProjectRequestClientToGateway(accessTokenWithoutBearerPrefix, model.ProjectId);
 
-        [ApiExplorerSettings(IgnoreApi = true)]
-        public void ValidateRecievedToken(ExecuteProjectRequestClientToGateway requestExecute)
-        {
-            if (Request.Headers["Bearer"].Count == 0)
-            {
-                ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
-            }
+                var returnModel = await _runTimeService.ExecuteProgram(modelWithJWT);
 
-            requestExecute.Jwt = Request.Headers["Bearer"];
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(SecretKey);
-            try
+                return Ok(returnModel);
+            }
+            else
             {
-                var tokenParam = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero,
-                };
+                var modelJwtArugments = new ArgumentListWithJwt(jwtFromHeader, model);
 
-                tokenHandler.ValidateToken(requestExecute.Jwt, tokenParam, out SecurityToken validatedToken);
+                var returnModel = await _runTimeService.ExecuteProgramWithArguments(modelJwtArugments);
+
+                return Ok(returnModel);
             }
-            catch (NullReferenceException nre)
-            {
-                JWTValidationException jWTValidationException2 = new JWTValidationException()
-                {   
-                    HumanReadableErrorMessage = "Token not valid",
-                };
-                ThrowException(nameof(JWTValidationException), jWTValidationException2.HumanReadableErrorMessage);
-            }
-            catch (Exception ex)
-            {
-                JWTValidationException jWTValidationException = new JWTValidationException()
-                {
-                    HumanReadableErrorMessage = ex.Message,
-                };
-                ThrowException(nameof(JWTValidationException), jWTValidationException.HumanReadableErrorMessage);
-            }
+          
         }
     }
 }
