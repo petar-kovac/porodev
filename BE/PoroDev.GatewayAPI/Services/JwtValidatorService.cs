@@ -1,10 +1,14 @@
 ﻿using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using static PoroDev.GatewayAPI.Constants.Constats;
+using PoroDev.Common.Exceptions;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -17,10 +21,10 @@ namespace PoroDev.GatewayAPI.Services
             _readUserById = readUserById;
         }
 
-        public async Task<Guid> ValidateToken(string jwt)
+        public async Task<Guid> GetIdFromToken(SecurityToken securityToken)
         {
             var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadJwtToken(jwt);
+            var jsonToken = securityToken as JwtSecurityToken;
 
             var id = Guid.Parse(jsonToken.Claims.First(claim => claim.Type == "Id").Value);
 
@@ -29,6 +33,25 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(readUserByIdResponseContext.Message.ExceptionName, readUserByIdResponseContext.Message.HumanReadableMessage);
 
             return id;
+        }
+
+        public async Task<TokenValidationResult> ValidateRecievedToken(string jwtForValidation)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(SecretKey);
+
+            TokenValidationParameters validationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            var validator = await tokenHandler.ValidateTokenAsync(jwtForValidation, validationParameters);
+
+            return validator;
         }
     }
 }

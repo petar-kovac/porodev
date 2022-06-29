@@ -1,10 +1,14 @@
 ﻿using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.RunTime.ParametersExecute;
 using PoroDev.Common.Contracts.RunTime.SimpleExecute;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.GatewayAPI.Models.Runtime;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using static PoroDev.GatewayAPI.Constants.Constats;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -27,7 +31,16 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestClientToGateway model)
         {
-            Guid userId = await _jwtValidatorService.ValidateToken(model.Jwt);
+            TokenValidationResult resultOfValidation = await _jwtValidatorService.ValidateRecievedToken(model.Jwt);
+
+            if (!resultOfValidation.IsValid)
+            {
+                var invalidTokenException = (JWTValidationException)resultOfValidation.Exception;
+                invalidTokenException.HumanReadableErrorMessage = CANNOT_VALIDATE_JWT;
+                throw invalidTokenException;
+            }
+
+            Guid userId = await _jwtValidatorService.GetIdFromToken(resultOfValidation.SecurityToken);
 
             var modelWithUserId = new ExecuteProjectRequestGatewayToService(userId, model.FileID);
 
@@ -41,9 +54,18 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<RuntimeData> ExecuteProgramWithArguments(ArgumentListWithJwt model)
         {
-            Guid userId = await _jwtValidatorService.ValidateToken(model.Jwt);
+            TokenValidationResult resultOfValidation = await _jwtValidatorService.ValidateRecievedToken(model.Jwt);
 
-            var modelForExecution = new ExecuteProjectWithArgumentsRequestGatewayToService(model, userId);
+            if (!resultOfValidation.IsValid)
+            {
+                var invalidTokenException = (JWTValidationException)resultOfValidation.Exception;
+                invalidTokenException.HumanReadableErrorMessage = CANNOT_VALIDATE_JWT;
+                throw invalidTokenException;
+            }
+
+            Guid userId = await _jwtValidatorService.GetIdFromToken(resultOfValidation.SecurityToken);
+
+            var modelForExecution = new ExecuteProjectWithArgumentsRequestGatewayToService(model.FileID, userId, model.Arguments);
 
             var requestResponseContext = await _executeWithArguments.GetResponse<CommunicationModel<RuntimeData>>(modelForExecution);
 

@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Contracts.RunTime;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts.RunTime.ParametersExecute;
 using PoroDev.Common.Contracts.RunTime.SimpleExecute;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.GatewayAPI.Models.Runtime;
 using PoroDev.GatewayAPI.Services.Contracts;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -12,14 +18,20 @@ namespace PoroDev.GatewayAPI.Controllers
     public class RuntimeController : ControllerBase
     {
         private readonly IRunTimeService _runTimeService;
-        public RuntimeController(IRunTimeService runTimeService)
+        private readonly IMapper _mapper;
+
+        public RuntimeController(IRunTimeService runTimeService, IMapper mapper)
         {
+            _mapper = mapper;
             _runTimeService = runTimeService;
         }
 
         [HttpPost("ExecuteProject")]
         public async Task<ActionResult<RuntimeData>> Execute([FromBody] ArgumentListRuntime model)
         {
+            if (Request.Headers["Bearer"].Count == 0)
+                ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
+
             string jwtFromHeader = Request.Headers["authorization"];
             string accessTokenWithoutBearerPrefix = jwtFromHeader.Substring("Bearer ".Length);
 
@@ -39,7 +51,8 @@ namespace PoroDev.GatewayAPI.Controllers
 
                 return Ok(returnModel);
             }
-          
         }
+
+       
     }
 }

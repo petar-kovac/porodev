@@ -1,7 +1,6 @@
 ﻿using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.RunTime.ParametersExecute;
-using PoroDev.Common.Contracts.RunTime.SimpleExecute;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.GatewayAPI.Models.Runtime;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Contracts.RunTime.ParametersExecute
+namespace PoroDev.GatewayAPI.Models.Runtime
 {
     public class ArgumentListWithJwt
     {
@@ -12,7 +11,7 @@ namespace PoroDev.Common.Contracts.RunTime.ParametersExecute
 
         public Guid FileID { get; set; }
 
-        public List<String> Arguments { get; set; }
+        public List<string> Arguments { get; set; }
 
         public ArgumentListWithJwt()
         {

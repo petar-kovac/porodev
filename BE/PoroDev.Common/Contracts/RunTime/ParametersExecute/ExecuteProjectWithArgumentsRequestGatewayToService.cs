@@ -19,11 +19,11 @@ namespace PoroDev.Common.Contracts.RunTime.ParametersExecute
 
         }
 
-        public ExecuteProjectWithArgumentsRequestGatewayToService(ArgumentListWithJwt model, Guid userId)
+        public ExecuteProjectWithArgumentsRequestGatewayToService(Guid fileId, Guid userId, List<string> arguments)
         {
             UserId = userId;
-            FileId = model.FileID;
-            Arguments = model.Arguments;
+            FileId = fileId;
+            Arguments = arguments;
         }
     }
 }

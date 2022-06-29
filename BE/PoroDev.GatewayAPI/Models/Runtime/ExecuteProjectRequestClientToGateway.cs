@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Contracts.RunTime.SimpleExecute
+namespace PoroDev.GatewayAPI.Models.Runtime
 {
     public class ExecuteProjectRequestClientToGateway
     {
@@ -13,7 +13,7 @@ namespace PoroDev.Common.Contracts.RunTime.SimpleExecute
 
         public ExecuteProjectRequestClientToGateway()
         {
-               
+
         }
         public ExecuteProjectRequestClientToGateway(string jwt, Guid fileID)
         {
