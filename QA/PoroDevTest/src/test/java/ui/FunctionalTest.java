@@ -10,12 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import java.io.IOException;
 
 public class FunctionalTest extends BaseTest{
-    protected FileControlUtil file;
     protected final Logger logger = LoggerFactory.getLogger(FunctionalTest.class);
+    protected FileControlUtil file;
     protected RegistrationPage registrationPage;
     protected HomePage homePage;
     protected LoginPage loginPage;

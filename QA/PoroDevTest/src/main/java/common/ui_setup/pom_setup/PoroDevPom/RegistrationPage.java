@@ -52,6 +52,10 @@ public class RegistrationPage extends BasePage {
     @FindBy(xpath = "//span[@data-testid='error-message']")
     List<WebElement> we_errorFields;
 
+    //Assertion messages
+    @FindBy(xpath = "//span[contains(text(),'Successful registration')]")
+    public WebElement we_successfulRegistration_message;
+
     public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position)  {
 
         BasePage.clickElement(we_createNewAccount_button);

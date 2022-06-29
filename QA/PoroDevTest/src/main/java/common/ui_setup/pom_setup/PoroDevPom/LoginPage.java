@@ -5,11 +5,14 @@ import common.ui_setup.pom_setup.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import java.util.List;
 
 public class LoginPage extends BasePage {
+    private final Logger logger = LoggerFactory.getLogger(LoginPage.class);
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -37,6 +40,8 @@ public class LoginPage extends BasePage {
     List<WebElement> we_listOfErrors;
     @FindBy(id = "loginForm")
     public WebElement we_login_form;
+    @FindBy(xpath = "//span[contains(text(),'Request failed with status code 400')]")
+    public WebElement we_badRequest_statusCode400;
 
     //functional methods section
 

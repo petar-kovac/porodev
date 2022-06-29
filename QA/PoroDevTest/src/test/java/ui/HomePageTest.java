@@ -10,23 +10,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
 import java.io.IOException;
 
 public class HomePageTest extends BaseTest{
     protected final Logger logger = LoggerFactory.getLogger(HomePageTest.class);
-    protected FileControlUtil file;
-    protected RegistrationPage registrationPage;
+    protected FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
     protected HomePage homePage;
+    protected RegistrationPage registrationPage;
     protected LoginPage loginPage;
+
+    public HomePageTest() throws IOException {
+    }
 
     // For the user login
     @BeforeMethod
-    public void setUp() throws IOException {
-        file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+    public void setUp() {
         registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
-        homePage = new HomePage(driver);
         loginPage = new LoginPage(driver);
+        homePage = new HomePage(driver);
         String currentEmail = BasePage.getRandomBoingEmail();
 
         registrationPage.registerUser(
@@ -46,7 +47,6 @@ public class HomePageTest extends BaseTest{
 
     @Test(priority = 1)
     public void check_profile_info() {
-
         homePage.goTo_profilePage();
         logger.info("User is on Home page");
 
