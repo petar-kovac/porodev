@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using PoroDev.Common.Contracts.StorageService;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Database.Repositories.Contracts;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -24,7 +27,7 @@ namespace PoroDev.DatabaseService.Repositories
             _unitOfWork = UnitOfWork;
         }
 
-        public async Task UploadFile(string fileName, byte[] fileArray, Guid userId)
+        public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, Guid userId)
         {
             var options = new GridFSUploadOptions()
             {
@@ -39,15 +42,19 @@ namespace PoroDev.DatabaseService.Repositories
                 }
             };
 
+            ObjectId id;
+
             try
             {
-                var id = await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
+                id = await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
                 
             }
             catch (Exception e)
             {
                 throw new FileUploadException("File isn't uploaded");
             }
+
+            return id;
         }
     }
 }

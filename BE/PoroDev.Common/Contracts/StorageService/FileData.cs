@@ -21,5 +21,10 @@ namespace PoroDev.Common.Contracts.StorageService
         {
             FileId = fileId;
         }
+
+        public FileData(string fileId, DataUserModel currentUser) : this(fileId)
+        {
+            CurrentUser = currentUser;
+        }
     }
 }
