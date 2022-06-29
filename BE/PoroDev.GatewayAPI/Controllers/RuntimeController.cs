@@ -29,28 +29,17 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpPost("ExecuteProject")]
         public async Task<ActionResult<RuntimeData>> Execute([FromBody] ArgumentListRuntime model)
         {
-            if (Request.Headers["Bearer"].Count == 0)
+            if (Request.Headers["authorization"].Count == 0)
                 ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
 
             string jwtFromHeader = Request.Headers["authorization"];
             string accessTokenWithoutBearerPrefix = jwtFromHeader.Substring("Bearer ".Length);
 
-            if (model.Arguments.Count == 0)
-            {
-                var modelWithJWT = new ExecuteProjectRequestClientToGateway(accessTokenWithoutBearerPrefix, model.ProjectId);
+            var modelJwtArugments = new ArgumentListWithJwt(accessTokenWithoutBearerPrefix, model);
 
-                var returnModel = await _runTimeService.ExecuteProgram(modelWithJWT);
+            var returnModel = await _runTimeService.ExecuteProgram(modelJwtArugments);
 
-                return Ok(returnModel);
-            }
-            else
-            {
-                var modelJwtArugments = new ArgumentListWithJwt(accessTokenWithoutBearerPrefix, model);
-
-                var returnModel = await _runTimeService.ExecuteProgramWithArguments(modelJwtArugments);
-
-                return Ok(returnModel);
-            }
+            return Ok(returnModel);
         }
 
        

@@ -7,7 +7,7 @@ using PoroDev.GatewayAPI.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
-using static PoroDev.GatewayAPI.Constants.Constats;
+using static PoroDev.Common.Constants.Constants;
 using PoroDev.Common.Exceptions;
 
 namespace PoroDev.GatewayAPI.Services

@@ -10,6 +10,6 @@
 
         public static readonly string CANNOT_VALIDATE_JWT = "Could not validate JWT token";
 
-        public const string SecretKey = "this is a custom Secret key for authentification";
+        
     }
 }

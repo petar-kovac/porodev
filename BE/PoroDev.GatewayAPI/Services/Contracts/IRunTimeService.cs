@@ -6,8 +6,6 @@ namespace PoroDev.GatewayAPI.Services.Contracts
 {
     public interface IRunTimeService
     {
-        Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestClientToGateway model);
-
-        Task<RuntimeData> ExecuteProgramWithArguments(ArgumentListWithJwt model);
+        Task<RuntimeData> ExecuteProgram(ArgumentListWithJwt model);
     }
 }

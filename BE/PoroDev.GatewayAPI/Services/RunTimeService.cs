@@ -29,22 +29,36 @@ namespace PoroDev.GatewayAPI.Services
             _jwtValidatorService = jwtValidatorService;
         }
 
-        public async Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestClientToGateway model)
+        public async Task<RuntimeData> ExecuteProgram(ArgumentListWithJwt model)
         {
             TokenValidationResult resultOfValidation = await _jwtValidatorService.ValidateRecievedToken(model.Jwt);
 
             if (!resultOfValidation.IsValid)
             {
-                var invalidTokenException = (JWTValidationException)resultOfValidation.Exception;
-                invalidTokenException.HumanReadableErrorMessage = CANNOT_VALIDATE_JWT;
+                var invalidTokenException = new JWTValidationException()
+                {
+                    HumanReadableErrorMessage = CANNOT_VALIDATE_JWT
+                };
                 throw invalidTokenException;
             }
 
             Guid userId = await _jwtValidatorService.GetIdFromToken(resultOfValidation.SecurityToken);
 
-            var modelWithUserId = new ExecuteProjectRequestGatewayToService(userId, model.FileID);
+            if (model.Arguments.Count == 0)
+            {
+                var modelWithoutArguments = new ExecuteProjectRequestGatewayToService(userId, model.FileID);
+                return await ExecuteProgram(modelWithoutArguments);
+            }
+            else
+            {
+                var modelWithArguments = new ExecuteProjectWithArgumentsRequestGatewayToService(model.FileID, userId, model.Arguments);
+                return await ExecuteProgramWithArguments(modelWithArguments);
+            }           
+        }
 
-            var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(modelWithUserId);
+        private async Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestGatewayToService model)
+        {
+            var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(model);
 
             if (requestResponsecontext.Message.ExceptionName != null)
                 ThrowException(requestResponsecontext.Message.ExceptionName, requestResponsecontext.Message.HumanReadableMessage);
@@ -52,22 +66,10 @@ namespace PoroDev.GatewayAPI.Services
             return requestResponsecontext.Message.Entity;
         }
 
-        public async Task<RuntimeData> ExecuteProgramWithArguments(ArgumentListWithJwt model)
+        private async Task<RuntimeData> ExecuteProgramWithArguments(ExecuteProjectWithArgumentsRequestGatewayToService model)
         {
-            TokenValidationResult resultOfValidation = await _jwtValidatorService.ValidateRecievedToken(model.Jwt);
 
-            if (!resultOfValidation.IsValid)
-            {
-                var invalidTokenException = (JWTValidationException)resultOfValidation.Exception;
-                invalidTokenException.HumanReadableErrorMessage = CANNOT_VALIDATE_JWT;
-                throw invalidTokenException;
-            }
-
-            Guid userId = await _jwtValidatorService.GetIdFromToken(resultOfValidation.SecurityToken);
-
-            var modelForExecution = new ExecuteProjectWithArgumentsRequestGatewayToService(model.FileID, userId, model.Arguments);
-
-            var requestResponseContext = await _executeWithArguments.GetResponse<CommunicationModel<RuntimeData>>(modelForExecution);
+            var requestResponseContext = await _executeWithArguments.GetResponse<CommunicationModel<RuntimeData>>(model);
 
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
