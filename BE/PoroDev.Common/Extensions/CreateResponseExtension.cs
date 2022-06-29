@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Exceptions.Contract;
 
 namespace PoroDev.Common.Extensions
 {
