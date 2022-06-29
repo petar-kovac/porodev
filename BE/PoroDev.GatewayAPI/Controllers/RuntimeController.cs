@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.RunTime;
+using PoroDev.Common.Contracts.RunTime.ParametersExecute;
 using PoroDev.Common.Contracts.RunTime.SimpleExecute;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
@@ -16,13 +18,28 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpPost("ExecuteProject")]
-        public async Task<ActionResult<RuntimeData>> Execute([FromBody] ExecuteProjectRequestClientToGatewayWithHeader model)
+        public async Task<ActionResult<RuntimeData>> Execute([FromBody] ArgumentListRuntime model)
         {
             string jwtFromHeader = Request.Headers["authorization"];
             string accessTokenWithoutBearerPrefix = jwtFromHeader.Substring("Bearer ".Length);
-            var modelWithJWT = new ExecuteProjectRequestClientToGateway() { FileID = model.FileId, Jwt = accessTokenWithoutBearerPrefix };
-            var returnModel = await _runTimeService.ExecuteProgram(modelWithJWT);
-            return Ok(returnModel);
+
+            if (model.Arguments.Count == 0)
+            {
+                var modelWithJWT = new ExecuteProjectRequestClientToGateway(accessTokenWithoutBearerPrefix, model.ProjectId);
+
+                var returnModel = await _runTimeService.ExecuteProgram(modelWithJWT);
+
+                return Ok(returnModel);
+            }
+            else
+            {
+                var modelJwtArugments = new ArgumentListWithJwt(jwtFromHeader, model);
+
+                var returnModel = await _runTimeService.ExecuteProgramWithArguments(modelJwtArugments);
+
+                return Ok(returnModel);
+            }
+          
         }
     }
 }

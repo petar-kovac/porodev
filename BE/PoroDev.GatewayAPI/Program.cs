@@ -15,12 +15,14 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:3000/",
     "http://localhost:3000")
     .AllowAnyHeader()
-    .AllowAnyMethod(); ;
+    .AllowAnyMethod();
     });
 });
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRunTimeService, RunTimeService>();
+builder.Services.AddScoped<IJwtValidatorService, JwtValidatorService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
