@@ -24,12 +24,7 @@ const Users: FC = () => {
     <StyledPage>
       <StyledHeadingWrapper>
         <StyledHeading>{PAGES.users}</StyledHeading>
-        <PButton
-          text="Add user"
-          color="#000"
-          borderRadius="12px"
-          background="#fff"
-        />
+        <PButton text="Add user" color="#000" radius="12px" background="#fff" />
       </StyledHeadingWrapper>
       <PTable dataSource={data} columns={columns} />
     </StyledPage>

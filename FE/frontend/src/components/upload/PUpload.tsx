@@ -1,20 +1,21 @@
 import { InboxOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { message, Upload } from 'antd';
+import { STATUS_CODES } from 'http';
 import React from 'react';
 import styled from 'styled-components';
+import { StatusCode } from 'util/enums/status-codes';
+import api from '../../service/base';
 
 const { Dragger } = Upload;
 
 const props: UploadProps = {
-  name: 'file',
   multiple: true,
   accept: '*',
-  action: `${process.env.REACT_APP_IMAGE_URL}`,
   onChange(info) {
     const { status } = info.file;
     if (status !== 'uploading') {
-      console.log('cdccd');
+      console.log('Uploading');
     }
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);
@@ -24,6 +25,35 @@ const props: UploadProps = {
   },
   onDrop(e) {
     console.log(e);
+  },
+  async customRequest(options) {
+    const { onError, file, onProgress, onSuccess, method } = options;
+    const fmData = new FormData();
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' },
+    };
+    fmData.append('file', file);
+    fmData.append('userId', '8e27aab4-d9d2-435b-ba75-bcb449046bc0');
+
+    try {
+      await api.service().post('/api/Storage/Upload', fmData, config);
+      if (onSuccess) {
+        onSuccess('Ok');
+      }
+    } catch (error: any) {
+      if (onError) {
+        onError({
+          status: error.status as any,
+          method,
+          url: '/api/Storage/Upload',
+          message: 'Error uploading file',
+          name: 'Error has happened',
+        });
+      }
+    }
+  },
+  onRemove(file) {
+    console.log('on remove');
   },
 };
 

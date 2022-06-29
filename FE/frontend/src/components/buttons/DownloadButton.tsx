@@ -9,6 +9,7 @@ interface IPButtonProps {
   borderRadius?: string;
   background?: string;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+  onClickCapture?: MouseEventHandler<HTMLButtonElement> | undefined;
 }
 
 const DownloadButton: FC<IPButtonProps> = ({
@@ -16,6 +17,7 @@ const DownloadButton: FC<IPButtonProps> = ({
   borderRadius,
   background,
   onClick,
+  onClickCapture,
 }) => {
   return (
     <StyledDownloadButton
@@ -23,6 +25,7 @@ const DownloadButton: FC<IPButtonProps> = ({
       borderRadius={borderRadius}
       background={background}
       onClick={onClick}
+      onClickCapture={onClickCapture}
       type="primary"
       icon={<DownloadOutlined />}
     >

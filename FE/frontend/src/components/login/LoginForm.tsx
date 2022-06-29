@@ -84,7 +84,7 @@ const LoginForm: FC<ILoginFormProps> = ({
         <PButton
           text="Login"
           color="#fff"
-          borderRadius="8px"
+          radius="8px"
           htmlType="submit"
           form="loginForm"
           background={theme.colors.primary}

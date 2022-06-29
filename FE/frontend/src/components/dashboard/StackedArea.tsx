@@ -7,7 +7,6 @@ interface IDashboardProps {
 }
 
 const StackedArea: FC<IDashboardProps> = ({ data }) => {
-  console.log(data);
   const config = {
     data,
     xField: 'date',

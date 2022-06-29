@@ -150,7 +150,7 @@ const RegisterForm: FC<ILoginFormProps> = ({
         <PButton
           text="Register"
           color="#fff"
-          borderRadius="8px"
+          radius="8px"
           htmlType="submit"
           form="registerForm"
           background={theme.colors.primary}

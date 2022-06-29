@@ -6,15 +6,17 @@ import theme from 'theme/theme';
 
 const { Meta } = Card;
 interface IGridCardProps {
-  heading: string;
-  description: string;
-  image: string;
+  id?: string;
+  heading?: string;
+  description?: string;
+  image?: string;
   selected: boolean;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
 }
 
 const GridCard: FC<IGridCardProps> = ({
+  id,
   heading,
   description,
   image,
@@ -27,25 +29,23 @@ const GridCard: FC<IGridCardProps> = ({
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
 
   return (
-    <>
-      <StyledGridCard
-        ref={ref}
-        hoverable
-        cover={<img alt="example" src={`${image}`} />}
-        role="button"
-        selected={selected}
-      >
-        <Meta
-          title={heading}
-          description={[
-            <StyledMetaCardDescription>
-              <span>{description.slice(0, 60)}...</span>
-              <span className="show-more">&rarr; Show more</span>
-            </StyledMetaCardDescription>,
-          ]}
-        />
-      </StyledGridCard>
-    </>
+    <StyledGridCard
+      ref={ref}
+      hoverable
+      cover={<img alt="example" src={`${image}`} />}
+      role="button"
+      selected={selected}
+    >
+      <Meta
+        title={heading}
+        description={[
+          <StyledMetaCardDescription>
+            <span>{description?.slice(0, 60)}...</span>
+            <span className="show-more">&rarr; Show more</span>
+          </StyledMetaCardDescription>,
+        ]}
+      />
+    </StyledGridCard>
   );
 };
 const StyledGridCard = styled(Card).attrs({

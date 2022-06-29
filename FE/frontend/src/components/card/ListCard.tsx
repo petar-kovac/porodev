@@ -1,6 +1,6 @@
 import { Card, Button } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import { FC, RefObject, useRef } from 'react';
+import { Dispatch, FC, RefObject, useRef, SetStateAction } from 'react';
 import styled from 'styled-components';
 import DownloadButton from 'components/buttons/DownloadButton';
 import useDoubleClick from 'hooks/useDoubleClick';
@@ -15,6 +15,7 @@ interface IListCardProps {
   selected: boolean;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
+  setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
 }
 
 const ListCard: FC<IListCardProps> = ({
@@ -24,6 +25,7 @@ const ListCard: FC<IListCardProps> = ({
   selected,
   onClick,
   onDoubleClick = () => undefined,
+  setIsSiderVisible,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
@@ -44,11 +46,19 @@ const ListCard: FC<IListCardProps> = ({
                   <span>{description.slice(0, 15)}</span>
                 </StyledDescriptionUploadDetails>
                 <StyledDescriptionButtons>
-                  <StyledFilesButton>Remove filee</StyledFilesButton>
-                  {/* <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-                    Download
-                  </StyledFilesButton> */}
-                  <DownloadButton />
+                  <StyledFilesButton
+                    onClickCapture={(e) => {
+                      console.log(e);
+                    }}
+                  >
+                    Remove file
+                  </StyledFilesButton>
+
+                  <DownloadButton
+                    onClickCapture={(e) => {
+                      console.log(e);
+                    }}
+                  />
                 </StyledDescriptionButtons>
               </StyledMetaDescription>,
             ]}

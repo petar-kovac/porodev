@@ -1,6 +1,9 @@
 html {
   font-size: 62.5%;
 }
+button > * {
+  pointer-events: none;
+}
 
 body {
   margin: 0;

@@ -23,7 +23,7 @@ const Files: FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
-  const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
+  const [cardData, setCardData] = useState<IFilesCard | null>(null);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -43,15 +43,16 @@ const Files: FC = () => {
         <StyledStaticContent
           onClick={() => {
             setIsSiderVisible(false);
-            setCardData(undefined); // to trigger rerender, simulating onBlur effect
+            setCardData(null); // to trigger rerender, simulating onBlur effect
           }}
         >
           <StyledFoldersContainer>
             {data?.slice(0, 4).map((value: any) => (
               <PFolders
-                heading={value?.name}
-                description={value?.description}
-                selected={value?.id === cardData?.id}
+                key={value.id}
+                heading={value.name}
+                description={value.description}
+                selected={value.id === cardData?.id}
                 onClick={(e) => {
                   setCardData(value);
                   e.stopPropagation();
@@ -84,10 +85,11 @@ const Files: FC = () => {
               <>
                 {isList ? (
                   <ListCard
-                    image={value?.image}
-                    heading={value?.name}
-                    description={value?.description}
-                    selected={value?.id === cardData?.id}
+                    key={value.id}
+                    image={value.image}
+                    heading={value.name}
+                    description={value.description}
+                    selected={value.id === cardData?.id}
                     onClick={(e) => {
                       setCardData(value);
                       e.stopPropagation();
@@ -99,13 +101,15 @@ const Files: FC = () => {
                       setIsSiderVisible(false);
                       setIsModalVisible(true);
                     }}
+                    setIsSiderVisible={setIsSiderVisible}
                   />
                 ) : (
                   <GridCard
-                    image={value?.image}
-                    heading={value?.name}
-                    description={value?.description}
-                    selected={value?.id === cardData?.id}
+                    key={value.id}
+                    image={value.image}
+                    heading={value.name}
+                    description={value.description}
+                    selected={value.id === cardData?.id}
                     onClick={(e) => {
                       setCardData(value);
                       e.stopPropagation();

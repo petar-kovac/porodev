@@ -49,7 +49,7 @@ const Login: FC = () => {
         <PButton
           text={isLogin ? 'Create new account' : 'Login with existing account'}
           color="#777"
-          borderRadius="8px"
+          radius="8px"
           htmlType="submit"
           form="toggle"
           background="#fcfcfc"

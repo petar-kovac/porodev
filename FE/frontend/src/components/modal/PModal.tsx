@@ -10,8 +10,8 @@ interface IPModalProps {
   title?: string;
   content?: ReactNode;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
-  setCardData?: Dispatch<SetStateAction<IFilesCard | undefined>>;
-  cardData?: IGroupCard | IFilesCard;
+  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  cardData?: IGroupCard | IFilesCard | null;
 }
 
 const PModal: FC<IPModalProps> = ({
@@ -24,14 +24,14 @@ const PModal: FC<IPModalProps> = ({
   const handleOk = () => {
     setIsModalVisible(false);
     if (setCardData) {
-      setCardData(undefined);
+      setCardData(null);
     }
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     if (setCardData) {
-      setCardData(undefined);
+      setCardData(null);
     }
   };
 

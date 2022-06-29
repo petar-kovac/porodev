@@ -27,7 +27,7 @@ const Admins: FC = () => {
         <PButton
           text="Add admin"
           color="#000"
-          borderRadius="12px"
+          radius="12px"
           background="#fff"
         />
       </StyledHeadingWrapper>

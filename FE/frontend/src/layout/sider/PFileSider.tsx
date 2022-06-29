@@ -23,8 +23,8 @@ interface IPFileSiderProps {
   isSiderVisible?: boolean;
   isDisabledButton?: boolean;
   isLoading?: boolean;
-  cardData?: IGroupCard | IFilesCard;
-  setCardData?: Dispatch<SetStateAction<IFilesCard | undefined>>;
+  cardData?: IGroupCard | IFilesCard | null;
+  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   type: 'folder' | 'file' | 'runtime';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
@@ -61,7 +61,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
   const handleClose = () => {
     setIsSiderVisible(false);
     if (setCardData) {
-      setCardData(undefined);
+      setCardData(null);
     }
   };
 
@@ -84,7 +84,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
           <PButton
             text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
             color="#fff"
-            borderRadius="12px"
+            radius="12px"
             background={theme.colors.primary}
             onClick={onButtonClick}
           />

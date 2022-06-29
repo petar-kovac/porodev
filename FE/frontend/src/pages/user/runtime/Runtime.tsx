@@ -19,7 +19,7 @@ const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState<boolean>(false);
-  const [cardData, setCardData] = useState<IFilesCard | undefined>(undefined);
+  const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [content, setContent] = useState<ReactNode>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -56,7 +56,7 @@ const Runtime: FC = () => {
         <StyledStaticContent
           onClick={() => {
             setIsSiderVisible(false);
-            setCardData(undefined); // to trigger rerender, simulating onBlur effect
+            setCardData(null); // to trigger rerender, simulating onBlur effect
           }}
         >
           <StyledFilesWrapper>

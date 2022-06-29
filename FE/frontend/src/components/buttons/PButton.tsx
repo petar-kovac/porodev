@@ -6,7 +6,7 @@ import styled from 'styled-components';
 interface IPButtonProps {
   text?: string;
   color?: string;
-  borderRadius?: string;
+  radius?: string;
   background?: string;
   htmlType?: 'button' | 'submit' | 'reset' | undefined;
   form?: string;
@@ -25,7 +25,7 @@ interface IPButtonProps {
 const PButton: FC<IPButtonProps> = ({
   text,
   color,
-  borderRadius,
+  radius,
   background,
   htmlType,
   form,
@@ -36,8 +36,8 @@ const PButton: FC<IPButtonProps> = ({
   return (
     <StyledButton
       color={color}
-      borderRadius={borderRadius}
       background={background}
+      radius={radius}
       htmlType={htmlType}
       form={form}
       type={type}
@@ -53,7 +53,7 @@ const StyledButton = styled(Button).attrs((props) => ({
   'data-testid': `${props.form}-button`,
 }))<IPButtonProps>`
   color: ${(props) => props.color};
-  border-radius: ${(props) => props.borderRadius};
+  border-radius: ${(props) => props.radius};
   border: none;
   outline: none;
   background-color: ${(props) => props.background};

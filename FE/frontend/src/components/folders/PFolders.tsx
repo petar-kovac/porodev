@@ -3,14 +3,7 @@ import { Card } from 'antd';
 import useDoubleClick from 'hooks/useDoubleClick';
 import { FC, RefObject, useRef } from 'react';
 import styled from 'styled-components';
-
-interface IPFoldersProps {
-  heading: string;
-  description: string;
-  selected: boolean;
-  onClick?: (event: MouseEvent) => unknown;
-  onDoubleClick?: (event: MouseEvent) => unknown;
-}
+import { IPFoldersProps } from 'types/folder-props';
 
 const PFolders: FC<IPFoldersProps> = ({
   heading,
@@ -27,7 +20,7 @@ const PFolders: FC<IPFoldersProps> = ({
     <StyledCard ref={ref} selected={selected} hoverable>
       <FolderFilled />
       <StyledFolderHeading>{heading}</StyledFolderHeading>
-      <p>{description.slice(0, 10)}</p>
+      <p>{description?.slice(0, 10)}</p>
     </StyledCard>
   );
 };

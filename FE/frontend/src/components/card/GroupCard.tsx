@@ -38,7 +38,6 @@ const GroupCard: FC<IGroupCardProps> = ({
       ref={ref}
       title={groupName}
       extra={isModerator && <StyledUserOutlined />}
-      key={uuid}
       selected={selected}
     >
       <StyledTextWrapper>

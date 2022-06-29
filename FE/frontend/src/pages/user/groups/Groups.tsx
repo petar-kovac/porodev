@@ -25,7 +25,7 @@ const Groups: FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
-  const [cardData, setCardData] = useState<IGroupCard | undefined>(undefined);
+  const [cardData, setCardData] = useState<IGroupCard | null>(null);
 
   const count = useRef(0);
 
@@ -77,7 +77,7 @@ const Groups: FC = () => {
         <StyledStaticContent
           onClick={() => {
             setIsSiderVisible(false);
-            setCardData(undefined); // to trigger rerender, simulating onBlur effect
+            setCardData(null); // to trigger rerender, simulating onBlur effect
           }}
         >
           <StyledFilesWrapper>

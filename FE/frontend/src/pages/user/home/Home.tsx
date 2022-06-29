@@ -9,6 +9,7 @@ import PUpload from 'components/upload/PUpload';
 
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
+import { IFilesCard } from 'types/card-data';
 import {
   StyledCardHeading,
   StyledCardListWrapper,
@@ -52,11 +53,12 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.splice(0, 5).map((value: any, index: any) => (
+            {data?.splice(0, 5).map((value: IFilesCard) => (
               <GridCard
-                heading={value?.name}
-                description={value?.description}
-                image={value?.image}
+                key={value.id}
+                heading={value.name}
+                description={value.description}
+                image={value.image}
                 selected={false}
               />
             ))}
@@ -66,7 +68,7 @@ const Home: FC = () => {
               <PButton
                 text="Show more files"
                 color="#fff"
-                borderRadius="12px"
+                radius="12px"
                 background={theme.colors.primary}
               />
             </Link>
