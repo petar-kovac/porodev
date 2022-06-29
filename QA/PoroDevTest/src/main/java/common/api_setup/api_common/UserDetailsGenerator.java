@@ -157,7 +157,17 @@ public class UserDetailsGenerator {
     public static String incorectJwtSignature = "tAt7oxNmdTHSnr5hUr_mjdH8B8elavo6LDeiXwIhg1OqjaeXj4V4L8OsumMIGSb61gweyjsWl1UuobnnQMJ1Ng";
 
 
+    @DataProvider(name = "invalidFileIdList")
+    Object[][] invalidFileIdList() {
+        Object[][] invalidFileIdList = new Object[][]{
+                {""},
+                {"111111111111111111111111111111111111"},
+                {"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+                {"e06246ba-d280-48bd-ab60-1739cee98c74e06246ba-d280-48bd-ab60-1739cee98c74"}
+        };
 
+        return invalidFileIdList;
+            }
 
 
     @DataProvider(name = "CombinationOfInvalidEntryList")
@@ -206,7 +216,7 @@ public class UserDetailsGenerator {
     public static String takeTokenValueFromJson(String email, String password){
         String loginJsonObject = "{\n" +
                 "  \"email\": \""+email+"\",\n" +
-                "  \"password\": \"stringString1!\"\n" +
+                "  \"password\": \""+password+"\"\n" +
                 "}";
         String json = given().relaxedHTTPSValidation().
                 body(loginJsonObject)
