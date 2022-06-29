@@ -380,16 +380,6 @@ namespace PoroDev.UserManagementService.Services
                 CheckPassword(updateModel.PasswordUnhashed);
                 CheckPosition(updateModel.Position);
             }
-            catch (EmailFormatException ex)
-            {
-
-                string exceptionType = nameof(EmailFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
-
-                return responseUpdateExceptionModel;
-            }
             catch (FullNameFormatException ex)
             {
                 string exceptionType = nameof(FullNameFormatException);
@@ -451,8 +441,6 @@ namespace PoroDev.UserManagementService.Services
             }
 
             return new CommunicationModel<DataUserModel>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
-
-    
         }
 
         private void CheckEmailIsNullOrWhiteSpace(string email)
