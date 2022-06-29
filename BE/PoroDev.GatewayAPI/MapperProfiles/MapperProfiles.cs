@@ -7,7 +7,7 @@ namespace PoroDev.GatewayAPI.MapperProfiles
     {
         public MapperProfiles()
         {
-            CreateMap<ExecuteProjectRequestClientToGatewayWithHeader, ExecuteProjectRequestClientToGateway>();
+           // CreateMap<ExecuteProjectRequestClientToGatewayWithHeader, ExecuteProjectRequestClientToGateway>();
         }
     }
 }

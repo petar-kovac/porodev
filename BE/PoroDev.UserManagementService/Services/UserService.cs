@@ -24,6 +24,7 @@ using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -37,6 +38,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<RegisterUserRequestServiceToDatabase> _registerUserClient;
         private readonly IRequestClient<UserLoginRequestServiceToDatabase> _loginUserRequestClient;
         private readonly IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> _readUserByIdWithRuntimeClient;
+        private readonly IRequestClient<UserDeleteAllRequestServiceToDataBase> _deleteAllUserRequestclient;
 
         private readonly IMapper _mapper;
 
@@ -48,6 +50,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<UserLoginRequestServiceToDatabase> loginUserRequestClient,
                            IRequestClient<UserReadByIdRequestServiceToDataBase> readByIdRequestClient,
                            IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> readUserByIdWithRuntimeClient,
+                           IRequestClient<UserDeleteAllRequestServiceToDataBase> deleteAllUsersRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
@@ -58,6 +61,7 @@ namespace PoroDev.UserManagementService.Services
             _loginUserRequestClient = loginUserRequestClient;
             _readUserByIdClient = readByIdRequestClient;
             _readUserByIdWithRuntimeClient = readUserByIdWithRuntimeClient;
+            _deleteAllUserRequestclient = deleteAllUsersRequestClient;
             _mapper = mapper;
         }
 
@@ -125,6 +129,12 @@ namespace PoroDev.UserManagementService.Services
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
             var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            return response.Message;
+        }
+
+        public async Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
+        {
+            var response = await _deleteAllUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 
@@ -220,5 +230,7 @@ namespace PoroDev.UserManagementService.Services
 
             return returnContext;
         }
+
+        
     }
 }

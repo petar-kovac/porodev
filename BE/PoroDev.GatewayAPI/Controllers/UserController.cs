@@ -10,6 +10,7 @@ using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -36,6 +37,13 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             var returnModel = await _userService.DeleteUser(model);
             return Ok(returnModel);
+        }
+
+        [HttpDelete("DeleteAllUsers")]
+        public async Task<ActionResult> DeleteAllUsers([FromBody] UserDeleteAllRequestGatewayToService model)
+        {
+            await _userService.DeleteAllUsers(model);
+            return Ok();
         }
 
         [HttpGet("ReadUserByEmail")]

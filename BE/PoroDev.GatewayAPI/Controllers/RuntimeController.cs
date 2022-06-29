@@ -42,7 +42,7 @@ namespace PoroDev.GatewayAPI.Controllers
             }
             else
             {
-                var modelJwtArugments = new ArgumentListWithJwt(jwtFromHeader, model);
+                var modelJwtArugments = new ArgumentListWithJwt(accessTokenWithoutBearerPrefix, model);
 
                 var returnModel = await _runTimeService.ExecuteProgramWithArguments(modelJwtArugments);
 
