@@ -35,6 +35,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void login_with_validCredentials() {
         String email = BasePage.getRandomBoingEmail();
+
         registrationPage.registerUser(
                 fileControlRegister.getValue("VALID_FIRSTNAME"),
                 fileControlRegister.getValue("VALID_LASTNAME"),
