@@ -5,7 +5,7 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileDownloadConsumer : IConsumer<FileDownloadRequestServiceToDatabase>
+    public class FileDownloadConsumer : IConsumer<FileDownloadMsg>
     {
         private IFileRepository _fileRepository;
 
@@ -14,12 +14,12 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             _fileRepository = fileRepository;
         }
 
-        public async Task Consume(ConsumeContext<FileDownloadRequestServiceToDatabase> context)
+        public async Task Consume(ConsumeContext<FileDownloadMsg> context)
         {
-            await _fileRepository.DownloadFile(context.Message.FileId, context.Message.FileName, context.Message.File);
+            await _fileRepository.DownloadFile(context.Message.FileName);
 
-            FileDownloadModel model = new(context.Message.FileId, context.Message.FileName, context.Message.File);
-            var response = new CommunicationModel<FileDownloadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
+            FileDownloadMsg model = new(context.Message.FileName);
+            var response = new CommunicationModel<FileDownloadMsg>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
 
             await context.RespondAsync(response);
         }

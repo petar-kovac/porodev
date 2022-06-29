@@ -8,6 +8,6 @@ namespace PoroDev.GatewayAPI.Services.Contracts
     {
         Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel);
 
-        Task<FileDownloadModel> DownloadFile(FileDownloadRequestGatewayToService downloadModel);
+        Task<FileDownloadMsg> DownloadFile(FileDownloadMsg downloadModel);
     }
 }

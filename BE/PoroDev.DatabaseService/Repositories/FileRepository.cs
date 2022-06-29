@@ -48,12 +48,12 @@ namespace PoroDev.DatabaseService.Repositories
                 throw new FileUploadException("File isn't uploaded");
             }
         }
-        //not sure if this should be ObjectId or Guid for fileId
-        public async Task DownloadFile (ObjectId fileId, string fileName, byte[] file)
+        
+        public async Task<byte[]> DownloadFile (string fileName)
         {
-            var downloadFile = await _bucket.DownloadAsBytesAsync(fileId);
+            var downloadFile = await _bucket.DownloadAsBytesByNameAsync(fileName);
 
-            //return Ok(downloadFile);
+            return downloadFile;
         }
     }
 }

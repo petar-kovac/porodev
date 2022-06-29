@@ -1,24 +1,25 @@
 ﻿using MassTransit;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.GatewayAPI.Services.Contracts;
-using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.GatewayAPI.Constants.Constats;
-using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.StorageService.UploadFile;
-using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Services
 {
     public class StorageService : IStorageService
     {
-        //da li bi trebali ovde dodavati ove standardne RequestFromGatewayToService i slicno ? 
-        private readonly IRequestClient<FileDownloadRequestGatewayToService> _downloadRequestClient;
+        //da li bi trebali ovde dodavati ove standardne RequestFromGatewayToService i slicno ?
+        private readonly IRequestClient<FileDownloadMsg> _downloadRequestClient;
+
         private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
 
         // da li cemo dodati ovaj model za citanje ID-a
         //       private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
 
-        public StorageService(IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
+        public StorageService(IRequestClient<FileDownloadMsg> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
@@ -37,7 +38,7 @@ namespace PoroDev.GatewayAPI.Services
         {
             //var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService() { Id = Guid.Parse(id) });
 
-            if (uploadModel.File == null || uploadModel.UserId == null)
+            if (uploadModel.File == null || uploadModel.UserId == Guid.Empty)
             {
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
             }
@@ -49,9 +50,9 @@ namespace PoroDev.GatewayAPI.Services
             return responseContext.Message.Entity;
         }
 
-        public async Task<FileDownloadModel> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
+        public async Task<FileDownloadMsg> DownloadFile(FileDownloadMsg downloadModel)
         {
-            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadModel>>(downloadModel);
+            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMsg>>(downloadModel);
 
             return responseContext.Message.Entity;
         }

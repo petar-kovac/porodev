@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.GatewayAPI.Services.Contracts;
@@ -11,6 +10,7 @@ namespace PoroDev.GatewayAPI.Controllers
     public class StorageController : ControllerBase
     {
         private readonly IStorageService _storageService;
+
         public StorageController(IStorageService storageService)
         {
             _storageService = storageService;
@@ -25,10 +25,11 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpPost("Download")]
-        public async Task<ActionResult<FileDownloadRequestGatewayToService>> Download(ObjectId fileId)
+        public async Task<ActionResult<FileDownloadMsg>> Download(string fileName)
         {
-            var returnModel = new FileDownloadRequestGatewayToService(fileId);
+            var returnModel = new FileDownloadMsg(fileName);
             await _storageService.DownloadFile(returnModel);
+
             return Ok(returnModel);
         }
     }

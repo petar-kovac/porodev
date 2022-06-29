@@ -4,6 +4,6 @@
     {
         public Task UploadFile(string fileName, byte[] fileArray, Guid id);
 
-        public Task DownloadFile(Guid fileId, string fileName, byte[] file);
+        public Task<byte[]> DownloadFile(string fileName);
     }
 }
