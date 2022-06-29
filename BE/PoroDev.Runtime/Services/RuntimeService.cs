@@ -62,5 +62,18 @@ namespace PoroDev.Runtime.Services
             return dbResponse.Message;
 
         }
+
+        public Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId, List<string> argumentList)
+        {
+            foreach (var argument in argumentList)
+            {
+                if (Guid.TryParse(argument, out Guid argumentId));
+                    //postoji ID slike u argumentima
+            }
+
+            System.IO.Compression.ZipFile.ExtractToDirectory(ZIPPED_FILE_ROUTE, RUNTIME_FOLDER_ROUTE);
+
+            await CreateDockerfile(PROJECT_PATH);
+        }
     }
 }
