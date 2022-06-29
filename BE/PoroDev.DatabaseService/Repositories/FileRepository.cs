@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Exceptions;
-
+using PoroDev.Database.Repositories.Contracts;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -12,17 +12,19 @@ namespace PoroDev.DatabaseService.Repositories
     {
         //private readonly IGridFSBucket<Guid> _bucket;
         private readonly IGridFSBucket _bucket;
+        private readonly IUnitOfWork _unitOfWork;
         
-        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings)
+        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings, IUnitOfWork UnitOfWork)
         {
             var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString) ;
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
             _bucket = new GridFSBucket(mongoDatabase);
+            _unitOfWork = UnitOfWork;
         }
 
-        public async Task UploadFile(string fileName, byte[] fileArray, Guid id)
+        public async Task UploadFile(string fileName, byte[] fileArray, Guid userId)
         {
             var options = new GridFSUploadOptions()
             {
@@ -31,7 +33,7 @@ namespace PoroDev.DatabaseService.Repositories
                    
                     { "latest" , true },
 
-                    {"userId", id},
+                    {"userId", userId},
 
                     {"time", DateTime.UtcNow}
                 }
@@ -39,8 +41,8 @@ namespace PoroDev.DatabaseService.Repositories
 
             try
             {
-                //Nece da upise kada se salje isti ID koji je vec upisan
-                await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
+                var id = await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
+                
             }
             catch (Exception e)
             {

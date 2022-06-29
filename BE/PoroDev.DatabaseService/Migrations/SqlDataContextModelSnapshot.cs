@@ -21,16 +21,12 @@ namespace PoroDev.DatabaseService.Migrations
 
             modelBuilder.Entity("PoroDev.Common.Contracts.StorageService.FileData", b =>
                 {
-                    b.Property<Guid>("FileId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<string>("FileId")
+                        .HasMaxLength(24)
+                        .HasColumnType("VARCHAR(24)");
 
                     b.Property<Guid>("CurrentUserId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("FileId");
 
