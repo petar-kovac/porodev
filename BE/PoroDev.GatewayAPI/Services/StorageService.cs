@@ -37,7 +37,7 @@ namespace PoroDev.GatewayAPI.Services
         {
             //var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService() { Id = Guid.Parse(id) });
 
-            if (uploadModel.File == null || uploadModel.UserId == null)
+            if (uploadModel.File is null)
             {
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
             }

@@ -23,7 +23,17 @@ namespace PoroDev.Database.Repositories
             TemplateEntity createdEntity;
             try
             {
-                createdEntity = (await _context.Set<TemplateEntity>().AddAsync(entity)).Entity;
+                var entityDto = await _context.Set<TemplateEntity>().AddAsync(entity);
+                createdEntity = entityDto.Entity;
+
+                UnitOfWorkResponseModel<TemplateEntity> response = new()
+                {
+                    Entity = createdEntity,
+                    ExceptionName = null,
+                    HumanReadableMessage = null
+                };
+
+                return response;
             }
             catch (Exception)
             {
@@ -36,15 +46,6 @@ namespace PoroDev.Database.Repositories
 
                 return responseException;
             }
-
-            UnitOfWorkResponseModel<TemplateEntity> response = new()
-            {
-                Entity = createdEntity,
-                ExceptionName = null,
-                HumanReadableMessage = null
-            };
-
-            return response;
         }
 
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity)

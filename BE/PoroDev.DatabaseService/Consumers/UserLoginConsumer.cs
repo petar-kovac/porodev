@@ -47,7 +47,6 @@ namespace PoroDev.Database.Consumers
             returnModel.Entity.Jwt = CreateToken(userToLogIn.Entity);
 
             await context.RespondAsync<CommunicationModel<LoginUserModel>>(returnModel);
-
         }
 
         public string CreateToken(DataUserModel user)
