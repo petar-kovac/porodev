@@ -1,45 +1,64 @@
 ﻿using MassTransit;
+using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.RunTime.ParametersExecute;
 using PoroDev.Common.Contracts.RunTime.SimpleExecute;
-using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.GatewayAPI.Models.Runtime;
 using PoroDev.GatewayAPI.Services.Contracts;
-using System.IdentityModel.Tokens.Jwt;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using static PoroDev.GatewayAPI.Constants.Constats;
 
 namespace PoroDev.GatewayAPI.Services
 {
     public class RunTimeService : IRunTimeService
     {
-        private readonly IRequestClient<ExecuteProjectRequestGatewayToService> _executeProjet;
-        private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
+        private readonly IRequestClient<ExecuteProjectRequestGatewayToService> _executeProjet;     
+        private readonly IRequestClient<ExecuteProjectWithArgumentsRequestGatewayToService> _executeWithArguments;
 
-        public RunTimeService(IRequestClient<ExecuteProjectRequestGatewayToService> executeProjet, IRequestClient<UserReadByIdRequestGatewayToService> readUserById)
+        public RunTimeService(
+            IRequestClient<ExecuteProjectRequestGatewayToService> executeProjet, 
+            IRequestClient<ExecuteProjectWithArgumentsRequestGatewayToService> executeWithArguments
+            )
         {
             _executeProjet = executeProjet;
-            _readUserById = readUserById;
+            _executeWithArguments = executeWithArguments;
         }
 
-        public async Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestClientToGateway model)
+        public async Task<RuntimeData> ExecuteProgram(ArgumentListWithUserId model)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(model.Jwt);
-            var tokenS = jsonToken as JwtSecurityToken;
+            if (model.Arguments.Count == 0)
+            {
+                var modelWithoutArguments = new ExecuteProjectRequestGatewayToService(model.UserId, model.FileID);
+                return await ExecuteProgram(modelWithoutArguments);
+            }
+            else
+            {
+                var modelWithArguments = new ExecuteProjectWithArgumentsRequestGatewayToService(model.FileID, model.UserId, model.Arguments);
+                return await ExecuteProgramWithArguments(modelWithArguments);
+            }           
+        }
 
-            var id = tokenS.Claims.First(claim => claim.Type == "Id").Value;
+        private async Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestGatewayToService model)
+        {
+            var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(model);
 
-            var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService() { Id = Guid.Parse(id) });
-            if (readUserByIdResponseContext.Message.ExceptionName != null)
-                ThrowException(readUserByIdResponseContext.Message.ExceptionName, readUserByIdResponseContext.Message.HumanReadableMessage);
-
-            var modelWithUserId = new ExecuteProjectRequestGatewayToService() { UserId = Guid.Parse(id), FileID = Guid.Parse(model.FileID) };
-
-            var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(modelWithUserId);
             if (requestResponsecontext.Message.ExceptionName != null)
                 ThrowException(requestResponsecontext.Message.ExceptionName, requestResponsecontext.Message.HumanReadableMessage);
 
             return requestResponsecontext.Message.Entity;
+        }
+
+        private async Task<RuntimeData> ExecuteProgramWithArguments(ExecuteProjectWithArgumentsRequestGatewayToService model)
+        {
+
+            var requestResponseContext = await _executeWithArguments.GetResponse<CommunicationModel<RuntimeData>>(model);
+
+            if (requestResponseContext.Message.ExceptionName != null)
+                ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
+
+            return requestResponseContext.Message.Entity;
         }
     }
 }
