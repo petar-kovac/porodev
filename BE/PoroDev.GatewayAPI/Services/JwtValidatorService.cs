@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.Common.Constants.Constants;
+using static PoroDev.GatewayAPI.Constants.Constats;
 using PoroDev.Common.Exceptions;
 
 namespace PoroDev.GatewayAPI.Services
@@ -21,7 +22,7 @@ namespace PoroDev.GatewayAPI.Services
             _readUserById = readUserById;
         }
 
-        public async Task<Guid> GetIdFromToken(SecurityToken securityToken)
+        private async Task<Guid> GetIdFromToken(SecurityToken securityToken)
         {
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = securityToken as JwtSecurityToken;
@@ -35,7 +36,31 @@ namespace PoroDev.GatewayAPI.Services
             return id;
         }
 
-        public async Task<TokenValidationResult> ValidateRecievedToken(string jwtForValidation)
+        public async Task<Guid> ValidateRecievedToken(string jwtForValidation) 
+        {
+            if (jwtForValidation.Count() == 0)
+                ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
+
+            string accessTokenWithoutBearerPrefix = jwtForValidation.Substring("Bearer ".Length);
+
+            TokenValidationResult resultOfValidation = await ValidateToken(accessTokenWithoutBearerPrefix);
+
+            if (!resultOfValidation.IsValid)
+            {
+                var invalidTokenException = new JWTValidationException()
+                {
+                    HumanReadableErrorMessage = CANNOT_VALIDATE_JWT
+                };
+                throw invalidTokenException;
+            }
+
+            Guid userId = await GetIdFromToken(resultOfValidation.SecurityToken);
+
+            return userId;
+
+        }
+
+        private async Task<TokenValidationResult> ValidateToken(string jwtForValidation)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(SecretKey);

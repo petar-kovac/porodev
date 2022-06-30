@@ -19,25 +19,21 @@ namespace PoroDev.GatewayAPI.Controllers
     {
         private readonly IRunTimeService _runTimeService;
         private readonly IMapper _mapper;
+        private readonly IJwtValidatorService _jwtValidatorService;
 
-        public RuntimeController(IRunTimeService runTimeService, IMapper mapper)
+        public RuntimeController(IRunTimeService runTimeService, IMapper mapper, IJwtValidatorService jwtValidatorService)
         {
             _mapper = mapper;
             _runTimeService = runTimeService;
+            _jwtValidatorService = jwtValidatorService;
         }
 
         [HttpPost("ExecuteProject")]
         public async Task<ActionResult<RuntimeData>> Execute([FromBody] ArgumentListRuntime model)
         {
-            if (Request.Headers["authorization"].Count == 0)
-                ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
-            string jwtFromHeader = Request.Headers["authorization"];
-            string accessTokenWithoutBearerPrefix = jwtFromHeader.Substring("Bearer ".Length);
-
-            var modelJwtArugments = new ArgumentListWithJwt(accessTokenWithoutBearerPrefix, model);
-
-            var returnModel = await _runTimeService.ExecuteProgram(modelJwtArugments);
+            var returnModel = await _runTimeService.ExecuteProgram(new ArgumentListWithUserId(userId, model));
 
             return Ok(returnModel);
         }

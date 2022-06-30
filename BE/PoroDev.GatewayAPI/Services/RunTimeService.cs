@@ -16,42 +16,26 @@ namespace PoroDev.GatewayAPI.Services
     {
         private readonly IRequestClient<ExecuteProjectRequestGatewayToService> _executeProjet;     
         private readonly IRequestClient<ExecuteProjectWithArgumentsRequestGatewayToService> _executeWithArguments;
-        private readonly IJwtValidatorService _jwtValidatorService;
 
         public RunTimeService(
             IRequestClient<ExecuteProjectRequestGatewayToService> executeProjet, 
-            IRequestClient<ExecuteProjectWithArgumentsRequestGatewayToService> executeWithArguments,
-            IJwtValidatorService jwtValidatorService
+            IRequestClient<ExecuteProjectWithArgumentsRequestGatewayToService> executeWithArguments
             )
         {
             _executeProjet = executeProjet;
             _executeWithArguments = executeWithArguments;
-            _jwtValidatorService = jwtValidatorService;
         }
 
-        public async Task<RuntimeData> ExecuteProgram(ArgumentListWithJwt model)
+        public async Task<RuntimeData> ExecuteProgram(ArgumentListWithUserId model)
         {
-            TokenValidationResult resultOfValidation = await _jwtValidatorService.ValidateRecievedToken(model.Jwt);
-
-            if (!resultOfValidation.IsValid)
-            {
-                var invalidTokenException = new JWTValidationException()
-                {
-                    HumanReadableErrorMessage = CANNOT_VALIDATE_JWT
-                };
-                throw invalidTokenException;
-            }
-
-            Guid userId = await _jwtValidatorService.GetIdFromToken(resultOfValidation.SecurityToken);
-
             if (model.Arguments.Count == 0)
             {
-                var modelWithoutArguments = new ExecuteProjectRequestGatewayToService(userId, model.FileID);
+                var modelWithoutArguments = new ExecuteProjectRequestGatewayToService(model.UserId, model.FileID);
                 return await ExecuteProgram(modelWithoutArguments);
             }
             else
             {
-                var modelWithArguments = new ExecuteProjectWithArgumentsRequestGatewayToService(model.FileID, userId, model.Arguments);
+                var modelWithArguments = new ExecuteProjectWithArgumentsRequestGatewayToService(model.FileID, model.UserId, model.Arguments);
                 return await ExecuteProgramWithArguments(modelWithArguments);
             }           
         }

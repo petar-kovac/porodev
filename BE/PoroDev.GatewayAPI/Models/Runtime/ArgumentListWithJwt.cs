@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 
 namespace PoroDev.GatewayAPI.Models.Runtime
 {
-    public class ArgumentListWithJwt
+    public class ArgumentListWithUserId
     {
-        public string Jwt { get; set; }
+        public Guid UserId { get; set; }
 
         public Guid FileID { get; set; }
 
         public List<string> Arguments { get; set; }
 
-        public ArgumentListWithJwt()
+        public ArgumentListWithUserId()
         {
 
         }
-        public ArgumentListWithJwt(string jwt, ArgumentListRuntime model)
+        public ArgumentListWithUserId(Guid userId, ArgumentListRuntime model)
         {
-            Jwt = jwt;
+            UserId = userId;
             FileID = model.ProjectId;
             Arguments = model.Arguments;
         }
