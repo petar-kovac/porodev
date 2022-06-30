@@ -1,7 +1,7 @@
 import { Card } from 'antd';
 import styled from 'styled-components';
 import { FileZipOutlined } from '@ant-design/icons';
-import { FC, ReactNode, RefObject, useRef } from 'react';
+import { FC, ReactNode, RefObject, useRef, MouseEventHandler } from 'react';
 
 import useDoubleClick from 'hooks/useDoubleClick';
 import { formatDate } from 'util/helpers/date-formaters';
@@ -13,8 +13,8 @@ interface IRuntimeCardProps {
   title: ReactNode;
   createdAt: string;
   selected: boolean;
-  onClick?: (event: MouseEvent) => unknown;
-  onDoubleClick?: (event: MouseEvent) => unknown;
+  onClick?: MouseEventHandler<HTMLElement>;
+  onDoubleClick?: MouseEventHandler<HTMLElement>;
 }
 
 const RuntimeCard: FC<IRuntimeCardProps> = ({

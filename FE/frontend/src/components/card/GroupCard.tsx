@@ -1,7 +1,7 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Card } from 'antd';
 import useDoubleClick from 'hooks/useDoubleClick';
-import React, { FC, RefObject, useRef } from 'react';
+import React, { FC, RefObject, useRef, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { StyledUserOutlined } from 'styles/icons/styled-icons';
 import theme from 'theme/theme';
@@ -14,8 +14,8 @@ interface IGroupCardProps {
   numberOfUsers?: number;
   uuid: string;
   selected: boolean;
-  onClick?: (event: MouseEvent) => unknown;
-  onDoubleClick?: (event: MouseEvent) => unknown;
+  onClick?: MouseEventHandler<HTMLElement>;
+  onDoubleClick?: MouseEventHandler<HTMLElement>;
 }
 
 const GroupCard: FC<IGroupCardProps> = ({

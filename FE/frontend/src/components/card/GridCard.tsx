@@ -1,6 +1,6 @@
 import { Card } from 'antd';
 import useDoubleClick from 'hooks/useDoubleClick';
-import { FC, RefObject, useRef } from 'react';
+import { FC, RefObject, useRef, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
@@ -11,8 +11,8 @@ interface IGridCardProps {
   description?: string;
   image?: string;
   selected: boolean;
-  onClick?: (event: MouseEvent) => unknown;
-  onDoubleClick?: (event: MouseEvent) => unknown;
+  onClick?: MouseEventHandler<HTMLElement>;
+  onDoubleClick?: MouseEventHandler<HTMLElement>;
 }
 
 const GridCard: FC<IGridCardProps> = ({
@@ -36,7 +36,7 @@ const GridCard: FC<IGridCardProps> = ({
       role="button"
       selected={selected}
     >
-      <Meta
+      {/* <Meta
         title={heading}
         description={[
           <StyledMetaCardDescription>
@@ -44,7 +44,7 @@ const GridCard: FC<IGridCardProps> = ({
             <span className="show-more">&rarr; Show more</span>
           </StyledMetaCardDescription>,
         ]}
-      />
+      /> */}
     </StyledGridCard>
   );
 };

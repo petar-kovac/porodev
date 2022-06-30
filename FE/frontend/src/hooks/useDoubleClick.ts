@@ -1,9 +1,9 @@
-import { RefObject, useEffect, useRef } from 'react';
+import React, { RefObject, useEffect, useRef, MouseEventHandler } from 'react';
 
 interface UseDoubleClickProps {
   ref: RefObject<HTMLElement | null>;
-  onDoubleClick?: (event: MouseEvent) => unknown;
-  onClick?: (event: MouseEvent) => unknown;
+  onDoubleClick?: MouseEventHandler<HTMLElement>;
+  onClick?: MouseEventHandler<HTMLElement>;
   stopPropagation?: boolean;
 }
 
@@ -22,12 +22,22 @@ const useDoubleClick = ({
     count.current += 1;
 
     if (count.current === 2 && onDoubleClick) {
-      onDoubleClick(event);
+      onDoubleClick(
+        event as unknown as React.MouseEvent<
+          HTMLElement,
+          globalThis.MouseEvent
+        >,
+      );
     }
 
     setTimeout(() => {
       if (count.current === 1 && onClick) {
-        onClick(event);
+        onClick(
+          event as unknown as React.MouseEvent<
+            HTMLElement,
+            globalThis.MouseEvent
+          >,
+        );
       }
       count.current = 0;
     }, 250);

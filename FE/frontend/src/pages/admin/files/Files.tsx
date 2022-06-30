@@ -8,6 +8,7 @@ import PFilter from 'components/filter/PFilter';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
+import { useFetchData } from 'hooks/useFetchData';
 import { IFilesCard } from 'types/card-data';
 import {
   PFilterWrapper,
@@ -19,23 +20,13 @@ import {
 } from './files-styled';
 
 const Files: FC = () => {
-  const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
 
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_MOCK_URL}/files`);
-        setData(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchFiles();
-  }, []);
+  const { data } = useFetchData(`${process.env.REACT_APP_MOCK_URL}/files`);
+  console.log(data);
 
   return (
     <StyledPageWrapper>
@@ -47,7 +38,7 @@ const Files: FC = () => {
           }}
         >
           <StyledFoldersContainer>
-            {data?.slice(0, 4).map((value: any) => (
+            {/* {data?.slice(0, 4).map((value: any) => (
               <PFolders
                 key={value.id}
                 heading={value.name}
@@ -65,7 +56,7 @@ const Files: FC = () => {
                   setIsModalVisible(true);
                 }}
               />
-            ))}
+            ))} */}
           </StyledFoldersContainer>
           <PFilterWrapper>
             <PFilter
@@ -81,27 +72,27 @@ const Files: FC = () => {
             />
           </PFilterWrapper>
           <StyledFilesWrapper>
-            {data?.map((value: any) => (
+            {/* {data?.map((value: any) => (
               <>
                 {isList ? (
                   <ListCard
-                    key={value.id}
-                    image={value.image}
-                    heading={value.name}
-                    description={value.description}
+                    // key={value.id}
+                    // image={value.image}
+                    // heading={value.name}
+                    // description={value.description}
                     selected={value.id === cardData?.id}
-                    onClick={(e) => {
-                      setCardData(value);
-                      e.stopPropagation();
-                      setIsSiderVisible(true);
-                    }}
-                    onDoubleClick={(e) => {
-                      e.stopPropagation();
-                      setCardData(value);
-                      setIsSiderVisible(false);
-                      setIsModalVisible(true);
-                    }}
-                    setIsSiderVisible={setIsSiderVisible}
+                    // onClick={(e) => {
+                    //   setCardData(value);
+                    //   e.stopPropagation();
+                    //   setIsSiderVisible(true);
+                    // }}
+                    // onDoubleClick={(e) => {
+                    //   e.stopPropagation();
+                    //   setCardData(value);
+                    //   setIsSiderVisible(false);
+                    //   setIsModalVisible(true);
+                    // }}
+                    // setIsSiderVisible={setIsSiderVisible}
                   />
                 ) : (
                   <GridCard
@@ -124,7 +115,23 @@ const Files: FC = () => {
                   />
                 )}
               </>
-            ))}
+            ))} */}
+            <ListCard
+              cardData={cardData}
+              setCardData={setCardData}
+              // onClick={(e) => {
+              //   setCardData(value);
+              //   e.stopPropagation();
+              //   setIsSiderVisible(true);
+              // }}
+              // onDoubleClick={(e) => {
+              //   e.stopPropagation();
+              //   setCardData(value);
+              //   setIsSiderVisible(false);
+              //   setIsModalVisible(true);
+              // }}
+              // setIsSiderVisible={setIsSiderVisible}
+            />
           </StyledFilesWrapper>
         </StyledStaticContent>
 

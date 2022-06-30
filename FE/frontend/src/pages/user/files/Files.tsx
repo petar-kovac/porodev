@@ -8,6 +8,7 @@ import PFilter from 'components/filter/PFilter';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
+import { useFetchData } from 'hooks/useFetchData';
 import { IFilesCard } from 'types/card-data';
 import {
   PFilterWrapper,
@@ -19,23 +20,10 @@ import {
 } from './files-styled';
 
 const Files: FC = () => {
-  const [data, setData] = useState<IFilesCard[] | undefined>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_MOCK_URL}/files`);
-        setData(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchFiles();
-  }, []);
 
   return (
     <StyledPageWrapper>
@@ -47,7 +35,7 @@ const Files: FC = () => {
           }}
         >
           <StyledFoldersContainer>
-            {data?.slice(0, 4).map((value: any) => (
+            {/* {data?.slice(0, 4).map((value: any) => (
               <PFolders
                 key={value.id}
                 heading={value.name}
@@ -65,7 +53,7 @@ const Files: FC = () => {
                   setIsModalVisible(true);
                 }}
               />
-            ))}
+            ))} */}
           </StyledFoldersContainer>
           <PFilterWrapper>
             <PFilter
@@ -81,7 +69,7 @@ const Files: FC = () => {
             />
           </PFilterWrapper>
           <StyledFilesWrapper>
-            {data?.map((value: any) => (
+            {/* {data?.map((value: any) => (
               <>
                 {isList ? (
                   <ListCard
@@ -124,7 +112,25 @@ const Files: FC = () => {
                   />
                 )}
               </>
-            ))}
+            ))} */}
+            <ListCard
+              cardData={cardData}
+              setIsSiderVisible={setIsSiderVisible}
+              setIsModalVisible={setIsModalVisible}
+              setCardData={setCardData}
+              // onClick={(e) => {
+              //   setCardData(value);
+              //   e.stopPropagation();
+              //   setIsSiderVisible(true);
+              // }}
+              // onDoubleClick={(e) => {
+              //   e.stopPropagation();
+              //   setCardData(value);
+              //   setIsSiderVisible(false);
+              //   setIsModalVisible(true);
+              // }}
+              // setIsSiderVisible={setIsSiderVisible}
+            />
           </StyledFilesWrapper>
         </StyledStaticContent>
 
