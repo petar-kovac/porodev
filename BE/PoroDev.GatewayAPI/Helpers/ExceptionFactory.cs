@@ -19,6 +19,10 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(FullNameFormatException) => new FullNameFormatException(errorMessage),
                 nameof(NoHeaderWithJwtException) => new NoHeaderWithJwtException(errorMessage),
                 nameof(JWTValidationException) => new JWTValidationException(errorMessage),
+                nameof(IdFormatException) => new IdFormatException(errorMessage),
+                nameof(RequestNullException) => new RequestNullException(errorMessage),
+                nameof(ZippedFileException) => new ZippedFileException(errorMessage),
+                nameof(DockerRuntimeException) => new DockerRuntimeException(errorMessage),
                 _ => new Exception("Exception not found!"),
             };
         }
