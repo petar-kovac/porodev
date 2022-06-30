@@ -30,7 +30,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
         {
                    
             ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.UserId);
-          
+
             FileUploadModel model = new(context.Message.FileName, context.Message.File, context.Message.UserId);
             var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
       
@@ -38,21 +38,21 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             string fileId = id.ToString();
 
             //we need to map here user with Id from parametar of method (userId);
-            DataUserModel userModel = new();
-            userModel.Id = context.Message.UserId;
-            userModel.Email = "jadranko@boing.rs";
-            userModel.Name = "test";
-            userModel.Lastname = "test";
-            userModel.Password = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }; 
-            userModel.Salt =  new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-            userModel.Position = "test";
-            userModel.Role = Common.Enums.UserEnums.UserRole.User;
-            userModel.Department = Common.Enums.UserEnums.UserDepartment.notDefined;
-            userModel.AvatarUrl = "testString";
+            //DataUserModel userModel = new();
+            //userModel.Id = context.Message.UserId;
+            //userModel.Email = "jadranko@boing.rs";
+            //userModel.Name = "test";
+            //userModel.Lastname = "test";
+            //userModel.Password = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }; 
+            //userModel.Salt =  new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+            //userModel.Position = "test";
+            //userModel.Role = Common.Enums.UserEnums.UserRole.User;
+            //userModel.Department = Common.Enums.UserEnums.UserDepartment.notDefined;
+            //userModel.AvatarUrl = "testString";
 
-            FileData createModel = new FileData(fileId, userModel.Id);
+            FileData createModel = new (fileId, context.Message.UserId);
 
-            var dbReturn = await _unitOfWork.UserFiles.CreateAsync(createModel);
+            await _unitOfWork.UserFiles.CreateAsync(createModel);
             await _unitOfWork.SaveChanges();
 
             await context.RespondAsync(response);

@@ -11,6 +11,8 @@ namespace PoroDev.Common.Contracts.StorageService
         [StringLength(200)]
         public string FileId { get; set; }
 
+        public Guid CurrentUserId { get; set; }
+
         public DataUserModel CurrentUser { get; set; }
 
         public FileData()
@@ -22,9 +24,9 @@ namespace PoroDev.Common.Contracts.StorageService
             FileId = fileId;
         }
 
-        public FileData(string fileId, DataUserModel currentUser) : this(fileId)
+        public FileData(string fileId, Guid CurrentUserId) : this(fileId)
         {
-            CurrentUser = currentUser;
+            this.CurrentUserId = CurrentUserId;
         }
     }
 }

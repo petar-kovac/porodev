@@ -11,8 +11,8 @@ using PoroDev.Database.Data;
 namespace PoroDev.DatabaseService.Migrations
 {
     [DbContext(typeof(SqlDataContext))]
-    [Migration("20220630064202_Initial")]
-    partial class Initial
+    [Migration("20220630084136_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

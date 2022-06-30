@@ -18,7 +18,9 @@ namespace PoroDev.StorageService.Consumers
 
         public async Task Consume(ConsumeContext<FileUploadRequestGatewayToService> context)
         {
-            var modelToReturn = await _storageService.UploadFile(context.Message);
+
+
+            var modelToReturn = await _storageService.UploadFile(new FileUploadRequestServiceToDatabase() { File = context.Message.File, FileName = context.Message.FileName, UserId = context.Message.UserId });
 
             await context.RespondAsync(modelToReturn);
         }
