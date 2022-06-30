@@ -28,28 +28,35 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
         public async Task Consume(ConsumeContext<FileUploadRequestServiceToDatabase> context)
         {
-            //using Stream stream = context.Message.File.OpenReadStream();
-            //string fileName = context.Message.File.FileName;
-            //Guid id = context.Message.UserId;
-
+                   
             ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.UserId);
-            //we need response model here
+          
             FileUploadModel model = new(context.Message.FileName, context.Message.File, context.Message.UserId);
             var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
-            await context.RespondAsync(response);
+      
 
             string fileId = id.ToString();
 
             //we need to map here user with Id from parametar of method (userId);
             DataUserModel userModel = new();
             userModel.Id = context.Message.UserId;
+            userModel.Email = "jadranko@boing.rs";
+            userModel.Name = "test";
+            userModel.Lastname = "test";
+            userModel.Password = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 }; 
+            userModel.Salt =  new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+            userModel.Position = "test";
+            userModel.Role = Common.Enums.UserEnums.UserRole.User;
+            userModel.Department = Common.Enums.UserEnums.UserDepartment.notDefined;
+            userModel.AvatarUrl = "testString";
 
-            FileData createModel = new FileData(fileId, userModel);
+            FileData createModel = new FileData(fileId, userModel.Id);
 
-            await _unitOfWork.UserFiles.CreateAsync(createModel);
+            var dbReturn = await _unitOfWork.UserFiles.CreateAsync(createModel);
             await _unitOfWork.SaveChanges();
 
-            //await _storageRepository.UploadFile(stream, fileName, id);
+            await context.RespondAsync(response);
+
         }
     }
 }

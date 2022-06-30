@@ -11,7 +11,7 @@ using PoroDev.Database.Data;
 namespace PoroDev.DatabaseService.Migrations
 {
     [DbContext(typeof(SqlDataContext))]
-    [Migration("20220629094139_Initial")]
+    [Migration("20220630064202_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,8 +24,8 @@ namespace PoroDev.DatabaseService.Migrations
             modelBuilder.Entity("PoroDev.Common.Contracts.StorageService.FileData", b =>
                 {
                     b.Property<string>("FileId")
-                        .HasMaxLength(24)
-                        .HasColumnType("VARCHAR(24)");
+                        .HasMaxLength(200)
+                        .HasColumnType("VARCHAR(200)");
 
                     b.Property<Guid>("CurrentUserId")
                         .HasColumnType("char(36)");

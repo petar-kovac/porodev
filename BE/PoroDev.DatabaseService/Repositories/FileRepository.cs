@@ -15,16 +15,16 @@ namespace PoroDev.DatabaseService.Repositories
     {
         //private readonly IGridFSBucket<Guid> _bucket;
         private readonly IGridFSBucket _bucket;
-        private readonly IUnitOfWork _unitOfWork;
+        //private readonly IUnitOfWork _unitOfWork;
         
-        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings, IUnitOfWork UnitOfWork)
+        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings /*,IUnitOfWork UnitOfWork*/)
         {
             var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString) ;
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
             _bucket = new GridFSBucket(mongoDatabase);
-            _unitOfWork = UnitOfWork;
+           // _unitOfWork = UnitOfWork;
         }
 
         public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, Guid userId)

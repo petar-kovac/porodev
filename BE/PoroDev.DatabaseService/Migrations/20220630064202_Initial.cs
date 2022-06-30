@@ -43,7 +43,7 @@ namespace PoroDev.DatabaseService.Migrations
                 name: "UserFiles",
                 columns: table => new
                 {
-                    FileId = table.Column<string>(type: "VARCHAR(24)", maxLength: 24, nullable: false)
+                    FileId = table.Column<string>(type: "VARCHAR(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CurrentUserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
