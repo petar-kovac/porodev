@@ -1,5 +1,5 @@
-﻿using PoroDev.DatabaseService.Data;
-using PoroDev.DatabaseService.Repositories.Contracts;
+﻿using PoroDev.DatabaseService.Repositories.Contracts;
+using PoroDev.DatabaseService.Data;
 
 namespace PoroDev.DatabaseService.Repositories
 {
@@ -9,14 +9,16 @@ namespace PoroDev.DatabaseService.Repositories
         private bool _disposed;
 
         public IUserRepository Users { get; }
+        public IStorageRepository UserFiles { get; }
 
         public IRuntimeDataRepository RuntimeData { get; }
 
-        public UnitOfWork(SqlDataContext context, IUserRepository users, IRuntimeDataRepository runtimeData)
+        public UnitOfWork(SqlDataContext context, IUserRepository users, IStorageRepository userFiles, IRuntimeDataRepository runtimeData)
         {
             _context = context;
             Users = users;
             RuntimeData = runtimeData;
+            UserFiles = userFiles;
         }
 
         public async Task<int> SaveChanges()

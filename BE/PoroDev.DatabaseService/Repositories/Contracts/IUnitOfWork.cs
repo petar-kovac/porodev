@@ -6,6 +6,8 @@
 
         IRuntimeDataRepository RuntimeData { get; }
 
+        IStorageRepository UserFiles { get; }
+
         Task<int> SaveChanges();
     }
 }

@@ -25,6 +25,7 @@ builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRunTimeService, RunTimeService>();
 builder.Services.AddScoped<IJwtValidatorService, JwtValidatorService>();
 
+builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
