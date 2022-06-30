@@ -1,6 +1,7 @@
 ﻿using PoroDev.Common.Contracts.StorageService;
 using PoroDev.Common.Enums;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Common.Models.StorageModels.Data;
 using System.Text.Json.Serialization;
 
 namespace PoroDev.Common.Models.UserModels.Data

@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
