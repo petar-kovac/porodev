@@ -57,7 +57,7 @@ public class UserDetailsGenerator {
 
     @DataProvider(name = "invalidEmailList")
     public Object[][] invalidEmailList() {
-        Object[][] email = new Object[][]{
+        return new Object[][]{
                 {""},
                 {"noDomain"},
                 {"name@live.com"},
@@ -71,7 +71,6 @@ public class UserDetailsGenerator {
                 {"boing.rs@gmail.com"}
         };
 
-        return email;
     }
 
     @DataProvider(name = "invalidIdAttributeList")

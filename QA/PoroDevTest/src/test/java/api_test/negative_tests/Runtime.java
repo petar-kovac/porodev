@@ -21,8 +21,8 @@ public class Runtime extends ApiConfig {
                 "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
                 "}";
         given().relaxedHTTPSValidation()
-                .header("Bearer",
-                        invalidJwtHeaderTokenList
+                .header("authorization", "Bearer"
+                        + invalidJwtHeaderTokenList
                         + UserDetailsGenerator.incorectJwtPayload
                         + UserDetailsGenerator.incorectJwtSignature)
                 .when()
@@ -79,11 +79,11 @@ public class Runtime extends ApiConfig {
                 "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
                 "}";
         given().relaxedHTTPSValidation()
-                .header("Bearer", token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .header("authorization", "Bearer"+token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 .when()
                 .body(jsonRequestWithFileId)
                 .post(Endpoints.RUNTIME)
-                .then().statusCode(401);
+                .then().statusCode(anyOf(is(400), is(401)));
     }
 
     @Test(dataProvider = "invalidFileIdList", dataProviderClass = UserDetailsGenerator.class,

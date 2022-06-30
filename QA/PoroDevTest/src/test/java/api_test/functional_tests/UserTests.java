@@ -87,7 +87,7 @@ public class UserTests extends ApiConfig {
                 "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
                 "}";
         given().relaxedHTTPSValidation()
-                .header("authorization", "Bearer "+token)
+                .header("Bearer", token)
                 .when()
                 .body(jsonRequestWithFileId)
                 .post(Endpoints.RUNTIME)
