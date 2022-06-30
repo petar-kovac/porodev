@@ -2,8 +2,8 @@ package common.api_setup.api_common;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jayway.jsonpath.JsonPath;
 import common.api_setup.Endpoints;
+import com.jayway.jsonpath.JsonPath;
 import org.testng.annotations.DataProvider;
 
 import java.util.*;
@@ -207,7 +207,6 @@ public class UserDetailsGenerator {
     public static String takeValueFromJsonResp(String endpoint, String attribute){
         String json = given().relaxedHTTPSValidation().when().get(endpoint).asString();
         String attributeValue = JsonPath.read(json, "$."+attribute).toString();
-
         return attributeValue;
     }
 
