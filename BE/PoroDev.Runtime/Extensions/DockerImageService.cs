@@ -132,5 +132,48 @@ namespace PoroDev.Runtime.Extensions
 
             return imageOutput;
         }
+
+        public async Task<string> RunDockerImageUnsafeWithArguments(string imageName, List<string> args)
+        {
+            string imageOutput = String.Empty;
+
+            string listOfArgs = "";
+            foreach (var arg in args)
+                listOfArgs += " " + arg;
+
+            try
+            {
+                using (var proc = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "CMD.exe",
+                        Arguments = $"/C docker run --name runtime-container {imageName}{listOfArgs}",
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        CreateNoWindow = true,
+                        WorkingDirectory = ProjectPath
+                    }
+                })
+                {
+
+                    proc.Start();
+                    while (!proc.StandardOutput.EndOfStream)
+                    {
+                        imageOutput = await proc.StandardOutput.ReadLineAsync();
+                    }
+                    await proc.WaitForExitAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                var createImageException = (DockerRuntimeException)ex;
+                createImageException.HumanReadableErrorMessage = "Exception happened while executing docker image, check process path?";
+
+                throw createImageException;
+            }
+
+            return imageOutput;
+        }
     }
 }
