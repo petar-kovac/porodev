@@ -21,7 +21,7 @@ public class BaseTest {
     };
 
     @BeforeMethod
-    public void setupBeforeMethod() throws IOException {
+    public void setupBeforeMethod() {
         System.out.println("BEFORE METHOD");
         driverSetup = new DriverSetup(DriverType.CHROME);
         driver = driverSetup.getDriver();

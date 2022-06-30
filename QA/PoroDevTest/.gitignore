@@ -213,3 +213,5 @@ $RECYCLE.BIN/
 
 /target
 /PoroDevTest.iml
+/logs
+/BE/PoroDev.DatabaseService/Migrations
