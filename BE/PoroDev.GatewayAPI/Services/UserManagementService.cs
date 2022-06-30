@@ -15,6 +15,7 @@ using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -28,6 +29,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<RegisterUserRequestGatewayToService> _registerClient;
         private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserByIdRequestClient;
         private readonly IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> _readUserByIdWithRuntimedataRequestClient;
+        private readonly IRequestClient<UserDeleteAllRequestGatewayToService> _deleteAllRequestClient;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
@@ -37,7 +39,8 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient,
             IRequestClient<RegisterUserRequestGatewayToService> registerClient,
             IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> readUserByIdWithRuntimedataRequestClient,
-            IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient
+            IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient,
+            IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers
             )
         {
             _createRequestClient = createRequestClient;
@@ -47,6 +50,7 @@ namespace PoroDev.GatewayAPI.Services
             _loginRequestClient = loginRequestClient;
             _registerClient = registerClient;
             _readUserByIdRequestClient = readUserByIdRequestClient;
+            _deleteAllRequestClient = deleteAllUsers;
             _readUserByIdWithRuntimedataRequestClient = readUserByIdWithRuntimedataRequestClient;
         }
 
@@ -70,6 +74,16 @@ namespace PoroDev.GatewayAPI.Services
             }
 
             var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(deleteModel);
+
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
+            return responseContext.Message.Entity;
+        }
+
+        public async Task<DeleteUserModel> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
+        {
+            var responseContext = await _deleteAllRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);

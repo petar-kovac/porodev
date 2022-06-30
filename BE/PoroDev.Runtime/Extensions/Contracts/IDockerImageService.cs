@@ -10,6 +10,8 @@ namespace PoroDev.Runtime.Extensions.Contracts
 
         Task<string> RunDockerImageUnsafe(string imageName);
 
+        Task<string> RunDockerImageUnsafeWithArguments(string imageName, List<string> args);
+
         Task<DockerRuntimeException> DeleteDockerImage(string imageName);
 
         DockerRuntimeException Initialize(string runtimeFolderPath);

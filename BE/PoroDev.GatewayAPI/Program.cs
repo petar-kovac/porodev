@@ -1,5 +1,6 @@
 using PoroDev.Common.MassTransit;
 using PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler;
+using PoroDev.GatewayAPI.MapperProfiles;
 using PoroDev.GatewayAPI.Services;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler.GlobalExceptionHandlerExtensions;
@@ -15,12 +16,15 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:3000/",
     "http://localhost:3000")
     .AllowAnyHeader()
-    .AllowAnyMethod(); ;
+    .AllowAnyMethod();
     });
 });
 builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddAutoMapper(typeof(MapperProfiles));
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRunTimeService, RunTimeService>();
+builder.Services.AddScoped<IJwtValidatorService, JwtValidatorService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
