@@ -8,7 +8,7 @@ namespace PoroDev.Common.Contracts.StorageService
     {
         [Key]
         [Column(TypeName = "VARCHAR")]
-        [StringLength(24)]
+        [StringLength(200)]
         public string FileId { get; set; }
 
         public DataUserModel CurrentUser { get; set; }
