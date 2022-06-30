@@ -216,3 +216,6 @@ $RECYCLE.BIN/
 
 allure-results
 allure-report
+/logs
+/BE/PoroDev.DatabaseService/Migrations
+

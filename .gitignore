@@ -454,3 +454,9 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 
+<<<<<<< HEAD
+=======
+##Runtime folder
+
+/BE/Runtime/*
+>>>>>>> dev

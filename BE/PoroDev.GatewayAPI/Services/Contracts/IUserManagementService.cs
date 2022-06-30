@@ -1,11 +1,13 @@
-﻿using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Contracts.LoginUser;
-using PoroDev.Common.Contracts.Update;
+﻿using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {
@@ -18,6 +20,10 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel);
 
         Task<DataUserModel> ReadUserByEmail(string email);
+
+        Task<DataUserModel> ReadUserById(UserReadByIdRequestGatewayToService readModel);
+
+        Task<DataUserModel> ReadUserByIdWithRuntimeData(UserReadByIdWithRuntimeRequestGatewayToService readModel);
 
         Task<DataUserModel> UpdateUser(UserUpdateRequestGatewayToService updateModel);
 
