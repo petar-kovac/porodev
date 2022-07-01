@@ -8,6 +8,10 @@ namespace PoroDev.Runtime.Extensions.Contracts
 
         Task<DockerRuntimeException> CreateDockerfile();
 
+        Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList);
+
+        Task<DockerRuntimeException> GetProcessedOutput(); 
+
         Task<string> RunDockerImageUnsafe(string imageName);
 
         Task<string> RunDockerImageUnsafeWithArguments(string imageName, List<string> args);

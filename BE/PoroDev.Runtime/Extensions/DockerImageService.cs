@@ -1,6 +1,7 @@
 ﻿using PoroDev.Common.Exceptions;
 using PoroDev.Runtime.Extensions.Contracts;
 using System.Diagnostics;
+using static PoroDev.Runtime.Constants.Consts;
 
 namespace PoroDev.Runtime.Extensions
 {
@@ -26,6 +27,40 @@ namespace PoroDev.Runtime.Extensions
 
                     await writer.WriteLineAsync(@"FROM mcr.microsoft.com/dotnet/aspnet:6.0");
                     await writer.WriteLineAsync(@"COPY --from=build-env /app/out .");
+                    await writer.WriteLineAsync(@$"ENTRYPOINT [""dotnet"", ""{ZippedFileName}.dll""]");
+                }
+            }
+            catch (Exception ex)
+            {
+                var createImageException = (DockerRuntimeException)ex;
+                createImageException.HumanReadableErrorMessage = "Exception happened while creating docker image, check process path?";
+
+                return createImageException;
+            }
+
+            return null;
+        }
+
+        public async Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList)
+        {
+            
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectPath, "Dockerfile")))
+                {
+                    await writer.WriteLineAsync(@"FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env");
+                    await writer.WriteLineAsync(@"WORKDIR /app");
+
+                    await writer.WriteLineAsync(@"COPY . ./");
+                    await writer.WriteLineAsync(@"RUN dotnet restore");
+                    await writer.WriteLineAsync(@"RUN dotnet publish -c Release -o out");
+
+                    await writer.WriteLineAsync(@"FROM mcr.microsoft.com/dotnet/aspnet:6.0");
+                    await writer.WriteLineAsync(@"COPY --from=build-env /app/out .");
+                    foreach (var item in argumentList)
+                    {
+                        await writer.WriteLineAsync($@"ADD {item} /");
+                    }
                     await writer.WriteLineAsync(@$"ENTRYPOINT [""dotnet"", ""{ZippedFileName}.dll""]");
                 }
             }
@@ -81,11 +116,27 @@ namespace PoroDev.Runtime.Extensions
             catch (Exception ex)
             {
                 var createImageException = (DockerRuntimeException)ex;
-                createImageException.HumanReadableErrorMessage = "Exception happened while deleting docker image, check process path?";
+                createImageException.HumanReadableErrorMessage = DELETE_DOCKER_FILE_EXCEPTION;
 
                 return createImageException;
             }
 
+            return null;
+        }
+
+        public async Task<DockerRuntimeException> GetProcessedOutput()
+        {
+            try
+            {
+                await Process.Start("CMD.exe", $"/C docker cp runtime-container:/imageEdited.jpg {RUNTIME_FOLDER_ROUTE}").WaitForExitAsync();
+            }
+            catch (Exception ex)
+            {
+                var createImageException = (DockerRuntimeException)ex;
+                createImageException.HumanReadableErrorMessage = GET_FILE_OUTPUT_EXCEPTION;
+
+                return createImageException;
+            }
             return null;
         }
 

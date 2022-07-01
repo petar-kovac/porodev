@@ -122,11 +122,6 @@ namespace PoroDev.Runtime.Services
 
         public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId, List<string> argumentList)
         {
-            foreach (var argument in argumentList)
-            {
-                if (Guid.TryParse(argument, out Guid argumentId));
-                    //postoji ID slike u argumentima
-            }
 
             ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
 
@@ -158,7 +153,22 @@ namespace PoroDev.Runtime.Services
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
 
-            await _dockerImageService.CreateDockerfile();
+            var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
+            for(int i = 0; i <= lastIndex; i++)
+            {
+                argumentList[i] = "image.jpg";
+            }
+            if (lastIndex != -1)
+            {
+                File.Copy(Path.Combine(RUNTIME_FOLDER_ROUTE, "image.jpg"), Path.Combine(_zipManipulator.ProjectPath,"image.jpg"));  
+                await _dockerImageService.CreateDockerfile(argumentList);
+            }
+            else
+            {
+                await _dockerImageService.CreateDockerfile();
+            }
+
+            
 
             await _dockerImageService.CreateDockerImage(imageName);
 
@@ -186,6 +196,9 @@ namespace PoroDev.Runtime.Services
             }
 
             stopwatch.Stop();
+
+            if (lastIndex != -1)
+                await _dockerImageService.GetProcessedOutput();
 
             await _dockerImageService.DeleteDockerImage(imageName);
 
