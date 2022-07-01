@@ -12,6 +12,27 @@ namespace PoroDev.Runtime.Extensions
 
         }
 
+        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IDockerImageService _dockerImageService, IZipManipulator _zipManipulator)
+        {
+            var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
+            var argumentListWithFileNames = new List<string>(argumentList);
+            for (int i = 0; i <= lastIndex; i++)
+            {
+                argumentListWithFileNames[i] = "image.jpg";
+            }
+            if (lastIndex != -1)
+            {
+                File.Copy(Path.Combine(RUNTIME_FOLDER_ROUTE, "image.jpg"), Path.Combine(_zipManipulator.ProjectPath, "image.jpg"));
+                await _dockerImageService.CreateDockerfile(argumentListWithFileNames);
+            }
+            else
+            {
+                await _dockerImageService.CreateDockerfile();
+            }
+
+            return argumentListWithFileNames;
+        }
+
         public async Task<DockerRuntimeException> CreateDockerfile()
         {
             try

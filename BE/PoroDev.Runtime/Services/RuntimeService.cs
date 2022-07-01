@@ -153,23 +153,8 @@ namespace PoroDev.Runtime.Services
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
 
-            var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
-            for(int i = 0; i <= lastIndex; i++)
-            {
-                argumentList[i] = "image.jpg";
-            }
-            if (lastIndex != -1)
-            {
-                File.Copy(Path.Combine(RUNTIME_FOLDER_ROUTE, "image.jpg"), Path.Combine(_zipManipulator.ProjectPath,"image.jpg"));  
-                await _dockerImageService.CreateDockerfile(argumentList);
-            }
-            else
-            {
-                await _dockerImageService.CreateDockerfile();
-            }
-
-            
-
+            List<string> fileNames = await _dockerImageService.CheckAndCreateDockerfile(argumentList, _dockerImageService, _zipManipulator);
+ 
             await _dockerImageService.CreateDockerImage(imageName);
 
             DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
@@ -180,7 +165,7 @@ namespace PoroDev.Runtime.Services
 
             try
             {
-                imageOutput = await _dockerImageService.RunDockerImageUnsafeWithArguments(imageName, argumentList);
+                imageOutput = await _dockerImageService.RunDockerImageUnsafeWithArguments(imageName, fileNames);
             }
             catch (DockerRuntimeException ex)
             {
@@ -197,7 +182,8 @@ namespace PoroDev.Runtime.Services
 
             stopwatch.Stop();
 
-            if (lastIndex != -1)
+            
+            if (argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand)) != -1)
                 await _dockerImageService.GetProcessedOutput();
 
             await _dockerImageService.DeleteDockerImage(imageName);
