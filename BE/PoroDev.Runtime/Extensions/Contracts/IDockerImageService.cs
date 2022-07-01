@@ -1,4 +1,6 @@
-﻿using PoroDev.Common.Exceptions;
+﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.RuntimeModels.Data;
 
 namespace PoroDev.Runtime.Extensions.Contracts
 {
@@ -6,7 +8,12 @@ namespace PoroDev.Runtime.Extensions.Contracts
     {
         Task<DockerRuntimeException> CreateDockerImage(string imageName);
 
-        Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IDockerImageService _dockerImageService, IZipManipulator _zipManipulator);
+        Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IZipManipulator _zipManipulator);
+
+        Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(IZipManipulator _zipManipulator, Guid userId, Guid projectId);
+
+
+        Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, IZipManipulator _zipManipulator, Guid userId, Guid projectId);
 
         Task<DockerRuntimeException> CreateDockerfile();
 

@@ -1,4 +1,6 @@
-﻿using PoroDev.Common.Exceptions;
+﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Runtime.Extensions.Contracts;
 using System.Diagnostics;
 using static PoroDev.Runtime.Constants.Consts;
@@ -12,7 +14,7 @@ namespace PoroDev.Runtime.Extensions
 
         }
 
-        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IDockerImageService _dockerImageService, IZipManipulator _zipManipulator)
+        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IZipManipulator _zipManipulator)
         {
             var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
             var argumentListWithFileNames = new List<string>(argumentList);
@@ -23,14 +25,119 @@ namespace PoroDev.Runtime.Extensions
             if (lastIndex != -1)
             {
                 File.Copy(Path.Combine(RUNTIME_FOLDER_ROUTE, "image.jpg"), Path.Combine(_zipManipulator.ProjectPath, "image.jpg"));
-                await _dockerImageService.CreateDockerfile(argumentListWithFileNames);
+                await CreateDockerfile(argumentListWithFileNames);
             }
             else
             {
-                await _dockerImageService.CreateDockerfile();
+                await CreateDockerfile();
             }
 
             return argumentListWithFileNames;
+        }
+
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        {
+            var imageName = Guid.NewGuid().ToString();
+            Stopwatch stopwatch = new();
+
+            await CreateDockerfile();
+
+            await CreateDockerImage(imageName);
+
+            DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
+
+            stopwatch.Start();
+
+            string imageOutput = String.Empty;
+
+            try
+            {
+                imageOutput = await RunDockerImageUnsafe(imageName);
+            }
+            catch (DockerRuntimeException ex)
+            {
+                stopwatch.Stop();
+
+                await DeleteDockerImage(imageName);
+
+                _zipManipulator.DeleteUnzippedFile();
+
+                var responseModel = new CommunicationModel<RuntimeData>(ex);
+
+                return responseModel;
+            }
+
+            stopwatch.Stop();
+
+            await DeleteDockerImage(imageName);
+
+            RuntimeData newRuntimeData = new(userId, projectId, dateStarted, stopwatch.ElapsedMilliseconds, imageOutput);
+
+            var responsemodel = new CommunicationModel<RuntimeData>()
+            {
+                Entity = newRuntimeData
+            };
+
+            return responsemodel;
+        }
+
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList,IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        {
+            var imageName = Guid.NewGuid().ToString();
+            Stopwatch stopwatch = new();
+
+            List<string> fileNames = await CheckAndCreateDockerfile(argumentList, _zipManipulator);
+
+            await CreateDockerImage(imageName);
+
+            DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
+
+            stopwatch.Start();
+
+            string imageOutput = String.Empty;
+
+            try
+            {
+                imageOutput = await RunDockerImageUnsafeWithArguments(imageName, fileNames);
+            }
+            catch (DockerRuntimeException ex)
+            {
+                stopwatch.Stop();
+
+                await DeleteDockerImage(imageName);
+
+                _zipManipulator.DeleteUnzippedFile();
+
+                var responseModel = new CommunicationModel<RuntimeData>(ex);
+
+                return responseModel;
+            }
+
+            stopwatch.Stop();
+
+
+            if (argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand)) != -1)
+                await GetProcessedOutput();
+
+            await DeleteDockerImage(imageName);
+
+            string argumentsAsString = String.Empty;
+
+            foreach (var argument in argumentList)
+            {
+                argumentsAsString += argument + "|";
+            }
+
+            argumentsAsString = argumentsAsString.Remove(argumentsAsString.Length - 1);
+
+            RuntimeData newRuntimeData = new(userId, projectId, dateStarted, stopwatch.ElapsedMilliseconds, imageOutput, argumentsAsString);
+
+            var responsemodel = new CommunicationModel<RuntimeData>()
+            {
+                Entity = newRuntimeData
+            };
+
+            return responsemodel;
         }
 
         public async Task<DockerRuntimeException> CreateDockerfile()
