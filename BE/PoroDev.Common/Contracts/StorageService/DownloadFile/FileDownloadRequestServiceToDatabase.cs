@@ -2,19 +2,18 @@
 {
     public class FileDownloadRequestServiceToDatabase
     {
-        public Guid FileId { get; init; }
-        public string FileName { get; set; }
-        public byte[] File { get; set; }
+        public string FileId { get; init; }
+
+        public Guid UserId { get; set; }
 
         public FileDownloadRequestServiceToDatabase()
         {
         }
 
-        public FileDownloadRequestServiceToDatabase(Guid fileId, string fileName, byte[] file)
+        public FileDownloadRequestServiceToDatabase(string fileId, Guid userId)
         {
             FileId = fileId;
-            FileName = fileName;
-            File = file;
+            UserId = userId;
         }
     }
 }

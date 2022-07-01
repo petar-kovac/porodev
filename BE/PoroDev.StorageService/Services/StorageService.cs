@@ -10,9 +10,9 @@ namespace PoroDev.StorageService.Services
     public class StorageService : IStorageService
     {
         private readonly IRequestClient<FileUploadRequestServiceToDatabase> _uploadRequestClient;
-        private readonly IRequestClient<FileDownloadMsg> _downloadRequestClient;
+        private readonly IRequestClient<FileDownloadRequestServiceToDatabase> _downloadRequestClient;
 
-        public StorageService(IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, IRequestClient<FileDownloadMsg> downloadRequestClient)
+        public StorageService(IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient)
         {
             _uploadRequestClient = uploadRequestClient;
             _downloadRequestClient = downloadRequestClient;
@@ -26,11 +26,9 @@ namespace PoroDev.StorageService.Services
             return response.Message;
         }
 
-        public async Task<CommunicationModel<FileDownloadMsg>> DownloadFile(FileDownloadMsg downloadModel)
+        public async Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadModel)
         {
-            FileDownloadMsg model = new(downloadModel.FileName);
-
-            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMsg>>(model);
+            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
 
             return response.Message;
 

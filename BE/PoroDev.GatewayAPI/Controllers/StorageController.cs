@@ -22,17 +22,18 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileUploadRequestGatewayToService(file, userId);
-            await _storageService.UploadFile(returnModel);
-            return Ok();
+            var response = await _storageService.UploadFile(returnModel);
+            return Ok(response);
         }
 
         [HttpPost("Download")]
-        public async Task<ActionResult<FileDownloadMsg>> Download(string fileName)
+        public async Task<ActionResult<FileDownloadRequestGatewayToService>> Download(string fileId)
         {
-            var returnModel = new FileDownloadMsg(fileName);
-            await _storageService.DownloadFile(returnModel);
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new FileDownloadRequestGatewayToService(fileId, userId);
+            var response = await _storageService.DownloadFile(returnModel);
 
-            return Ok(returnModel);
+            return Ok(response);
         }
     }
 }

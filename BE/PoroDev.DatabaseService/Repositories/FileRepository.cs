@@ -52,9 +52,11 @@ namespace PoroDev.DatabaseService.Repositories
             return id;
         }
         
-        public async Task<byte[]> DownloadFile (string fileName)
+        public async Task<byte[]> DownloadFile (string fileId, Guid userId)
         {
-            var downloadFile = await _bucket.DownloadAsBytesByNameAsync(fileName);
+            ObjectId fileObjectId = ObjectId.Parse(fileId);
+
+            var downloadFile = await _bucket.DownloadAsBytesAsync(fileObjectId);
 
             return downloadFile;
         }

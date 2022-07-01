@@ -8,6 +8,6 @@ namespace PoroDev.DatabaseService.Repositories.Contracts
     {
         public Task<ObjectId> UploadFile(string fileName, byte[] fileArray, Guid id);
 
-        public Task<byte[]> DownloadFile(string fileName);
+        public Task<byte[]> DownloadFile(string fileId, Guid userId);
     }
 }

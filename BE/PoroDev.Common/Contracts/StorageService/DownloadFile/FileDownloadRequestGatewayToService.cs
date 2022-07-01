@@ -2,19 +2,18 @@
 {
     public class FileDownloadRequestGatewayToService
     {
-        public Guid FileId { get; init; }
-        public string FileName { get; set; }
-        public byte[] File { get; set; }
+        public string FileId { get; init; }
+        
+        public Guid UserId { get; }
 
         public FileDownloadRequestGatewayToService()
         {
         }
 
-        public FileDownloadRequestGatewayToService(Guid fileId, string fileName, byte[] file)
+        public FileDownloadRequestGatewayToService(string fileId, Guid userId)
         {
             FileId = fileId;
-            FileName = fileName;
-            File = file;
+            UserId = userId;
         }
     }
 }

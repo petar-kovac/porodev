@@ -20,7 +20,12 @@ namespace PoroDev.StorageService.Consumers
         {
 
 
-            var modelToReturn = await _storageService.UploadFile(new FileUploadRequestServiceToDatabase() { File = context.Message.File, FileName = context.Message.FileName, UserId = context.Message.UserId });
+            var modelToReturn = await _storageService.UploadFile(new FileUploadRequestServiceToDatabase() 
+            { 
+                File = context.Message.File, 
+                FileName = context.Message.FileName, 
+                UserId = context.Message.UserId 
+            });
 
             await context.RespondAsync(modelToReturn);
         }

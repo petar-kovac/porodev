@@ -12,14 +12,14 @@ namespace PoroDev.GatewayAPI.Services
     public class StorageService : IStorageService
     {
         //da li bi trebali ovde dodavati ove standardne RequestFromGatewayToService i slicno ?
-        private readonly IRequestClient<FileDownloadMsg> _downloadRequestClient;
+        private readonly IRequestClient<FileDownloadRequestGatewayToService> _downloadRequestClient;
 
         private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
 
         // da li cemo dodati ovaj model za citanje ID-a
         //       private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
 
-        public StorageService(IRequestClient<FileDownloadMsg> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
+        public StorageService(IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
@@ -38,12 +38,15 @@ namespace PoroDev.GatewayAPI.Services
 
             var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
 
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
             return responseContext.Message.Entity;
         }
 
-        public async Task<FileDownloadMsg> DownloadFile(FileDownloadMsg downloadModel)
+        public async Task<FileDownloadMessage> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
-            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMsg>>(downloadModel);
+            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
 
             return responseContext.Message.Entity;
         }
