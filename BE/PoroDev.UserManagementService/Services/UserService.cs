@@ -1,10 +1,17 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
@@ -16,6 +23,8 @@ using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -28,6 +37,8 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
         private readonly IRequestClient<RegisterUserRequestServiceToDatabase> _registerUserClient;
         private readonly IRequestClient<UserLoginRequestServiceToDatabase> _loginUserRequestClient;
+        private readonly IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> _readUserByIdWithRuntimeClient;
+        private readonly IRequestClient<UserDeleteAllRequestServiceToDataBase> _deleteAllUserRequestclient;
 
         private readonly IMapper _mapper;
 
@@ -38,6 +49,8 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<RegisterUserRequestServiceToDatabase> registerUserClient,
                            IRequestClient<UserLoginRequestServiceToDatabase> loginUserRequestClient,
                            IRequestClient<UserReadByIdRequestServiceToDataBase> readByIdRequestClient,
+                           IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> readUserByIdWithRuntimeClient,
+                           IRequestClient<UserDeleteAllRequestServiceToDataBase> deleteAllUsersRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
@@ -47,6 +60,8 @@ namespace PoroDev.UserManagementService.Services
             _registerUserClient = registerUserClient;
             _loginUserRequestClient = loginUserRequestClient;
             _readUserByIdClient = readByIdRequestClient;
+            _readUserByIdWithRuntimeClient = readUserByIdWithRuntimeClient;
+            _deleteAllUserRequestclient = deleteAllUsersRequestClient;
             _mapper = mapper;
         }
 
@@ -282,6 +297,12 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
+        public async Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
+        {
+            var response = await _deleteAllUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            return response.Message;
+        }
+
         public async Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model)
         {
             if (model.Email.Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Email))
@@ -323,6 +344,22 @@ namespace PoroDev.UserManagementService.Services
 
             var response = await _readUserByIdClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
             return response.Message;
+        }
+
+        public async Task<CommunicationModel<DataUserModel>> ReadUserByIdWithRuntimeData(UserReadByIdWithRuntimeRequestGatewayToService model)
+        {
+            if (model.Id.ToString().Equals(String.Empty) || String.IsNullOrWhiteSpace(model.Id.ToString()))
+            {
+                string exceptionType = nameof(IdFormatException);
+                string humanReadableMessage = "Id cannot be empty!";
+
+                var responseException = CreateResponseModel<CommunicationModel<DataUserModel>, DataUserModel>(exceptionType, humanReadableMessage);
+
+                return responseException;
+            }
+
+            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id});
+            return response.Message;
 
         }
 
@@ -348,7 +385,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
         {
-            var isException = await CheckUserFields(registerModel);
+            var isException = await Helpers.UserManagementValidator.Validate(registerModel, _readUserByEmailClient);
 
             if (isException.ExceptionName != null)
                 return isException;

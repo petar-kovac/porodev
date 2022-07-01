@@ -11,7 +11,7 @@ namespace PoroDev.DatabaseService.Repositories
         IGenericRepository<TemplateEntity> where TemplateEntity : class, new()
         where TemplateDatabaseContext : DbContext
     {
-        private readonly TemplateDatabaseContext _context;
+        protected readonly TemplateDatabaseContext _context;
 
         public GenericRepository(TemplateDatabaseContext context)
         {

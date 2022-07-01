@@ -7,6 +7,8 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {
@@ -16,11 +18,15 @@ namespace PoroDev.GatewayAPI.Services.Contracts
 
         Task<DeleteUserModel> DeleteUser(UserDeleteRequestGatewayToService deleteModel);
 
+        Task<DeleteUserModel> DeleteAllUsers(UserDeleteAllRequestGatewayToService model);
+
         Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel);
 
         Task<DataUserModel> ReadUserByEmail(string email);
 
         Task<DataUserModel> ReadUserById(UserReadByIdRequestGatewayToService readModel);
+
+        Task<DataUserModel> ReadUserByIdWithRuntimeData(UserReadByIdWithRuntimeRequestGatewayToService readModel);
 
         Task<DataUserModel> UpdateUser(UserUpdateRequestGatewayToService updateModel);
 

@@ -6,6 +6,7 @@ import java.util.Properties;
 public class FileControlUtil {
     public static String LOGIN_DATA_PROPERTIES = "login_data.properties";
     public static String REGISTRATION_DATA_PROPERTIES = "registration_data.properties";
+    public static String END_TO_END_PROPERTIES = "end_to_end.properties";
     public Properties properties;
 
     public FileControlUtil(String file) throws IOException {

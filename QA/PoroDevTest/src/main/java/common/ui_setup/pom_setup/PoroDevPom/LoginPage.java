@@ -1,16 +1,18 @@
 package common.ui_setup.pom_setup.PoroDevPom;
 
 import common.ui_setup.DriverSetup;
-import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import java.util.List;
 
 public class LoginPage extends BasePage {
+    private final Logger logger = LoggerFactory.getLogger(LoginPage.class);
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -31,23 +33,26 @@ public class LoginPage extends BasePage {
 
     //ASSERTION ELEMENTS
     @FindBy(xpath = "//span[contains(text(),'Successful login')]")
-    WebElement we_successfulLogin;
+    public WebElement we_successfulLogin;
     @FindBy(className = "ant-message")
-    WebElement we_badRequestError;
+    public WebElement we_badRequestError;
     @FindBy(xpath = "//span[@data-testid='error-message']")
     List<WebElement> we_listOfErrors;
+    @FindBy(id = "loginForm")
+    public WebElement we_login_form;
+    @FindBy(xpath = "//span[contains(text(),'Request failed with status code 400')]")
+    public WebElement we_badRequest_statusCode400;
 
     //functional methods section
 
-    public void login(String email, String password) throws InterruptedException {
+    public void logInUser(String email, String password) {
         BasePage.sendText(we_emailInputField,email);
         BasePage.sendText(we_passInputField, password);
         BasePage.clickElement(we_loginButton);
-        Thread.sleep(2000);
     }
 
     //ASSERT METHODS
-    public void assert_login(String expectedResults) {
+    public void assert_login_errorMessages(String expectedResults, String customErrorMessage) {
 
         String currentError = "";
         for (WebElement element : we_listOfErrors) {
@@ -56,14 +61,14 @@ public class LoginPage extends BasePage {
                 break;
             }
         }
-        System.out.println(currentError);
-        Assert.assertEquals(currentError, expectedResults);
-    }
-    public void assert_valid_login(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_successfulLogin), expectedResults);
+        Assert.assertEquals(currentError, expectedResults, customErrorMessage);
     }
 
-    public void assert_login_with_valid_notExistingCredentials(String expectedResults) {
-        Assert.assertEquals(BasePage.getTextFromElement(we_badRequestError), expectedResults);
+    public void assert_login(WebElement element, String expectedResults, String customErrorMessage) {
+        Assert.assertEquals(BasePage.getTextFromElement(element), expectedResults, customErrorMessage);
+    }
+
+    public void assert_thatElement_isDisplayed(WebElement element, String customErrorMessage) {
+        Assert.assertTrue(BasePage.isDisplayed(element), customErrorMessage);
     }
 }
