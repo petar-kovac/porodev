@@ -181,9 +181,9 @@ namespace PoroDev.Runtime.Services
 
             string argumentsAsString = String.Empty;
 
-            foreach(var argument in argumentList)
+            foreach (var argument in argumentList)
             {
-                argumentsAsString = argument + "|";    
+                argumentsAsString += argument + "|";    
             }
 
             argumentsAsString = argumentsAsString.Remove(argumentsAsString.Length - 1);
