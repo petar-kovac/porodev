@@ -5,8 +5,12 @@ import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.User;
 import common.api_setup.api_common.UserDetailsGenerator;
+import common.ui_setup.FileControlUtil;
 import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+
 import static org.hamcrest.Matchers.equalTo;
 import static io.restassured.RestAssured.given;
 
@@ -14,6 +18,10 @@ import static io.restassured.RestAssured.given;
 @Feature("CRUD")
 public class UserTests extends ApiConfig {
 
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+
+    public UserTests() throws IOException {
+    }
 
 
     //Register user
@@ -24,7 +32,7 @@ public class UserTests extends ApiConfig {
                 .body(providedUser)
                 .when()
                 .post(Endpoints.REGISTER_USER)
-                .then();
+                .then().statusCode(200);
     }
 
 
@@ -33,14 +41,14 @@ public class UserTests extends ApiConfig {
     @Test (priority = 1, description = "Sending the request for update the users information with regular input")
     public void updateUserByJson() {
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
+                .body(UserDetailsGenerator.createUpdateJsonReq(
+                        "John",
                         "Doe",
-                        "john.dean@boing.rs",
-                        "stringString1!"))
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS")))
                 .when()
                 .put(Endpoints.UPDATE_USER)
-                .then();
+                .then().statusCode(200);
     }
 
     // Get the user details with sending the email in request
@@ -50,7 +58,7 @@ public class UserTests extends ApiConfig {
     public void getUserByEmail() {
         given().relaxedHTTPSValidation()
                 .when()
-                .get(Endpoints.GET_USER_BY_EMAIL+ Endpoints.EMAIL_PATH + "john.dean@boing.rs")
+                .get(Endpoints.GET_USER_BY_EMAIL+ Endpoints.EMAIL_PATH + file.getValue("VALID_EMAIL"))
                 .then().body("name", equalTo("John"));
 
     }
@@ -59,7 +67,8 @@ public class UserTests extends ApiConfig {
     @Test(priority = 3, description = "Sending the request for getting the user with that id value")
     public void getUserById() {
         String userIdFromJson = UserDetailsGenerator.takeValueFromJsonResp
-                (Endpoints.GET_USER_BY_EMAIL+ Endpoints.EMAIL_PATH + "john.dean@boing.rs", "id");
+                (Endpoints.GET_USER_BY_EMAIL+ Endpoints.EMAIL_PATH
+                        + file.getValue("VALID_EMAIL"), "id");
         given().relaxedHTTPSValidation()
                 .when()
                 .get(Endpoints.GET_USER_BY_ID + Endpoints.ID_PATH + userIdFromJson)
@@ -70,7 +79,8 @@ public class UserTests extends ApiConfig {
     @Test (priority = 4, description = "Sending the request for log in with regular email and password entry")
     public void logInUser() {
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createLogInJsonReq("john.dean@boing.rs", "stringString1!"))
+                .body(UserDetailsGenerator.createLogInJsonReq(file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS")))
                 .when()
                 .post(Endpoints.USER_LOGIN)
                 .then().body("name", equalTo("John"));
@@ -80,7 +90,8 @@ public class UserTests extends ApiConfig {
     @Test(priority = 5, description = "Sending the request for runtime with jwt token in header")
     public void runtime() {
         String token = UserDetailsGenerator
-                .takeTokenValueFromJson("john.dean@boing.rs", "stringString1!");
+                .takeTokenValueFromJson(file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"));
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer "+token)
                 .when()
@@ -99,9 +110,9 @@ public class UserTests extends ApiConfig {
     public void deleteUser() {
         given().relaxedHTTPSValidation()
                 .when()
-                .body(UserDetailsGenerator.createEmailJsonReq("john.dean@boing.rs"))
+                .body(UserDetailsGenerator.createEmailJsonReq(file.getValue("VALID_EMAIL")))
                 .delete(Endpoints.USER_DELETE)
-                .then();
+                .then().statusCode(200);
     }
 
 }

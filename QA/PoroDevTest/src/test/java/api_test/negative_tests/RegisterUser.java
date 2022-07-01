@@ -6,11 +6,20 @@ import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.User;
 import common.api_setup.api_common.UserDetailsGenerator;
+import common.ui_setup.FileControlUtil;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+
 import static io.restassured.RestAssured.*;
 
 
 public class RegisterUser extends ApiConfig {
+
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+
+    public RegisterUser() throws IOException {
+    }
 
 
 
@@ -18,11 +27,11 @@ public class RegisterUser extends ApiConfig {
     @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
     public void registerInvalidName(String invalidNameList){
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                .body(UserDetailsGenerator.createRegisterJsonReq(
                         invalidNameList,
-                        "Dean",
-                        "john.dean@boing.rs",
-                        "stringString1!")
+                        file.getValue("VALID_LASTNAME"),
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"))
                 )
                 .when()
                 .post(Endpoints.REGISTER_USER)
@@ -34,11 +43,11 @@ public class RegisterUser extends ApiConfig {
     @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
     public void registerInvalidLastname(String InvalidLastNameList){
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
+                .body(UserDetailsGenerator.createRegisterJsonReq(
+                        file.getValue("VALID_FIRSTNAME"),
                         InvalidLastNameList,
-                        "john.dean@boing.rs",
-                        "stringString1!")
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"))
                 )
                 .when()
                 .post(Endpoints.REGISTER_USER)
@@ -50,11 +59,11 @@ public class RegisterUser extends ApiConfig {
     @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
     public void registerInvalidEmail(String invalidEmailList){
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
-                        "Dean",
+                .body(UserDetailsGenerator.createRegisterJsonReq(
+                        file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_LASTNAME"),
                         invalidEmailList,
-                        "stringString1!")
+                        file.getValue("VALID_PASS"))
                 )
                 .when()
                 .post(Endpoints.REGISTER_USER)
@@ -64,10 +73,10 @@ public class RegisterUser extends ApiConfig {
     @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class)
     public void registerInvalidPass(String invalidPasswordList){
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
-                        "Dean",
-                        "james.dean@boing.rs",
+                .body(UserDetailsGenerator.createRegisterJsonReq(
+                        file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_LASTNAME"),
+                        file.getValue("VALID_EMAIL"),
                         invalidPasswordList)
                 )
                 .when()

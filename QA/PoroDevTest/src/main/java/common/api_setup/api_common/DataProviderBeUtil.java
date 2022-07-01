@@ -1,7 +1,16 @@
 package common.api_setup.api_common;
+import common.ui_setup.FileControlUtil;
 import org.testng.annotations.DataProvider;
 
+import java.io.IOException;
+
 public class DataProviderBeUtil {
+
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+
+    public DataProviderBeUtil() throws IOException {
+    }
+
 
     @DataProvider(name = "invalidNameOrLastNameList")
     public Object[][] invalidNameList() {
@@ -143,7 +152,10 @@ public class DataProviderBeUtil {
     @DataProvider(name = "PojoRegularEntry")
     public Object[][] functionalTestPojo() {
         return new Object[][]{
-                {new User("John", "Do", "john.dean@boing.rs", "stringString1!",
+                {new User(file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"),
                         0, 1, "string", "string")}
         };
     }

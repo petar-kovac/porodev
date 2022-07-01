@@ -5,7 +5,10 @@ import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
+import common.ui_setup.FileControlUtil;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.anyOf;
@@ -13,16 +16,21 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class UpdateUser extends ApiConfig {
 
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+
+    public UpdateUser() throws IOException {
+    }
+
     //Updating the user with invalid name
 
     @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidName(String InvalidNameList) {
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                .body(UserDetailsGenerator.createUpdateJsonReq(
                         InvalidNameList,
-                "dean",
-                        "james.dean@boing.rs",
-                        "StringString1!"
+                file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS")
 
                 ))
                 .when()
@@ -35,11 +43,11 @@ public class UpdateUser extends ApiConfig {
     @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidLastname(String invalidLastNameList) {
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
+                .body(UserDetailsGenerator.createUpdateJsonReq(
+                        file.getValue("VALID_FIRSTNAME"),
                         invalidLastNameList,
-                        "james.dean@boing.rs",
-                        "StringString1!"
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS")
 
                 ))
                 .when()
@@ -52,11 +60,11 @@ public class UpdateUser extends ApiConfig {
     @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidEmail(String invalidEmailList) {
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
-                        "Dean",
+                .body(UserDetailsGenerator.createUpdateJsonReq(
+                        file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_LASTNAME"),
                         invalidEmailList,
-                        "StringString1!"
+                        file.getValue("VALID_PASS")
 
                 ))
                 .when()
@@ -70,10 +78,10 @@ public class UpdateUser extends ApiConfig {
     public void updateInvalidPass(String invalidPasswordList) {
 
         given().relaxedHTTPSValidation()
-                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
-                        "James",
-                        "Dean",
-                        "james.dean@boing.rs",
+                .body(UserDetailsGenerator.createUpdateJsonReq(
+                        file.getValue("VALID_FIRSTNAME"),
+                        file.getValue("VALID_LASTNAME"),
+                        file.getValue("VALID_EMAIL"),
                         invalidPasswordList
 
                 ))

@@ -4,13 +4,21 @@ import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
+import common.ui_setup.FileControlUtil;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 
 public class LogInUser extends ApiConfig {
+
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+
+    public LogInUser() throws IOException {
+    }
 
 
     // Sending the request with invalid email
@@ -19,7 +27,7 @@ public class LogInUser extends ApiConfig {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
                         invalidEmailList,
-                        "stringString1!"
+                        file.getValue("VALID_PASS")
                 ))
                 .when()
                 .post(Endpoints.USER_LOGIN)
@@ -33,7 +41,7 @@ public class LogInUser extends ApiConfig {
     public void logInInvalidPassword(String invalidPasswordList) {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
-                        "john.dean@boing.rs",
+                        file.getValue("VALID_EMAIL"),
                         invalidPasswordList
                 ))
                 .when()
@@ -61,7 +69,7 @@ public class LogInUser extends ApiConfig {
     public void logInInvalidPassword() {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
-                        "jadranko@boing.rs",
+                        file.getValue("VALID_EMAIL"),
                         "Password$3"
                 ))
                 .when()

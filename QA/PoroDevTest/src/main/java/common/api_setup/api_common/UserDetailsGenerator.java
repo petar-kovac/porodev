@@ -87,7 +87,7 @@ public class UserDetailsGenerator {
     }
 
     // Generating JSON req for Register or Update
-    public static String createRegisterOrUpdateJsonReq(
+    public static String createRegisterJsonReq(
             String name,
             String lastname,
             String email,
@@ -104,6 +104,25 @@ public class UserDetailsGenerator {
          return generatedRegisterOrUpdateJsonReq;
     }
 
+    public static String createUpdateJsonReq(
+            String name,
+            String lastname,
+            String email,
+            String password) {
+        String generatedUpgradeJsonReq = "{\n" +
+                "  \"avatarUrl\": \"string\",\n" +
+                "  \"department\": 0,\n" +
+                "  \"email\": \""+email+"\",\n" +
+                "  \"lastname\": \""+lastname+"\",\n" +
+                "  \"name\": \""+name+"\",\n" +
+                "  \"passwordUnhashed\": \""+password+"\",\n" +
+                "  \"position\": \"string\",\n" +
+                "  \"role\": 0\n" +
+                "}";
+        return generatedUpgradeJsonReq;
+    }
+
+
     // Generating JSON req for LogIn operation
 
     public static String createLogInJsonReq (
@@ -119,7 +138,7 @@ public class UserDetailsGenerator {
 
     public static String createEmailJsonReq (String email) {
         String emailBody = "{\n" +
-                "  \""+email+"\": \"string\"\n" +
+                "  \"email\": \""+email+"\"\n" +
                 "}";
         return emailBody;
     }
