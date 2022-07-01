@@ -48,6 +48,7 @@ namespace PoroDev.GatewayAPI.Services
         {
             var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
 
+
             return responseContext.Message.Entity;
         }
     }

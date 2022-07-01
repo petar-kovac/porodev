@@ -2,6 +2,7 @@
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.GatewayAPI.Services.Contracts;
+using System.Net.Http.Headers;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -11,6 +12,7 @@ namespace PoroDev.GatewayAPI.Controllers
     {
         private readonly IStorageService _storageService;
         private readonly IJwtValidatorService _jwtValidatorService;
+
         public StorageController(IStorageService storageService, IJwtValidatorService jwtValidatorService)
         {
             _storageService = storageService;
@@ -26,14 +28,17 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(response);
         }
 
-        [HttpPost("Download")]
+        [HttpGet("Download")]
         public async Task<ActionResult<FileDownloadRequestGatewayToService>> Download(string fileId)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileDownloadRequestGatewayToService(fileId, userId);
-            var response = await _storageService.DownloadFile(returnModel);
+            var file = await _storageService.DownloadFile(returnModel);
 
-            return Ok(response);
+            // GET api/storage/fileId
+            // POST api/storage
+
+            return File(file.File, "image/jpeg", "slika1.jpg");
         }
     }
 }
