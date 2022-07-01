@@ -14,6 +14,8 @@ using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -26,6 +28,8 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserLoginRequestGatewayToService> _loginRequestClient;
         private readonly IRequestClient<RegisterUserRequestGatewayToService> _registerClient;
         private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserByIdRequestClient;
+        private readonly IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> _readUserByIdWithRuntimedataRequestClient;
+        private readonly IRequestClient<UserDeleteAllRequestGatewayToService> _deleteAllRequestClient;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
@@ -34,7 +38,9 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
             IRequestClient<UserUpdateRequestGatewayToService> updateRequestClient,
             IRequestClient<RegisterUserRequestGatewayToService> registerClient,
-            IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient
+            IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> readUserByIdWithRuntimedataRequestClient,
+            IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient,
+            IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers
             )
         {
             _createRequestClient = createRequestClient;
@@ -44,6 +50,8 @@ namespace PoroDev.GatewayAPI.Services
             _loginRequestClient = loginRequestClient;
             _registerClient = registerClient;
             _readUserByIdRequestClient = readUserByIdRequestClient;
+            _deleteAllRequestClient = deleteAllUsers;
+            _readUserByIdWithRuntimedataRequestClient = readUserByIdWithRuntimedataRequestClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -66,6 +74,16 @@ namespace PoroDev.GatewayAPI.Services
             }
 
             var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(deleteModel);
+
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
+            return responseContext.Message.Entity;
+        }
+
+        public async Task<DeleteUserModel> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
+        {
+            var responseContext = await _deleteAllRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
@@ -111,6 +129,16 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<DataUserModel> ReadUserById(UserReadByIdRequestGatewayToService model)
         {
             var requestResponseContext = await _readUserByIdRequestClient.GetResponse<CommunicationModel<DataUserModel>>(model);
+            if (requestResponseContext.Message.ExceptionName != null)
+                ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
+
+            var returnUser = requestResponseContext.Message.Entity;
+            return returnUser;
+        }
+
+        public async Task<DataUserModel> ReadUserByIdWithRuntimeData(UserReadByIdWithRuntimeRequestGatewayToService readModel)
+        {
+            var requestResponseContext = await _readUserByIdWithRuntimedataRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readModel);
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
 

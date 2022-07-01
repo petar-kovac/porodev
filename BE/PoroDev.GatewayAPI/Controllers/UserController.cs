@@ -9,6 +9,8 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -35,6 +37,13 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             var returnModel = await _userService.DeleteUser(model);
             return Ok(returnModel);
+        }
+
+        [HttpDelete("DeleteAllUsers")]
+        public async Task<ActionResult> DeleteAllUsers([FromBody] UserDeleteAllRequestGatewayToService model)
+        {
+            await _userService.DeleteAllUsers(model);
+            return Ok();
         }
 
         [HttpGet("ReadUserByEmail")]
@@ -69,6 +78,13 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<LoginUserModel>> LoginUser([FromBody] UserLoginRequestGatewayToService model)
         {
             var returnModel = await _userService.LoginUser(model);
+            return Ok(returnModel);
+        }
+
+        [HttpPost("ReadUserByIdWithRuntimeData")]
+        public async Task<ActionResult<DataUserModel>> ReadUserByIdWithRuntimeData([FromBody] UserReadByIdWithRuntimeRequestGatewayToService model)
+        {
+            var returnModel = await _userService.ReadUserByIdWithRuntimeData(model);
             return Ok(returnModel);
         }
     }

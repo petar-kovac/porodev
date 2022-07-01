@@ -6,7 +6,6 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
-using static PoroDev.DatabaseService.Constants.Constants;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Models.RuntimeModels.Data;

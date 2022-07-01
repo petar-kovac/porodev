@@ -7,15 +7,10 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
-    public class UserReadByIdConsumer : IConsumer<UserReadByIdRequestServiceToDataBase>
+    public class UserReadByIdConsumer : BaseDbConsumer, IConsumer<UserReadByIdRequestServiceToDataBase>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public UserReadByIdConsumer(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserReadByIdConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         public async Task Consume(ConsumeContext<UserReadByIdRequestServiceToDataBase> context)

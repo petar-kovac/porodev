@@ -17,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRuntimeService, RuntimeService>();
 builder.Services.AddScoped<IDockerImageService, DockerImageService>();
+builder.Services.AddScoped<IZipManipulator, ZipManipulator>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

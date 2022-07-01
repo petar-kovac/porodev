@@ -28,6 +28,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case NoHeaderWithJwtException noHeaderWithJwtException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = noHeaderWithJwtException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, noHeaderWithJwtException);
+                        break;
+
+                    case JWTValidationException jwtValidationException:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = jwtValidationException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, jwtValidationException);
+                        break;
+
                     case DatabaseException databaseException:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = databaseException.HumanReadableErrorMessage;
@@ -86,6 +98,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = positionFormatException.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, positionFormatException);
+                        break;
+
+                    case DockerRuntimeException dockerRuntimeException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = dockerRuntimeException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, dockerRuntimeException);
+                        break;
+
+                    case ZippedFileException zippedFileException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = zippedFileException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, zippedFileException);
                         break;
 
                     default:
