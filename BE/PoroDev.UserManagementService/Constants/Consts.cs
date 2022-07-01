@@ -29,7 +29,7 @@
         public const string PASSWORD_MIN_SPECIAL_ERROR = "Password must contain at least 1 special character!";
 
         public const string EMAIL_EMPTY_ERROR = "Email cannot be empty!";
-        public const string EMAIL_LENGTH_ERROR = "Email cannot be empty!";
+        public const string EMAIL_LENGTH_ERROR = "Email cannot exceed 50 characters!";
         public const string EMAIL_FORMAT_ERROR = "Email format is invalid!";
         public const string EMAIL_WHITESPACE_ERROR = "Email cannot contain whitespace!";
         public const string EMAIL_DOMAIN_ERROR = "Email domain is invalid!";
