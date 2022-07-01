@@ -94,16 +94,7 @@ namespace PoroDev.Runtime.Services
 
             await _dockerImageService.DeleteDockerImage(imageName);
 
-            RuntimeData newRuntimeData = new()
-            {
-                ExceptionHappened = imageOutput == "" ? true : false,
-                ExecutionStart = dateStarted,
-                ExecutionTime = imageOutput == String.Empty ? 0 : stopwatch.ElapsedMilliseconds,
-                UserId = userId,
-                FileId = projectId,
-                Id = Guid.NewGuid(),
-                ExecutionOutput = imageOutput
-            };
+            RuntimeData newRuntimeData = new(userId, projectId, dateStarted, stopwatch.ElapsedMilliseconds, imageOutput);
 
             var deleteException = _zipManipulator.DeleteUnzippedFile();
 
@@ -188,16 +179,16 @@ namespace PoroDev.Runtime.Services
 
             await _dockerImageService.DeleteDockerImage(imageName);
 
-            RuntimeData newRuntimeData = new()
+            string argumentsAsString = String.Empty;
+
+            foreach(var argument in argumentList)
             {
-                ExceptionHappened = imageOutput == "" ? true : false,
-                ExecutionStart = dateStarted,
-                ExecutionTime = imageOutput == String.Empty ? 0 : stopwatch.ElapsedMilliseconds,
-                UserId = userId,
-                FileId = projectId,
-                Id = Guid.NewGuid(),
-                ExecutionOutput = imageOutput
-            };
+                argumentsAsString = argument + "|";    
+            }
+
+            argumentsAsString = argumentsAsString.Remove(argumentsAsString.Length - 1);
+
+            RuntimeData newRuntimeData = new(userId, projectId, dateStarted, stopwatch.ElapsedMilliseconds, imageOutput, argumentsAsString);
 
             var deleteException = _zipManipulator.DeleteUnzippedFile();
 
