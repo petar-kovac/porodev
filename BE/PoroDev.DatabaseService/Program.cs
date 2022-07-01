@@ -1,13 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.MassTransit;
-using PoroDev.Database.Data;
-using PoroDev.Database.MapperProfiles;
-using PoroDev.Database.Repositories;
-using PoroDev.Database.Repositories.Contracts;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories;
 using PoroDev.DatabaseService.Repositories.Contracts;
-
+using PoroDev.DatabaseService.Data;
+using PoroDev.DatabaseService.MapperProfiles;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,6 +25,9 @@ builder.Services.AddAutoMapper(typeof(MapperProfiles));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IStorageRepository, StorageRepository>();
+builder.Services.AddScoped<IRuntimeDataRepository, RuntimeDataRepository>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

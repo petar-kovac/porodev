@@ -3,7 +3,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Exceptions;
-
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -23,30 +22,34 @@ namespace PoroDev.DatabaseService.Repositories
             _bucket = new GridFSBucket(mongoDatabase);
         }
 
-        public async Task UploadFile(string fileName, byte[] fileArray, Guid id)
+        public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, Guid userId)
         {
             var options = new GridFSUploadOptions()
             {
-                Metadata = new MongoDB.Bson.BsonDocument()
+                Metadata = new BsonDocument()
                 {
                    
                     { "latest" , true },
 
-                    {"userId", id},
+                    {"userId", userId},
 
                     {"time", DateTime.UtcNow}
                 }
             };
 
+            ObjectId id;
+
             try
             {
-                //Nece da upise kada se salje isti ID koji je vec upisan
-                await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
+                id = await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
+                
             }
             catch (Exception e)
             {
                 throw new FileUploadException("File isn't uploaded");
             }
+
+            return id;
         }
         
         public async Task<byte[]> DownloadFile (string fileName)

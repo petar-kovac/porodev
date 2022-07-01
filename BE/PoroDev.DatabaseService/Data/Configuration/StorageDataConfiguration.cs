@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PoroDev.Common.Contracts.StorageService;
+using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 
 namespace PoroDev.DatabaseService.Data.Configuration
@@ -13,7 +14,7 @@ namespace PoroDev.DatabaseService.Data.Configuration
 
             builder.HasOne<DataUserModel>(x => x.CurrentUser)
                 .WithMany(x => x.fileDatas)
-                .HasForeignKey(x => x.CurrentUser.Id);
+                .HasForeignKey(x => x.CurrentUserId);
 
 
         }

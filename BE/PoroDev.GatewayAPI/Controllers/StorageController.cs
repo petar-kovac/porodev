@@ -10,16 +10,18 @@ namespace PoroDev.GatewayAPI.Controllers
     public class StorageController : ControllerBase
     {
         private readonly IStorageService _storageService;
-
-        public StorageController(IStorageService storageService)
+        private readonly IJwtValidatorService _jwtValidatorService;
+        public StorageController(IStorageService storageService, IJwtValidatorService jwtValidatorService)
         {
             _storageService = storageService;
+            _jwtValidatorService = jwtValidatorService;
         }
 
         [HttpPost("Upload")]
-        public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file, [FromForm] Guid UserId)
+        public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file)
         {
-            var returnModel = new FileUploadRequestGatewayToService(file, UserId);
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new FileUploadRequestGatewayToService(file, userId);
             await _storageService.UploadFile(returnModel);
             return Ok();
         }

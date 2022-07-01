@@ -25,20 +25,11 @@ namespace PoroDev.GatewayAPI.Services
             _uploadRequestClient = uploadRequestClient;
         }
 
-        /* Some additional things which we have to implement
-              da li cemo dodati ovaj model za citanje ID-a
-              private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserById;
-            var modelWithUserId = new ExecuteProjectRequestGatewayToService() { UserId = Guid.Parse(id), FileID = Guid.Parse(model.FileID) };
-           var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(modelWithUserId);
-           if (requestResponsecontext.Message.ExceptionName != null)
-               ThrowException(requestResponsecontext.Message.ExceptionName, requestResponsecontext.Message.HumanReadableMessage);
-           //return requestResponsecontext.Message.Entity;*/
-
         public async Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel)
         {
             //var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService() { Id = Guid.Parse(id) });
 
-            if (uploadModel.File == null || uploadModel.UserId == Guid.Empty)
+            if (uploadModel.File is null)
             {
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
             }

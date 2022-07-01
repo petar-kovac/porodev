@@ -1,8 +1,12 @@
-﻿namespace PoroDev.DatabaseService.Repositories.Contracts
+﻿
+
+using MongoDB.Bson;
+
+namespace PoroDev.DatabaseService.Repositories.Contracts
 {
     public interface IFileRepository
     {
-        public Task UploadFile(string fileName, byte[] fileArray, Guid id);
+        public Task<ObjectId> UploadFile(string fileName, byte[] fileArray, Guid id);
 
         public Task<byte[]> DownloadFile(string fileName);
     }

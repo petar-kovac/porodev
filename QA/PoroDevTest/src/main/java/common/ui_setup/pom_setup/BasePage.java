@@ -1,11 +1,15 @@
 package common.ui_setup.pom_setup;
 
+import common.ui_setup.SetupConstants;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.Random;
 
 public class BasePage {
@@ -66,5 +70,10 @@ public class BasePage {
             salt.append(domain.charAt(index));
         }
         return salt + "@boing.rs";
+    }
+
+    public static void waitForElementVisibility(WebElement element, WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 }

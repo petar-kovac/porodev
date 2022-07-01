@@ -18,11 +18,11 @@ namespace PoroDev.StorageService.Services
             _downloadRequestClient = downloadRequestClient;
         }
 
-        public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestGatewayToService uploadModel)
+        public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
         {
-            FileUploadModel model = new(uploadModel.FileName, uploadModel.File, uploadModel.UserId);
-
-            var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(model);
+            //FileUploadModel model = new(uploadModel.FileName, uploadModel.File, uploadModel.UserId);
+        
+            var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
             return response.Message;
         }
 

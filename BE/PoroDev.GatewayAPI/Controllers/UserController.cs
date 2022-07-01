@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Contracts.Create;
-using PoroDev.Common.Contracts.DeleteUser;
-using PoroDev.Common.Contracts.LoginUser;
-using PoroDev.Common.Contracts.Update;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -36,10 +39,24 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(returnModel);
         }
 
+        [HttpDelete("DeleteAllUsers")]
+        public async Task<ActionResult> DeleteAllUsers([FromBody] UserDeleteAllRequestGatewayToService model)
+        {
+            await _userService.DeleteAllUsers(model);
+            return Ok();
+        }
+
         [HttpGet("ReadUserByEmail")]
         public async Task<ActionResult<DataUserModel>> ReadUserByEmail([FromQuery] string email)
         {
             var returnModel = await _userService.ReadUserByEmail(email);
+            return Ok(returnModel);
+        }
+
+        [HttpGet("ReadUserById")]
+        public async Task<ActionResult<DataUserModel>> ReadUserById([FromQuery] UserReadByIdRequestGatewayToService model)
+        {
+            var returnModel = await _userService.ReadUserById(model);
             return Ok(returnModel);
         }
 
@@ -61,6 +78,13 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<LoginUserModel>> LoginUser([FromBody] UserLoginRequestGatewayToService model)
         {
             var returnModel = await _userService.LoginUser(model);
+            return Ok(returnModel);
+        }
+
+        [HttpPost("ReadUserByIdWithRuntimeData")]
+        public async Task<ActionResult<DataUserModel>> ReadUserByIdWithRuntimeData([FromBody] UserReadByIdWithRuntimeRequestGatewayToService model)
+        {
+            var returnModel = await _userService.ReadUserByIdWithRuntimeData(model);
             return Ok(returnModel);
         }
     }

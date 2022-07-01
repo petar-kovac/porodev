@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PoroDev.Database.Data;
+using PoroDev.DatabaseService.Data;
 
 #nullable disable
 
@@ -19,18 +19,46 @@ namespace PoroDev.DatabaseService.Migrations
                 .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("PoroDev.Common.Contracts.StorageService.FileData", b =>
+            modelBuilder.Entity("PoroDev.Common.Models.RuntimeModels.Data.RuntimeData", b =>
                 {
-                    b.Property<Guid>("FileId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CurrentUserId")
-                        .HasColumnType("char(36)");
+                    b.Property<bool>("ExceptionHappened")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("ExecutionOutput")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset>("ExecutionStart")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long>("ExecutionTime")
+                        .HasColumnType("bigint");
+
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RuntimeMetadata");
+                });
+
+            modelBuilder.Entity("PoroDev.Common.Models.StorageModels.Data.FileData", b =>
+                {
+                    b.Property<string>("FileId")
+                        .HasMaxLength(200)
+                        .HasColumnType("VARCHAR(200)");
+
+                    b.Property<Guid>("CurrentUserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("FileId");
 
@@ -87,7 +115,18 @@ namespace PoroDev.DatabaseService.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PoroDev.Common.Contracts.StorageService.FileData", b =>
+            modelBuilder.Entity("PoroDev.Common.Models.RuntimeModels.Data.RuntimeData", b =>
+                {
+                    b.HasOne("PoroDev.Common.Models.UserModels.Data.DataUserModel", "User")
+                        .WithMany("runtimeDatas")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PoroDev.Common.Models.StorageModels.Data.FileData", b =>
                 {
                     b.HasOne("PoroDev.Common.Models.UserModels.Data.DataUserModel", "CurrentUser")
                         .WithMany("fileDatas")
@@ -101,6 +140,8 @@ namespace PoroDev.DatabaseService.Migrations
             modelBuilder.Entity("PoroDev.Common.Models.UserModels.Data.DataUserModel", b =>
                 {
                     b.Navigation("fileDatas");
+
+                    b.Navigation("runtimeDatas");
                 });
 #pragma warning restore 612, 618
         }

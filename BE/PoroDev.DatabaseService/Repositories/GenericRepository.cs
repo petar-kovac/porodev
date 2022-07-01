@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UnitOfWorkResponse;
-using PoroDev.Database.Repositories.Contracts;
+using PoroDev.DatabaseService.Repositories.Contracts;
 using System.Linq.Expressions;
-using static PoroDev.Database.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
 
-namespace PoroDev.Database.Repositories
+namespace PoroDev.DatabaseService.Repositories
 {
     public class GenericRepository<TemplateEntity, TemplateDatabaseContext> :
         IGenericRepository<TemplateEntity> where TemplateEntity : class, new()
         where TemplateDatabaseContext : DbContext
     {
-        private readonly TemplateDatabaseContext _context;
+        protected readonly TemplateDatabaseContext _context;
 
         public GenericRepository(TemplateDatabaseContext context)
         {
@@ -23,7 +23,17 @@ namespace PoroDev.Database.Repositories
             TemplateEntity createdEntity;
             try
             {
-                createdEntity = (await _context.Set<TemplateEntity>().AddAsync(entity)).Entity;
+                var entityDto = await _context.Set<TemplateEntity>().AddAsync(entity);
+                createdEntity = entityDto.Entity;
+
+                UnitOfWorkResponseModel<TemplateEntity> response = new()
+                {
+                    Entity = createdEntity,
+                    ExceptionName = null,
+                    HumanReadableMessage = null
+                };
+
+                return response;
             }
             catch (Exception)
             {
@@ -36,15 +46,6 @@ namespace PoroDev.Database.Repositories
 
                 return responseException;
             }
-
-            UnitOfWorkResponseModel<TemplateEntity> response = new()
-            {
-                Entity = createdEntity,
-                ExceptionName = null,
-                HumanReadableMessage = null
-            };
-
-            return response;
         }
 
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity)
@@ -128,7 +129,7 @@ namespace PoroDev.Database.Repositories
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id)
         {
 
-            TemplateEntity? exist = await _context.Set<TemplateEntity>().FindAsync(id);
+            TemplateEntity exist = await _context.Set<TemplateEntity>().FindAsync(id);
             UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
 
             try
