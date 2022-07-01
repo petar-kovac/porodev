@@ -1,8 +1,8 @@
 package api_test.functional_tests;
 
-import com.jayway.jsonpath.JsonPath;
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
+import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.User;
 import common.api_setup.api_common.UserDetailsGenerator;
 import io.qameta.allure.Feature;
@@ -17,7 +17,7 @@ public class UserTests extends ApiConfig {
 
 
     //Register user
-    @Test(priority = 0, dataProvider = "PojoRegularEntry", dataProviderClass = UserDetailsGenerator.class,
+    @Test(priority = 0, dataProvider = "PojoRegularEntry", dataProviderClass = DataProviderBeUtil.class,
             description = "Sending the request for user register with regular input")
     public void registerUserByJSON(User providedUser) {
         given().relaxedHTTPSValidation()
@@ -30,11 +30,14 @@ public class UserTests extends ApiConfig {
 
     // Update user (change any of the details)
 
-    @Test (priority = 1, dataProvider = "PojoRegularEntry", dataProviderClass = UserDetailsGenerator.class,
-    description = "Sending the request for update the users information with regular input")
-    public void updateUserByJson(User providedUser) {
+    @Test (priority = 1, description = "Sending the request for update the users information with regular input")
+    public void updateUserByJson() {
         given().relaxedHTTPSValidation()
-                .body(providedUser)
+                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                        "James",
+                        "Doe",
+                        "john.dean@boing.rs",
+                        "stringString1!"))
                 .when()
                 .put(Endpoints.UPDATE_USER)
                 .then();
@@ -66,13 +69,8 @@ public class UserTests extends ApiConfig {
     //Sending the log in request
     @Test (priority = 4, description = "Sending the request for log in with regular email and password entry")
     public void logInUser() {
-        String logInJSONObject = "{\n" +
-                "  \"email\": \"john.dean@boing.rs\",\n" +
-                "  \"password\": \"stringString1!\"\n" +
-                "}";
-
         given().relaxedHTTPSValidation()
-                .body(logInJSONObject)
+                .body(UserDetailsGenerator.createLogInJsonReq("john.dean@boing.rs", "stringString1!"))
                 .when()
                 .post(Endpoints.USER_LOGIN)
                 .then().body("name", equalTo("John"));
@@ -83,13 +81,13 @@ public class UserTests extends ApiConfig {
     public void runtime() {
         String token = UserDetailsGenerator
                 .takeTokenValueFromJson("john.dean@boing.rs", "stringString1!");
-        String jsonRequestWithFileId = "{\n" +
-                "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .header("Bearer", token)
+                .header("authorization", "Bearer "+token)
                 .when()
-                .body(jsonRequestWithFileId)
+                .body(UserDetailsGenerator.createRuntimeJsonReq(
+                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        "1",
+                        "2"))
                 .post(Endpoints.RUNTIME)
                 .then().statusCode(200);
     }
@@ -99,12 +97,9 @@ public class UserTests extends ApiConfig {
     // Sending the request for deleting the user with sending email
     @Test (priority = 6, description = "Sending the request for deleting the user with regular email")
     public void deleteUser() {
-        String jsonRequestWithEmail = "{\n" +
-                "  \"email\": \"john.dean@boing.rs\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
                 .when()
-                .body(jsonRequestWithEmail)
+                .body(UserDetailsGenerator.createEmailJsonReq("john.dean@boing.rs"))
                 .delete(Endpoints.USER_DELETE)
                 .then();
     }

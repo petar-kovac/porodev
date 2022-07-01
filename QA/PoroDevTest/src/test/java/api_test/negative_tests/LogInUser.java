@@ -2,6 +2,7 @@ package api_test.negative_tests;
 
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
+import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
 import org.testng.annotations.Test;
 
@@ -13,14 +14,13 @@ public class LogInUser extends ApiConfig {
 
 
     // Sending the request with invalid email
-    @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
     public void logInInvalidEmail(String invalidEmailList) {
-        String userBodyJson = "{\n"+
-                "  \"email\": \""+invalidEmailList+"\",\n" +
-                "  \"password\": \"stringString1!\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createLogInJsonReq(
+                        invalidEmailList,
+                        "stringString1!"
+                ))
                 .when()
                 .post(Endpoints.USER_LOGIN)
                 .then()
@@ -29,14 +29,13 @@ public class LogInUser extends ApiConfig {
 
 
     // Sending request with invalid password
-    @Test(dataProvider = "invalidPasswordList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class)
     public void logInInvalidPassword(String invalidPasswordList) {
-        String userBodyJson = "{\n"+
-                "  \"email\": \"jadranko@boing.rs\",\n" +
-                "  \"password\": \""+invalidPasswordList+"\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createLogInJsonReq(
+                        "john.dean@boing.rs",
+                        invalidPasswordList
+                ))
                 .when()
                 .post(Endpoints.USER_LOGIN)
                 .then()
@@ -46,12 +45,11 @@ public class LogInUser extends ApiConfig {
     // Valid but non-existing email and password
     @Test
     public void logInNonExistingUser() {
-        String userBodyJson = "{\n"+
-                "  \"email\": \"zivko@boing.rs\",\n" +
-                "  \"password\": \"Password###4576\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createLogInJsonReq(
+                        "zivko@boing.rs",
+                        "Password###4576"
+                ))
                 .when()
                 .post(Endpoints.USER_LOGIN)
                 .then().statusCode(400);
@@ -61,12 +59,11 @@ public class LogInUser extends ApiConfig {
 
     @Test
     public void logInInvalidPassword() {
-        String userBodyJson = "{\n"+
-                "  \"email\": \"jadranko@boing.rs\",\n" +
-                "  \"password\": \"Password###4576\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createLogInJsonReq(
+                        "jadranko@boing.rs",
+                        "Password$3"
+                ))
                 .when()
                 .post(Endpoints.USER_LOGIN)
                 .then().statusCode(400);

@@ -3,11 +3,8 @@ package api_test.negative_tests;
 
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
-import common.api_setup.api_common.UserDetailsGenerator;
-import org.testng.annotations.DataProvider;
+import common.api_setup.api_common.DataProviderBeUtil;
 import org.testng.annotations.Test;
-
-import javax.xml.crypto.Data;
 
 import static org.hamcrest.CoreMatchers.anyOf;
 
@@ -18,7 +15,7 @@ public class GetUser extends ApiConfig {
 
 
     //Sending request for user with invalid email
-    @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
     public void getUserByInvalidEmail(String invalidEmailList) {
         given().relaxedHTTPSValidation()
                 .when()
@@ -38,7 +35,7 @@ public class GetUser extends ApiConfig {
 
     }
 
-    @Test(dataProvider = "invalidIdAttributeList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidIdAttributeList", dataProviderClass = DataProviderBeUtil.class)
     public void getUserByInvalidIdAttribute(String invalidIdAttributeList) {
             given().relaxedHTTPSValidation()
                     .when()

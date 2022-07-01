@@ -3,6 +3,7 @@ package api_test.negative_tests;
 
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
+import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
 import org.testng.annotations.Test;
 
@@ -14,77 +15,68 @@ public class UpdateUser extends ApiConfig {
 
     //Updating the user with invalid name
 
-    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidName(String InvalidNameList) {
-        String userBodyJson = "{\n" +
-                "  \"name\": \"" + InvalidNameList + "\",\n" +
-                "  \"lastname\": \"Dean\",\n" +
-                "  \"email\": \"usertesting@boing.rs\",\n" +
-                "  \"passwordUnhashed\": \"pas@eeeG33\",\n" +
-                "  \"department\": 0,\n" +
-                "  \"role\": 1,\n" +
-                "  \"position\": \"string\",\n" +
-                "  \"avatarUrl\": \"string\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                        InvalidNameList,
+                "dean",
+                        "james.dean@boing.rs",
+                        "StringString1!"
+
+                ))
                 .when()
                 .put(Endpoints.UPDATE_USER)
                 .then().statusCode(400);
     }
+
+
     //Updating user with invalid last name
-    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidLastname(String invalidLastNameList) {
-        String userBodyJson = "{\n" +
-                "  \"name\": \"John\",\n" +
-                "  \"lastname\": \"" + invalidLastNameList + "\",\n" +
-                "  \"email\": \"usertesting@boing.rs\",\n" +
-                "  \"passwordUnhashed\": \"pas@eeeG33\",\n" +
-                "  \"department\": 0,\n" +
-                "  \"role\": 1,\n" +
-                "  \"position\": \"string\",\n" +
-                "  \"avatarUrl\": \"string\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                        "James",
+                        invalidLastNameList,
+                        "james.dean@boing.rs",
+                        "StringString1!"
+
+                ))
                 .when()
                 .put(Endpoints.UPDATE_USER)
                 .then().statusCode(400);
     }
+
+
     // Updating user with invalid email
-    @Test(dataProvider = "invalidEmailList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidEmail(String invalidEmailList) {
-        String userBodyJson = "{\n" +
-                "  \"name\": \"John\",\n" +
-                "  \"lastname\": \"Dean\",\n" +
-                "  \"email\": \"" + invalidEmailList + "\",\n" +
-                "  \"passwordUnhashed\": \"pas@eeeG33\",\n" +
-                "  \"department\": 0,\n" +
-                "  \"role\": 1,\n" +
-                "  \"position\": \"string\",\n" +
-                "  \"avatarUrl\": \"string\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                        "James",
+                        "Dean",
+                        invalidEmailList,
+                        "StringString1!"
+
+                ))
                 .when()
                 .put(Endpoints.UPDATE_USER)
                 .then().statusCode(anyOf(is(400), is(404)));
     }
+
+
     // Updating user with invalid password
-    @Test(dataProvider = "invalidPasswordList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class)
     public void updateInvalidPass(String invalidPasswordList) {
-        String userBodyJson = "{\n" +
-                "  \"name\": \"John\",\n" +
-                "  \"lastname\": \"Dean\",\n" +
-                "  \"email\": \"usertesting@boing.rs\",\n" +
-                "  \"passwordUnhashed\": \"" + invalidPasswordList + "\",\n" +
-                "  \"department\": 0,\n" +
-                "  \"role\": 1,\n" +
-                "  \"position\": \"string\",\n" +
-                "  \"avatarUrl\": \"string\"\n" +
-                "}";
+
         given().relaxedHTTPSValidation()
-                .body(userBodyJson)
+                .body(UserDetailsGenerator.createRegisterOrUpdateJsonReq(
+                        "James",
+                        "Dean",
+                        "james.dean@boing.rs",
+                        invalidPasswordList
+
+                ))
                 .when()
                 .put(Endpoints.UPDATE_USER)
                 .then().statusCode(400);

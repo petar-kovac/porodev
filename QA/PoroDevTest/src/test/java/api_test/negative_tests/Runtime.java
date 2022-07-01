@@ -2,8 +2,8 @@ package api_test.negative_tests;
 
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
+import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
-import org.hamcrest.core.AnyOf;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
@@ -15,91 +15,91 @@ public class Runtime extends ApiConfig {
 
 
 
-    @Test(dataProvider = "invalidJwtHeaderTokenList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidJwtHeaderTokenList", dataProviderClass = DataProviderBeUtil.class)
     public void runtimeWithInvalidJwtHeaderTokenList(String invalidJwtHeaderTokenList) {
-        String jsonRequestWithFileId = "{\n" +
-                "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
                         + invalidJwtHeaderTokenList
                         + UserDetailsGenerator.incorectJwtPayload
                         + UserDetailsGenerator.incorectJwtSignature)
                 .when()
-                .body(jsonRequestWithFileId)
+                .body(UserDetailsGenerator.createRuntimeJsonReq(
+                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        "1",
+                        "2"))
                 .post(Endpoints.RUNTIME)
                 .then()
                 .statusCode(anyOf(is(400), is(500), is(401)));
     }
 
 
-    @Test(dataProvider = "invalidJwtPayloadTokenList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidJwtPayloadTokenList", dataProviderClass = DataProviderBeUtil.class)
     public void runtimeWithInvalidJwtPayloadTokenList(String invalidJwtPayloadTokenList) {
-        String jsonRequestWithFileId = "{\n" +
-                "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
                         + UserDetailsGenerator.validJwtHeader
                         + invalidJwtPayloadTokenList
                         + UserDetailsGenerator.incorectJwtSignature)
                 .when()
-                .body(jsonRequestWithFileId)
+                .body(UserDetailsGenerator.createRuntimeJsonReq(
+                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        "3",
+                        "3"))
                 .post(Endpoints.RUNTIME)
                 .then()
-                .statusCode(anyOf(is(400), is(404), is(500)));
+                .statusCode(anyOf(is(400), is(404), is(401), is(500)));
 
     }
 
 
 
 
-    @Test(dataProvider = "invalidJwtSignatureTokenList", dataProviderClass = UserDetailsGenerator.class)
+    @Test(dataProvider = "invalidJwtSignatureTokenList", dataProviderClass = DataProviderBeUtil.class)
     public void runtimeWithInvalidJwtSignatureTokenList(String invalidJwtSignatureTokenList) {
-        String jsonRequestWithFileId = "{\n" +
-                "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
-                "}";
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
                         + UserDetailsGenerator.validJwtHeader
                         + UserDetailsGenerator.incorectJwtPayload
                         + invalidJwtSignatureTokenList)
                 .when()
-                .body(jsonRequestWithFileId)
+                .body(UserDetailsGenerator.createRuntimeJsonReq(
+                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        "2",
+                        "2"))
                 .post(Endpoints.RUNTIME)
                 .then()
-                .statusCode(anyOf(is(400), is(404), is(500)));
+                .statusCode(anyOf(is(400), is(404), is(500), is(401)));
     }
 
     @Test(description = "Sending the request for runtime with added characters to jwt token")
     public void runtimeWithAddedValuesToValidToken() {
         String token = UserDetailsGenerator
-                .takeTokenValueFromJson("john.dean@boing.rs", "Pass$$444");
-        String jsonRequestWithFileId = "{\n" +
-                "  \"fileId\": \"e06246ba-d280-48bd-ab60-1739cee98c74\"\n" +
-                "}";
+                .takeTokenValueFromJson("jack.sparrow@boing.rs", "Pass##33");
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"+token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 .when()
-                .body(jsonRequestWithFileId)
+                .body(UserDetailsGenerator.createRuntimeJsonReq(
+                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        "1",
+                        "2"))
                 .post(Endpoints.RUNTIME)
                 .then().statusCode(anyOf(is(400), is(401)));
     }
 
-    @Test(dataProvider = "invalidFileIdList", dataProviderClass = UserDetailsGenerator.class,
+    @Test(dataProvider = "invalidFileIdList", dataProviderClass = DataProviderBeUtil.class,
             description = "Sending the request for runtime with list of invalid file id's")
         public  void runtimeWithInvalidFileID(String invalidFileIdList){
         String token = UserDetailsGenerator
-                .takeTokenValueFromJson("john.dean@boing.rs", "Pass$$444");
-        String jsonRequestWithFileId = "{\n" +
-                "  \"fileId\": \""+invalidFileIdList+"\"\n" +
-                "}";
+                .takeTokenValueFromJson("jack.sparrow@boing.rs", "Pass##33");
         given().relaxedHTTPSValidation()
                 .header("Bearer", token)
                 .when()
-                .body(jsonRequestWithFileId)
+                .body(UserDetailsGenerator.createRuntimeJsonReq(
+                        invalidFileIdList,
+                        "1",
+                        "2"))
                 .post(Endpoints.RUNTIME)
-                .then().statusCode(500);
+                .then().statusCode(400);
     }
 
 
