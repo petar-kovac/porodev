@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -51,14 +52,32 @@ namespace PoroDev.DatabaseService.Repositories
 
             return id;
         }
-        
+
         public async Task<byte[]> DownloadFile (string fileId, Guid userId)
         {
             ObjectId fileObjectId = ObjectId.Parse(fileId);
 
             var downloadFile = await _bucket.DownloadAsBytesAsync(fileObjectId);
+            
 
             return downloadFile;
         }
+
+        public async Task<FileReadSingleModel> ReadFiles(string fileId)
+        {
+            ObjectId fileObjectId = ObjectId.Parse(fileId);
+            var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
+            var searchResult = await _bucket.FindAsync(filter);
+            var fileEntry = searchResult.First();
+
+            FileReadSingleModel readModel = new FileReadSingleModel()
+            {
+                FileName = fileEntry.Filename,
+                UploadTime = fileEntry.UploadDateTime
+            };
+
+            return readModel;
+        }
+
     }
 }
