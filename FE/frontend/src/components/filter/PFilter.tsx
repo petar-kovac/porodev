@@ -1,5 +1,5 @@
 import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
-import { DatePicker, Select, Slider } from 'antd';
+import { DatePicker, Select, Slider, Input } from 'antd';
 import { DefaultOptionType } from 'antd/lib/select';
 import PSelect from 'components/select/PSelect';
 import { Dispatch, FC, SetStateAction } from 'react';
@@ -58,15 +58,13 @@ const PFilter: FC<IPFilterProps> = ({
     <StyledFilesHeader>
       {propsObj.showFilterByDate && (
         <StyledFilesDateFilter>
-          <h4>Filter files by date:</h4>
           <RangePicker />
         </StyledFilesDateFilter>
       )}
 
       {propsObj.showFilterBySize && (
         <StyledFilesSlider>
-          <h4>Filter by size:</h4>
-          <Slider range defaultValue={[0, 30]} />
+          <StyledInput placeholder="Search folders &amp; files" />
         </StyledFilesSlider>
       )}
 
@@ -90,9 +88,19 @@ const PFilter: FC<IPFilterProps> = ({
         {propsObj.showToggleButton && (
           <StyledToggleButton>
             {isList ? (
-              <StyledAppstoreOutlined onClick={() => setIsList(!isList)} />
+              <StyledAppstoreOutlined
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setIsList((prevState) => !prevState);
+                }}
+              />
             ) : (
-              <StyledBarsOutlined onClick={() => setIsList(!isList)} />
+              <StyledBarsOutlined
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setIsList((prevState) => !prevState);
+                }}
+              />
             )}
           </StyledToggleButton>
         )}
@@ -103,44 +111,39 @@ const PFilter: FC<IPFilterProps> = ({
 
 const StyledFilesHeader = styled.div`
   display: flex;
-  justify-content: space-around;
   flex-wrap: wrap;
-  width: 100%;
 `;
 
 const StyledToggleButton = styled.div`
   margin-left: auto;
 `;
 const StyledFilesSlider = styled.div`
-  width: 32rem;
+  /* width: 32rem; */
   .ant-slider {
-    margin: 2.2rem 0.6rem 1rem;
-    padding: 0 !important;
   }
 `;
 
 const StyledFilesDateFilter = styled.div`
-  width: 32rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
   .ant-picker {
     border-radius: 1rem;
   }
 `;
 
 const StyledFilesSelect = styled.div`
-  width: 32rem;
+  /* width: 32rem; */
   align-self: flex-end;
   display: flex;
   gap: 1rem;
   align-items: center;
 
   .ant-select-selector {
-    border-radius: 10px !important;
+    border-radius: 1rem !important;
     color: #999;
   }
+`;
+
+const StyledInput = styled(Input)`
+  border-radius: 1rem;
 `;
 
 export default PFilter;

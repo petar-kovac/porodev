@@ -4,22 +4,21 @@ import { FC, RefObject, useRef, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
-const { Meta } = Card;
 interface IGridCardProps {
+  value?: any;
   id?: string;
   heading?: string;
   description?: string;
   image?: string;
   selected: boolean;
+  setIsSiderVisible?: (value: boolean) => unknown;
+  setSelectedCardId?: (value: number | null) => unknown;
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
 }
 
 const GridCard: FC<IGridCardProps> = ({
-  id,
-  heading,
-  description,
-  image,
+  value,
   selected,
   onClick,
   onDoubleClick = () => undefined,
@@ -31,31 +30,28 @@ const GridCard: FC<IGridCardProps> = ({
   return (
     <StyledGridCard
       ref={ref}
-      hoverable
-      cover={<img alt="example" src={`${image}`} />}
-      role="button"
       selected={selected}
+      hoverable
+      cover={<img alt="example" src={`${value.image}`} />}
+      role="button"
     >
-      {/* <Meta
-        title={heading}
-        description={[
-          <StyledMetaCardDescription>
-            <span>{description?.slice(0, 60)}...</span>
-            <span className="show-more">&rarr; Show more</span>
-          </StyledMetaCardDescription>,
-        ]}
-      /> */}
+      <StyledMetaCardDescription>
+        <h4>{value.name}</h4>
+        <span>{value.description.slice(0, 30)}...</span>
+        <span className="show-more">&rarr; Show more</span>
+      </StyledMetaCardDescription>
     </StyledGridCard>
   );
 };
+
 const StyledGridCard = styled(Card).attrs({
   'data-testid': 'grid-card',
 })<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 25rem;
+  height: 24rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  max-width: 24rem;
+  max-width: 23rem;
   cursor: pointer;
   border: 2px solid
     ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};
@@ -70,7 +66,7 @@ const StyledGridCard = styled(Card).attrs({
 
   .ant-card-cover {
     height: 14rem;
-    width: 24rem;
+    max-width: 24rem;
     overflow: hidden;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
@@ -87,4 +83,5 @@ const StyledMetaCardDescription = styled.div`
     margin-left: 2rem;
   }
 `;
+
 export default GridCard;

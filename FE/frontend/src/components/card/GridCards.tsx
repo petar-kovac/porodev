@@ -1,36 +1,36 @@
-import { Dispatch, FC, MouseEvent, SetStateAction } from 'react';
+import { FC, Dispatch, MouseEvent, SetStateAction } from 'react';
 
-import { IFilesCard } from 'types/card-data';
 import { useFetchData } from 'hooks/useFetchData';
+import { IFilesCard } from 'types/card-data';
 
-import ListCard from './ListCard';
+import GridCard from './GridCard';
 
-interface IListCardProps {
-  cardData?: IFilesCard | null;
+interface IGridCardProps {
   selected?: boolean;
+  cardData?: IFilesCard | null;
   selectedCardId?: number | null;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
-  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
   setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
+  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
 }
 
-const ListCards: FC<IListCardProps> = ({
+const GridCards: FC<IGridCardProps> = ({
   selectedCardId,
   setCardData = () => undefined,
   setIsSiderVisible = () => undefined,
-  setIsModalVisible = () => undefined,
   setSelectedCardId = () => undefined,
+  setIsModalVisible = () => undefined,
 }) => {
   const url = `${process.env.REACT_APP_MOCK_URL}/files`;
   const { data } = useFetchData(url);
 
   const handleClick = (value: any) => {
-    setSelectedCardId(value.id);
-    setCardData(value);
     setIsSiderVisible(true);
+    setCardData(value);
+    setSelectedCardId(value.id);
   };
 
   const handleDoubleClick = (value: any) => {
@@ -43,12 +43,12 @@ const ListCards: FC<IListCardProps> = ({
   return (
     <>
       {data?.map((value: any) => (
-        <ListCard
+        <GridCard
+          key={value.id}
           value={value}
           selected={selectedCardId === value.id}
-          key={value.id}
-          setSelectedCardId={setSelectedCardId}
           setIsSiderVisible={setIsSiderVisible}
+          setSelectedCardId={setSelectedCardId}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />
@@ -57,4 +57,4 @@ const ListCards: FC<IListCardProps> = ({
   );
 };
 
-export default ListCards;
+export default GridCards;
