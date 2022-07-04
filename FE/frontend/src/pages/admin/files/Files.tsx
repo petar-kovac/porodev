@@ -3,7 +3,7 @@ import GridCard from 'components/card/GridCard';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import ListCard from 'components/card/ListCard';
+import ListCards from 'components/card/ListCards';
 import PFilter from 'components/filter/PFilter';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
@@ -116,7 +116,7 @@ const Files: FC = () => {
                 )}
               </>
             ))} */}
-            <ListCard
+            <ListCards
               cardData={cardData}
               setCardData={setCardData}
               // onClick={(e) => {

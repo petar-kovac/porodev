@@ -40,7 +40,7 @@ const useDoubleClick = ({
         );
       }
       count.current = 0;
-    }, 250);
+    }, 200);
   };
 
   useEffect(() => {

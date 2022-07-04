@@ -1,121 +1,66 @@
 import { Card, Button } from 'antd';
-import { useFetchData } from 'hooks/useFetchData';
-import React, {
-  useState,
-  Dispatch,
-  FC,
-  RefObject,
-  useRef,
-  SetStateAction,
-  MouseEvent,
-} from 'react';
 import styled from 'styled-components';
-import DownloadButton from 'components/buttons/DownloadButton';
-import useDoubleClick from 'hooks/useDoubleClick';
-import { IFilesCard } from 'types/card-data';
+import { FC, useRef, MouseEventHandler, RefObject } from 'react';
+
 import theme from 'theme/theme';
 
-const { Meta } = Card;
+import useDoubleClick from 'hooks/useDoubleClick';
+
+import DownloadButton from 'components/buttons/DownloadButton';
 
 interface IListCardProps {
-  heading?: string;
-  description?: string;
-  image?: string;
-  cardData?: IFilesCard | null;
-  selected?: boolean;
-  onClick?: (event: MouseEvent) => unknown;
-  onDoubleClick?: (event: MouseEvent) => unknown;
-  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
-  setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
+  value: any;
+  selected: boolean;
+  onClick?: MouseEventHandler<HTMLElement>;
+  onDoubleClick?: MouseEventHandler<HTMLElement>;
+  setSelectedCardId: (value: number | null) => unknown;
+  setIsSiderVisible: (value: boolean) => unknown;
 }
 
 const ListCard: FC<IListCardProps> = ({
-  cardData,
+  value,
+  selected,
   onClick = () => undefined,
   onDoubleClick = () => undefined,
-  setCardData = () => undefined,
-  setIsSiderVisible = () => undefined,
-  setIsModalVisible = () => undefined,
+  setSelectedCardId,
+  setIsSiderVisible,
 }) => {
-  const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  const { data } = useFetchData(url);
-
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
-
-  const handleOnClick = (
-    event: MouseEvent<HTMLElement, globalThis.MouseEvent>,
-    value: any,
-  ) => {
-    event.stopPropagation();
-    setCardData(value);
-    setIsSiderVisible(true);
-  };
-
-  const handleOnDoubleClick = (
-    event: MouseEvent<HTMLElement, globalThis.MouseEvent>,
-    value: any,
-  ) => {
-    event.stopPropagation();
-    setCardData(value);
-    setIsSiderVisible(false);
-    setIsModalVisible(false);
-  };
-
   const ref = useRef<HTMLDivElement>(null);
-  useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
+
+  useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
 
   return (
-    <>
-      {data?.map((value: any) => (
-        <StyledListCardContainer>
-          <StyledListCard
-            ref={ref}
-            hoverable
-            key={value.id}
-            selected={value?.id === selectedCardId}
-            onClick={(event) => {
-              setSelectedCardId(value.id);
-              handleOnClick(event, value);
-            }}
-            onDoubleClick={(event) => {
-              setSelectedCardId(value.id);
-              handleOnDoubleClick(event, value);
-            }}
-          >
-            <StyledDescription>
-              <div>
-                <h3>{value.name}</h3>
-                <span>Click/DoubleClick for more!</span>
-              </div>
-              <StyledDescriptionUploadDetails>
-                <h4>Uploaded:</h4>
-                <span>{value.description.slice(0, 12)}</span>
-              </StyledDescriptionUploadDetails>
-              <StyledDescriptionButtons>
-                <StyledFilesButton
-                  onClickCapture={(e) => {
-                    console.log(e);
-                  }}
-                >
-                  Remove file
-                </StyledFilesButton>
+    <StyledListCardContainer>
+      <StyledListCard ref={ref} hoverable selected={selected}>
+        <StyledDescription>
+          <div>
+            <h3>{value.name}</h3>
+            <span>Click/DoubleClick for more!</span>
+          </div>
+          <StyledDescriptionUploadDetails>
+            <h4>Uploaded:</h4>
+            <span>{value.description.slice(0, 12)}</span>
+          </StyledDescriptionUploadDetails>
+          <StyledDescriptionButtons>
+            <StyledFilesButton
+              onClickCapture={(e) => {
+                console.log(e);
+              }}
+            >
+              Remove file
+            </StyledFilesButton>
 
-                <DownloadButton
-                  onClickCapture={(e) => {
-                    e.stopPropagation();
-                    setSelectedCardId(value.id);
-                    if (setIsSiderVisible) {
-                      setIsSiderVisible(false);
-                    }
-                  }}
-                />
-              </StyledDescriptionButtons>
-            </StyledDescription>
-          </StyledListCard>
-        </StyledListCardContainer>
-      ))}
-    </>
+            <DownloadButton
+              onClickCapture={(e) => {
+                e.stopPropagation();
+                setSelectedCardId(value.id);
+                setIsSiderVisible(false);
+              }}
+            />
+          </StyledDescriptionButtons>
+        </StyledDescription>
+      </StyledListCard>
+    </StyledListCardContainer>
   );
 };
 

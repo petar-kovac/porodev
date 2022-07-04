@@ -5,6 +5,7 @@ import {
   MouseEventHandler,
   SetStateAction,
   useState,
+  MouseEvent,
 } from 'react';
 import styled from 'styled-components';
 
@@ -25,6 +26,7 @@ interface IPFileSiderProps {
   isLoading?: boolean;
   cardData?: IGroupCard | IFilesCard | null;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
   type: 'folder' | 'file' | 'runtime';
   setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
@@ -34,7 +36,8 @@ const PFileSider: FC<IPFileSiderProps> = ({
   isSiderVisible,
   setIsSiderVisible,
   cardData,
-  setCardData,
+  setSelectedCardId = () => undefined,
+  setCardData = () => undefined,
   type,
   onButtonClick,
   isDisabledButton,
@@ -63,10 +66,16 @@ const PFileSider: FC<IPFileSiderProps> = ({
     if (setCardData) {
       setCardData(null);
     }
+    setSelectedCardId(null);
   };
 
   return (
-    <StyledFileSider collapsedWidth={0} collapsed={!isSiderVisible} width={320}>
+    <StyledFileSider
+      collapsedWidth={0}
+      collapsed={!isSiderVisible}
+      width={320}
+      onClick={(e) => e.stopPropagation()}
+    >
       <StyledColumn>
         <StyledRow>
           <StyledIcon type={type} />
@@ -86,7 +95,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
             color="#fff"
             radius="12px"
             background={theme.colors.primary}
-            onClick={onButtonClick}
+            onClick={() => console.log('proptest')}
           />
         )}
       </StyledColumn>

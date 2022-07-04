@@ -1,14 +1,9 @@
-import axios from 'axios';
-import GridCard from 'components/card/GridCard';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { FC, useState } from 'react';
 
-import ListCard from 'components/card/ListCard';
+import ListCards from 'components/card/ListCards';
 import PFilter from 'components/filter/PFilter';
-import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
-import { useFetchData } from 'hooks/useFetchData';
 import { IFilesCard } from 'types/card-data';
 import {
   PFilterWrapper,
@@ -24,16 +19,18 @@ const Files: FC = () => {
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   return (
     <StyledPageWrapper>
-      <StyledContent>
-        <StyledStaticContent
-          onClick={() => {
-            setIsSiderVisible(false);
-            setCardData(null); // to trigger rerender, simulating onBlur effect
-          }}
-        >
+      <StyledContent
+        onClick={() => {
+          setSelectedCardId(null);
+          setIsSiderVisible(false);
+          setCardData(null);
+        }}
+      >
+        <StyledStaticContent>
           <StyledFoldersContainer>
             {/* {data?.slice(0, 4).map((value: any) => (
               <PFolders
@@ -113,11 +110,14 @@ const Files: FC = () => {
                 )}
               </>
             ))} */}
-            <ListCard
+            <ListCards
               cardData={cardData}
               setIsSiderVisible={setIsSiderVisible}
               setIsModalVisible={setIsModalVisible}
               setCardData={setCardData}
+              selectedCardId={selectedCardId}
+              setSelectedCardId={setSelectedCardId}
+
               // onClick={(e) => {
               //   setCardData(value);
               //   e.stopPropagation();
@@ -139,6 +139,7 @@ const Files: FC = () => {
           setCardData={setCardData}
           isSiderVisible={isSiderVisible}
           setIsSiderVisible={setIsSiderVisible}
+          setSelectedCardId={setSelectedCardId}
           type="folder"
         />
       </StyledContent>
