@@ -6,7 +6,7 @@ using static PoroDev.Runtime.Constants.Consts;
 
 namespace PoroDev.Runtime.Extensions
 {
-    public class ExceptionHelper
+    public class RunTimeHelper
     {
         public static CommunicationModel<RuntimeData> InitializeAndExtract(IZipManipulator _zipManipulator, IDockerImageService _dockerImageService)
         {
