@@ -16,10 +16,10 @@ namespace PoroDev.StorageService.Consumers
 
         public async Task Consume(ConsumeContext<FileReadRequestGatewayToService> context)
         {
-            var modelToReturn = await _storageService.ReadFiles(new FileReadRequestServiceToDatabase()
-            {
-                UserId = context.Message.UserId
-            });
+            var modelToRead = new FileReadRequestServiceToDatabase();
+            modelToRead.UserId = context.Message.UserId;
+
+            var modelToReturn = await _storageService.ReadFiles(modelToRead);
 
             await context.RespondAsync<CommunicationModel<FileReadModel>>(modelToReturn);
         }

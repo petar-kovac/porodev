@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -36,7 +37,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 returnModel.UploadTime.Add(fileReadSingleModel.UploadTime);
             }
 
-            await context.RespondAsync(returnModel);
+            FileReadModel responseModel = new FileReadModel(returnModel.FileNames, returnModel.UploadTime);
+            await context.RespondAsync<CommunicationModel<FileReadModel>>(responseModel);
         }
     }
 }

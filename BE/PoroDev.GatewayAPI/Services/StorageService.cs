@@ -60,7 +60,9 @@ namespace PoroDev.GatewayAPI.Services
         {
             var responseContext = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel);
 
-            return responseContext.Message.Entity;
+            var response = responseContext.Message.Entity;
+
+            return response;
         }
     }
 }
