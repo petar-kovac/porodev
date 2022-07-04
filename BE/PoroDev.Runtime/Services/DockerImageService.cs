@@ -1,11 +1,11 @@
 ﻿using PoroDev.Common.Contracts;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Runtime.Extensions.Contracts;
+using PoroDev.Runtime.Services.Contracts;
 using System.Diagnostics;
 using static PoroDev.Runtime.Constants.Consts;
 
-namespace PoroDev.Runtime.Extensions
+namespace PoroDev.Runtime.Services
 {
     public class DockerImageService : RuntimePathsAbstract, IDockerImageService
     {
@@ -48,7 +48,7 @@ namespace PoroDev.Runtime.Extensions
 
             stopwatch.Start();
 
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             try
             {
@@ -81,7 +81,7 @@ namespace PoroDev.Runtime.Extensions
             return responsemodel;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList,IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, IZipManipulator _zipManipulator, Guid userId, Guid projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
@@ -94,7 +94,7 @@ namespace PoroDev.Runtime.Extensions
 
             stopwatch.Start();
 
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             try
             {
@@ -121,7 +121,7 @@ namespace PoroDev.Runtime.Extensions
 
             await DeleteDockerImage(imageName);
 
-            string argumentsAsString = String.Empty;
+            string argumentsAsString = string.Empty;
 
             foreach (var argument in argumentList)
             {
@@ -171,7 +171,7 @@ namespace PoroDev.Runtime.Extensions
 
         public async Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList)
         {
-            
+
             try
             {
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectPath, "Dockerfile")))
@@ -275,7 +275,7 @@ namespace PoroDev.Runtime.Extensions
 
         public async Task<string> RunDockerImageUnsafe(string imageName)
         {
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             try
             {
@@ -314,7 +314,7 @@ namespace PoroDev.Runtime.Extensions
 
         public async Task<string> RunDockerImageUnsafeWithArguments(string imageName, List<string> args)
         {
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             string listOfArgs = "";
             foreach (var arg in args)

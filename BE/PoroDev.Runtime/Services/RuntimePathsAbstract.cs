@@ -1,6 +1,6 @@
 ﻿using PoroDev.Common.Exceptions;
 
-namespace PoroDev.Runtime.Extensions
+namespace PoroDev.Runtime.Services
 {
     public abstract class RuntimePathsAbstract
     {
@@ -25,7 +25,7 @@ namespace PoroDev.Runtime.Extensions
                 ProjectPath = Path.Combine(Path.Combine(RuntimeFolderPath, ZippedFileName), ZippedFileName);
             }
             catch (Exception ex)
-            { 
+            {
                 return ex;
             }
 

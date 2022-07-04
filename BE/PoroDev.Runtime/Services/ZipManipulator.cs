@@ -1,7 +1,7 @@
 ﻿using PoroDev.Common.Exceptions;
 using PoroDev.Runtime.Services.Contracts;
 
-namespace PoroDev.Runtime.Extensions
+namespace PoroDev.Runtime.Services
 {
     public class ZipManipulator : RuntimePathsAbstract, IZipManipulator
     {

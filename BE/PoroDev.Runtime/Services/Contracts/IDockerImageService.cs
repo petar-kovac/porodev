@@ -2,7 +2,7 @@
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
 
-namespace PoroDev.Runtime.Extensions.Contracts
+namespace PoroDev.Runtime.Services.Contracts
 {
     public interface IDockerImageService
     {
@@ -19,7 +19,7 @@ namespace PoroDev.Runtime.Extensions.Contracts
 
         Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList);
 
-        Task<DockerRuntimeException> GetProcessedOutput(); 
+        Task<DockerRuntimeException> GetProcessedOutput();
 
         Task<string> RunDockerImageUnsafe(string imageName);
 

@@ -2,8 +2,6 @@
 using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Runtime.Extensions;
-using PoroDev.Runtime.Extensions.Contracts;
 using PoroDev.Runtime.Services.Contracts;
 
 namespace PoroDev.Runtime.Services
@@ -14,6 +12,7 @@ namespace PoroDev.Runtime.Services
         private readonly IMapper _mapper;
         private readonly IDockerImageService _dockerImageService;
         private readonly IZipManipulator _zipManipulator;
+        private readonly IRuntimeHelper _runtimeHelper;
 
         public RuntimeService(IRequestClient<RuntimeData> createRequestClient,
             IMapper mapper,
@@ -28,7 +27,7 @@ namespace PoroDev.Runtime.Services
 
         public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId)
         {
-            var exceptionThatHappened = ExceptionHelper.InitializeAndExtract(_zipManipulator, _dockerImageService);
+            var exceptionThatHappened = _runtimeHelper.InitializeAndExtract();
             if (exceptionThatHappened != null)
                 return exceptionThatHappened;
 
@@ -49,7 +48,7 @@ namespace PoroDev.Runtime.Services
 
         public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId, List<string> argumentList)
         {
-            var exceptionThatHappened = ExceptionHelper.InitializeAndExtract(_zipManipulator, _dockerImageService);
+            var exceptionThatHappened = _runtimeHelper.InitializeAndExtract();
             if (exceptionThatHappened != null)
                 return exceptionThatHappened;
 
