@@ -9,5 +9,10 @@ namespace PoroDev.DatabaseService.Repositories
         public RuntimeDataRepository(SqlDataContext context) : base(context)
         {
         }
+
+        public async Task GetRuntimeDatasByUserId(Guid userId)
+        {
+            var result = _context.RuntimeMetadata.Where(x => x.UserId == userId);
+        }
     }
 }

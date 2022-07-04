@@ -4,8 +4,6 @@ namespace PoroDev.GatewayAPI.Models.Runtime
 {
     public class RuntimeQueryRequest
     {
-        public Guid Id { get; set; }
-
         public Guid UserId { get; set; }
 
         public Guid FileId { get; set; }

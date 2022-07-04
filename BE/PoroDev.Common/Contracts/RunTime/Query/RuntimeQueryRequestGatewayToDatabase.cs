@@ -8,8 +8,6 @@ namespace PoroDev.Common.Contracts.RunTime.Query
 {
     public class RuntimeQueryRequestGatewayToDatabase
     {
-        public Guid Id { get; set; }
-
         public Guid UserId { get; set; }
 
         public Guid FileId { get; set; }
@@ -24,9 +22,8 @@ namespace PoroDev.Common.Contracts.RunTime.Query
 
         public string? Arguments { get; set; }
 
-        public RuntimeQueryRequestGatewayToDatabase(Guid id, Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string? executionOutput, bool exceptionHappened, string? arguments)
+        public RuntimeQueryRequestGatewayToDatabase(Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string? executionOutput, bool exceptionHappened, string? arguments)
         {
-            Id = id;
             UserId = userId;
             FileId = fileId;
             ExecutionStart = executionStart;
