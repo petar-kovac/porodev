@@ -5,6 +5,7 @@ import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
 import common.ui_setup.FileControlUtil;
+import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 
+@Feature("LogIn User/Negative test cases")
 public class LogInUser extends ApiConfig {
 
     private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
@@ -21,8 +23,9 @@ public class LogInUser extends ApiConfig {
     }
 
 
-    // Sending the request with invalid email
-    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
+    // Sending the request with invalid email (invalid email list form dataprovider)
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending the log in request with invalid email attribute")
     public void logInInvalidEmail(String invalidEmailList) {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
@@ -36,8 +39,9 @@ public class LogInUser extends ApiConfig {
     }
 
 
-    // Sending request with invalid password
-    @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class)
+    // Sending request with invalid password (invalid password list from dataprovider)
+    @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending the log in request with invalid password attribute")
     public void logInInvalidPassword(String invalidPasswordList) {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
@@ -51,7 +55,7 @@ public class LogInUser extends ApiConfig {
     }
 
     // Valid but non-existing email and password
-    @Test
+    @Test(description = "Sending the log in request with non existing user details")
     public void logInNonExistingUser() {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
@@ -63,9 +67,9 @@ public class LogInUser extends ApiConfig {
                 .then().statusCode(400);
     }
 
-    // Existing email, invalid password
+    // Existing email, non-existing password
 
-    @Test
+    @Test(description = "Sending the log in request with valid, non-existing password")
     public void logInInvalidPassword() {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(

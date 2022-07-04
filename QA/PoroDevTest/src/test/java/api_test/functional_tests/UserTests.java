@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static io.restassured.RestAssured.given;
 
 
-@Feature("CRUD")
+@Feature("CRUD operations / Functional test cases")
 public class UserTests extends ApiConfig {
 
     private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);

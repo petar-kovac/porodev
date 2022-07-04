@@ -92,7 +92,7 @@ public class UserDetailsGenerator {
             String lastname,
             String email,
             String password) {
-         String generatedRegisterOrUpdateJsonReq = "{\n" +
+         String generatedRegisterJsonReq = "{\n" +
                  "  \"name\": \""+name+"\",\n" +
                  "  \"lastname\": \""+lastname+"\",\n" +
                  "  \"email\": \""+email+"\",\n" +
@@ -101,7 +101,7 @@ public class UserDetailsGenerator {
                  "  \"position\": \"string\",\n" +
                  "  \"avatarUrl\": \"string\"\n" +
                  "}";
-         return generatedRegisterOrUpdateJsonReq;
+         return generatedRegisterJsonReq;
     }
 
     public static String createUpdateJsonReq(

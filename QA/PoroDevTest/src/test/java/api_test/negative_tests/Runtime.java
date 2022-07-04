@@ -4,18 +4,31 @@ import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
+import common.ui_setup.FileControlUtil;
+import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
+@Feature("Runtime / Negative test cases")
 public class Runtime extends ApiConfig {
 
 
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+
+    public Runtime() throws IOException {
+    }
 
 
 
-    @Test(dataProvider = "invalidJwtHeaderTokenList", dataProviderClass = DataProviderBeUtil.class)
+
+
+    // Sending the runtime request with invalid token (header part with invalid list)
+    @Test(dataProvider = "invalidJwtHeaderTokenList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending the runtime request with invalid Header part of token")
     public void runtimeWithInvalidJwtHeaderTokenList(String invalidJwtHeaderTokenList) {
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
@@ -33,7 +46,9 @@ public class Runtime extends ApiConfig {
     }
 
 
-    @Test(dataProvider = "invalidJwtPayloadTokenList", dataProviderClass = DataProviderBeUtil.class)
+    // Sending the runtime request with invalid token (payload part with invalid list)
+    @Test(dataProvider = "invalidJwtPayloadTokenList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending the runtime request with invalid Payload part of token")
     public void runtimeWithInvalidJwtPayloadTokenList(String invalidJwtPayloadTokenList) {
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
@@ -53,8 +68,9 @@ public class Runtime extends ApiConfig {
 
 
 
-
-    @Test(dataProvider = "invalidJwtSignatureTokenList", dataProviderClass = DataProviderBeUtil.class)
+    // Sending the runtime request with invalid token (signature part with invalid list)
+    @Test(dataProvider = "invalidJwtSignatureTokenList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending the runtime request with invalid Signature part of token")
     public void runtimeWithInvalidJwtSignatureTokenList(String invalidJwtSignatureTokenList) {
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
@@ -71,10 +87,12 @@ public class Runtime extends ApiConfig {
                 .statusCode(anyOf(is(400), is(404), is(500), is(401)));
     }
 
+    // Sending the runtime request with valid token + added characters
     @Test(description = "Sending the request for runtime with added characters to jwt token")
     public void runtimeWithAddedValuesToValidToken() {
         String token = UserDetailsGenerator
-                .takeTokenValueFromJson("jack.sparrow@boing.rs", "Pass##33");
+                .takeTokenValueFromJson(file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"));
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"+token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 .when()
@@ -86,11 +104,12 @@ public class Runtime extends ApiConfig {
                 .then().statusCode(anyOf(is(400), is(401)));
     }
 
+    // Sending the runtime request with invalid id (invalid id list from dataprovider)
     @Test(dataProvider = "invalidFileIdList", dataProviderClass = DataProviderBeUtil.class,
-            description = "Sending the request for runtime with list of invalid file id's")
+            description = "Sending the request for runtime with invalid file ID attribute")
         public  void runtimeWithInvalidFileID(String invalidFileIdList){
         String token = UserDetailsGenerator
-                .takeTokenValueFromJson("jack.sparrow@boing.rs", "Pass##33");
+                .takeTokenValueFromJson(file.getValue("VALID_EMAIL"), file.getValue("VALID_PASS"));
         given().relaxedHTTPSValidation()
                 .header("Bearer", token)
                 .when()

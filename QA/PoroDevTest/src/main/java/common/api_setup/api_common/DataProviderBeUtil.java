@@ -156,7 +156,10 @@ public class DataProviderBeUtil {
                         file.getValue("VALID_FIRSTNAME"),
                         file.getValue("VALID_EMAIL"),
                         file.getValue("VALID_PASS"),
-                        0, 1, "string", "string")}
+                        0,
+                        1,
+                        "string",
+                        "string")}
         };
     }
 }

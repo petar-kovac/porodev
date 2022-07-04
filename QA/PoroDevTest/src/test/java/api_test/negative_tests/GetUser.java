@@ -4,6 +4,7 @@ package api_test.negative_tests;
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
+import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.anyOf;
@@ -11,11 +12,13 @@ import static org.hamcrest.CoreMatchers.anyOf;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
+@Feature("Get user by Email/ID / Negative test cases")
 public class GetUser extends ApiConfig {
 
 
-    //Sending request for user with invalid email
-    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
+    //Get user by invalid email (invalid email list from dataprovider)
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending the request for get user details by email with invalid email attribute")
     public void getUserByInvalidEmail(String invalidEmailList) {
         given().relaxedHTTPSValidation()
                 .when()
@@ -24,8 +27,8 @@ public class GetUser extends ApiConfig {
                 .statusCode(anyOf(is(400), is(404), is(500)));
 
     }
-    // Valid but non-existing email
-    @Test
+    // Get user by valid but non-existing email
+    @Test(description = "Sending the request for get user details by email with non-existing email attribute")
     public void getUserByNonExistingEmail() {
         given().relaxedHTTPSValidation()
                 .when()
@@ -35,7 +38,9 @@ public class GetUser extends ApiConfig {
 
     }
 
-    @Test(dataProvider = "invalidIdAttributeList", dataProviderClass = DataProviderBeUtil.class)
+    // Get user by invalid id attribute (invalid id attribute list from dataprovider)
+    @Test(dataProvider = "invalidIdAttributeList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Sending request for getting user details with invalid id attribute")
     public void getUserByInvalidIdAttribute(String invalidIdAttributeList) {
             given().relaxedHTTPSValidation()
                     .when()

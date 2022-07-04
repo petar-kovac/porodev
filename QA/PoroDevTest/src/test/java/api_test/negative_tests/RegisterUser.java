@@ -7,6 +7,7 @@ import common.api_setup.api_common.DataProviderBeUtil;
 import common.api_setup.api_common.User;
 import common.api_setup.api_common.UserDetailsGenerator;
 import common.ui_setup.FileControlUtil;
+import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import static io.restassured.RestAssured.*;
 
 
+@Feature("Register user/Negative test cases")
 public class RegisterUser extends ApiConfig {
 
     private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
@@ -24,7 +26,8 @@ public class RegisterUser extends ApiConfig {
 
 
     // Register user with invalid entry in the name field
-    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
+    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Register user request with invalid entry in the name attribute")
     public void registerInvalidName(String invalidNameList){
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createRegisterJsonReq(
@@ -40,7 +43,8 @@ public class RegisterUser extends ApiConfig {
 
 
     //Register user with invalid entry in the name field
-    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class)
+    @Test(dataProvider = "invalidNameOrLastNameList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Register user request with invalid entry in the lastname attribute")
     public void registerInvalidLastname(String InvalidLastNameList){
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createRegisterJsonReq(
@@ -56,7 +60,8 @@ public class RegisterUser extends ApiConfig {
 
 
     // Register user with invalid entry in email field
-    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class)
+    @Test(dataProvider = "invalidEmailList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Register user request with invalid entry in email attribute")
     public void registerInvalidEmail(String invalidEmailList){
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createRegisterJsonReq(
@@ -70,7 +75,8 @@ public class RegisterUser extends ApiConfig {
                 .then().statusCode(400);
     }
     //Register user with invalid entry in the password field
-    @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class)
+    @Test(dataProvider = "invalidPasswordList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Register user request with invalid entry in the password attribute")
     public void registerInvalidPass(String invalidPasswordList){
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createRegisterJsonReq(
@@ -84,7 +90,8 @@ public class RegisterUser extends ApiConfig {
                 .then().statusCode(400);
     }
 
-    @Test(dataProvider = "CombinationOfInvalidEntryList", dataProviderClass = DataProviderBeUtil.class)
+    @Test(dataProvider = "CombinationOfInvalidEntryList", dataProviderClass = DataProviderBeUtil.class,
+    description = "Register user request with the combination of invalid attributes")
     public void registerPojoUser(User invalidEntry){
         given().relaxedHTTPSValidation()
                 .body(invalidEntry)
