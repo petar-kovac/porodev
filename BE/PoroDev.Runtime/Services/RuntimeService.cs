@@ -17,10 +17,12 @@ namespace PoroDev.Runtime.Services
         public RuntimeService(IRequestClient<RuntimeData> createRequestClient,
             IMapper mapper,
             IDockerImageService dockerImageService,
+            IRuntimeHelper runtimeHelper,
             IZipManipulator zipManipulator)
         {
             _createRequestClient = createRequestClient;
             _mapper = mapper;
+            _runtimeHelper = runtimeHelper;
             _dockerImageService = dockerImageService;
             _zipManipulator = zipManipulator;
         }
