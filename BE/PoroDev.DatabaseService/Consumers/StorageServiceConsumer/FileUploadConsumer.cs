@@ -14,9 +14,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
         private IFileRepository _fileRepository;
-        /*using Stream stream = uploadModel.File.OpenReadStream();
-            string fileName = uploadModel.File.FileName;
-            Guid id = uploadModel.UserId;*/
+  
 
         public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository)
         {
@@ -33,7 +31,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             FileUploadModel model = new(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
             var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
       
-
             string fileId = id.ToString();
 
             FileData createModel = new (fileId, context.Message.UserId);

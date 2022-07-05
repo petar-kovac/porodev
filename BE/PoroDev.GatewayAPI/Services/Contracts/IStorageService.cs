@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 
 
@@ -9,5 +10,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel);
 
         Task<FileDownloadMessage> DownloadFile(FileDownloadRequestGatewayToService downloadModel);
+
+        Task<FileReadModel> ReadFiles(FileReadRequestGatewayToService readModel);
     }
 }

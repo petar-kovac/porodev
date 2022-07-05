@@ -1,5 +1,6 @@
 ﻿using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 
 namespace PoroDev.StorageService.Services.Contracts
@@ -10,5 +11,7 @@ namespace PoroDev.StorageService.Services.Contracts
         Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadModel);
 
         Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadModel);
+
+        Task<CommunicationModel<FileReadModel>> ReadFiles(FileReadRequestServiceToDatabase readModel);
     }
 }

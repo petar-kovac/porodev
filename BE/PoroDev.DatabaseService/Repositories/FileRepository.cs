@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
@@ -88,5 +89,22 @@ namespace PoroDev.DatabaseService.Repositories
         //    //var downloadFile = await _bucket.DownloadToStreamAsync(fileObjectId, "");
         //    return null;
         //}
+
+        public async Task<FileReadSingleModel> ReadFiles(string fileId)
+        {
+            ObjectId fileObjectId = ObjectId.Parse(fileId);
+            var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
+            var searchResult = await _bucket.FindAsync(filter);
+            var fileEntry = searchResult.First();
+
+            FileReadSingleModel readModel = new FileReadSingleModel()
+            {
+                FileName = fileEntry.Filename,
+                UploadTime = fileEntry.UploadDateTime
+            };
+
+            return readModel;
+        }
+
     }
 }
