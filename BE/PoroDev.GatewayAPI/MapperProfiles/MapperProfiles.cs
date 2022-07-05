@@ -18,7 +18,7 @@ namespace PoroDev.GatewayAPI.MapperProfiles
 
         private string ConvertListToArgumentString(List<string>? argumentList)
         {
-            if (argumentList != null || argumentList.Count != 0)
+            if (argumentList == null)
                 return null;
 
             string args = String.Empty;

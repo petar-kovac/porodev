@@ -22,6 +22,11 @@ namespace PoroDev.Common.Contracts.RunTime.Query
 
         public string? Arguments { get; set; }
 
+        public RuntimeQueryRequestGatewayToDatabase()
+        {
+
+        }
+
         public RuntimeQueryRequestGatewayToDatabase(Guid userId, Guid? fileId, DateTimeOffset? executionStart, long? executionTime, string? executionOutput, bool? exceptionHappened, string? arguments)
         {
             UserId = userId;

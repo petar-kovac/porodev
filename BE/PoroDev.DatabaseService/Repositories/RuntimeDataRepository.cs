@@ -17,7 +17,7 @@ namespace PoroDev.DatabaseService.Repositories
             var runtimeDatas = _context.RuntimeMetadata.Where(runtime => runtime.UserId.Equals(queryRequest.UserId));
 
             if (queryRequest.FileId.HasValue)
-                runtimeDatas = runtimeDatas.Where(runtime => runtime.FileId.Equals(queryRequest.FileId.Value)); 
+                runtimeDatas = runtimeDatas.Where(runtime => runtime.FileId.Equals(queryRequest.FileId.Value));
 
             if (queryRequest.ExecutionTime.HasValue)
                 runtimeDatas = runtimeDatas.Where(runtime => runtime.ExecutionTime == queryRequest.ExecutionTime.Value);
@@ -34,7 +34,7 @@ namespace PoroDev.DatabaseService.Repositories
             if (queryRequest.Arguments != null)
                 runtimeDatas = runtimeDatas.Where(runtime => runtime.Arguments.Equals(queryRequest.Arguments));
 
-            var responseModel = new UnitOfWorkResponseModel<List<RuntimeData>>(runtimeDatas.ToList());
+            var responseModel = new UnitOfWorkResponseModel<List<RuntimeData>>(runtimeDatas);
 
             return responseModel;
             
