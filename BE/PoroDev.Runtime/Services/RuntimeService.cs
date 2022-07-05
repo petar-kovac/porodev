@@ -33,7 +33,7 @@ namespace PoroDev.Runtime.Services
             if (exceptionThatHappened != null)
                 return exceptionThatHappened;
 
-            var runTimeResult = await _dockerImageService.CreateAndRunDockerImage(_zipManipulator, userId, projectId);
+            var runTimeResult = await _dockerImageService.CreateAndRunDockerImage(userId, projectId);
 
             var deleteException = _zipManipulator.DeleteUnzippedFile();
 
@@ -54,7 +54,7 @@ namespace PoroDev.Runtime.Services
             if (exceptionThatHappened != null)
                 return exceptionThatHappened;
 
-            var runtimeResult = await _dockerImageService.CreateAndRunDockerImageWithParameteres(argumentList, _zipManipulator, userId, projectId);
+            var runtimeResult = await _dockerImageService.CreateAndRunDockerImageWithParameteres(argumentList, userId, projectId);
             var deleteException = _zipManipulator.DeleteUnzippedFile();
 
             if (deleteException != null)

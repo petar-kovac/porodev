@@ -9,12 +9,13 @@ namespace PoroDev.Runtime.Services
 {
     public class DockerImageService : RuntimePathsAbstract, IDockerImageService
     {
-        public DockerImageService() : base()
+        private readonly IZipManipulator _zipManipulator;
+        public DockerImageService(IZipManipulator zipManipulator) : base()
         {
-
+            _zipManipulator = zipManipulator;
         }
 
-        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IZipManipulator _zipManipulator)
+        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList)
         {
             var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
             var argumentListWithFileNames = new List<string>(argumentList);
@@ -35,7 +36,7 @@ namespace PoroDev.Runtime.Services
             return argumentListWithFileNames;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, Guid projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
@@ -81,12 +82,12 @@ namespace PoroDev.Runtime.Services
             return responsemodel;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, Guid userId, Guid projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
 
-            List<string> fileNames = await CheckAndCreateDockerfile(argumentList, _zipManipulator);
+            List<string> fileNames = await CheckAndCreateDockerfile(argumentList);
 
             await CreateDockerImage(imageName);
 

@@ -8,12 +8,12 @@ namespace PoroDev.Runtime.Services.Contracts
     {
         Task<DockerRuntimeException> CreateDockerImage(string imageName);
 
-        Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IZipManipulator _zipManipulator);
+        Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList);
 
-        Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(IZipManipulator _zipManipulator, Guid userId, Guid projectId);
+        Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, Guid projectId);
 
 
-        Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, IZipManipulator _zipManipulator, Guid userId, Guid projectId);
+        Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, Guid userId, Guid projectId);
 
         Task<DockerRuntimeException> CreateDockerfile();
 
