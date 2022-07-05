@@ -1,5 +1,4 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Avatar, Card } from 'antd';
+import { Card } from 'antd';
 import useDoubleClick from 'hooks/useDoubleClick';
 import { FC, RefObject, useRef, MouseEventHandler } from 'react';
 import styled from 'styled-components';

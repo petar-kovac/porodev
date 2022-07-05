@@ -1,6 +1,4 @@
-import { Layout } from 'antd';
-import axios from 'axios';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 
 import GroupCards from 'components/card/GroupCards';
 import PFilter from 'components/filter/PFilter';
@@ -9,15 +7,12 @@ import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 
 import {
+  StyledPageWrapper,
   StyledContent,
-  StyledFilesWrapper,
   StyledFilterWrapper,
-  StyledHeadingText,
-  StyledHeadingWrapper,
+  StyledFilesWrapper,
   StyledStaticContent,
 } from './groups-styled';
-
-const { Sider, Content } = Layout;
 
 const Groups: FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -27,10 +22,20 @@ const Groups: FC = () => {
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   return (
-    <Layout>
-      <StyledContent>
-        <StyledHeadingWrapper>
-          <StyledHeadingText>Your groups: </StyledHeadingText>
+    <StyledPageWrapper>
+      <StyledContent
+        onClick={() => {
+          setSelectedCardId(null);
+          setIsSiderVisible(false);
+          setCardData(null);
+        }}
+      >
+        <StyledStaticContent
+          onClick={() => {
+            setIsSiderVisible(false);
+            setCardData(null); // to trigger rerender, simulating onBlur effect
+          }}
+        >
           <StyledFilterWrapper>
             <PFilter
               isList={isList}
@@ -41,13 +46,6 @@ const Groups: FC = () => {
               }}
             />
           </StyledFilterWrapper>
-        </StyledHeadingWrapper>
-        <StyledStaticContent
-          onClick={() => {
-            setIsSiderVisible(false);
-            setCardData(null); // to trigger rerender, simulating onBlur effect
-          }}
-        >
           <StyledFilesWrapper>
             <GroupCards
               cardData={cardData}
@@ -60,20 +58,29 @@ const Groups: FC = () => {
           </StyledFilesWrapper>
         </StyledStaticContent>
 
+        <PFileSider
+          cardData={cardData}
+          setCardData={setCardData}
+          isSiderVisible={isSiderVisible}
+          setIsSiderVisible={setIsSiderVisible}
+          setSelectedCardId={setSelectedCardId}
+          type="folder"
+        />
         <PModal
           isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}
           cardData={cardData}
+          setIsModalVisible={setIsModalVisible}
           setCardData={setCardData}
         />
       </StyledContent>
+
       <PFileSider
         isSiderVisible={isSiderVisible}
         setIsSiderVisible={setIsSiderVisible}
         cardData={cardData}
         type="file"
       />
-    </Layout>
+    </StyledPageWrapper>
   );
 };
 
