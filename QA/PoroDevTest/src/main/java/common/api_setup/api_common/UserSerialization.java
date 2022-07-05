@@ -3,21 +3,21 @@ package common.api_setup.api_common;
 
 public class UserSerialization {
 
-     String name;
+    private String name;
 
-     String lastname;
+    private String lastname;
 
-     String email;
+    private String email;
 
-     String password;
+    private String password;
 
-     int department;
+    private int department;
 
-     int role;
+    private int role;
 
-     String position;
+    private String position;
 
-     String avatarUrl;
+    private String avatarUrl;
 
 
     public UserSerialization() {
@@ -36,53 +36,53 @@ public class UserSerialization {
         user.setAvatarUrl(avatarUrl);
 }
 
-    public String getName() {
+    private String getName() {
         return name;
     }
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
-    public String getLastname() {
+    private String getLastname() {
         return lastname;
     }
-    public void setLastname(String lastname) {
+    private void setLastname(String lastname) {
         this.lastname = lastname;
     }
 
-    public String getEmail() {
+    private String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
+    private void setEmail(String email) {
         this.email = email;
     }
-    public String getPassword() {
+    private String getPassword() {
         return  password;
     }
-    public void setPassword(String password) {
+    private void setPassword(String password) {
         this.password = password;
     }
-    public int getDepartment() {
+    private int getDepartment() {
         return department;
     }
-    public void setDepartment(int department) {
+    private void setDepartment(int department) {
         this.department = department;
     }
-    public int getRole() {
+    private int getRole() {
         return role;
     }
-    public void setRole(int role){
+    private void setRole(int role){
         this.role = role;
     }
-    public String getPosition() {
+    private String getPosition() {
         return position;
     }
-    public void setPosition(String position){
+    private void setPosition(String position){
         this.position = position;
     }
-    public String getAvatarUrl() {
+    private String getAvatarUrl() {
         return avatarUrl;
     }
-    public void setAvatarUrl(String avatarUrl){
+    private void setAvatarUrl(String avatarUrl){
         this.avatarUrl = avatarUrl;
     }
 

@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 @Feature("Update user /Negative test cases")
 public class UpdateUser extends ApiConfig {
 
-    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
 
     public UpdateUser() throws IOException {
     }

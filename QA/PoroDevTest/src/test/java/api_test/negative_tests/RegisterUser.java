@@ -18,7 +18,7 @@ import static io.restassured.RestAssured.*;
 @Feature("Register user/Negative test cases")
 public class RegisterUser extends ApiConfig {
 
-    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
 
     public RegisterUser() throws IOException {
     }

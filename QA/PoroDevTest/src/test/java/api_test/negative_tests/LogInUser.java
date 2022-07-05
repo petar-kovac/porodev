@@ -17,7 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 @Feature("LogIn User/Negative test cases")
 public class LogInUser extends ApiConfig {
 
-    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
 
     public LogInUser() throws IOException {
     }
@@ -59,8 +59,8 @@ public class LogInUser extends ApiConfig {
     public void logInNonExistingUser() {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
-                        "zivko@boing.rs",
-                        "Password###4576"
+                        file.getValue("NON_EXISTING_EMAIL"),
+                        file.getValue("NON_EXISTING_PASS")
                 ))
                 .when()
                 .post(Endpoints.USER_LOGIN)
@@ -74,7 +74,7 @@ public class LogInUser extends ApiConfig {
         given().relaxedHTTPSValidation()
                 .body(UserDetailsGenerator.createLogInJsonReq(
                         file.getValue("VALID_EMAIL"),
-                        "Password$3"
+                        file.getValue("NON_EXISTING_PASS")
                 ))
                 .when()
                 .post(Endpoints.USER_LOGIN)

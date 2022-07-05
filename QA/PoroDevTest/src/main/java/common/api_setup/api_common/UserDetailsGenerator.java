@@ -33,17 +33,6 @@ public class UserDetailsGenerator {
         return user;
     }
 
-    // Strings as a valid parts of jwt token
-
-    public static String validJwtHeader = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9y" +
-            "Zy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTUxMiIsInR5cCI6IkpXVCIsImN0eSI6IkpXVCJ9.";
-
-    public static String incorectJwtPayload = "eyJJZCI6IjVjMzczOTE2LTRlMjgtNDMwYi1iNGFhLTM2MjQ3ZWFhYzc2MyIsImV4cCI6MTY1NjA4MzY4Nn0.";
-
-    public static String incorectJwtSignature = "tAt7oxNmdTHSnr5hUr_mjdH8B8elavo6LDeiXwIhg1OqjaeXj4V4L8OsumMIGSb61gweyjsWl1UuobnnQMJ1Ng";
-
-
-
 
     // Converting the pojo object to json payload
     public static String convertToJson(Object object) {

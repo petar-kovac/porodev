@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class DataProviderBeUtil {
 
-    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
 
     public DataProviderBeUtil() throws IOException {
     }
@@ -62,15 +62,23 @@ public class DataProviderBeUtil {
     @DataProvider(name = "CombinationOfInvalidEntryList")
     public Object[][] invalidEntryCombinationList() {
         return new Object[][]{
-                {new User("Jadranko", "Jankovic", "jadranko@boing.rs", // existing password
-                        "Pass##3", 2, 0, "string", "")},
-                {new User("Jadranko", "Jankovic", "", "", // Empty email and password field
-                        2, 0, "String", "")},
-                {new User("", "", "newuser1234@boing.rs", // empty name and lastname
-                        "Pass##3", 2, 0, "string", "")},
-                {new User("Jadranko Jankovic", "Jankoivc Jadranko", // white space in all fields
-                        "jadranko jankovic@boing.rs", "Pass 44#",
-                        2, 0, "stri ng", "ss ff")},
+                {new User(file.getValue("VALID_FIRSTNAME"), file.getValue("VALID_LASTNAME"),
+                        file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"),
+                        2, 0, "string", "")}, // existing non-matching password
+
+                {new User(file.getValue("VALID_FIRSTNAME"), file.getValue("VALID_LASTNAME"),
+                        "", "",
+                        2, 0, "String", "")}, // Empty email and password field
+
+                {new User("", "", file.getValue("VALID_EMAIL"),
+                        file.getValue("VALID_PASS"),
+                        2, 0, "string", "")}, // empty name and lastname
+
+                {new User("String String", "String String",
+                        "string string@boing.rs", file.getValue("VALID_PASS") + " string",
+                        2, 0, "stri ng", "ss ff")}, // white space in all fields
+
                 {new User("", "", "", "", // empty all string fields
                         2, 0, "", "")}
         };

@@ -4,8 +4,11 @@ package api_test.negative_tests;
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
 import common.api_setup.api_common.DataProviderBeUtil;
+import common.ui_setup.FileControlUtil;
 import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.anyOf;
 
@@ -14,6 +17,13 @@ import static org.hamcrest.CoreMatchers.is;
 
 @Feature("Get user by Email/ID / Negative test cases")
 public class GetUser extends ApiConfig {
+
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
+
+    public GetUser() throws IOException {
+    }
+
+
 
 
     //Get user by invalid email (invalid email list from dataprovider)
@@ -32,7 +42,8 @@ public class GetUser extends ApiConfig {
     public void getUserByNonExistingEmail() {
         given().relaxedHTTPSValidation()
                 .when()
-                .get(Endpoints.GET_USER_BY_EMAIL + Endpoints.EMAIL_PATH + "zivko@boing.rs")
+                .get(Endpoints.GET_USER_BY_EMAIL + Endpoints.EMAIL_PATH
+                        + file.getValue("NON_EXISTING_EMAIL"))
                 .then()
                 .statusCode(anyOf(is(400), is(404), is(500)));
 

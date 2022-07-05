@@ -17,7 +17,8 @@ import static org.hamcrest.CoreMatchers.*;
 public class Runtime extends ApiConfig {
 
 
-    private final FileControlUtil file = new FileControlUtil(FileControlUtil.END_TO_END_PROPERTIES);
+    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
+    private final FileControlUtil fileRuntime = new FileControlUtil(FileControlUtil.RUNTIME_DATA_PROPERTIES);
 
     public Runtime() throws IOException {
     }
@@ -33,11 +34,11 @@ public class Runtime extends ApiConfig {
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
                         + invalidJwtHeaderTokenList
-                        + UserDetailsGenerator.incorectJwtPayload
-                        + UserDetailsGenerator.incorectJwtSignature)
+                        + fileRuntime.getValue("VALID_JWT_PAYLOAD")
+                        + fileRuntime.getValue("VALID_JWT_SIGNATURE"))
                 .when()
                 .body(UserDetailsGenerator.createRuntimeJsonReq(
-                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        fileRuntime.getValue("VALID_FILE_ID"),
                         "1",
                         "2"))
                 .post(Endpoints.RUNTIME)
@@ -52,12 +53,12 @@ public class Runtime extends ApiConfig {
     public void runtimeWithInvalidJwtPayloadTokenList(String invalidJwtPayloadTokenList) {
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
-                        + UserDetailsGenerator.validJwtHeader
+                        + fileRuntime.getValue("VALID_JWT_HEADER")
                         + invalidJwtPayloadTokenList
-                        + UserDetailsGenerator.incorectJwtSignature)
+                        + fileRuntime.getValue("VALID_JWT_SIGNATURE"))
                 .when()
                 .body(UserDetailsGenerator.createRuntimeJsonReq(
-                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        fileRuntime.getValue("VALID_FILE_ID"),
                         "3",
                         "3"))
                 .post(Endpoints.RUNTIME)
@@ -74,12 +75,12 @@ public class Runtime extends ApiConfig {
     public void runtimeWithInvalidJwtSignatureTokenList(String invalidJwtSignatureTokenList) {
         given().relaxedHTTPSValidation()
                 .header("authorization", "Bearer"
-                        + UserDetailsGenerator.validJwtHeader
-                        + UserDetailsGenerator.incorectJwtPayload
+                        + fileRuntime.getValue("VALID_JWT_HEADER")
+                        + fileRuntime.getValue("VALID_JWT_PAYLOAD")
                         + invalidJwtSignatureTokenList)
                 .when()
                 .body(UserDetailsGenerator.createRuntimeJsonReq(
-                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        fileRuntime.getValue("VALID_FILE_ID"),
                         "2",
                         "2"))
                 .post(Endpoints.RUNTIME)
@@ -97,7 +98,7 @@ public class Runtime extends ApiConfig {
                 .header("authorization", "Bearer"+token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 .when()
                 .body(UserDetailsGenerator.createRuntimeJsonReq(
-                        "e06246ba-d280-48bd-ab60-1739cee98c74",
+                        fileRuntime.getValue("VALID_FILE_ID"),
                         "1",
                         "2"))
                 .post(Endpoints.RUNTIME)
