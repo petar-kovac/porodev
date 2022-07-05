@@ -1,13 +1,14 @@
 ﻿
 
 using MongoDB.Bson;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
 
 namespace PoroDev.DatabaseService.Repositories.Contracts
 {
     public interface IFileRepository
     {
-        public Task<ObjectId> UploadFile(string fileName, byte[] fileArray, Guid id);
+        public Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType, Guid id);
 
-        public Task<byte[]> DownloadFile(string fileId, Guid userId);
+        public Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId);
     }
 }

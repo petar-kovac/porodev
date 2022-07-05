@@ -28,9 +28,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
         public async Task Consume(ConsumeContext<FileUploadRequestServiceToDatabase> context)
         {
                    
-            ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.UserId);
+            ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
 
-            FileUploadModel model = new(context.Message.FileName, context.Message.File, context.Message.UserId);
+            FileUploadModel model = new(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
             var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
       
 

@@ -24,6 +24,7 @@ namespace PoroDev.StorageService.Consumers
             { 
                 File = context.Message.File, 
                 FileName = context.Message.FileName, 
+                ContentType = context.Message.ContentType,
                 UserId = context.Message.UserId 
             });
 

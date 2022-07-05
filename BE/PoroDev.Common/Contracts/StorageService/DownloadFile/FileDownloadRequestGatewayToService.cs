@@ -4,7 +4,7 @@
     {
         public string FileId { get; init; }
         
-        public Guid UserId { get; }
+        public Guid UserId { get; set; }
 
         public FileDownloadRequestGatewayToService()
         {

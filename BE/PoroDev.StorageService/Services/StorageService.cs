@@ -20,9 +20,8 @@ namespace PoroDev.StorageService.Services
 
         public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
         {
-            //FileUploadModel model = new(uploadModel.FileName, uploadModel.File, uploadModel.UserId);
-        
             var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
+
             return response.Message;
         }
 
@@ -31,7 +30,6 @@ namespace PoroDev.StorageService.Services
             var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
 
             return response.Message;
-
         }
     }
 }
