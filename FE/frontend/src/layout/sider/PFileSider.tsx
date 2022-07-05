@@ -1,71 +1,43 @@
-import { Layout, Button } from 'antd';
-import {
-  Dispatch,
-  FC,
-  MouseEventHandler,
-  SetStateAction,
-  useState,
-  MouseEvent,
-} from 'react';
+import { Layout } from 'antd';
+import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 import styled from 'styled-components';
 
-import { IFilesCard } from 'types/card-data';
-import { CloseOutlined, FileOutlined, FolderFilled } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import PButton from 'components/buttons/PButton';
-import Spinner from 'components/spinner/Spinner';
-import theme from 'theme/theme';
-import StyledIcon from 'styles/icons/StyledIcons';
+import { usePageContext } from 'context/PageContext';
 import { StyledClose } from 'styles/icons/styled-icons';
+import StyledIcon from 'styles/icons/StyledIcons';
+import { IFilesCard } from 'types/card-data';
+import RuntimeInputSiderMapper from 'util/mappers/RuntimeInputSiderMapper';
 import SiderDataMapper from '../../util/mappers/SiderDataMapper';
 
 const { Sider } = Layout;
 
 interface IPFileSiderProps {
-  isSiderVisible?: boolean;
-  isDisabledButton?: boolean;
-  isLoading?: boolean;
   cardData?: IFilesCard | null;
+  type: 'folder' | 'file' | 'runtime';
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
-  type: 'folder' | 'file' | 'runtime';
-  setIsSiderVisible: Dispatch<SetStateAction<boolean>>;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const PFileSider: FC<IPFileSiderProps> = ({
-  isSiderVisible,
-  setIsSiderVisible,
   cardData,
   setSelectedCardId = () => undefined,
   setCardData = () => undefined,
   type,
   onButtonClick,
-  isDisabledButton,
-  isLoading,
 }) => {
-  const [loadings, setLoadings] = useState<boolean[]>([]);
-
-  const enterLoading = (index: number) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 6000);
-  };
+  const {
+    isLoading,
+    isSiderVisible,
+    setIsSiderVisible,
+    setNumberOfInputFields,
+  } = usePageContext();
 
   const handleClose = () => {
     setIsSiderVisible(false);
-    if (setCardData) {
-      setCardData(null);
-    }
+    setCardData(null);
     setSelectedCardId(null);
   };
 
@@ -85,19 +57,22 @@ const PFileSider: FC<IPFileSiderProps> = ({
         <StyledContent>
           {cardData && <SiderDataMapper data={cardData} />}
         </StyledContent>
-        {isLoading ? (
-          <Button type="primary" loading style={{ borderRadius: '12px' }}>
-            Loading
-          </Button>
-        ) : (
-          <PButton
-            text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
-            color="#fff"
-            radius="12px"
-            background={theme.colors.primary}
-            onClick={() => console.log('proptest')}
-          />
+        {type === 'runtime' && (
+          <>
+            <StyledRow>
+              <StyledTitle>Add parameters</StyledTitle>
+              <PlusCircleOutlined
+                onClick={() => setNumberOfInputFields((value) => value + 1)}
+              />
+            </StyledRow>
+            <RuntimeInputSiderMapper />
+          </>
         )}
+        <PButton
+          text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
+          onClick={onButtonClick}
+          isLoading={isLoading}
+        />
       </StyledColumn>
     </StyledFileSider>
   );
@@ -114,7 +89,7 @@ const StyledRow = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 `;
 const StyledTitle = styled.div`
   font-size: 24px;

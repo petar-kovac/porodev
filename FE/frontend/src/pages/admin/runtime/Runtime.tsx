@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { FC, ReactNode, useEffect, useState } from 'react';
 
 import RuntimeCard from 'components/card/RuntimeCard';
 import PModal from 'components/modal/PModal';
+import { usePageContext } from 'context/PageContext';
 import PFileSider from 'layout/sider/PFileSider';
 import { startRuntimeService } from 'service/runtime/runtime';
 import { IFilesCard } from 'types/card-data';
@@ -17,28 +17,37 @@ import {
 
 const Runtime: FC = () => {
   const [data, setData] = useState<IFilesCard[] | undefined>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSiderVisible, setIsSiderVisible] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [content, setContent] = useState<ReactNode>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const {
+    setIsLoading,
+    setIsSiderVisible,
+    setIsModalVisible,
+    setNumberOfInputFields,
+    setInputParameters,
+  } = usePageContext();
 
   const startRuntime = async () => {
     setIsLoading(true);
 
-    const res = await startRuntimeService({
-      fileID: 'b22a0496-ded5-4fe5-bbb3-e20280b70a03',
-      jwt: localStorage.getItem('accessToken'),
-    });
-    const modalDataToRender: ReactNode = GetRuntimeModalData(res);
-
-    setContent(modalDataToRender);
-    setIsSiderVisible(false);
-    setIsModalVisible(true);
-    setIsLoading(false);
+    try {
+      const res = await startRuntimeService({
+        projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        arguments: ['a'],
+      });
+      const modalDataToRender: ReactNode = GetRuntimeModalData(res);
+      setContent(modalDataToRender);
+      setIsSiderVisible(false);
+      setIsModalVisible(true);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
+    setIsSiderVisible(false);
     const fetchFiles = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_MOCK_URL}/files`);
@@ -57,6 +66,8 @@ const Runtime: FC = () => {
           onClick={() => {
             setIsSiderVisible(false);
             setCardData(null); // to trigger rerender, simulating onBlur effect
+            setInputParameters([]);
+            setNumberOfInputFields(1);
           }}
         >
           <StyledFilesWrapper>
@@ -67,6 +78,8 @@ const Runtime: FC = () => {
                 createdAt={value?.createdAt}
                 selected={value?.id === cardData?.id}
                 onClick={(e) => {
+                  setNumberOfInputFields(1);
+                  setInputParameters([]);
                   setCardData(value);
                   e.stopPropagation();
                   setIsSiderVisible(true);
@@ -83,21 +96,16 @@ const Runtime: FC = () => {
         </StyledStaticContent>
 
         <PFileSider
-          cardData={cardData}
-          setCardData={setCardData}
-          isSiderVisible={isSiderVisible}
-          setIsSiderVisible={setIsSiderVisible}
           type="runtime"
           onButtonClick={startRuntime}
-          isLoading={isLoading}
+          cardData={cardData}
+          setCardData={setCardData}
         />
       </StyledContent>
       <PModal
         title="Result of you action: "
-        isModalVisible={isModalVisible}
         cardData={cardData}
         setCardData={setCardData}
-        setIsModalVisible={setIsModalVisible}
         content={content}
       />
     </StyledPageWrapper>

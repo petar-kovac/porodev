@@ -2,6 +2,7 @@ import { FC, MouseEventHandler, ReactNode } from 'react';
 import { Button } from 'antd';
 import { PoweroffOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import theme from 'theme/theme';
 
 interface IPButtonProps {
   text?: string;
@@ -20,6 +21,7 @@ interface IPButtonProps {
     | undefined;
   icon?: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+  isLoading?: boolean;
 }
 
 const PButton: FC<IPButtonProps> = ({
@@ -31,6 +33,7 @@ const PButton: FC<IPButtonProps> = ({
   form,
   type,
   icon,
+  isLoading,
   onClick,
 }) => {
   return (
@@ -43,6 +46,7 @@ const PButton: FC<IPButtonProps> = ({
       type={type}
       onClick={onClick}
       icon={icon}
+      loading={isLoading}
     >
       {text}
     </StyledButton>
@@ -52,19 +56,22 @@ const PButton: FC<IPButtonProps> = ({
 const StyledButton = styled(Button).attrs((props) => ({
   'data-testid': `${props.form}-button`,
 }))<IPButtonProps>`
-  color: ${(props) => props.color};
-  border-radius: ${(props) => props.radius};
+  color: ${(props) => (props.color ? props.color : '#fff')};
+  border-radius: ${(props) => (props.radius ? props.radius : '12px')};
   border: none;
   outline: none;
-  background-color: ${(props) => props.background};
+  background-color: ${(props) =>
+    props.background ? props.background : theme.colors.primary};
 
   &:hover,
   &:focus,
   &:active {
-    color: ${(props) => props.color};
+    color: ${(props) => (props.color ? props.color : '#fff')};
     box-shadow: 1px 2px 6px 1px rgba(0, 0, 0, 0.1);
     background-color: ${(props) =>
-      `${props.background}bf`}; // simulating hover effect, this function is adding a little bit of opacity
+      props.background
+        ? `${props.background}bf`
+        : `${theme.colors.primary}bf`}; // simulating hover effect, this function is adding a little bit of opacity
   }
 `;
 

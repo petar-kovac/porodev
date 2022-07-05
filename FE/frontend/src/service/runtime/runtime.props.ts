@@ -1,6 +1,6 @@
 export interface IRuntimeRequest {
-  fileID: string;
-  jwt: string | null;
+  projectId: string;
+  arguments: string[];
 }
 export interface IRuntimeRsponse {
   exceptionHappened: boolean;

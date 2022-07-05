@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 
 import PModal from 'components/modal/PModal';
+import { usePageContext } from 'context/PageContext';
 
 interface IModalTitleProps {
   title?: string;
@@ -18,10 +19,10 @@ interface IModalTitleProps {
 }
 
 const Profile: FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [modalData, setModalData] = useState<IModalTitleProps | undefined>(
     undefined,
   );
+  const { setIsModalVisible } = usePageContext();
 
   return (
     <>
@@ -95,8 +96,6 @@ const Profile: FC = () => {
       </StyledPage>
       <PModal
         title={modalData?.title}
-        isModalVisible={isModalVisible}
-        setIsModalVisible={setIsModalVisible}
         content={
           <Input
             onChange={(e) =>

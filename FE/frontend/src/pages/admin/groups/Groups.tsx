@@ -75,19 +75,19 @@ const Groups: FC = () => {
           </StyledFilesWrapper>
         </StyledStaticContent>
 
-        <PModal
+        {/* <PModal
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           cardData={cardData}
           setCardData={setCardData}
-        />
+        /> */}
       </StyledContent>
-      <PFileSider
+      {/* <PFileSider
         isSiderVisible={isSiderVisible}
         setIsSiderVisible={setIsSiderVisible}
         cardData={cardData}
         type="file"
-      />
+      /> */}
     </Layout>
   );
 };

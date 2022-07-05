@@ -1,26 +1,21 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Modal, Input } from 'antd';
+import { usePageContext } from 'context/PageContext';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import styled from 'styled-components';
 import { IFilesCard } from 'types/card-data';
 
 interface IPModalProps {
-  isModalVisible?: boolean;
   title?: string;
   content?: ReactNode;
-  setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   cardData?: IFilesCard | null;
 }
 
-const PModal: FC<IPModalProps> = ({
-  isModalVisible,
-  title,
-  content,
-  setIsModalVisible,
-  setCardData,
-}) => {
+const PModal: FC<IPModalProps> = ({ title, content, setCardData }) => {
+  const { isModalVisible, setIsModalVisible } = usePageContext();
+
   const handleOk = () => {
     setIsModalVisible(false);
     if (setCardData) {

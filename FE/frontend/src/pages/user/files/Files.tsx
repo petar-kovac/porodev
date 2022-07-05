@@ -1,5 +1,6 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
+import { usePageContext } from 'context/PageContext';
 import ListCards from 'components/card/ListCards';
 import GridCards from 'components/card/GridCards';
 import PFilter from 'components/filter/PFilter';
@@ -18,11 +19,15 @@ import {
 } from './files-styled';
 
 const Files: FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSiderVisible, setIsSiderVisible] = useState(false);
-  const [isList, setIsList] = useState<boolean>(false);
+  const [isListView, setIsListView] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+
+  useEffect(() => {
+    setIsSiderVisible(false);
+  }, []);
 
   return (
     <StyledPageWrapper>
@@ -36,8 +41,8 @@ const Files: FC = () => {
         <StyledStaticContent>
           <PFilterWrapper>
             <PFilter
-              isList={isList}
-              setIsList={setIsList}
+              isList={isListView}
+              setIsList={setIsListView}
               activeFilters={{
                 showFilterByDate: true,
                 showSortByTime: true,
@@ -59,7 +64,7 @@ const Files: FC = () => {
           </StyledFoldersContainer>
 
           <StyledFilesWrapper>
-            {isList ? (
+            {isListView ? (
               <ListCards
                 cardData={cardData}
                 setIsSiderVisible={setIsSiderVisible}
@@ -84,19 +89,12 @@ const Files: FC = () => {
         <PFileSider
           cardData={cardData}
           setCardData={setCardData}
-          isSiderVisible={isSiderVisible}
-          setIsSiderVisible={setIsSiderVisible}
           setSelectedCardId={setSelectedCardId}
           type="folder"
         />
       </StyledContent>
 
-      <PModal
-        isModalVisible={isModalVisible}
-        cardData={cardData}
-        setIsModalVisible={setIsModalVisible}
-        setCardData={setCardData}
-      />
+      <PModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
   );
 };

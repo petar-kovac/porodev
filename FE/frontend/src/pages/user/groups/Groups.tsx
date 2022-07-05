@@ -1,10 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import GroupCards from 'components/card/GroupCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
+import { usePageContext } from 'context/PageContext';
 
 import {
   StyledPageWrapper,
@@ -15,11 +16,15 @@ import {
 } from './groups-styled';
 
 const Groups: FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+
+  useEffect(() => {
+    setIsSiderVisible(false);
+  }, []);
 
   return (
     <StyledPageWrapper>
@@ -53,21 +58,9 @@ const Groups: FC = () => {
           </StyledFilesWrapper>
         </StyledStaticContent>
 
-        <PFileSider
-          cardData={cardData}
-          setCardData={setCardData}
-          isSiderVisible={isSiderVisible}
-          setIsSiderVisible={setIsSiderVisible}
-          setSelectedCardId={setSelectedCardId}
-          type="folder"
-        />
+        <PFileSider cardData={cardData} type="file" />
       </StyledContent>
-      <PModal
-        isModalVisible={isModalVisible}
-        cardData={cardData}
-        setIsModalVisible={setIsModalVisible}
-        setCardData={setCardData}
-      />
+      <PModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
   );
 };
