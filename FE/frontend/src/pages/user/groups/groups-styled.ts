@@ -23,7 +23,7 @@ export const StyledContent = styled.div`
 export const StyledStaticContent = styled.div`
   width: 100%;
   margin-top: 4rem;
-  padding: 0 4rem;
+  padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
   gap: 5rem;
