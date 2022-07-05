@@ -7,7 +7,7 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileReadConsumer : IConsumer<FileReadRequestServiceToDatabase>
+    public class FileReadConsumer : IConsumer<FileReadModel>
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
@@ -20,25 +20,27 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             _fileRepository = fileRepository;
         }
 
-        public async Task Consume(ConsumeContext<FileReadRequestServiceToDatabase> context)
+        public async Task Consume(ConsumeContext<FileReadModel> context)
         {
-            //List<DataUserModel> allUsers = (await _unitOfWork.Users.FindAllAsync(user => user.Email.Contains(""))).ToList<DataUserModel>();
-            //Task<ICollection<TemplateEntity>?> FindAllAsync(Expression<Func<TemplateEntity, bool>> filter);
-            //vidjeti da li ce pogoditi ovo kako treba
-
             List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
             FileReadModel returnModel = new FileReadModel();
     
-         
-            foreach(var fileModel in allUserFiles)
+            for(int i = 0; i < allUserFiles.Count; i++)
             {
+                var fileModel = allUserFiles[i];
                 var fileReadSingleModel = await _fileRepository.ReadFiles(fileModel.FileId);
                 returnModel.FileNames.Add(fileReadSingleModel.FileName);
                 returnModel.UploadTime.Add(fileReadSingleModel.UploadTime);
             }
 
-            FileReadModel responseModel = new FileReadModel(returnModel.FileNames, returnModel.UploadTime);
-            await context.RespondAsync<CommunicationModel<FileReadModel>>(responseModel);
+            var response = new CommunicationModel<FileReadModel>()
+            {
+                Entity = returnModel,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+
+            await context.RespondAsync<CommunicationModel<FileReadModel>>(response);
         }
     }
 }

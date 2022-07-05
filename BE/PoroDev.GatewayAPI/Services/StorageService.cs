@@ -59,7 +59,6 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<FileReadModel> ReadFiles(FileReadRequestGatewayToService readModel)
         {
             var responseContext = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel);
-
             var response = responseContext.Message.Entity;
 
             return response;

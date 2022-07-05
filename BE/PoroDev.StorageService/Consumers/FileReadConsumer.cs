@@ -21,7 +21,7 @@ namespace PoroDev.StorageService.Consumers
 
             var modelToReturn = await _storageService.ReadFiles(modelToRead);
 
-            await context.RespondAsync<CommunicationModel<FileReadModel>>(modelToReturn);
+            await context.RespondAsync<CommunicationModel<FileReadModel>> (modelToReturn);
         }
     }
 }
