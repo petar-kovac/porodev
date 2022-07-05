@@ -30,12 +30,7 @@ const Groups: FC = () => {
           setCardData(null);
         }}
       >
-        <StyledStaticContent
-          onClick={() => {
-            setIsSiderVisible(false);
-            setCardData(null); // to trigger rerender, simulating onBlur effect
-          }}
-        >
+        <StyledStaticContent>
           <StyledFilterWrapper>
             <PFilter
               isList={isList}
@@ -66,19 +61,12 @@ const Groups: FC = () => {
           setSelectedCardId={setSelectedCardId}
           type="folder"
         />
-        <PModal
-          isModalVisible={isModalVisible}
-          cardData={cardData}
-          setIsModalVisible={setIsModalVisible}
-          setCardData={setCardData}
-        />
       </StyledContent>
-
-      <PFileSider
-        isSiderVisible={isSiderVisible}
-        setIsSiderVisible={setIsSiderVisible}
+      <PModal
+        isModalVisible={isModalVisible}
         cardData={cardData}
-        type="file"
+        setIsModalVisible={setIsModalVisible}
+        setCardData={setCardData}
       />
     </StyledPageWrapper>
   );
