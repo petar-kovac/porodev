@@ -45,8 +45,8 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpGet("Read")]
         public async Task<ActionResult<FileReadModel>> Read()
         {
-            //Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            Guid userId = new Guid("2081a08d-d3a4-4a22-be97-0c940f28438b");
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            //Guid userId = new Guid("21566439-04ea-40f2-b649-924cd1bf410a");
             var returnModel = new FileReadRequestGatewayToService(userId);
 
             var response = await _storageService.ReadFiles(returnModel);
