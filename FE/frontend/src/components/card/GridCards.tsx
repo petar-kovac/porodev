@@ -44,14 +44,12 @@ const GridCards: FC<IGridCardProps> = ({
     <>
       {data?.map((value: any) => (
         <GridCard
-          key={value.id}
           value={value}
-          image={value?.image}
-          heading={value?.name}
-          description={value?.description}
+          key={value.id}
+          image={value.image}
+          heading={value.name}
+          description={value.description}
           selected={selectedCardId === value.id}
-          setIsSiderVisible={setIsSiderVisible}
-          setSelectedCardId={setSelectedCardId}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />

@@ -2,11 +2,12 @@ import { Layout } from 'antd';
 import axios from 'axios';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
-import GroupCard from 'components/card/GroupCard';
+import GroupCards from 'components/card/GroupCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
-import { IGroupCard } from 'types/card-data';
+import { IFilesCard } from 'types/card-data';
+
 import {
   StyledContent,
   StyledFilesWrapper,
@@ -19,42 +20,11 @@ import {
 const { Sider, Content } = Layout;
 
 const Groups: FC = () => {
-  const [data, setData] = useState<IGroupCard[] | undefined>();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
-  const [cardData, setCardData] = useState<IGroupCard | null>(null);
-
-  const count = useRef(0);
-
-  const onClick = useCallback((value: any) => {
-    count.current += 1;
-    setCardData(value);
-    setTimeout(() => {
-      if (count.current === 1) {
-        setIsSiderVisible(true);
-      }
-
-      if (count.current === 2) {
-        setIsSiderVisible(false);
-        setIsModalVisible(true);
-      }
-
-      count.current = 0;
-    }, 250);
-  }, []);
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const res = await axios.get(`${process.env.REACT_APP_MOCK_URL}/groups`);
-        setData(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchFiles();
-  }, []);
+  const [cardData, setCardData] = useState<IFilesCard | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   return (
     <Layout>
@@ -79,30 +49,14 @@ const Groups: FC = () => {
           }}
         >
           <StyledFilesWrapper>
-            {data?.map((value: any) => (
-              <>
-                <GroupCard
-                  groupName={value.groupName}
-                  isModerator={value.isModerator}
-                  moderatorName={value.moderatorName}
-                  numberOfFiles={value.numberOfFiles}
-                  numberOfUsers={value.numberOfUsers}
-                  selected={value?.id === cardData?.id}
-                  onClick={(e) => {
-                    setCardData(value);
-                    e.stopPropagation();
-                    setIsSiderVisible(true);
-                  }}
-                  onDoubleClick={(e) => {
-                    e.stopPropagation();
-                    setCardData(value);
-                    setIsSiderVisible(false);
-                    setIsModalVisible(true);
-                  }}
-                  uuid={value.uuid}
-                />
-              </>
-            ))}
+            <GroupCards
+              cardData={cardData}
+              selectedCardId={selectedCardId}
+              setCardData={setCardData}
+              setSelectedCardId={setSelectedCardId}
+              setIsModalVisible={setIsModalVisible}
+              setIsSiderVisible={setIsSiderVisible}
+            />
           </StyledFilesWrapper>
         </StyledStaticContent>
 

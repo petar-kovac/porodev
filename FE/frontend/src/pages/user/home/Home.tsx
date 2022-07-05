@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 
 import GridCard from 'components/card/GridCard';
 import Spinner from 'components/spinner/Spinner';

@@ -9,7 +9,7 @@ import {
 } from 'react';
 import styled from 'styled-components';
 
-import { IGroupCard, IFilesCard } from 'types/card-data';
+import { IFilesCard } from 'types/card-data';
 import { CloseOutlined, FileOutlined, FolderFilled } from '@ant-design/icons';
 import PButton from 'components/buttons/PButton';
 import Spinner from 'components/spinner/Spinner';
@@ -24,7 +24,7 @@ interface IPFileSiderProps {
   isSiderVisible?: boolean;
   isDisabledButton?: boolean;
   isLoading?: boolean;
-  cardData?: IGroupCard | IFilesCard | null;
+  cardData?: IFilesCard | null;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
   type: 'folder' | 'file' | 'runtime';

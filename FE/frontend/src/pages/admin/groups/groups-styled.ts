@@ -30,8 +30,6 @@ export const StyledHeadingWrapper = styled.div`
 export const StyledStaticContent = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin: 0 auto;
   align-items: flex-start;
   gap: 5rem;
 `;

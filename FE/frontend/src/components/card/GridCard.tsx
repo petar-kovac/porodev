@@ -11,23 +11,19 @@ interface IGridCardProps {
   description?: string;
   image?: string;
   selected: boolean;
-  setIsSiderVisible?: (value: boolean) => unknown;
-  setSelectedCardId?: (value: number | null) => unknown;
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
 }
 
 const GridCard: FC<IGridCardProps> = ({
-  value,
   heading,
   description,
   selected,
   image,
   onClick,
-  onDoubleClick = () => undefined,
+  onDoubleClick,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
 
   return (

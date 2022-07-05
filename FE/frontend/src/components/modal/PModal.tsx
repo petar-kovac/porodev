@@ -3,7 +3,7 @@ import { Button, Modal, Input } from 'antd';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import styled from 'styled-components';
-import { IFilesCard, IGroupCard } from 'types/card-data';
+import { IFilesCard } from 'types/card-data';
 
 interface IPModalProps {
   isModalVisible?: boolean;
@@ -11,7 +11,7 @@ interface IPModalProps {
   content?: ReactNode;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  cardData?: IGroupCard | IFilesCard | null;
+  cardData?: IFilesCard | null;
 }
 
 const PModal: FC<IPModalProps> = ({

@@ -1,13 +1,12 @@
-import { FC, MouseEventHandler, Dispatch, SetStateAction } from 'react';
-import { useFetchData } from 'hooks/useFetchData';
-// import { IPFoldersProps } from 'types/folder-props';
-import { IFilesCard } from 'types/card-data';
-import PFolder from './PFolder';
+import { FC, Dispatch, SetStateAction } from 'react';
 
-interface IPFoldersProps {
-  id?: string;
-  heading?: string;
-  description?: string;
+import { useFetchData } from 'hooks/useFetchData';
+
+import { IFilesCard } from 'types/card-data';
+
+import GroupCard from 'components/card/GroupCard';
+
+interface IGroupCardProps {
   selected?: boolean | null;
   selectedCardId?: number | null;
   cardData?: IFilesCard | null;
@@ -15,18 +14,16 @@ interface IPFoldersProps {
   setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
   setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  onClick?: MouseEventHandler<HTMLElement>;
-  onDoubleClick?: MouseEventHandler<HTMLElement>;
 }
 
-const PFolders: FC<IPFoldersProps> = ({
+const GroupCards: FC<IGroupCardProps> = ({
   selectedCardId,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
   setIsModalVisible = () => undefined,
   setIsSiderVisible = () => undefined,
 }) => {
-  const url = `${process.env.REACT_APP_MOCK_URL}/files`;
+  const url = `${process.env.REACT_APP_MOCK_URL}/groups`;
   const { data } = useFetchData(url);
 
   const handleClick = (value: any) => {
@@ -44,12 +41,13 @@ const PFolders: FC<IPFoldersProps> = ({
 
   return (
     <>
-      {data?.slice(0, 4).map((value: any) => (
-        <PFolder
-          key={value.id}
-          value={value}
-          heading={value?.name}
-          description={value?.description}
+      {data?.map((value: any) => (
+        <GroupCard
+          groupName={value.groupName}
+          isModerator={value.isModerator}
+          moderatorName={value.moderatorName}
+          numberOfFiles={value.numberOfFiles}
+          numberOfUsers={value.numberOfUsers}
           selected={selectedCardId === value.id}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
@@ -59,4 +57,4 @@ const PFolders: FC<IPFoldersProps> = ({
   );
 };
 
-export default PFolders;
+export default GroupCards;

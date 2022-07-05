@@ -24,13 +24,9 @@ const Files: FC = () => {
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  const { data } = useFetchData(url);
-
   return (
     <StyledPageWrapper>
       <StyledContent
-        style={{ position: 'relative' }}
         onClick={() => {
           setSelectedCardId(null);
           setIsSiderVisible(false);
@@ -52,25 +48,14 @@ const Files: FC = () => {
             />
           </PFilterWrapper>
           <StyledFoldersContainer>
-            {data?.slice(0, 4).map((value: any) => (
-              <PFolders
-                key={value.id}
-                heading={value.name}
-                description={value.description}
-                selected={value.id === cardData?.id}
-                onClick={(e) => {
-                  setCardData(value);
-                  e.stopPropagation();
-                  setIsSiderVisible(true);
-                }}
-                onDoubleClick={(e) => {
-                  e.stopPropagation();
-                  setCardData(value);
-                  setIsSiderVisible(false);
-                  setIsModalVisible(true);
-                }}
-              />
-            ))}
+            <PFolders
+              cardData={cardData}
+              setIsSiderVisible={setIsSiderVisible}
+              setIsModalVisible={setIsModalVisible}
+              setCardData={setCardData}
+              selectedCardId={selectedCardId}
+              setSelectedCardId={setSelectedCardId}
+            />
           </StyledFoldersContainer>
 
           <StyledFilesWrapper>
