@@ -18,6 +18,8 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<List<RuntimeData>> Query(RuntimeQueryRequestGatewayToDatabase query)
         {
+
+
             var queryContext = await _queryClient.GetResponse<CommunicationModel<List<RuntimeData>>>(query);
 
             if (queryContext.Message.ExceptionName is not null)

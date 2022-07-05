@@ -9,7 +9,27 @@ namespace PoroDev.GatewayAPI.MapperProfiles
     {
         public MapperProfiles()
         {
-            CreateMap<RuntimeQueryRequest, RuntimeQueryRequestGatewayToDatabase>();
+            CreateMap<RuntimeQueryRequest, RuntimeQueryRequestGatewayToDatabase>()
+                .ForMember(destionation => destionation.Arguments, option => option.MapFrom(source => ConvertListToArgumentString(source.Arguments)));
+
+
+
+        }
+
+        private string ConvertListToArgumentString(List<string>? argumentList)
+        {
+            if (argumentList != null || argumentList.Count != 0)
+                return null;
+
+            string args = String.Empty;
+            foreach (var argument in argumentList)
+            {
+                args += argument + "|";
+            }
+
+            args = args.Remove(args.Length - 1);
+
+            return args;
         }
     }
 }
