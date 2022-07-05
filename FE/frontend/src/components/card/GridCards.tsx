@@ -46,6 +46,9 @@ const GridCards: FC<IGridCardProps> = ({
         <GridCard
           key={value.id}
           value={value}
+          image={value?.image}
+          heading={value?.name}
+          description={value?.description}
           selected={selectedCardId === value.id}
           setIsSiderVisible={setIsSiderVisible}
           setSelectedCardId={setSelectedCardId}

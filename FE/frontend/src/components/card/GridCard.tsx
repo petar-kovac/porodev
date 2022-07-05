@@ -19,7 +19,10 @@ interface IGridCardProps {
 
 const GridCard: FC<IGridCardProps> = ({
   value,
+  heading,
+  description,
   selected,
+  image,
   onClick,
   onDoubleClick = () => undefined,
 }) => {
@@ -32,12 +35,12 @@ const GridCard: FC<IGridCardProps> = ({
       ref={ref}
       selected={selected}
       hoverable
-      cover={<img alt="example" src={`${value.image}`} />}
+      cover={<img alt="example" src={`${image}`} />}
       role="button"
     >
       <StyledMetaCardDescription>
-        <h4>{value.name}</h4>
-        <span>{value.description.slice(0, 30)}...</span>
+        <h4>{heading}</h4>
+        <span>{description?.slice(0, 30)}...</span>
         <span className="show-more">&rarr; Show more</span>
       </StyledMetaCardDescription>
     </StyledGridCard>
