@@ -29,7 +29,7 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("Download")]
-        public async Task<IActionResult> Download([FromQuery]string fileId)
+        public async Task<ActionResult<FileDownloadMessage>> Download([FromQuery] string fileId)
         {
             //Guid userId = Guid.Parse("4eb08fe0-3995-4902-a8d7-20908538bc7f");
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
