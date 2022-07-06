@@ -1,5 +1,6 @@
 ﻿using PoroDev.Common.Exceptions;
 using PoroDev.Runtime.Services.Contracts;
+using static System.IO.Compression.ZipFile;
 
 namespace PoroDev.Runtime.Services
 {
@@ -18,7 +19,7 @@ namespace PoroDev.Runtime.Services
         {
             try
             {
-                System.IO.Compression.ZipFile.ExtractToDirectory(ZippedFilePath, RuntimeFolderPath);
+                ExtractToDirectory(ZippedFilePath, RuntimeFolderPath);
             }
             catch (Exception ex)
             {
@@ -26,7 +27,7 @@ namespace PoroDev.Runtime.Services
                 {
                     Directory.Delete(Path.Combine(RuntimeFolderPath, ZippedFileName), true);
 
-                    System.IO.Compression.ZipFile.ExtractToDirectory(ZippedFilePath, RuntimeFolderPath);
+                    ExtractToDirectory(ZippedFilePath, RuntimeFolderPath);
                 }
                 else
                 {
