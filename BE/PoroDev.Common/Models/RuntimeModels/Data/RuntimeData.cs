@@ -29,5 +29,28 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DataUserModel User { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Arguments { get; set; }
+
+        public RuntimeData()
+        {
+
+        }
+
+        public RuntimeData(Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string executionOutput)
+        {
+            Id = Guid.NewGuid();
+            UserId = userId;
+            FileId = fileId;
+            ExecutionStart = executionStart;
+            ExecutionTime = executionOutput == String.Empty ? 0 : executionTime;
+            ExecutionOutput = executionOutput;
+            ExceptionHappened = executionOutput == "";
+        }
+
+        public RuntimeData(Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string executionOutput, string arguments) : this(userId, fileId, executionStart, executionTime, executionOutput)
+        {
+            Arguments = arguments;
+        }
     }
 }

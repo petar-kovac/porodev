@@ -19,6 +19,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
         {
             CreateMap<UnitOfWorkResponseModel<RuntimeData>, CommunicationModel<RuntimeData>>();
 
+            CreateMap<UnitOfWorkResponseModel<List<RuntimeData>>, CommunicationModel<List<RuntimeData>>>();
+
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
 
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();

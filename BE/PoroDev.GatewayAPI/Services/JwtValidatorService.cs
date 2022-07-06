@@ -38,7 +38,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<Guid> ValidateRecievedToken(string jwtForValidation) 
         {
-            if (jwtForValidation.Count() == 0)
+            if (jwtForValidation is null)
                 ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
 
             string accessTokenWithoutBearerPrefix = jwtForValidation.Substring("Bearer ".Length);
