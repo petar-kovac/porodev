@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Exceptions;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
-using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
-using PoroDev.Common.Contracts.UserManagement.Update;
-using PoroDev.Common.Contracts.UserManagement.Create;
-using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {
@@ -17,6 +17,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
         public MapperProfiles()
         {
             CreateMap<UnitOfWorkResponseModel<RuntimeData>, CommunicationModel<RuntimeData>>();
+
+            CreateMap<UnitOfWorkResponseModel<List<RuntimeData>>, CommunicationModel<List<RuntimeData>>>();
 
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
 
@@ -40,6 +42,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
                 .ForSourceMember(source => source.Password, option => option.DoNotValidate())
                 .ForSourceMember(source => source.Salt, option => option.DoNotValidate())
                 .ForSourceMember(source => source.DateCreated, option => option.DoNotValidate());
+
+            CreateMap<UnitOfWorkResponseModel<FileUploadModel>, CommunicationModel<FileUploadModel>>();
         }
 
         private bool ValidateUserDeletion(DataUserModel src)

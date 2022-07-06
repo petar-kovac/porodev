@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Exceptions;
-using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -42,7 +41,6 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             returnModel.Entity.Jwt = CreateToken(userToLogIn.Entity);
 
             await context.RespondAsync(returnModel);
-
         }
 
         public string CreateToken(DataUserModel user)

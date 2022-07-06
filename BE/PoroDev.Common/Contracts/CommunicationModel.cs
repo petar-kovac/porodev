@@ -12,7 +12,6 @@ namespace PoroDev.Common.Contracts
 
         public CommunicationModel()
         {
-
         }
 
         public CommunicationModel(ICustomException exception)

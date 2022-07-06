@@ -1,0 +1,18 @@
+﻿using PoroDev.Common.Contracts.StorageService.DeleteFile;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.ReadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
+
+namespace PoroDev.GatewayAPI.Services.Contracts
+{
+    public interface IStorageService
+    {
+        Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel);
+
+        Task<FileDownloadMessage> DownloadFile(FileDownloadRequestGatewayToService downloadModel);
+
+        Task<FileReadModel> ReadFiles(FileReadRequestGatewayToService readModel);
+
+        Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel);
+    }
+}

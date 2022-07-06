@@ -20,7 +20,7 @@
 
         private static void WriteLog(string hrmessage, Exception e)
         {
-            string newLog = DateTime.Now.ToString() + ',' + hrmessage + ',' + e.GetType() + ',' + e.Message + ',' +e.StackTrace + "\n";
+            string newLog = DateTime.Now.ToString() + ',' + hrmessage + ',' + e.GetType() + ',' + e.Message + ',' + e.StackTrace + "\n";
             using (StreamWriter sw = new StreamWriter(filePath, true))
             {
                 sw.WriteLine(newLog);

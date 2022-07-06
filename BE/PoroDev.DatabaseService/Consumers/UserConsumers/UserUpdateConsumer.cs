@@ -4,8 +4,6 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
-using static PoroDev.DatabaseService.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
@@ -40,16 +38,13 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             updatedModel.Entity.Password = userToBeUpdated.Entity.Password;
             updatedModel.Entity.Salt = userToBeUpdated.Entity.Salt;
 
-
             var updatedUser = await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
             await _unitOfWork.SaveChanges();
 
             var returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(updatedUser);
             await context.RespondAsync(returnModel);
         }
-
     }
-
 
     /* public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
      {

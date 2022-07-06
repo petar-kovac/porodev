@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.MassTransit;
 using PoroDev.DatabaseService.Data;
+using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.MapperProfiles;
 using PoroDev.DatabaseService.Repositories;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -17,10 +18,15 @@ builder.Services.AddDbContext<SqlDataContext>(options =>
                    );
             });
 
+builder.Services.Configure<MongoDBSettings>(
+    builder.Configuration.GetSection("MongoDB"));
+
 builder.Services.AddMassTransitWithRabbitMq();
 builder.Services.AddAutoMapper(typeof(MapperProfiles));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 builder.Services.AddScoped<IRuntimeDataRepository, RuntimeDataRepository>();
 
 builder.Services.AddControllers();
