@@ -13,7 +13,6 @@ namespace PoroDev.DatabaseService.Data
 
         public virtual DbSet<DataUserModel> Users { get; set; } = default!;
         public virtual DbSet<RuntimeData> RuntimeMetadata { get; set; } = default!;
-
         public virtual DbSet<FileData> UserFiles { get; set; } = default!;
     }
 }

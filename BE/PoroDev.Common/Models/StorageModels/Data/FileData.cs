@@ -31,7 +31,7 @@ namespace PoroDev.Common.Models.StorageModels.Data
         public FileData(string fileId, Guid CurrentUserId, bool isDeleted) : this(fileId)
         {
             this.CurrentUserId = CurrentUserId;
-            IsDeleted = isDeleted;
+            this.IsDeleted = isDeleted;
         }
     }
 }

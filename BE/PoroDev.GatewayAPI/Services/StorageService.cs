@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
@@ -15,14 +16,18 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<FileDownloadRequestGatewayToService> _downloadRequestClient;
         private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
         private readonly IRequestClient<FileReadRequestGatewayToService> _readRequestClient;
+        private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
 
         public StorageService
-            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
-            IRequestClient<FileReadRequestGatewayToService> readRequestClient)
+            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, 
+            IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
+            IRequestClient<FileReadRequestGatewayToService> readRequestClient,
+            IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
             _readRequestClient = readRequestClient;
+            _deleteRequestClient = deleteRequestClient;
         }
 
         public async Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel)
@@ -53,6 +58,14 @@ namespace PoroDev.GatewayAPI.Services
             var response = responseContext.Message.Entity;
 
             return response;
+        }
+
+        public async Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel)
+        {
+            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+
+            return responseContext.Message.Entity;
+
         }
     }
 }
