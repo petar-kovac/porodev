@@ -1,20 +1,21 @@
 ﻿using PoroDev.Common.Contracts;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Runtime.Extensions.Contracts;
+using PoroDev.Runtime.Services.Contracts;
 using System.Diagnostics;
 using static PoroDev.Runtime.Constants.Consts;
 
-namespace PoroDev.Runtime.Extensions
+namespace PoroDev.Runtime.Services
 {
     public class DockerImageService : RuntimePathsAbstract, IDockerImageService
     {
-        public DockerImageService() : base()
+        private readonly IZipManipulator _zipManipulator;
+        public DockerImageService(IZipManipulator zipManipulator) : base()
         {
-
+            _zipManipulator = zipManipulator;
         }
 
-        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList, IZipManipulator _zipManipulator)
+        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList)
         {
             var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
             var argumentListWithFileNames = new List<string>(argumentList);
@@ -35,7 +36,7 @@ namespace PoroDev.Runtime.Extensions
             return argumentListWithFileNames;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, Guid projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
@@ -48,7 +49,7 @@ namespace PoroDev.Runtime.Extensions
 
             stopwatch.Start();
 
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             try
             {
@@ -81,12 +82,12 @@ namespace PoroDev.Runtime.Extensions
             return responsemodel;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList,IZipManipulator _zipManipulator, Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, Guid userId, Guid projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
 
-            List<string> fileNames = await CheckAndCreateDockerfile(argumentList, _zipManipulator);
+            List<string> fileNames = await CheckAndCreateDockerfile(argumentList);
 
             await CreateDockerImage(imageName);
 
@@ -94,7 +95,7 @@ namespace PoroDev.Runtime.Extensions
 
             stopwatch.Start();
 
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             try
             {
@@ -121,7 +122,7 @@ namespace PoroDev.Runtime.Extensions
 
             await DeleteDockerImage(imageName);
 
-            string argumentsAsString = String.Empty;
+            string argumentsAsString = string.Empty;
 
             foreach (var argument in argumentList)
             {
@@ -171,7 +172,7 @@ namespace PoroDev.Runtime.Extensions
 
         public async Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList)
         {
-            
+
             try
             {
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectPath, "Dockerfile")))
@@ -275,7 +276,7 @@ namespace PoroDev.Runtime.Extensions
 
         public async Task<string> RunDockerImageUnsafe(string imageName)
         {
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             try
             {
@@ -314,7 +315,7 @@ namespace PoroDev.Runtime.Extensions
 
         public async Task<string> RunDockerImageUnsafeWithArguments(string imageName, List<string> args)
         {
-            string imageOutput = String.Empty;
+            string imageOutput = string.Empty;
 
             string listOfArgs = "";
             foreach (var arg in args)

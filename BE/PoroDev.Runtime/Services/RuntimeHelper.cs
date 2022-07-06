@@ -1,14 +1,24 @@
 ﻿using PoroDev.Common.Contracts;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Runtime.Extensions.Contracts;
+using PoroDev.Runtime.Services.Contracts;
 using static PoroDev.Runtime.Constants.Consts;
 
-namespace PoroDev.Runtime.Extensions
+namespace PoroDev.Runtime.Services
 {
-    public class ExceptionHelper
+    public class RuntimeHelper : IRuntimeHelper
     {
-        public static CommunicationModel<RuntimeData> InitializeAndExtract(IZipManipulator _zipManipulator, IDockerImageService _dockerImageService)
+        private readonly IZipManipulator _zipManipulator;
+        
+        private readonly IDockerImageService _dockerImageService;
+
+        public RuntimeHelper(IZipManipulator zipManipulator, IDockerImageService dockerImageService)
+        {
+            _zipManipulator = zipManipulator;
+            _dockerImageService = dockerImageService;
+        }
+
+        public CommunicationModel<RuntimeData> InitializeAndExtract()
         {
             ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
 
