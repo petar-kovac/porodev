@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.StorageService.Services.Contracts;
 
@@ -8,7 +7,7 @@ namespace PoroDev.StorageService.Consumers
     //IConsumer<ExecuteProjectRequestGatewayToService>
 
     public class FileUploadConsumer : IConsumer<FileUploadRequestGatewayToService>
-    {   
+    {
         private readonly IStorageService _storageService;
 
         public FileUploadConsumer(IStorageService storageService)
@@ -18,12 +17,12 @@ namespace PoroDev.StorageService.Consumers
 
         public async Task Consume(ConsumeContext<FileUploadRequestGatewayToService> context)
         {
-            var modelToReturn = await _storageService.UploadFile(new FileUploadRequestServiceToDatabase() 
-            { 
-                File = context.Message.File, 
-                FileName = context.Message.FileName, 
+            var modelToReturn = await _storageService.UploadFile(new FileUploadRequestServiceToDatabase()
+            {
+                File = context.Message.File,
+                FileName = context.Message.FileName,
                 ContentType = context.Message.ContentType,
-                UserId = context.Message.UserId 
+                UserId = context.Message.UserId
             });
 
             await context.RespondAsync(modelToReturn);

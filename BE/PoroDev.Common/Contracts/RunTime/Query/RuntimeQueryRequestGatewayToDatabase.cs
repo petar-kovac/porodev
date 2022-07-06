@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.RunTime.Query
+﻿namespace PoroDev.Common.Contracts.RunTime.Query
 {
     public class RuntimeQueryRequestGatewayToDatabase
     {
@@ -24,7 +18,6 @@ namespace PoroDev.Common.Contracts.RunTime.Query
 
         public RuntimeQueryRequestGatewayToDatabase()
         {
-
         }
 
         public RuntimeQueryRequestGatewayToDatabase(Guid userId, Guid? fileId, DateTimeOffset? executionStart, long? executionTime, string? executionOutput, bool? exceptionHappened, string? arguments)

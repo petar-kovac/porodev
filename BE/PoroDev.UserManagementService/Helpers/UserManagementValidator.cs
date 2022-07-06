@@ -120,7 +120,6 @@ namespace PoroDev.UserManagementService.Helpers
             }
             catch (EmailFormatException ex)
             {
-
                 string exceptionType = nameof(EmailFormatException);
                 string humanReadableMessage = ex.HumanReadableErrorMessage;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PoroDev.Runtime.Constants
+﻿namespace PoroDev.Runtime.Constants
 {
     public static class Consts
     {

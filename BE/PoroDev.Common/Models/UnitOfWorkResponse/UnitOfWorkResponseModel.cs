@@ -10,7 +10,6 @@
 
         public UnitOfWorkResponseModel()
         {
-
         }
 
         public UnitOfWorkResponseModel(T entity)

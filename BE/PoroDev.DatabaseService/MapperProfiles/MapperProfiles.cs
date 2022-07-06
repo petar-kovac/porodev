@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Exceptions;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
-using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
-using PoroDev.Common.Contracts.StorageService.UploadFile;
-using PoroDev.Common.Contracts.UserManagement.Update;
-using PoroDev.Common.Contracts.UserManagement.Create;
-using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {

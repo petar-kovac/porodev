@@ -1,21 +1,21 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
+using PoroDev.Common.Contracts.UserManagement.DeleteUser;
+using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
+using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
-using PoroDev.Common.Models.UserModels.RegisterUser;
-using PoroDev.Common.Contracts.UserManagement.Create;
-using PoroDev.Common.Contracts.UserManagement.Update;
-using PoroDev.Common.Contracts.UserManagement.DeleteUser;
-using PoroDev.Common.Contracts.UserManagement.LoginUser;
-using PoroDev.Common.Contracts.UserManagement.ReadUser;
-using PoroDev.Common.Contracts.UserManagement.ReadById;
-using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
-using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -32,7 +32,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserDeleteAllRequestGatewayToService> _deleteAllRequestClient;
 
         public UserManagementService(
-            IRequestClient<UserCreateRequestGatewayToService> createRequestClient, 
+            IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
             IRequestClient<UserReadByEmailRequestGatewayToService> readUserByEmailRequestClient,
             IRequestClient<UserLoginRequestGatewayToService> loginRequestClient,
             IRequestClient<UserDeleteRequestGatewayToService> deleteRequestClient,
@@ -177,7 +177,5 @@ namespace PoroDev.GatewayAPI.Services
 
             return requestReturnContext.Message.Entity;
         }
-
-        
     }
 }

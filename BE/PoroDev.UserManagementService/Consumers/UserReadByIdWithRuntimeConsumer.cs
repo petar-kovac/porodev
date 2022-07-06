@@ -1,7 +1,5 @@
 ﻿using MassTransit;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
-using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers

@@ -7,7 +7,6 @@ namespace PoroDev.Runtime.Services
     {
         public ZipManipulator() : base()
         {
-
         }
 
         public ZippedFileException Initialize(string runtimeFolderPath)
@@ -18,7 +17,7 @@ namespace PoroDev.Runtime.Services
         public ZippedFileException ExtractZipToPath()
         {
             try
-            { 
+            {
                 System.IO.Compression.ZipFile.ExtractToDirectory(ZippedFilePath, RuntimeFolderPath);
             }
             catch (Exception ex)

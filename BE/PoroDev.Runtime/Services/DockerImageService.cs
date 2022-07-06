@@ -10,6 +10,7 @@ namespace PoroDev.Runtime.Services
     public class DockerImageService : RuntimePathsAbstract, IDockerImageService
     {
         private readonly IZipManipulator _zipManipulator;
+
         public DockerImageService(IZipManipulator zipManipulator) : base()
         {
             _zipManipulator = zipManipulator;
@@ -116,7 +117,6 @@ namespace PoroDev.Runtime.Services
 
             stopwatch.Stop();
 
-
             if (argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand)) != -1)
                 await GetProcessedOutput();
 
@@ -172,7 +172,6 @@ namespace PoroDev.Runtime.Services
 
         public async Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList)
         {
-
             try
             {
                 using (StreamWriter writer = new StreamWriter(Path.Combine(ProjectPath, "Dockerfile")))
@@ -293,7 +292,6 @@ namespace PoroDev.Runtime.Services
                     }
                 })
                 {
-
                     proc.Start();
                     while (!proc.StandardOutput.EndOfStream)
                     {
@@ -336,7 +334,6 @@ namespace PoroDev.Runtime.Services
                     }
                 })
                 {
-
                     proc.Start();
                     while (!proc.StandardOutput.EndOfStream)
                     {

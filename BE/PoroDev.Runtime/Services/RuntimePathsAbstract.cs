@@ -1,6 +1,4 @@
-﻿using PoroDev.Common.Exceptions;
-
-namespace PoroDev.Runtime.Services
+﻿namespace PoroDev.Runtime.Services
 {
     public abstract class RuntimePathsAbstract
     {
@@ -24,7 +22,7 @@ namespace PoroDev.Runtime.Services
 
                 ProjectPath = Path.Combine(Path.Combine(RuntimeFolderPath, ZippedFileName), ZippedFileName);
             }
-            catch(DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException ex)
             {
                 Directory.CreateDirectory(RuntimeFolderPath);
                 SetFolderPath(runtimeFolderPath);

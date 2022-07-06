@@ -2,7 +2,6 @@
 {
     public static class Consts
     {
-        
         public const string EMAIL_DOMAIN = "boing.rs";
 
         public const int MIN_PASSWORD_LENGTH = 8;
@@ -46,6 +45,5 @@
         public const string POSITION_TOO_LONG_ERROR = "Postion cannot exceed 50 characters!";
         public const string POSITION_NUMBER_ERROR = "Position cannot contain numbers!";
         public const string POSITION_SPECIAL_CHARACTER_ERROR = "Position cannot contain special characters!";
-
     }
 }

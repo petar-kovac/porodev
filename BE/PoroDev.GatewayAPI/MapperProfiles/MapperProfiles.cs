@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts.RunTime.Query;
-using PoroDev.Common.Contracts.RunTime.SimpleExecute;
 using PoroDev.GatewayAPI.Models.Runtime;
 
 namespace PoroDev.GatewayAPI.MapperProfiles
@@ -11,9 +10,6 @@ namespace PoroDev.GatewayAPI.MapperProfiles
         {
             CreateMap<RuntimeQueryRequest, RuntimeQueryRequestGatewayToDatabase>()
                 .ForMember(destionation => destionation.Arguments, option => option.MapFrom(source => ConvertListToArgumentString(source.Arguments)));
-
-
-
         }
 
         private string ConvertListToArgumentString(List<string>? argumentList)

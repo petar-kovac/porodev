@@ -17,7 +17,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<FileReadRequestGatewayToService> _readRequestClient;
 
         public StorageService
-            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient, 
+            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
             IRequestClient<FileReadRequestGatewayToService> readRequestClient)
         {
             _downloadRequestClient = downloadRequestClient;

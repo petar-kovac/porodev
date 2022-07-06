@@ -2,8 +2,8 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -14,10 +14,10 @@ namespace PoroDev.DatabaseService.Repositories
     {
         //private readonly IGridFSBucket<Guid> _bucket;
         private readonly IGridFSBucket _bucket;
-        
+
         public FileRepository(IOptions<MongoDBSettings> mongoDBSettings)
         {
-            var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString) ;
+            var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString);
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
@@ -30,7 +30,6 @@ namespace PoroDev.DatabaseService.Repositories
             {
                 Metadata = new BsonDocument()
                 {
-                   
                     { "latest" , true },
 
                     { "ContentType", contentType },
@@ -44,7 +43,6 @@ namespace PoroDev.DatabaseService.Repositories
             try
             {
                 id = await _bucket.UploadFromBytesAsync(fileName, fileArray, options);
-                
             }
             catch (Exception e)
             {
@@ -53,29 +51,30 @@ namespace PoroDev.DatabaseService.Repositories
 
             return id;
         }
+
         public async Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId)
         {
-                ObjectId fileObjectId = ObjectId.Parse(fileId);
+            ObjectId fileObjectId = ObjectId.Parse(fileId);
 
-                var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
-                var searchResult = await _bucket.FindAsync(filter);
-                var doc = searchResult.First();
+            var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
+            var searchResult = await _bucket.FindAsync(filter);
+            var doc = searchResult.First();
 
-                var contentType = doc.Metadata.GetValue("ContentType").ToString();
-                var fileName = doc.Filename;
+            var contentType = doc.Metadata.GetValue("ContentType").ToString();
+            var fileName = doc.Filename;
 
-                var downloadFile = await _bucket.DownloadAsBytesAsync(fileObjectId);
+            var downloadFile = await _bucket.DownloadAsBytesAsync(fileObjectId);
 
-                var modelToReturn = new FileDownloadMessage()
-                {
-                    File = downloadFile,
-                    FileName = fileName,
-                    ContentType = contentType
-                };
+            var modelToReturn = new FileDownloadMessage()
+            {
+                File = downloadFile,
+                FileName = fileName,
+                ContentType = contentType
+            };
 
-                return modelToReturn;
-            
+            return modelToReturn;
         }
+
         //public async Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId)
         //{
         //    ObjectId fileObjectId = ObjectId.Parse(fileId);
@@ -105,6 +104,5 @@ namespace PoroDev.DatabaseService.Repositories
 
             return readModel;
         }
-
     }
 }
