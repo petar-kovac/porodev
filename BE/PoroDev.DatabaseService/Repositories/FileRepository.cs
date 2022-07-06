@@ -12,7 +12,6 @@ namespace PoroDev.DatabaseService.Repositories
 {
     public class FileRepository : IFileRepository
     {
-        //private readonly IGridFSBucket<Guid> _bucket;
         private readonly IGridFSBucket _bucket;
 
         public FileRepository(IOptions<MongoDBSettings> mongoDBSettings)
@@ -74,20 +73,6 @@ namespace PoroDev.DatabaseService.Repositories
 
             return modelToReturn;
         }
-
-        //public async Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId)
-        //{
-        //    ObjectId fileObjectId = ObjectId.Parse(fileId);
-
-        //    //var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
-        //    //var searchResult = await _bucket.FindAsync(filter);
-        //    //var contentType = searchResult.First().Metadata.GetValue("ContentType").ToString();
-        //    //var fileName = searchResult.First().Filename;
-        //    var x = new FileStream("./", new FileStreamOptions() { BufferSize = 1024, });
-        //    await _bucket.DownloadToStreamAsync(fileObjectId, x);
-        //    //var downloadFile = await _bucket.DownloadToStreamAsync(fileObjectId, "");
-        //    return null;
-        //}
 
         public async Task<FileReadSingleModel> ReadFiles(string fileId)
         {
