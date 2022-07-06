@@ -1,12 +1,5 @@
 ﻿using PoroDev.Common.Models.UserModels.Data;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace PoroDev.Common.Models.RuntimeModels.Data
 {
@@ -34,7 +27,6 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
 
         public RuntimeData()
         {
-
         }
 
         public RuntimeData(Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string executionOutput)

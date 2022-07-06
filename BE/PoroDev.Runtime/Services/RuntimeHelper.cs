@@ -9,7 +9,7 @@ namespace PoroDev.Runtime.Services
     public class RuntimeHelper : IRuntimeHelper
     {
         private readonly IZipManipulator _zipManipulator;
-        
+
         private readonly IDockerImageService _dockerImageService;
 
         public RuntimeHelper(IZipManipulator zipManipulator, IDockerImageService dockerImageService)

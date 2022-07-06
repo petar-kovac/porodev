@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace PoroDev.GatewayAPI.Models.Runtime
+﻿namespace PoroDev.GatewayAPI.Models.Runtime
 {
     public class RuntimeQueryRequest
     {

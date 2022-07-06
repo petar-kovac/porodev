@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.RunTime.SimpleExecute
+﻿namespace PoroDev.Common.Contracts.RunTime.SimpleExecute
 {
     public class ExecuteProjectRequestGatewayToService
     {
@@ -13,8 +7,8 @@ namespace PoroDev.Common.Contracts.RunTime.SimpleExecute
 
         public ExecuteProjectRequestGatewayToService()
         {
-
         }
+
         public ExecuteProjectRequestGatewayToService(Guid userId, Guid fileID)
         {
             UserId = userId;

@@ -1,5 +1,4 @@
-﻿using PoroDev.Common.Contracts.StorageService;
-using PoroDev.Common.Models.StorageModels.Data;
+﻿using PoroDev.Common.Models.StorageModels.Data;
 
 namespace PoroDev.DatabaseService.Repositories.Contracts
 {

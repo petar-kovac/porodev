@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.MassTransit;
+using PoroDev.DatabaseService.Data;
 using PoroDev.DatabaseService.Data.Configuration;
+using PoroDev.DatabaseService.MapperProfiles;
 using PoroDev.DatabaseService.Repositories;
 using PoroDev.DatabaseService.Repositories.Contracts;
-using PoroDev.DatabaseService.Data;
-using PoroDev.DatabaseService.MapperProfiles;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

@@ -1,6 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-
-namespace PoroDev.GatewayAPI.Services.Contracts
+﻿namespace PoroDev.GatewayAPI.Services.Contracts
 {
     public interface IJwtValidatorService
     {

@@ -2,6 +2,7 @@
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers
@@ -54,6 +55,17 @@ namespace PoroDev.GatewayAPI.Controllers
             var response = await _storageService.ReadFiles(returnModel);
 
             return Ok(response);
+        }
+
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete([FromQuery] string fileId)
+        {
+            await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new FileDeleteRequestGatewayToService(fileId);
+
+            await _storageService.DeleteFile(returnModel);
+
+            return Ok();
         }
     }
 }

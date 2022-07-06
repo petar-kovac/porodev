@@ -9,11 +9,15 @@ namespace PoroDev.DatabaseService.Repositories.Contracts
 
         Task<TemplateEntity?> GetByIdAsync(Guid Id);
 
+        Task<TemplateEntity?> GetByStringIdAsync(string Id);
+
         Task<UnitOfWorkResponseModel<TemplateEntity>> CreateAsync(TemplateEntity entity);
 
         Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity);
 
         Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id);
+
+        Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsyncStringId(TemplateEntity entity, string id);
 
         Task<UnitOfWorkResponseModel<TemplateEntity>> FindAsync(Expression<Func<TemplateEntity, bool>> filter);
 

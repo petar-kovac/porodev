@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.StorageService.ReadFile
+﻿namespace PoroDev.Common.Contracts.StorageService.ReadFile
 {
     public class FileReadSingleModel
     {
@@ -14,7 +8,6 @@ namespace PoroDev.Common.Contracts.StorageService.ReadFile
 
         public FileReadSingleModel()
         {
-
         }
 
         public FileReadSingleModel(string fileName, DateTime uploadTime)
