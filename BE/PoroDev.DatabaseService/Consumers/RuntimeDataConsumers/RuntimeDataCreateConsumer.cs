@@ -6,11 +6,12 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.RuntimeDataConsumers
 {
-    public class RuntimeDataCreateConsumer : BaseDbConsumer ,IConsumer<RuntimeData>
+    public class RuntimeDataCreateConsumer : BaseDbConsumer, IConsumer<RuntimeData>
     {
         public RuntimeDataCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
+
         public async Task Consume(ConsumeContext<RuntimeData> context)
         {
             var dbResponse = await _unitOfWork.RuntimeData.CreateAsync(context.Message);

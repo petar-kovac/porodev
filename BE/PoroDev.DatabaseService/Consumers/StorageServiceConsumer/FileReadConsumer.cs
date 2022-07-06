@@ -24,8 +24,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
         {
             List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
             FileReadModel returnModel = new FileReadModel();
-    
-            for(int i = 0; i < allUserFiles.Count; i++)
+
+            for (int i = 0; i < allUserFiles.Count; i++)
             {
                 var fileModel = allUserFiles[i];
                 var fileReadSingleModel = await _fileRepository.ReadFiles(fileModel.FileId);

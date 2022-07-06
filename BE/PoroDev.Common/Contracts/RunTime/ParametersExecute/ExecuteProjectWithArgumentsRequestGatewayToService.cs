@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.RunTime.ParametersExecute
+﻿namespace PoroDev.Common.Contracts.RunTime.ParametersExecute
 {
     public class ExecuteProjectWithArgumentsRequestGatewayToService
     {
@@ -16,7 +10,6 @@ namespace PoroDev.Common.Contracts.RunTime.ParametersExecute
 
         public ExecuteProjectWithArgumentsRequestGatewayToService()
         {
-
         }
 
         public ExecuteProjectWithArgumentsRequestGatewayToService(Guid fileId, Guid userId, List<string> arguments)

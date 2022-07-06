@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.StorageService.ReadFile
+﻿namespace PoroDev.Common.Contracts.StorageService.ReadFile
 {
     public class FileReadModel
     {
@@ -17,6 +11,7 @@ namespace PoroDev.Common.Contracts.StorageService.ReadFile
             FileNames = new List<string>();
             UploadTime = new List<DateTime>();
         }
+
         public FileReadModel(List<string> fileNames, List<DateTime> uploadTime)
         {
             FileNames = fileNames;

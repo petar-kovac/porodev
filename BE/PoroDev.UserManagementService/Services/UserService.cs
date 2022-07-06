@@ -2,9 +2,11 @@
 using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Exceptions;
@@ -15,16 +17,6 @@ using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
-using static PoroDev.UserManagementService.Constants.Consts;
-using PoroDev.Common.Models.UserModels.RegisterUser;
-using PoroDev.Common.Contracts.UserManagement.Create;
-using PoroDev.Common.Contracts.UserManagement.Update;
-using PoroDev.Common.Contracts.UserManagement.DeleteUser;
-using PoroDev.Common.Contracts.UserManagement.LoginUser;
-using PoroDev.Common.Contracts.UserManagement.ReadUser;
-using PoroDev.Common.Contracts.UserManagement.ReadById;
-using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
-using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -193,9 +185,8 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
-            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id});
+            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id });
             return response.Message;
-
         }
 
         public async Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model)
@@ -230,7 +221,5 @@ namespace PoroDev.UserManagementService.Services
 
             return returnContext;
         }
-
-        
     }
 }

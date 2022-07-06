@@ -2,7 +2,6 @@
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 
-
 namespace PoroDev.GatewayAPI.Services.Contracts
 {
     public interface IStorageService

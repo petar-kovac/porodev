@@ -128,7 +128,6 @@ namespace PoroDev.DatabaseService.Repositories
 
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id)
         {
-
             TemplateEntity exist = await _context.Set<TemplateEntity>().FindAsync(id);
             UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
 

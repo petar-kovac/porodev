@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.GatewayAPI.Models.Runtime
+﻿namespace PoroDev.GatewayAPI.Models.Runtime
 {
     public class ArgumentListWithUserId
     {
@@ -15,8 +10,8 @@ namespace PoroDev.GatewayAPI.Models.Runtime
 
         public ArgumentListWithUserId()
         {
-
         }
+
         public ArgumentListWithUserId(Guid userId, ArgumentListRuntime model)
         {
             UserId = userId;

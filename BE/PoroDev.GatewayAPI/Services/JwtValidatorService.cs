@@ -2,14 +2,14 @@
 using Microsoft.IdentityModel.Tokens;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.GatewayAPI.Services.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.Common.Constants.Constants;
 using static PoroDev.GatewayAPI.Constants.Constats;
-using PoroDev.Common.Exceptions;
+using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -36,7 +36,7 @@ namespace PoroDev.GatewayAPI.Services
             return id;
         }
 
-        public async Task<Guid> ValidateRecievedToken(string jwtForValidation) 
+        public async Task<Guid> ValidateRecievedToken(string jwtForValidation)
         {
             if (jwtForValidation is null)
                 ThrowException(nameof(NoHeaderWithJwtException), "There is no JWT in request's header.");
@@ -57,7 +57,6 @@ namespace PoroDev.GatewayAPI.Services
             Guid userId = await GetIdFromToken(resultOfValidation.SecurityToken);
 
             return userId;
-
         }
 
         private async Task<TokenValidationResult> ValidateToken(string jwtForValidation)

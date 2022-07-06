@@ -12,7 +12,6 @@ namespace PoroDev.Runtime.Services.Contracts
 
         Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, Guid projectId);
 
-
         Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, Guid userId, Guid projectId);
 
         Task<DockerRuntimeException> CreateDockerfile();

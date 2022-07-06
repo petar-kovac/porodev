@@ -12,6 +12,7 @@ namespace PoroDev.DatabaseService.Consumers.RuntimeDataConsumers.Query
         public RuntimeDataQueryConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
+
         public async Task Consume(ConsumeContext<RuntimeQueryRequestGatewayToDatabase> context)
         {
             var queryResult = await _unitOfWork.RuntimeData.GetRuntimeDatasByUserId(context.Message);
@@ -19,7 +20,6 @@ namespace PoroDev.DatabaseService.Consumers.RuntimeDataConsumers.Query
             var reponseModel = _mapper.Map<CommunicationModel<List<RuntimeData>>>(queryResult);
 
             await context.RespondAsync(reponseModel);
-
         }
     }
 }

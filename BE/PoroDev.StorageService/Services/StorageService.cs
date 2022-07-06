@@ -15,7 +15,7 @@ namespace PoroDev.StorageService.Services
         private readonly IRequestClient<FileReadModel> _readRequestClient;
 
         public StorageService
-            (IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient, 
+            (IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient,
             IRequestClient<FileReadModel> readRequestClient)
         {
             _uploadRequestClient = uploadRequestClient;
