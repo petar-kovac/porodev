@@ -4,8 +4,6 @@ using PoroDev.StorageService.Services.Contracts;
 
 namespace PoroDev.StorageService.Consumers
 {
-    //IConsumer<ExecuteProjectRequestGatewayToService>
-
     public class FileUploadConsumer : IConsumer<FileUploadRequestGatewayToService>
     {
         private readonly IStorageService _storageService;
