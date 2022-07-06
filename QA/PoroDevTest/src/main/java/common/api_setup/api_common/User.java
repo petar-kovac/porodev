@@ -4,7 +4,13 @@ package common.api_setup.api_common;
 Defined all user details that needs to be sent in one JSON object when executing basic CRUD operations
  */
 
-public class User {
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+import java.io.Serializable;
+
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class User implements Serializable {
 
     private String name;
 
@@ -15,6 +21,21 @@ public class User {
     private String password;
 
     private int department;
+
+    public User(){
+
+    };
+
+    public User(String name, String lastname, String email, String password, int department, int role, String position, String avatarUrl) {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.department = department;
+        this.role = role;
+        this.position = position;
+        this.avatarUrl = avatarUrl;
+    }
 
     private int role;
 
@@ -54,4 +75,6 @@ public class User {
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
+
+
 }

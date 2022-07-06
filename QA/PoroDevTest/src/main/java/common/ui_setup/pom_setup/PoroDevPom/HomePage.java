@@ -2,10 +2,10 @@ package common.ui_setup.pom_setup.PoroDevPom;
 
 import common.ui_setup.DriverSetup;
 import common.ui_setup.pom_setup.BasePage;
-import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.testng.Assert;
 
 public class HomePage extends BasePage {
 
@@ -49,6 +49,6 @@ public class HomePage extends BasePage {
     }
 
     public void assert_profileInfo_isDisplayed(String customErrorMessage) {
-        Assert.assertTrue(customErrorMessage, BasePage.isDisplayed(we_profileInfo_message));
+        Assert.assertTrue(BasePage.isDisplayed(we_profileInfo_message),customErrorMessage);
     }
 }

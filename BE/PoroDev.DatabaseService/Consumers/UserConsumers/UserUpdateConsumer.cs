@@ -19,6 +19,13 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 
             var userToBeUpdated = await _unitOfWork.Users.FindAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
 
+            if(userToBeUpdated.ExceptionName != null)
+            {
+                var returnModelException = _mapper.Map<CommunicationModel<DataUserModel>>(userToBeUpdated);
+                await context.RespondAsync(returnModelException);
+                return;
+            }
+
             CommunicationModel<DataUserModel> updatedModel = new()
             {
                 Entity = model,

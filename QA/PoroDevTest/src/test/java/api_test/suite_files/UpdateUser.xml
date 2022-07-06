@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="UpdateUser" verbose="1" >
+    <test name="UpdateUser">
+        <classes>
+            <class name="api_test.negative_tests.UpdateUser" />
+        </classes>
+    </test>
+
+</suite>

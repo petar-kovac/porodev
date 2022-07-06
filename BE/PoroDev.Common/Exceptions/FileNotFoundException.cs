@@ -3,21 +3,21 @@ using System.Globalization;
 
 namespace PoroDev.Common.Exceptions
 {
-    public class FileUploadException : Exception, ICustomException
+    public class FileNotFoundException : Exception, ICustomException
     {
         public string HumanReadableErrorMessage { get; set; }
 
-        public FileUploadException() : base()
+        public FileNotFoundException() : base()
         {
-            HumanReadableErrorMessage = "File failed to upload";
+            HumanReadableErrorMessage = "Internal server error occurred";
         }
 
-        public FileUploadException(string message) : base()
+        public FileNotFoundException(string message) : base()
         {
             HumanReadableErrorMessage = message;
         }
 
-        public FileUploadException(string message, params object[] args) : base()
+        public FileNotFoundException(string message, params object[] args) : base()
         {
             HumanReadableErrorMessage = string.Format(CultureInfo.CurrentCulture, message, args);
         }
