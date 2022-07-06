@@ -47,7 +47,7 @@ namespace PoroDev.Runtime.Services
         {
             try
             {
-                Directory.Delete(Path.Combine(RuntimeFolderPath, ZippedFileName), true);
+                Directory.Delete(RuntimeFolderPath, true);
             }
             catch (Exception ex)
             {

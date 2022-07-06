@@ -16,28 +16,8 @@ namespace PoroDev.Runtime.Services
             _zipManipulator = zipManipulator;
         }
 
-        public async Task<List<string>> CheckAndCreateDockerfile(List<string> argumentList)
-        {
-            var lastIndex = argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand));
-            var argumentListWithFileNames = new List<string>(argumentList);
-            for (int i = 0; i <= lastIndex; i++)
-            {
-                argumentListWithFileNames[i] = "image.jpg";
-            }
-            if (lastIndex != -1)
-            {
-                File.Copy(Path.Combine(RUNTIME_FOLDER_ROUTE, "image.jpg"), Path.Combine(_zipManipulator.ProjectPath, "image.jpg"));
-                await CreateDockerfile(argumentListWithFileNames);
-            }
-            else
-            {
-                await CreateDockerfile();
-            }
 
-            return argumentListWithFileNames;
-        }
-
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, string projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
@@ -83,24 +63,40 @@ namespace PoroDev.Runtime.Services
             return responsemodel;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImageWithParameteres(List<string> argumentList, Guid userId, string projectId)
         {
             var imageName = Guid.NewGuid().ToString();
             Stopwatch stopwatch = new();
 
-            List<string> fileNames = await CheckAndCreateDockerfile(argumentList);
+            List<string> fileNames = new();
+
+            foreach(var arg in argumentList)
+            {
+                if (arg.EndsWith(".jpg"))
+                {
+                    fileNames.Add(arg);
+                    //File.Copy(Path.Combine(RUNTIME_FOLDER_ROUTE, arg), Path.Combine(_zipManipulator.ProjectPath, arg));
+                }             
+            }
+
+            if (!fileNames.Any())
+                await CreateDockerfile();
+            else
+                await CreateDockerfile(fileNames);
 
             await CreateDockerImage(imageName);
 
-            DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
+            
 
-            stopwatch.Start();
+            DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
 
             string imageOutput = string.Empty;
 
+            stopwatch.Start();          
+
             try
             {
-                imageOutput = await RunDockerImageUnsafeWithArguments(imageName, fileNames);
+                imageOutput = await RunDockerImageUnsafeWithArguments(imageName, argumentList);
             }
             catch (DockerRuntimeException ex)
             {
@@ -117,21 +113,12 @@ namespace PoroDev.Runtime.Services
 
             stopwatch.Stop();
 
-            if (argumentList.FindLastIndex(x => Guid.TryParse(x, out Guid rand)) != -1)
+            if (fileNames.Any())
                 await GetProcessedOutput();
 
-            await DeleteDockerImage(imageName);
+            await DeleteDockerImage(imageName);           
 
-            string argumentsAsString = string.Empty;
-
-            foreach (var argument in argumentList)
-            {
-                argumentsAsString += argument + "|";
-            }
-
-            argumentsAsString = argumentsAsString.Remove(argumentsAsString.Length - 1);
-
-            RuntimeData newRuntimeData = new(userId, projectId, dateStarted, stopwatch.ElapsedMilliseconds, imageOutput, argumentsAsString);
+            RuntimeData newRuntimeData = new(userId, projectId, dateStarted, stopwatch.ElapsedMilliseconds, imageOutput);
 
             var responsemodel = new CommunicationModel<RuntimeData>()
             {
