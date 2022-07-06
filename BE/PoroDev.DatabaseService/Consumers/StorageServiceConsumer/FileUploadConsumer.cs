@@ -33,7 +33,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
       
             string fileId = id.ToString();
 
-            FileData createModel = new (fileId, context.Message.UserId);
+            FileData createModel = new (fileId, context.Message.UserId, false);
 
             await _unitOfWork.UserFiles.CreateAsync(createModel);
             await _unitOfWork.SaveChanges();

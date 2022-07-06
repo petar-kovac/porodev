@@ -14,6 +14,8 @@ namespace PoroDev.Common.Models.StorageModels.Data
 
         public Guid CurrentUserId { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DataUserModel CurrentUser { get; set; }
 
@@ -26,9 +28,10 @@ namespace PoroDev.Common.Models.StorageModels.Data
             FileId = fileId;
         }
 
-        public FileData(string fileId, Guid CurrentUserId) : this(fileId)
+        public FileData(string fileId, Guid CurrentUserId, bool isDeleted) : this(fileId)
         {
             this.CurrentUserId = CurrentUserId;
+            IsDeleted = isDeleted;
         }
     }
 }
