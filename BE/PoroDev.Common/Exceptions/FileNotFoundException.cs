@@ -1,8 +1,9 @@
-﻿using System.Globalization;
+﻿using PoroDev.Common.Exceptions.Contract;
+using System.Globalization;
 
 namespace PoroDev.Common.Exceptions
 {
-    internal class FileNotFoundException : Exception
+    public class FileNotFoundException : Exception, ICustomException
     {
         public string HumanReadableErrorMessage { get; set; }
 

@@ -1,8 +1,9 @@
-﻿using System.Globalization;
+﻿using PoroDev.Common.Exceptions.Contract;
+using System.Globalization;
 
 namespace PoroDev.Common.Exceptions
 {
-    public class FileUploadException : Exception
+    public class FileUploadException : Exception, ICustomException
     {
         public string HumanReadableErrorMessage { get; set; }
 

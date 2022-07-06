@@ -191,6 +191,13 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model)
         {
+            var isException = await CheckUserFieldsUpdate(model);
+
+            if (isException.ExceptionName != null)
+            {
+                return isException;
+            }
+
             GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
 
             var updateUserRequest = _mapper.Map<UserUpdateRequestServiceToDatabase>(model);
@@ -221,5 +228,7 @@ namespace PoroDev.UserManagementService.Services
 
             return returnContext;
         }
+
+        
     }
 }
