@@ -1,15 +1,17 @@
 package common.api_setup.api_common;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import common.api_setup.Endpoints;
+import com.jayway.jsonpath.JsonPath;
 import java.util.*;
+
+import static io.restassured.RestAssured.given;
 
 
 public class UserDetailsGenerator {
 
-/*
-Generating the JSON object with randomly created details
- */
+
+
 
     public static User generateRandomUserDetails() {
         Random rn = new Random();
@@ -22,7 +24,7 @@ Generating the JSON object with randomly created details
                 UserDetailsList.passSymbols.get(rn.nextInt(UserDetailsList.passSymbols.size()))+
                 rn.nextInt(10000) + 1);
         user.setDepartment(0);                                // will have to be added later
-        user.setRole(rn.nextInt(1));         // as it has to be 0 or 1
+        user.setRole(rn.nextInt(1));
         user.setPosition(UserDetailsList.userPosition.get(rn.nextInt(UserDetailsList.userPosition.size())));
         user.setAvatarUrl("string");   // will have to be added later
 
@@ -30,12 +32,106 @@ Generating the JSON object with randomly created details
 
         return user;
     }
-/*
-Method for transforming object to JSON
- */
+
+
+    // Converting the pojo object to json payload
     public static String convertToJson(Object object) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();  // calling the gson
         return gson.toJson(object);  // returning JSON value
     }
+
+    // Taking the value from json based on defined endpoint and attribute
+    public static String takeValueFromJsonResp(String endpoint, String attribute){
+        String json = given().relaxedHTTPSValidation().when().get(endpoint).asString();
+        String attributeValue = JsonPath.read(json, "$."+attribute).toString();
+        return attributeValue;
+    }
+
+    // Taking the jwt token attribute based on users email and password
+    public static String takeTokenValueFromJson(String email, String password){
+        String loginJsonObject = "{\n" +
+                "  \"email\": \""+email+"\",\n" +
+                "  \"password\": \""+password+"\"\n" +
+                "}";
+        String json = given().relaxedHTTPSValidation().
+                body(loginJsonObject)
+                .when()
+                .post(Endpoints.USER_LOGIN).asString();
+        String fetchedToken = JsonPath.read(json, "$.jwt").toString();
+
+        return fetchedToken;
+    }
+
+    // Generating JSON body for runtime with two numbers
+    public static String createRuntimeJsonReq(String fileID, String firstNmb, String secondNmb) {
+        String generatedRuntimeJsonReq = "{\n" +
+                "  \"projectId\": \""+fileID+"\",\n" +
+                "  \"arguments\": [\n" +
+                "    \"" + firstNmb + "\",\n" +
+                "    \"" + secondNmb + "\"\n" +
+                "  ]\n" +
+                "}";
+        return generatedRuntimeJsonReq;
+
+    }
+
+    // Generating JSON req for Register or Update
+    public static String createRegisterJsonReq(
+            String name,
+            String lastname,
+            String email,
+            String password) {
+         String generatedRegisterJsonReq = "{\n" +
+                 "  \"name\": \""+name+"\",\n" +
+                 "  \"lastname\": \""+lastname+"\",\n" +
+                 "  \"email\": \""+email+"\",\n" +
+                 "  \"password\": \""+password+"\",\n" +
+                 "  \"department\": 0,\n" +
+                 "  \"position\": \"string\",\n" +
+                 "  \"avatarUrl\": \"string\"\n" +
+                 "}";
+         return generatedRegisterJsonReq;
+    }
+
+    public static String createUpdateJsonReq(
+            String name,
+            String lastname,
+            String email,
+            String password) {
+        String generatedUpgradeJsonReq = "{\n" +
+                "  \"avatarUrl\": \"string\",\n" +
+                "  \"department\": 0,\n" +
+                "  \"email\": \""+email+"\",\n" +
+                "  \"lastname\": \""+lastname+"\",\n" +
+                "  \"name\": \""+name+"\",\n" +
+                "  \"passwordUnhashed\": \""+password+"\",\n" +
+                "  \"position\": \"string\",\n" +
+                "  \"role\": 0\n" +
+                "}";
+        return generatedUpgradeJsonReq;
+    }
+
+
+    // Generating JSON req for LogIn operation
+
+    public static String createLogInJsonReq (
+            String email,
+            String password
+    ) {
+        String generatedLogInJsonReq = "{\n" +
+                "  \"email\": \"" +email + "\",\n" +
+                "  \"password\": \""+password+"\"\n" +
+                "}";
+        return generatedLogInJsonReq;
+    }
+
+    public static String createEmailJsonReq (String email) {
+        String emailBody = "{\n" +
+                "  \"email\": \""+email+"\"\n" +
+                "}";
+        return emailBody;
+    }
+
+
 
 }
