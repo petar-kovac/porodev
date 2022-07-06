@@ -23,8 +23,8 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpPost("Upload")]
         public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file)
         {
-            //Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            Guid userId = Guid.Parse("f7a3a5dd-a69d-4017-b141-a42f1cb2c24d");
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            //Guid userId = Guid.Parse("f7a3a5dd-a69d-4017-b141-a42f1cb2c24d");
             var returnModel = new FileUploadRequestGatewayToService(file, userId);
             var response = await _storageService.UploadFile(returnModel);
             return Ok(response);
@@ -60,7 +60,7 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete([FromQuery] string fileId)
         {
-            //await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileDeleteRequestGatewayToService(fileId);
 
             await _storageService.DeleteFile(returnModel);

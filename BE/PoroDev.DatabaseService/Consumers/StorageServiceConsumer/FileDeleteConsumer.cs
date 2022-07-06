@@ -20,7 +20,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             var entity = await _unitOfWork.UserFiles.GetByStringIdAsync(context.Message.FileId);
             if (entity == null)
             {
-                throw new FileNotFoundException();
+                throw new FileNotFoundException("File not found");
             }
             else
             {
