@@ -34,7 +34,7 @@ namespace PoroDev.DatabaseService.Repositories
             if (queryRequest.Arguments != null)
                 runtimeDatas = runtimeDatas.Where(runtime => runtime.Arguments.Equals(queryRequest.Arguments));
 
-            var responseModel = new UnitOfWorkResponseModel<List<RuntimeData>>(runtimeDatas);
+            var responseModel = new UnitOfWorkResponseModel<List<RuntimeData>>(runtimeDatas.ToList());
 
             return responseModel;
             
