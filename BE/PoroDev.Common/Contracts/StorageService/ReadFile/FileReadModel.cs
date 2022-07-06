@@ -8,19 +8,15 @@ namespace PoroDev.Common.Contracts.StorageService.ReadFile
 {
     public class FileReadModel
     {
-        public List<string> FileNames { get; set; }
-
-        public List<DateTime> UploadTime { get; set; }
+        public List<FileReadSingleModel> Content { get; set; }
 
         public FileReadModel()
         {
-            FileNames = new List<string>();
-            UploadTime = new List<DateTime>();
+            Content = new List<FileReadSingleModel>();
         }
-        public FileReadModel(List<string> fileNames, List<DateTime> uploadTime)
+        public FileReadModel(List<FileReadSingleModel> files)
         {
-            FileNames = fileNames;
-            UploadTime = uploadTime;
+            Content = files;
         }
     }
 }
