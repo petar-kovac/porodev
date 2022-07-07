@@ -83,6 +83,7 @@ namespace PoroDev.DatabaseService.Repositories
 
             FileReadSingleModel readModel = new FileReadSingleModel()
             {
+                FileId = fileEntry.Id.ToString(),
                 FileName = fileEntry.Filename,
                 UploadTime = fileEntry.UploadDateTime
             };

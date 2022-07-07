@@ -24,7 +24,7 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            //Guid userId = Guid.Parse("f7a3a5dd-a69d-4017-b141-a42f1cb2c24d");
+            //Guid userId = Guid.Parse("f8cc4055-75a8-4573-8a7d-5f9d31778559");
             var returnModel = new FileUploadRequestGatewayToService(file, userId);
             var response = await _storageService.UploadFile(returnModel);
             return Ok(response);
@@ -33,7 +33,7 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpGet("Download")]
         public async Task<ActionResult<FileDownloadMessage>> Download([FromQuery] string fileId)
         {
-            //Guid userId = Guid.Parse("f7a3a5dd-a69d-4017-b141-a42f1cb2c24d");
+           // Guid userId = Guid.Parse("f8cc4055-75a8-4573-8a7d-5f9d31778559");
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileDownloadRequestGatewayToService(fileId, userId);
 
