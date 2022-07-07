@@ -191,7 +191,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model)
         {
-            var isException = await CheckUserFieldsUpdate(model);
+            var isException = Helpers.UserManagementValidator.ValidateUpdate(model);
 
             if (isException.ExceptionName != null)
             {
@@ -208,6 +208,7 @@ namespace PoroDev.UserManagementService.Services
 
             return response.Message;
         }
+
 
         public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
         {

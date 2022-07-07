@@ -4,7 +4,7 @@
     {
         public Guid UserId { get; set; }
 
-        public Guid FileID { get; set; }
+        public string FileID { get; set; }
 
         public List<string> Arguments { get; set; }
 

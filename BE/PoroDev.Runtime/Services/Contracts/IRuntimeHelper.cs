@@ -5,6 +5,8 @@ namespace PoroDev.Runtime.Services.Contracts
 {
     public interface IRuntimeHelper
     {
-        CommunicationModel<RuntimeData> InitializeAndExtract();
+        Task<CommunicationModel<RuntimeData>> InitializeAndExtract(string projectId, Guid userId);
+
+        Task<CommunicationModel<List<String>>> InitializeFileArguments(List<string> argList, Guid userId);
     }
 }
