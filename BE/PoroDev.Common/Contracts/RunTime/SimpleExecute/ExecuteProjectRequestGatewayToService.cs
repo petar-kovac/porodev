@@ -3,13 +3,13 @@
     public class ExecuteProjectRequestGatewayToService
     {
         public Guid UserId { get; set; }
-        public Guid FileID { get; set; }
+        public string FileID { get; set; }
 
         public ExecuteProjectRequestGatewayToService()
         {
         }
 
-        public ExecuteProjectRequestGatewayToService(Guid userId, Guid fileID)
+        public ExecuteProjectRequestGatewayToService(Guid userId, string fileID)
         {
             UserId = userId;
             FileID = fileID;

@@ -9,7 +9,7 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
 
         public Guid UserId { get; set; }
 
-        public Guid FileId { get; set; }
+        public string FileId { get; set; }
 
         public DateTimeOffset ExecutionStart { get; set; }
 
@@ -23,13 +23,13 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
         public DataUserModel User { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Arguments { get; set; }
+        public string? Arguments { get; set; }
 
         public RuntimeData()
         {
         }
 
-        public RuntimeData(Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string executionOutput)
+        public RuntimeData(Guid userId, string fileId, DateTimeOffset executionStart, long executionTime, string executionOutput)
         {
             Id = Guid.NewGuid();
             UserId = userId;
@@ -40,7 +40,7 @@ namespace PoroDev.Common.Models.RuntimeModels.Data
             ExceptionHappened = executionOutput == "";
         }
 
-        public RuntimeData(Guid userId, Guid fileId, DateTimeOffset executionStart, long executionTime, string executionOutput, string arguments) : this(userId, fileId, executionStart, executionTime, executionOutput)
+        public RuntimeData(Guid userId, string fileId, DateTimeOffset executionStart, long executionTime, string executionOutput, string arguments) : this(userId, fileId, executionStart, executionTime, executionOutput)
         {
             Arguments = arguments;
         }

@@ -1,4 +1,7 @@
-﻿using PoroDev.Common.Contracts;
+﻿using MassTransit;
+using MongoDB.Bson;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Runtime.Services.Contracts;
@@ -12,14 +15,46 @@ namespace PoroDev.Runtime.Services
 
         private readonly IDockerImageService _dockerImageService;
 
-        public RuntimeHelper(IZipManipulator zipManipulator, IDockerImageService dockerImageService)
+        private readonly IRequestClient<FileDownloadRequestServiceToDatabase> _downloadFileRequestClient;
+
+        public RuntimeHelper(IZipManipulator zipManipulator,
+            IDockerImageService dockerImageService,
+            IRequestClient<FileDownloadRequestServiceToDatabase> downloadFileRequestClient)
         {
             _zipManipulator = zipManipulator;
             _dockerImageService = dockerImageService;
+            _downloadFileRequestClient = downloadFileRequestClient;
         }
 
-        public CommunicationModel<RuntimeData> InitializeAndExtract()
+        public async Task<CommunicationModel<List<String>>> InitializeFileArguments(List<string> argList, Guid userId)
         {
+            var lastIndex = argList.FindLastIndex(x => ObjectId.TryParse(x, out ObjectId rand));
+
+            for (int i = 0; i <= lastIndex; i++)
+            {
+                FileDownloadRequestServiceToDatabase requestToDb = new(argList[i], userId);
+
+                var fileContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb);
+
+                argList[i] = fileContext.Message.Entity.FileName;
+
+                await File.WriteAllBytesAsync(Path.Combine(_zipManipulator.ProjectPath, $"{fileContext.Message.Entity.FileName}"), fileContext.Message.Entity.File);
+            }
+
+            return new CommunicationModel<List<string>>(argList);
+        }
+
+        public async Task<CommunicationModel<RuntimeData>> InitializeAndExtract(string projectId, Guid userId)
+        {
+            if (!Directory.Exists(RUNTIME_FOLDER_ROUTE))
+                System.IO.Directory.CreateDirectory(RUNTIME_FOLDER_ROUTE);
+
+            FileDownloadRequestServiceToDatabase requestToDb = new(projectId, userId);
+
+            var projectContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb);
+
+            await File.WriteAllBytesAsync(Path.Combine(RUNTIME_FOLDER_ROUTE, $"{projectContext.Message.Entity.FileName}"), projectContext.Message.Entity.File);
+
             ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
 
             if (pathException != null)

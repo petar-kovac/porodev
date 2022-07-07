@@ -14,6 +14,13 @@ namespace PoroDev.Common.Contracts
         {
         }
 
+        public CommunicationModel(T entity)
+        {
+            Entity = entity;
+            ExceptionName = null;
+            HumanReadableMessage = null;
+        }
+
         public CommunicationModel(ICustomException exception)
         {
             Entity = null;
