@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.RegisterUser;
@@ -176,6 +177,111 @@ namespace PoroDev.UserManagementService.Helpers
             }
 
             return new CommunicationModel<RegisterUserResponse>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
+        }
+
+        public static CommunicationModel<DataUserModel> ValidateUpdate(UserUpdateRequestGatewayToService updateModel)
+        {
+            try
+            {
+                CheckFullName(updateModel.Name, updateModel.Lastname);
+                CheckEmailUpdate(updateModel.Email);
+                CheckPassword(updateModel.PasswordUnhashed);
+                CheckPosition(updateModel.Position);
+            }
+            catch (EmailFormatException ex)
+            {
+                string exceptionType = nameof(EmailFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
+
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                return responseException;
+            }
+            catch (PasswordFormatException ex)
+            {
+                string exceptionType = nameof(PasswordFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
+
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                return responseException;
+            }
+            catch (FullNameFormatException ex)
+            {
+                string exceptionType = nameof(FullNameFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
+
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                return responseException;
+            }
+            catch (PositionFormatException ex)
+            {
+                string exceptionType = nameof(PositionFormatException);
+                string humanReadableMessage = ex.HumanReadableErrorMessage;
+
+                var responseException = new CommunicationModel<DataUserModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                return responseException;
+            }
+
+            return new CommunicationModel<DataUserModel>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
+        }
+
+        private static async Task CheckEmailUpdate(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) 
+            { 
+                throw new EmailFormatException(EMAIL_EMPTY_ERROR);
+            }
+
+            if (email.Length > MAX_EMAIL_LENGTH)
+            {
+                throw new EmailFormatException(EMAIL_LENGTH_ERROR);
+            }
+
+            var splitEmail = email.Split('@');
+
+            if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
+            {
+                throw new EmailFormatException(EMAIL_FORMAT_ERROR);
+            }
+
+            if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
+            {
+                throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
+            }
+
+            if (CheckStringForCharacters(splitEmail[0], SPECIAL_CHARACTERS_EMAIL_STRING))
+            {
+                throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
+            }
+
+            if (!splitEmail[1].Equals(EMAIL_DOMAIN))
+            {
+               throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
+            }
+
         }
     }
 }
