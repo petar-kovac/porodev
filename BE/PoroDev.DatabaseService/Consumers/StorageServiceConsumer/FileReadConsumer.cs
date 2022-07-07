@@ -36,17 +36,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 returnModel = await findUserFiles(user.Id);
             }
 
-     /*       List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
-          
-    
-            for(int i = 0; i < allUserFiles.Count; i++)
-            {
-                var fileModel = allUserFiles[i];
-                var fileReadSingleModel = await _fileRepository.ReadFiles(fileModel.FileId);
-                returnModel.FileNames.Add(fileReadSingleModel.FileName);
-                returnModel.UploadTime.Add(fileReadSingleModel.UploadTime);
-            } */
-
             var response = new CommunicationModel<FileReadModel>()
             {
                 Entity = returnModel,
