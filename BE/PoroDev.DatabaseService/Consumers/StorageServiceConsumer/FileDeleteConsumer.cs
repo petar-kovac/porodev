@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
-using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
