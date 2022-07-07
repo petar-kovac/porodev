@@ -6,6 +6,7 @@ import GridCard from 'components/card/GridCard';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
 
+import { downloadFile, findFiles } from 'service/files/files';
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { IFilesCard } from 'types/card-data';
@@ -21,23 +22,31 @@ import {
 } from './home-styled';
 
 const Home: FC = () => {
-  const [data, setData] = useState<[]>([]);
+  const [data, setData] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>();
+  const [url, setUrl] = useState<any>(undefined);
 
   useEffect(() => {
-    const fetchCards = async () => {
-      setIsLoading(true);
-      try {
-        await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/files`)
-          .then((res) => setData(res.data));
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
+    // const fetchCards = async () => {
+    //   setIsLoading(true);
+    //   try {
+    //     await axios
+    //       .get(`${process.env.REACT_APP_MOCK_URL}/files`)
+    //       .then((res) => setData(res.data));
+    //   } catch (err) {
+    //     console.log(err);
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // };
+    const fetchFiles = async () => {
+      const res = await findFiles();
+      setData(res);
+      console.log(data);
     };
-    fetchCards();
+
+    // fetchCards();
+    fetchFiles();
   }, []);
 
   return (
@@ -52,12 +61,11 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.splice(0, 5).map((value: IFilesCard) => (
+            {data?.content.map((value: any) => (
               <GridCard
-                key={value.id}
-                heading={value.name}
-                description={value.description}
-                image={value.image}
+                key={value.fileId}
+                heading={value.fileName}
+                description={value.uploadTime}
                 selected={false}
               />
             ))}

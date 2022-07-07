@@ -23,17 +23,23 @@ export const StyledFile = styled(FileImageOutlined)`
   color: ${({ theme: { colors } }) => colors.primary};
   font-size: 100px;
 `;
-export const StyledAppstoreOutlined = styled(AppstoreOutlined)`
-  font-size: 2rem;
+export const StyledAppstoreOutlined = styled(AppstoreOutlined)<{
+  isList: boolean;
+}>`
+  font-size: ${({ isList }) => (isList ? '2.3rem' : '2.6rem')};
   cursor: pointer;
-  color: #555;
+  color: ${({ isList, theme: { colors } }) =>
+    isList ? '#555' : colors.primary};
+  margin-right: 0.5rem;
 `;
 
-export const StyledBarsOutlined = styled(BarsOutlined)`
-  font-size: 2rem;
+export const StyledBarsOutlined = styled(BarsOutlined)<{ isList: boolean }>`
+  font-size: ${({ isList }) => (isList ? '2.6rem' : '2.3rem')};
   cursor: pointer;
-  color: #555;
+  color: ${({ isList, theme: { colors } }) =>
+    isList ? colors.primary : '#555'};
 `;
+
 export const StyledSpin = styled(Spin).attrs({
   'data-testid': 'spinner',
 })<{ speed: number }>`

@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import theme from 'theme/theme';
 
 interface IPButtonProps {
+  href?: string;
+  download?: string;
   color?: string;
   borderRadius?: string;
   background?: string;
@@ -13,6 +15,8 @@ interface IPButtonProps {
 }
 
 const DownloadButton: FC<IPButtonProps> = ({
+  href,
+  download,
   color,
   borderRadius,
   background,
@@ -21,6 +25,8 @@ const DownloadButton: FC<IPButtonProps> = ({
 }) => {
   return (
     <StyledDownloadButton
+      href={href}
+      download={download}
       color={color}
       borderRadius={borderRadius}
       background={background}

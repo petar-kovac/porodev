@@ -1,12 +1,14 @@
 import { Card, Button } from 'antd';
 import styled from 'styled-components';
-import { FC, useRef, MouseEventHandler, RefObject } from 'react';
+import { FC, useRef, MouseEventHandler, RefObject, useState } from 'react';
 
 import theme from 'theme/theme';
 
 import useDoubleClick from 'hooks/useDoubleClick';
 
 import DownloadButton from 'components/buttons/DownloadButton';
+
+import { downloadFile, findFiles } from 'service/files/files';
 
 interface IListCardProps {
   value: any;
@@ -25,21 +27,26 @@ const ListCard: FC<IListCardProps> = ({
   setSelectedCardId,
   setIsSiderVisible,
 }) => {
+  const [url, setUrl] = useState<any>(undefined);
   const ref = useRef<HTMLDivElement>(null);
 
   useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
+
+  const handleDownload = async () => {
+    const res = await downloadFile();
+    setUrl(window.URL.createObjectURL(new Blob([res.data])));
+  };
 
   return (
     <StyledListCardContainer>
       <StyledListCard ref={ref} hoverable selected={selected}>
         <StyledDescription>
           <div>
-            <h3>{value.name}</h3>
-            <span>Click/DoubleClick for more!</span>
+            <h3>{value.fileName}</h3>
           </div>
           <StyledDescriptionUploadDetails>
             <h4>Uploaded:</h4>
-            <span>{value.description.slice(0, 12)}</span>
+            <span>{value.uploadTime}</span>
           </StyledDescriptionUploadDetails>
           <StyledDescriptionButtons>
             <StyledFilesButton
@@ -55,7 +62,17 @@ const ListCard: FC<IListCardProps> = ({
                 e.stopPropagation();
                 setSelectedCardId(value.id);
                 setIsSiderVisible(false);
+                handleDownload();
               }}
+              download="image.png"
+              // onClickCapture={async () => {
+              //   const res = await downloadFile();
+              //   // console.log(res.data.content.map((item: any) => console.log(item)));
+
+              //   setUrl(window.URL.createObjectURL(new Blob([res.data])));
+              //   console.log(url);
+              // }}
+              href={url}
             />
           </StyledDescriptionButtons>
         </StyledDescription>

@@ -71,7 +71,7 @@ const PFilter: FC<IPFilterProps> = ({
       <StyledFilesSelect>
         {propsObj.showSortByType && (
           <PSelect
-            defaultValue="File type"
+            defaultValue="File extension"
             onChange={handleChange}
             data={data}
           />
@@ -87,7 +87,7 @@ const PFilter: FC<IPFilterProps> = ({
 
         {propsObj.showToggleButton && (
           <StyledToggleButton>
-            {isList ? (
+            {/* {isList ? (
               <StyledAppstoreOutlined
                 onClick={(e: any) => {
                   e.stopPropagation();
@@ -101,7 +101,24 @@ const PFilter: FC<IPFilterProps> = ({
                   setIsList((prevState) => !prevState);
                 }}
               />
-            )}
+            )} */}
+            <>
+              <StyledAppstoreOutlined
+                isList={isList}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setIsList((prevState) => !prevState);
+                }}
+              />
+
+              <StyledBarsOutlined
+                isList={isList}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  setIsList((prevState) => !prevState);
+                }}
+              />
+            </>
           </StyledToggleButton>
         )}
       </StyledFilesSelect>
@@ -133,7 +150,7 @@ const StyledFilesSelect = styled.div`
   /* width: 32rem; */
   align-self: flex-end;
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
 
   .ant-select-selector {

@@ -8,11 +8,12 @@ import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
 import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
-import { useFetchData } from 'hooks/useFetchData';
 import {
   PFilterWrapper,
   StyledContent,
   StyledFilesWrapper,
+  StyledFoldersWrapper,
+  StyledFilesContainer,
   StyledFoldersContainer,
   StyledPageWrapper,
   StyledStaticContent,
@@ -45,27 +46,15 @@ const Files: FC = () => {
               setIsList={setIsListView}
               activeFilters={{
                 showFilterByDate: true,
-                showSortByTime: true,
-                showSortByType: true,
                 showFilterBySize: true,
-                showToggleButton: true,
               }}
             />
           </PFilterWrapper>
-          <StyledFoldersContainer>
-            <PFolders
-              cardData={cardData}
-              setIsSiderVisible={setIsSiderVisible}
-              setIsModalVisible={setIsModalVisible}
-              setCardData={setCardData}
-              selectedCardId={selectedCardId}
-              setSelectedCardId={setSelectedCardId}
-            />
-          </StyledFoldersContainer>
 
-          <StyledFilesWrapper>
-            {isListView ? (
-              <ListCards
+          <StyledFoldersContainer>
+            <h2>Folders</h2>
+            <StyledFoldersWrapper>
+              <PFolders
                 cardData={cardData}
                 setIsSiderVisible={setIsSiderVisible}
                 setIsModalVisible={setIsModalVisible}
@@ -73,17 +62,49 @@ const Files: FC = () => {
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
               />
-            ) : (
-              <GridCards
-                cardData={cardData}
-                setCardData={setCardData}
-                setIsSiderVisible={setIsSiderVisible}
-                setIsModalVisible={setIsModalVisible}
-                selectedCardId={selectedCardId}
-                setSelectedCardId={setSelectedCardId}
+            </StyledFoldersWrapper>
+          </StyledFoldersContainer>
+          <StyledFilesContainer>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <h2>Files</h2>
+              <PFilter
+                isList={isListView}
+                setIsList={setIsListView}
+                activeFilters={{
+                  showSortByTime: true,
+                  showSortByType: true,
+                  showToggleButton: true,
+                }}
               />
-            )}
-          </StyledFilesWrapper>
+            </div>
+            <StyledFilesWrapper>
+              {isListView ? (
+                <ListCards
+                  cardData={cardData}
+                  setIsSiderVisible={setIsSiderVisible}
+                  setIsModalVisible={setIsModalVisible}
+                  setCardData={setCardData}
+                  selectedCardId={selectedCardId}
+                  setSelectedCardId={setSelectedCardId}
+                />
+              ) : (
+                <GridCards
+                  cardData={cardData}
+                  setCardData={setCardData}
+                  setIsSiderVisible={setIsSiderVisible}
+                  setIsModalVisible={setIsModalVisible}
+                  selectedCardId={selectedCardId}
+                  setSelectedCardId={setSelectedCardId}
+                />
+              )}
+            </StyledFilesWrapper>
+          </StyledFilesContainer>
         </StyledStaticContent>
 
         <PFileSider

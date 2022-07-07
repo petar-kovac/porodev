@@ -25,6 +25,7 @@ const GroupCards: FC<IGroupCardProps> = ({
 }) => {
   const url = `${process.env.REACT_APP_MOCK_URL}/groups`;
   const { data } = useFetchData(url);
+  console.log(data);
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
