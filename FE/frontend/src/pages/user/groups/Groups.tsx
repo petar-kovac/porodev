@@ -22,16 +22,11 @@ const Groups: FC = () => {
 
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
-  useEffect(() => {
-    setIsSiderVisible(false);
-  }, []);
-
   return (
     <StyledPageWrapper>
       <StyledContent
         onClick={() => {
           setSelectedCardId(null);
-          setIsSiderVisible(false);
           setCardData(null);
         }}
       >

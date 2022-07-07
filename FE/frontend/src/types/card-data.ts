@@ -13,7 +13,7 @@
 // }
 export interface IFilesCard {
   titleString?: string;
-  title: string;
+  title?: string;
   avatar?: string;
   createdAt?: string;
   description?: string;

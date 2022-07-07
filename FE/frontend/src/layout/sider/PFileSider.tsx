@@ -1,5 +1,11 @@
 import { Layout } from 'antd';
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
+import {
+  Dispatch,
+  FC,
+  MouseEventHandler,
+  ReactNode,
+  SetStateAction,
+} from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleOutlined } from '@ant-design/icons';
@@ -9,20 +15,25 @@ import { StyledClose } from 'styles/icons/styled-icons';
 import StyledIcon from 'styles/icons/StyledIcons';
 import { IFilesCard } from 'types/card-data';
 import RuntimeInputSiderMapper from 'util/mappers/RuntimeInputSiderMapper';
+import RuntimeImageSiderMapper from 'util/mappers/RuntimeImageSiderMapper';
+import { CreateImageAsparameter } from 'util/util-components/CreateImageAsParameter';
 import SiderDataMapper from '../../util/mappers/SiderDataMapper';
 
 const { Sider } = Layout;
 
 interface IPFileSiderProps {
   cardData?: IFilesCard | null;
+  data?: IFilesCard[] | null;
   type: 'folder' | 'file' | 'runtime';
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  setData?: Dispatch<SetStateAction<IFilesCard[] | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const PFileSider: FC<IPFileSiderProps> = ({
   cardData,
+  data,
   setSelectedCardId = () => undefined,
   setCardData = () => undefined,
   type,
@@ -33,12 +44,26 @@ const PFileSider: FC<IPFileSiderProps> = ({
     isSiderVisible,
     setIsSiderVisible,
     setNumberOfInputFields,
+    setIsModalVisible,
+    setModalContent,
   } = usePageContext();
 
   const handleClose = () => {
     setIsSiderVisible(false);
     setCardData(null);
     setSelectedCardId(null);
+  };
+
+  const onAddImage = () => {
+    if (data) {
+      const modalDataToRender: ReactNode = CreateImageAsparameter(
+        data as IFilesCard[],
+      );
+      console.log(modalDataToRender);
+
+      setModalContent(modalDataToRender);
+      setIsModalVisible(true);
+    }
   };
 
   return (
@@ -49,30 +74,42 @@ const PFileSider: FC<IPFileSiderProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
-        <StyledRow>
-          <StyledIcon type={type} />
-          <StyledClose onClick={() => handleClose()} />
-        </StyledRow>
-        <StyledTitle>{cardData?.title}</StyledTitle>
-        <StyledContent>
-          {cardData && <SiderDataMapper data={cardData} />}
-        </StyledContent>
-        {type === 'runtime' && (
+        {cardData ? (
           <>
             <StyledRow>
-              <StyledTitle>Add parameters</StyledTitle>
-              <PlusCircleOutlined
-                onClick={() => setNumberOfInputFields((value) => value + 1)}
-              />
+              <StyledIcon type={type} />
             </StyledRow>
-            <RuntimeInputSiderMapper />
+            <StyledTitle>{cardData?.title}</StyledTitle>
+            <StyledContent>
+              {cardData && <SiderDataMapper data={cardData} />}
+            </StyledContent>
+            {type === 'runtime' && (
+              <>
+                <StyledRow>
+                  <StyledTitle>Add parameters</StyledTitle>
+                  <PlusCircleOutlined
+                    onClick={() => setNumberOfInputFields((value) => value + 1)}
+                  />
+                </StyledRow>
+                <RuntimeInputSiderMapper />
+                <StyledRow>
+                  <StyledTitle>Add image</StyledTitle>
+                  <PlusCircleOutlined onClick={onAddImage} />
+                </StyledRow>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  <RuntimeImageSiderMapper />
+                </div>
+              </>
+            )}
+            <PButton
+              text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
+              onClick={onButtonClick}
+              isLoading={isLoading}
+            />
           </>
+        ) : (
+          'Please select folder'
         )}
-        <PButton
-          text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
-          onClick={onButtonClick}
-          isLoading={isLoading}
-        />
       </StyledColumn>
     </StyledFileSider>
   );

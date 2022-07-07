@@ -18,16 +18,10 @@ const PModal: FC<IPModalProps> = ({ title, content, setCardData }) => {
 
   const handleOk = () => {
     setIsModalVisible(false);
-    if (setCardData) {
-      setCardData(null);
-    }
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    if (setCardData) {
-      setCardData(null);
-    }
   };
 
   return (
