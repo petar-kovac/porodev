@@ -6,6 +6,7 @@ using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using System.Security.Cryptography;
+using static PoroDev.DatabaseService.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
@@ -28,6 +29,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             byte[] encryptedFile;
             byte[] key;
+            byte[] iv;
 
             using(Aes cipher = Aes.Create())
             {
@@ -39,6 +41,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 
                 key = cipher.Key;
                 encryptedFile = cipherText;
+                iv = cipher.IV;
             }
 
 
@@ -49,7 +52,19 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             string fileId = id.ToString();
 
-            var createModel = new FileData(fileId, context.Message.UserId, false, key);
+            using(Aes cipher = Aes.Create())
+            {
+                cipher.Padding = PaddingMode.ISO10126;
+                cipher.Key = secretKey;
+                cipher.IV = secretIv;
+
+                ICryptoTransform encryptor = cipher.CreateEncryptor(secretKey, secretIv);
+
+                key = encryptor.TransformFinalBlock(key, 0, key.Length);
+                iv = encryptor.TransformFinalBlock(iv, 0, iv.Length);
+            }
+
+            var createModel = new FileData(fileId, context.Message.UserId, false, key, iv);
 
             await _unitOfWork.UserFiles.CreateAsync(createModel);
             await _unitOfWork.SaveChanges();
