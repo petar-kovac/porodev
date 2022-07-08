@@ -27,16 +27,17 @@ const RuntimeCards: FC<IGroupCardProps> = ({
   setIsModalVisible = () => undefined,
   setIsSiderVisible = () => undefined,
 }) => {
-  const { setInputParameters, setNumberOfInputFields } = usePageContext();
+  const { setInputParameters, setNumberOfInputFields, setProjectId } =
+    usePageContext();
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
     setCardData(value);
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.fileId);
   };
 
   const handleDoubleClick = (value: any) => {
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.fileId);
     setCardData(value);
     setIsSiderVisible(false);
     setIsModalVisible(true);
@@ -47,15 +48,16 @@ const RuntimeCards: FC<IGroupCardProps> = ({
       {data?.slice(0, 3).map((value: any) => (
         <RuntimeCard
           value={value}
-          key={value.id}
+          key={value.fileId}
           image={value.image}
           heading={value.name}
           description={value.description}
-          selected={selectedCardId === value.id}
+          selected={selectedCardId === value.fileId}
           onClick={() => {
             handleClick(value);
             setNumberOfInputFields(1);
             setInputParameters([]);
+            setProjectId(value.fileId);
           }}
           onDoubleClick={() => handleDoubleClick(value)}
         />

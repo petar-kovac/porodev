@@ -10,6 +10,7 @@ import { usePageContext } from 'context/PageContext';
 import { startRuntimeService } from 'service/runtime/runtime';
 
 import { useFetchData } from 'hooks/useFetchData';
+import { findFiles } from 'service/files/files';
 import RuntimeCards from 'components/card/RuntimeCards';
 import {
   StyledPageWrapper,
@@ -22,9 +23,8 @@ import {
 const Runtime: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
+  const [data, setData] = useState<any>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
-  const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  const { data } = useFetchData(url);
 
   const {
     setIsLoading,
@@ -33,16 +33,30 @@ const Runtime: FC = () => {
     setNumberOfInputFields,
     setInputParameters,
     inputParameters,
+    imageParameters,
     setModalContent,
     modalContent,
+    projectId,
   } = usePageContext();
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const res = await findFiles();
+        setData(res.content);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchFiles();
+  }, []);
 
   const startRuntime = async () => {
     setIsLoading(true);
     try {
       const res = await startRuntimeService({
-        projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        arguments: inputParameters,
+        projectId,
+        arguments: [...imageParameters, ...inputParameters],
       });
       const modalDataToRender: ReactNode = GetRuntimeModalData(res);
       setModalContent(modalDataToRender);
@@ -53,6 +67,7 @@ const Runtime: FC = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <StyledPageWrapper>
       <StyledContent

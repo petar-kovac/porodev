@@ -42,6 +42,10 @@ const PFileSider: FC<IPFileSiderProps> = ({
   const {
     isLoading,
     isSiderVisible,
+    inputParameters,
+    imageParameters,
+    setImageParameters,
+    setInputParameters,
     setIsSiderVisible,
     setNumberOfInputFields,
     setIsModalVisible,
@@ -58,8 +62,9 @@ const PFileSider: FC<IPFileSiderProps> = ({
     if (data) {
       const modalDataToRender: ReactNode = CreateImageAsparameter(
         data as IFilesCard[],
+        imageParameters as string[],
+        setImageParameters as Dispatch<SetStateAction<string[]>>,
       );
-      console.log(modalDataToRender);
 
       setModalContent(modalDataToRender);
       setIsModalVisible(true);

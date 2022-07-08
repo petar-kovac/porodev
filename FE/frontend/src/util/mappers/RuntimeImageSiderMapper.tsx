@@ -1,4 +1,4 @@
-import { Image, Input } from 'antd';
+import { Card, Image, Input } from 'antd';
 import { usePageContext } from 'context/PageContext';
 import { FC } from 'react';
 
@@ -6,8 +6,12 @@ import { FC } from 'react';
  * Component to set input fields in a Runtime sider.
  */
 const RuntimeImageSiderMapper: FC = () => {
-  const { numberOfImages, inputParameters, setInputParameters } =
-    usePageContext();
+  const {
+    numberOfImages,
+    inputParameters,
+    setInputParameters,
+    imageParameters,
+  } = usePageContext();
 
   const setItems = (e: any, index: any) => {
     const newItem = [...inputParameters];
@@ -17,13 +21,8 @@ const RuntimeImageSiderMapper: FC = () => {
 
   return (
     <>
-      {[...Array(2)].map((value, index) => {
-        return (
-          <Image
-            width={50}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          />
-        );
+      {imageParameters.map((value: any, index) => {
+        return <Card style={{ width: '100%', padding: 2 }}>{value} </Card>;
       })}
     </>
   );
