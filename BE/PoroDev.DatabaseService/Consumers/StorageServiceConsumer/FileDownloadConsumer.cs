@@ -18,6 +18,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
         {
             var downloadedFile = await _fileRepository.DownloadFile(context.Message.FileId, context.Message.UserId);
 
+
+
             FileDownloadMessage model = new()
             {
                 File = downloadedFile.File,
