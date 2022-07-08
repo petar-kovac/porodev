@@ -12,6 +12,11 @@
         {
         }
 
+        public FileUploadModel(Guid userId)
+        {
+            UserId = userId;
+        }
+
         public FileUploadModel(string fileName, byte[] file, string contentType, Guid userId)
         {
             FileName = fileName;

@@ -41,6 +41,7 @@ namespace PoroDev.GatewayAPI.Services
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
             var response = responseContext.Message.Entity;
 
             return response;
