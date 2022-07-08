@@ -10,7 +10,7 @@ import {
 import { IFilesCard } from 'types/card-data';
 import { useFetchData } from 'hooks/useFetchData';
 
-import { findFiles } from 'service/files/files';
+import { findFiles, downloadFile } from 'service/files/files';
 
 import ListCard from './ListCard';
 
@@ -42,11 +42,22 @@ const ListCards: FC<IListCardProps> = ({
     const fetchFiles = async () => {
       const res = await findFiles();
       setData(res);
-      console.log(data);
     };
 
     fetchFiles();
   }, []);
+
+  // console.log(data);
+
+  // const handleDownload = async () => {
+  //   const res = await downloadFile();
+  //   setFileData(window.URL.createObjectURL(new Blob([res.data])));
+  //   console.log(fileData);
+  // };
+
+  // // console.log(`${value.fileId}sss`);
+
+  // console.log(fileData);
 
   const handleClick = (value: any) => {
     setSelectedCardId(value.fileId);
@@ -65,6 +76,9 @@ const ListCards: FC<IListCardProps> = ({
     <>
       {data?.content.map((value: any) => (
         <ListCard
+          fileId={value.fileId}
+          fileName={value.fileName}
+          data={data}
           value={value}
           selected={selectedCardId === value.fileId}
           key={value.fileId}

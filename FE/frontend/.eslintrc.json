@@ -41,6 +41,14 @@
     ],
     "no-restricted-syntax": "off",
     "no-nested-ternary": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "off",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ],
     "import/no-mutable-exports": "off",
     "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "off",

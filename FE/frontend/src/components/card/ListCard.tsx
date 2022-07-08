@@ -1,16 +1,29 @@
 import { Card, Button } from 'antd';
 import styled from 'styled-components';
-import { FC, useRef, MouseEventHandler, RefObject, useState } from 'react';
+import {
+  FC,
+  useRef,
+  MouseEventHandler,
+  RefObject,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 
 import theme from 'theme/theme';
+
+import api from 'service/base';
 
 import useDoubleClick from 'hooks/useDoubleClick';
 
 import DownloadButton from 'components/buttons/DownloadButton';
 
-import { downloadFile, findFiles } from 'service/files/files';
+import { downloadFile, findFiles, deleteFile } from 'service/files/files';
 
 interface IListCardProps {
+  fileId: any;
+  fileName: any;
+  data: any;
   value: any;
   selected: boolean;
   onClick?: MouseEventHandler<HTMLElement>;
@@ -20,6 +33,9 @@ interface IListCardProps {
 }
 
 const ListCard: FC<IListCardProps> = ({
+  fileId,
+  fileName,
+  data,
   value,
   selected,
   onClick = () => undefined,
@@ -27,19 +43,31 @@ const ListCard: FC<IListCardProps> = ({
   setSelectedCardId,
   setIsSiderVisible,
 }) => {
-  const [url, setUrl] = useState<any>(undefined);
   const ref = useRef<HTMLDivElement>(null);
-
   useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
 
   const handleDownload = async () => {
-    const res = await downloadFile();
-    setUrl(window.URL.createObjectURL(new Blob([res.data])));
+    const res = await downloadFile(fileId as string);
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${value.fileName}`);
+    document.body.appendChild(link);
+    link.click();
+
+    link.parentNode?.removeChild(link);
+  };
+
+  const handleDelete = async () => {
+    await deleteFile(fileId as string);
+    const listCard = document.getElementById('remove-id');
+    listCard?.parentNode?.removeChild(listCard);
   };
 
   return (
     <StyledListCardContainer>
-      <StyledListCard ref={ref} hoverable selected={selected}>
+      <StyledListCard ref={ref} hoverable selected={selected} id="remove-id">
         <StyledDescription>
           <div>
             <h3>{value.fileName}</h3>
@@ -52,28 +80,22 @@ const ListCard: FC<IListCardProps> = ({
             <StyledFilesButton
               onClickCapture={(e) => {
                 console.log(e);
+                handleDelete();
               }}
             >
               Remove file
             </StyledFilesButton>
-
-            <DownloadButton
+            <a
+              type="button"
               onClickCapture={(e) => {
                 e.stopPropagation();
-                setSelectedCardId(value.id);
-                setIsSiderVisible(false);
                 handleDownload();
+                setIsSiderVisible(false);
+                setSelectedCardId(value.fileId);
               }}
-              download="image.png"
-              // onClickCapture={async () => {
-              //   const res = await downloadFile();
-              //   // console.log(res.data.content.map((item: any) => console.log(item)));
-
-              //   setUrl(window.URL.createObjectURL(new Blob([res.data])));
-              //   console.log(url);
-              // }}
-              href={url}
-            />
+            >
+              <DownloadButton />
+            </a>
           </StyledDescriptionButtons>
         </StyledDescription>
       </StyledListCard>

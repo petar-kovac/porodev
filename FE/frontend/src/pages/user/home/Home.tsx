@@ -24,7 +24,6 @@ import {
 const Home: FC = () => {
   const [data, setData] = useState<any>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>();
-  const [url, setUrl] = useState<any>(undefined);
 
   useEffect(() => {
     // const fetchCards = async () => {
