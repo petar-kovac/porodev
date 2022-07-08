@@ -26,7 +26,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
             FileReadModel returnModel = new FileReadModel();
 
-            //super admin = 0; normal user = 1 
+            //super admin = 0; normal user = 1
             if (user.Role == 0)
             {
                 returnModel = await findAdminFiles();
@@ -52,10 +52,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             FileReadModel returnModel = new FileReadModel();
 
-            for (int i = 0; i < allAdminFiles.Count; i++)
+            foreach (FileData file in allAdminFiles)
             {
-                var fileModel = allAdminFiles[i];
-                var fileReadSingleModel = await _fileRepository.ReadFiles(fileModel.FileId);
+                var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
                 returnModel.Content.Add(fileReadSingleModel);
             }
 
@@ -68,15 +67,15 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             FileReadModel returnModel = new FileReadModel();
 
-            for(int i = 0; i < allUserFiles.Count; i++)
+            foreach (FileData file in allUserFiles)
             {
-                if (allUserFiles[i].IsDeleted == false)
+                if (file.IsDeleted == false)
                 {
-                    var fileModel = allUserFiles[i];
-                    var fileReadSingleModel = await _fileRepository.ReadFiles(fileModel.FileId);
+                    var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
                     returnModel.Content.Add(fileReadSingleModel);
                 }
             }
+
             return returnModel;
         }
     }
