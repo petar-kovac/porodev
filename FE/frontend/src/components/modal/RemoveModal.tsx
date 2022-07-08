@@ -11,34 +11,30 @@ interface IPModalProps {
   content?: ReactNode;
   onOk?: any;
   onCancel?: any;
+  isRemoveModalVisible?: boolean;
+  setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  handleDelete?: any;
   cardData?: IFilesCard | null;
 }
 
-const PModal: FC<IPModalProps> = ({
+const RemoveModal: FC<IPModalProps> = ({
   title,
   content,
   setCardData,
   onOk,
   onCancel,
+  handleDelete,
+  isRemoveModalVisible,
+  setIsRemoveModalVisible,
 }) => {
-  const { isModalVisible, setIsModalVisible } = usePageContext();
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   return (
     <>
       <StyledFilesModal
         title={title}
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        visible={isRemoveModalVisible}
+        onOk={handleDelete}
+        // onCancel={handleCancel}
 
         // footer={[
         //   <div className="footer-content">
@@ -92,4 +88,4 @@ const StyledFilesModal = styled(Modal).attrs({
   }
 `;
 
-export default PModal;
+export default RemoveModal;

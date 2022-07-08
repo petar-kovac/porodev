@@ -84,6 +84,7 @@ const ListCards: FC<IListCardProps> = ({
           key={value.fileId}
           setSelectedCardId={setSelectedCardId}
           setIsSiderVisible={setIsSiderVisible}
+          setIsModalVisible={setIsModalVisible}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />

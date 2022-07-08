@@ -20,6 +20,8 @@ import DownloadButton from 'components/buttons/DownloadButton';
 
 import { downloadFile, findFiles, deleteFile } from 'service/files/files';
 
+import RemoveModal from '../modal/RemoveModal';
+
 interface IListCardProps {
   fileId: any;
   fileName: any;
@@ -30,6 +32,7 @@ interface IListCardProps {
   onDoubleClick?: MouseEventHandler<HTMLElement>;
   setSelectedCardId: (value: number | null) => unknown;
   setIsSiderVisible: (value: boolean) => unknown;
+  setIsModalVisible: (value: boolean) => unknown;
 }
 
 const ListCard: FC<IListCardProps> = ({
@@ -42,9 +45,13 @@ const ListCard: FC<IListCardProps> = ({
   onDoubleClick = () => undefined,
   setSelectedCardId,
   setIsSiderVisible,
+  setIsModalVisible,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
+
+  const [isRemoveModalVisible, setIsRemoveModalVisible] =
+    useState<boolean>(false);
 
   const handleDownload = async () => {
     const res = await downloadFile(fileId as string);
@@ -66,40 +73,49 @@ const ListCard: FC<IListCardProps> = ({
   };
 
   return (
-    <StyledListCardContainer>
-      <StyledListCard ref={ref} hoverable selected={selected} id="remove-id">
-        <StyledDescription>
-          <div>
-            <h3>{value.fileName}</h3>
-          </div>
-          <StyledDescriptionUploadDetails>
-            <h4>Uploaded:</h4>
-            <span>{value.uploadTime}</span>
-          </StyledDescriptionUploadDetails>
-          <StyledDescriptionButtons>
-            <StyledFilesButton
-              onClickCapture={(e) => {
-                console.log(e);
-                handleDelete();
-              }}
-            >
-              Remove file
-            </StyledFilesButton>
-            <a
-              type="button"
-              onClickCapture={(e) => {
-                e.stopPropagation();
-                handleDownload();
-                setIsSiderVisible(false);
-                setSelectedCardId(value.fileId);
-              }}
-            >
-              <DownloadButton />
-            </a>
-          </StyledDescriptionButtons>
-        </StyledDescription>
-      </StyledListCard>
-    </StyledListCardContainer>
+    <>
+      <StyledListCardContainer>
+        <StyledListCard ref={ref} hoverable selected={selected} id="remove-id">
+          <StyledDescription>
+            <div>
+              <h3>{value.fileName}</h3>
+            </div>
+            <StyledDescriptionUploadDetails>
+              <h4>Uploaded:</h4>
+              <span>{value.uploadTime}</span>
+            </StyledDescriptionUploadDetails>
+            <StyledDescriptionButtons>
+              <StyledFilesButton
+                onClickCapture={(e) => {
+                  e.stopPropagation();
+                  setIsRemoveModalVisible(true);
+                  setIsSiderVisible(false);
+                  setSelectedCardId(value.fileId);
+                }}
+              >
+                Remove file
+              </StyledFilesButton>
+              <a
+                type="button"
+                onClickCapture={(e) => {
+                  e.stopPropagation();
+                  handleDownload();
+                  setIsSiderVisible(false);
+                  setSelectedCardId(value.fileId);
+                }}
+              >
+                <DownloadButton />
+              </a>
+            </StyledDescriptionButtons>
+          </StyledDescription>
+        </StyledListCard>
+      </StyledListCardContainer>
+      <RemoveModal
+        isRemoveModalVisible={isRemoveModalVisible}
+        setIsRemoveModalVisible={setIsRemoveModalVisible}
+        handleDelete={handleDelete}
+      />
+    </>
   );
 };
 
