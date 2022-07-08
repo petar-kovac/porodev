@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
-using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers
@@ -21,10 +21,11 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpPost("Upload")]
+        [DisableRequestSizeLimit]
+        [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
         public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            //Guid userId = Guid.Parse("f8cc4055-75a8-4573-8a7d-5f9d31778559");
             var returnModel = new FileUploadRequestGatewayToService(file, userId);
             var response = await _storageService.UploadFile(returnModel);
             return Ok(response);
@@ -33,14 +34,10 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpGet("Download")]
         public async Task<ActionResult<FileDownloadMessage>> Download([FromQuery] string fileId)
         {
-           // Guid userId = Guid.Parse("f8cc4055-75a8-4573-8a7d-5f9d31778559");
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileDownloadRequestGatewayToService(fileId, userId);
 
             var file = await _storageService.DownloadFile(returnModel);
-
-            // GET api/storage/fileId
-            // POST api/storage
 
             return File(file.File, file.ContentType, file.FileName);
         }
@@ -49,7 +46,6 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<FileReadModel>> Read()
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            //Guid userId = new Guid("21566439-04ea-40f2-b649-924cd1bf410a");
             var returnModel = new FileReadRequestGatewayToService(userId);
 
             var response = await _storageService.ReadFiles(returnModel);
