@@ -5,6 +5,7 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using System.Security.Cryptography;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
@@ -23,6 +24,25 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
         public async Task Consume(ConsumeContext<FileUploadRequestServiceToDatabase> context)
         {
+            byte[] fileForUpload = context.Message.File;
+
+            byte[] encryptedFile;
+            byte[] key;
+
+            using(Aes cipher = Aes.Create())
+            {
+                cipher.Padding = PaddingMode.ISO10126;
+
+                ICryptoTransform encryptor = cipher.CreateEncryptor(cipher.Key, cipher.IV);
+
+                var cipherText = encryptor.TransformFinalBlock(fileForUpload, 0, fileForUpload.Length);
+                
+                key = cipher.Key;
+                encryptedFile = cipherText;
+            }
+
+
+
             ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
 
             var model = new FileUploadModel(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
