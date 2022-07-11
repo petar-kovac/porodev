@@ -1,7 +1,16 @@
-import { FC, Dispatch, MouseEvent, SetStateAction } from 'react';
+import {
+  FC,
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useState,
+  useEffect,
+} from 'react';
 
 import { useFetchData } from 'hooks/useFetchData';
 import { IFilesCard } from 'types/card-data';
+
+import { findFiles, downloadFile } from 'service/files/files';
 
 import GridCard from './GridCard';
 
@@ -24,17 +33,30 @@ const GridCards: FC<IGridCardProps> = ({
   setSelectedCardId = () => undefined,
   setIsModalVisible = () => undefined,
 }) => {
-  const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  const { data } = useFetchData(url);
+  // const url = `${process.env.REACT_APP_MOCK_URL}/files`;
+  // const { data } = useFetchData(url);
+
+  const [data, setData] = useState<any>(undefined);
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const res = await findFiles();
+      setData(res);
+    };
+
+    fetchFiles();
+  }, []);
+
+  console.log(data);
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
     setCardData(value);
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.fileId);
   };
 
   const handleDoubleClick = (value: any) => {
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.fileId);
     setCardData(value);
     setIsSiderVisible(false);
     setIsModalVisible(true);
@@ -42,14 +64,15 @@ const GridCards: FC<IGridCardProps> = ({
 
   return (
     <>
-      {data?.map((value: any) => (
+      {data?.content.map((value: any) => (
         <GridCard
           value={value}
-          key={value.id}
+          key={value.fileId}
           image={value.image}
-          heading={value.name}
+          heading={value.fileName}
           description={value.description}
-          selected={selectedCardId === value.id}
+          selected={selectedCardId === value.fileId}
+          fileExtension={value.fileName.split('.')[1]}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />

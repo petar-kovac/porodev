@@ -10,6 +10,7 @@ import { downloadFile, findFiles } from 'service/files/files';
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { IFilesCard } from 'types/card-data';
+import GridCards from 'components/card/GridCards';
 import {
   StyledCardHeading,
   StyledCardListWrapper,
@@ -26,33 +27,21 @@ const Home: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
 
   useEffect(() => {
-    // const fetchCards = async () => {
-    //   setIsLoading(true);
-    //   try {
-    //     await axios
-    //       .get(`${process.env.REACT_APP_MOCK_URL}/files`)
-    //       .then((res) => setData(res.data));
-    //   } catch (err) {
-    //     console.log(err);
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
     const fetchFiles = async () => {
       const res = await findFiles();
       setData(res);
-      console.log(data);
     };
 
-    // fetchCards();
     fetchFiles();
   }, []);
+
+  console.log(data);
 
   return (
     <StyledPage>
       <StyledUploadWrapper>
         <StyledHeading>User file upload:</StyledHeading>
-        <PUpload />
+        <PUpload setFiles={setData} />
       </StyledUploadWrapper>
       {!isLoading ? (
         <StyledCardListWrapper>
@@ -60,14 +49,18 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.content.map((value: any) => (
-              <GridCard
-                key={value.fileId}
-                heading={value.fileName}
-                description={value.uploadTime}
-                selected={false}
-              />
-            ))}
+            {data?.content
+              .slice(0, 4)
+              .reverse()
+              .map((value: any) => (
+                <GridCard
+                  key={value.fileId}
+                  heading={value.fileName}
+                  description={value.uploadTime}
+                  selected={false}
+                  fileExtension={value.fileName.split('.')[1]}
+                />
+              ))}
           </StyledCardWrapper>
           <StyledShowMoreButton>
             <Link to="/user-files">

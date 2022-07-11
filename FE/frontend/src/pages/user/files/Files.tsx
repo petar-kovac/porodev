@@ -74,7 +74,7 @@ const Files: FC = () => {
             >
               <h2>Files</h2>
               <PFilter
-                isList={isListView}
+                isList={!isListView}
                 setIsList={setIsListView}
                 activeFilters={{
                   showSortByTime: true,
@@ -84,7 +84,7 @@ const Files: FC = () => {
               />
             </div>
             <StyledFilesWrapper>
-              {isListView ? (
+              {!isListView ? (
                 <ListCards
                   cardData={cardData}
                   setIsSiderVisible={setIsSiderVisible}

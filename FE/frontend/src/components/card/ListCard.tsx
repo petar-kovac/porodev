@@ -70,6 +70,12 @@ const ListCard: FC<IListCardProps> = ({
     await deleteFile(fileId as string);
     const listCard = document.getElementById('remove-id');
     listCard?.parentNode?.removeChild(listCard);
+
+    setIsRemoveModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsRemoveModalVisible(false);
   };
 
   return (
@@ -114,6 +120,8 @@ const ListCard: FC<IListCardProps> = ({
         isRemoveModalVisible={isRemoveModalVisible}
         setIsRemoveModalVisible={setIsRemoveModalVisible}
         handleDelete={handleDelete}
+        handleCancel={handleCancel}
+        fileName={value.fileName}
       />
     </>
   );

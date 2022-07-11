@@ -12,9 +12,11 @@ interface IPModalProps {
   onOk?: any;
   onCancel?: any;
   isRemoveModalVisible?: boolean;
+  fileName?: string;
   setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   handleDelete?: any;
+  handleCancel?: any;
   cardData?: IFilesCard | null;
 }
 
@@ -25,16 +27,20 @@ const RemoveModal: FC<IPModalProps> = ({
   onOk,
   onCancel,
   handleDelete,
+  handleCancel,
+  fileName,
   isRemoveModalVisible,
   setIsRemoveModalVisible,
 }) => {
   return (
     <>
       <StyledFilesModal
+        okText="Yes"
+        cancelText="No"
         title={title}
         visible={isRemoveModalVisible}
         onOk={handleDelete}
-        // onCancel={handleCancel}
+        onCancel={handleCancel}
 
         // footer={[
         //   <div className="footer-content">
@@ -45,7 +51,10 @@ const RemoveModal: FC<IPModalProps> = ({
         //   </div>,
         // ]}
       >
-        <div>{content}</div>
+        <div>
+          <p>Are you sure you want to delete this file? </p>
+          <span>{fileName}</span>
+        </div>
       </StyledFilesModal>
     </>
   );
