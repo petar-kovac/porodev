@@ -19,7 +19,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
 
         public StorageService
-            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, 
+            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient,
             IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
             IRequestClient<FileReadRequestGatewayToService> readRequestClient,
             IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient)
@@ -69,7 +69,6 @@ namespace PoroDev.GatewayAPI.Services
             var response = responseContext.Message.Entity;
 
             return response;
-
         }
     }
 }

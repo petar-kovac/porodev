@@ -2,7 +2,6 @@
 using MassTransit;
 using MongoDB.Bson;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
@@ -37,10 +36,10 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             bool flagFileWithThatNameExistDeleted = false;
             bool flagFileWithThatNameExist = false;
 
-            foreach(FileReadSingleModel file in readUserFiles.Content)
+            foreach (FileReadSingleModel file in readUserFiles.Content)
             {
                 //3 slucaja -> 1 nema fajla sa tim imenom; 2 ima ali je obrisan; 3 ima i nije obrisan
-                if(file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == true)
+                if (file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == true)
                 {
                     flagFileWithThatNameExistDeleted = true;
 
@@ -49,15 +48,17 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                     await _unitOfWork.UserFiles.UpdateAsyncStringId(entity, file.FileId);
 
                     var model = new FileUploadModel(entity.CurrentUserId);
-                    var responseDeletedModel = new CommunicationModel<FileUploadModel>() { 
-                        Entity = model, 
-                        ExceptionName = null, 
-                        HumanReadableMessage = null };
+                    var responseDeletedModel = new CommunicationModel<FileUploadModel>()
+                    {
+                        Entity = model,
+                        ExceptionName = null,
+                        HumanReadableMessage = null
+                    };
 
                     await context.RespondAsync(responseDeletedModel);
                 }
 
-                if(file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == false)
+                if (file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == false)
                 {
                     flagFileWithThatNameExist = true;
 
@@ -72,15 +73,13 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                     };
 
                     await context.RespondAsync(resposneException);
-
                 }
 
                 counter++;
             }
 
-            if(flagFileWithThatNameExistDeleted == false && flagFileWithThatNameExist == false)
+            if (flagFileWithThatNameExistDeleted == false && flagFileWithThatNameExist == false)
             {
-
                 ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
 
                 var model = new FileUploadModel(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
@@ -95,22 +94,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
                 await context.RespondAsync(response);
             }
-
-
-
-            //ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
-
-            //var model = new FileUploadModel(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
-            //var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
-
-            //string fileId = id.ToString();
-
-            //var createModel = new FileData(fileId, context.Message.UserId, false);
-
-            //await _unitOfWork.UserFiles.CreateAsync(createModel);
-            //await _unitOfWork.SaveChanges();
-
-            //await context.RespondAsync(response);
         }
 
         public async Task<FileReadModel> findAllUserFiles(Guid userId)
@@ -121,8 +104,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             foreach (FileData file in allUserFiles)
             {
-               var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
-               returnModel.Content.Add(fileReadSingleModel);
+                var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
+                returnModel.Content.Add(fileReadSingleModel);
             }
 
             return returnModel;

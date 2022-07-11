@@ -74,7 +74,7 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         HumanReadableErrorMessage = failedToLogIn.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToLogIn);
-                        break; 
+                        break;
 
                     case PoroDev.Common.Exceptions.FileNotFoundException fileNotFound:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
