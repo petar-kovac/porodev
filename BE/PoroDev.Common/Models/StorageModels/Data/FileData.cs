@@ -16,10 +16,6 @@ namespace PoroDev.Common.Models.StorageModels.Data
 
         public bool IsDeleted { get; set; }
 
-        public byte[] EncryptionKey { get; set; }
-
-        public byte[] Iv { get; set; }
-
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DataUserModel CurrentUser { get; set; }
 
@@ -32,12 +28,10 @@ namespace PoroDev.Common.Models.StorageModels.Data
             FileId = fileId;
         }
 
-        public FileData(string fileId, Guid CurrentUserId, bool isDeleted, byte[] encryptionKey, byte[] iv) : this(fileId)
+        public FileData(string fileId, Guid CurrentUserId, bool isDeleted) : this(fileId)
         {
             this.CurrentUserId = CurrentUserId;
             this.IsDeleted = isDeleted;
-            EncryptionKey = encryptionKey;
-            Iv = iv;
         }
     }
 }

@@ -28,22 +28,17 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             byte[] fileForUpload = context.Message.File;
 
             byte[] encryptedFile;
-            byte[] key;
-            byte[] iv;
 
             using(Aes cipher = Aes.Create())
             {
                 cipher.Padding = PaddingMode.ISO10126;
 
-                ICryptoTransform encryptor = cipher.CreateEncryptor(cipher.Key, cipher.IV);
+                ICryptoTransform encryptor = cipher.CreateEncryptor(secretKey, secretIv);
 
                 var cipherText = encryptor.TransformFinalBlock(fileForUpload, 0, fileForUpload.Length);
                 
-                key = cipher.Key;
                 encryptedFile = cipherText;
-                iv = cipher.IV;
             }
-
 
             ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, encryptedFile, context.Message.ContentType, context.Message.UserId);
 
@@ -52,19 +47,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             string fileId = id.ToString();
 
-            using(Aes cipher = Aes.Create())
-            {
-                cipher.Padding = PaddingMode.ISO10126;
-                cipher.Key = secretKey;
-                cipher.IV = secretIv;
-
-                ICryptoTransform encryptor = cipher.CreateEncryptor(secretKey, secretIv);
-
-                key = encryptor.TransformFinalBlock(key, 0, key.Length);
-                iv = encryptor.TransformFinalBlock(iv, 0, iv.Length);
-            }
-
-            var createModel = new FileData(fileId, context.Message.UserId, false, key, iv);
+            var createModel = new FileData(fileId, context.Message.UserId, false);
 
             await _unitOfWork.UserFiles.CreateAsync(createModel);
             await _unitOfWork.SaveChanges();
