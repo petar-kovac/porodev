@@ -6,14 +6,17 @@
 
         public Guid UserId { get; set; }
 
+        public string PublicKey { get; set; }
+
         public FileDownloadRequestServiceToDatabase()
         {
         }
 
-        public FileDownloadRequestServiceToDatabase(string fileId, Guid userId)
+        public FileDownloadRequestServiceToDatabase(string fileId, Guid userId, string publicKey)
         {
             FileId = fileId;
             UserId = userId;
+            PublicKey = publicKey;
         }
     }
 }

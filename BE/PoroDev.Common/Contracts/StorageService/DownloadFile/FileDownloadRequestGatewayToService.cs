@@ -6,14 +6,17 @@
 
         public Guid UserId { get; set; }
 
+        public string PublicKey { get; set; }
+
         public FileDownloadRequestGatewayToService()
         {
         }
 
-        public FileDownloadRequestGatewayToService(string fileId, Guid userId)
+        public FileDownloadRequestGatewayToService(string fileId, Guid userId, string publicKey)
         {
             FileId = fileId;
             UserId = userId;
+            PublicKey = publicKey;
         }
     }
 }

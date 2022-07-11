@@ -16,13 +16,14 @@ namespace PoroDev.StorageService.Consumers
 
         public async Task Consume(ConsumeContext<FileDownloadRequestGatewayToService> context)
         {
-            var modelToReturn = await _storageService.DownloadFile(new FileDownloadRequestServiceToDatabase()
-            {
-                FileId = context.Message.FileId,
-                UserId = context.Message.UserId
-            });
+            var modelToReturn = await _storageService.DownloadFile(new FileDownloadRequestServiceToDatabase
+                                                                                    (
+                                                                                        context.Message.FileId, 
+                                                                                        context.Message.UserId, 
+                                                                                        context.Message.PublicKey
+                                                                                     ));
 
-            await context.RespondAsync<CommunicationModel<FileDownloadMessage>>(modelToReturn);
+            await context.RespondAsync(modelToReturn);
         }
     }
 }
