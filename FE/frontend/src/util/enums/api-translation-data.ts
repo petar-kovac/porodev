@@ -11,5 +11,8 @@ export enum ApiTranslation {
   name = 'Name',
   description = 'Description',
   image = 'Image',
+  fileId = 'File ID',
+  fileName = 'File name',
+  uploadTime = 'Upload time',
   ERROR = 4,
 }

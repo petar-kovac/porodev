@@ -37,8 +37,8 @@ const RuntimeCard: FC<IGridCardProps> = ({
     >
       <StyledMetaCardDescription>
         <h4>{heading}</h4>
-        <span>{description?.slice(0, 30)}...</span>
-        <span className="show-more">&rarr; Show more</span>
+        {/* <span>{description?.slice(0, 30)}...</span>
+        <span className="show-more">&rarr; Show more</span> */}
       </StyledMetaCardDescription>
     </StyledRuntimeCard>
   );

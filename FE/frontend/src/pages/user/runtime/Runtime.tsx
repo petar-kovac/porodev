@@ -32,6 +32,7 @@ const Runtime: FC = () => {
     setIsModalVisible,
     setNumberOfInputFields,
     setInputParameters,
+    setImageParameters,
     inputParameters,
     imageParameters,
     setModalContent,
@@ -75,6 +76,7 @@ const Runtime: FC = () => {
           setSelectedCardId(null);
           setCardData(null);
           setInputParameters([]);
+          setImageParameters([]);
           setNumberOfInputFields(1);
         }}
       >

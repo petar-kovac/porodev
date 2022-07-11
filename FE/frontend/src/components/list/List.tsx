@@ -1,33 +1,53 @@
+import { FileZipOutlined } from '@ant-design/icons';
 import { Avatar, List } from 'antd';
+import { usePageContext } from 'context/PageContext';
 import React from 'react';
 import styled from 'styled-components';
-import dayjs from 'dayjs';
 import { formatDate } from 'util/helpers/date-formaters';
 
-const PList: React.FC<{ data?: unknown[] | undefined }> = ({ data }) => {
+const PList: React.FC<{ data?: unknown[] | undefined; onSelectImage: any }> = ({
+  data,
+  onSelectImage,
+}) => {
+  const { setIsModalVisible } = usePageContext();
   return (
     <List
-      itemLayout="horizontal"
       dataSource={data}
       renderItem={(item: any) => (
-        <List.Item>
+        <StyledListItem
+          aria-hidden="true"
+          onClick={() => {
+            setIsModalVisible(false);
+            onSelectImage(item);
+          }}
+          key={item.fileName}
+        >
           <List.Item.Meta
-            avatar={<Avatar src={item.avatar} />}
-            title={<>{item.name}</>}
-            description={
-              <StyledDescription>
-                <div>{item.address}</div>
-                <div style={{ marginRight: 450, textAlign: 'left' }}>
-                  {formatDate(item.createdAt)}
-                </div>
-              </StyledDescription>
-            }
+            // avatar={<Avatar src={item.avatar} />}
+            title={item.fileName}
+            description={item.uploadTime}
           />
-        </List.Item>
+
+          <StyledSelect>
+            <FileZipOutlined />
+          </StyledSelect>
+        </StyledListItem>
       )}
     />
   );
 };
+
+const StyledSelect = styled.div`
+  cursor: pointer;
+`;
+const StyledListItem = styled(List.Item)`
+  cursor: pointer;
+  /* &:hover,
+  &:active,
+  &:focus {
+    border: 2px solid red;
+  } */
+`;
 
 const StyledDescription = styled.div`
   display: flex;

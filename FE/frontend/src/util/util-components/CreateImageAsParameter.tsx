@@ -16,6 +16,7 @@ import { IFilesCard } from 'types/card-data';
 import { Image } from 'antd';
 import styled from 'styled-components';
 import { usePageContext } from 'context/PageContext';
+import PList from 'components/list/List';
 
 interface ISelectProps {
   fileName: string;
@@ -35,22 +36,22 @@ export const CreateImageAsparameter = (
   };
 
   return (
-    <StyledImageWrapper>
-      {aa.map((value: any) => (
-        <StyledImage
-          onClick={() => {
-            onSelectImage(value);
-          }}
-        >
-          {value.fileName}
-          {/* <div>{value.fileId}</div>
-         
-          <div>{value.uploadTime}</div> */}
-        </StyledImage>
-      ))}
-    </StyledImageWrapper>
+    <>
+      <PList data={data} onSelectImage={onSelectImage} />
+    </>
   );
 };
+
+// <StyledImage
+//   onClick={() => {
+//     onSelectImage(value);
+//   }}
+// >
+//   {value.fileName}
+//   {/* <div>{value.fileId}</div>
+
+//   <div>{value.uploadTime}</div> */}
+// </StyledImage>
 
 const StyledImageWrapper = styled.div`
   display: flex;
