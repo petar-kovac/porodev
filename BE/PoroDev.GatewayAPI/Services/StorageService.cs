@@ -66,6 +66,10 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel)
         {
             var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
             var response = responseContext.Message.Entity;
 
             return response;
