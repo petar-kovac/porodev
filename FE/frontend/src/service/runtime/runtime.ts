@@ -8,6 +8,8 @@ export const getRuntime: () => Promise<string> = () => {
 export const startRuntimeService: (
   payload: IRuntimeRequest,
 ) => Promise<IRuntimeRsponse> = (payload) => {
+  // eslint-disable-next-line no-unused-expressions
+
   return api
     .service()
     .post('/api/Runtime/ExecuteProject', payload)

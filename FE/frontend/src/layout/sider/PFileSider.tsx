@@ -21,6 +21,7 @@ import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
 import RuntimeInputSiderMapper from 'util/mappers/RuntimeInputSiderMapper';
 import RuntimeImageSiderMapper from 'util/mappers/RuntimeImageSiderMapper';
 import { CreateImageAsparameter } from 'util/util-components/CreateImageAsParameter';
+import { inputParamsChecker } from 'util/helpers/input-params-checker';
 import SiderDataMapper from '../../util/mappers/SiderDataMapper';
 
 const { Sider } = Layout;
@@ -68,10 +69,14 @@ const PFileSider: FC<IPFileSiderProps> = ({
 
   const onStartRuntime = async () => {
     setIsLoading(true);
+
+    // function to check if arguments are empty strings
+    const checkedInputParams = inputParamsChecker(inputParameters);
+
     try {
       const res = await startRuntimeService({
         projectId,
-        arguments: [...imageParameters, ...inputParameters],
+        arguments: [...imageParameters, ...checkedInputParams],
       });
       const modalDataToRender: ReactNode = GetRuntimeModalData(res);
       setModalContent(modalDataToRender);
