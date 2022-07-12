@@ -19,7 +19,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
 
         public StorageService
-            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient, 
+            (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient,
             IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
             IRequestClient<FileReadRequestGatewayToService> readRequestClient,
             IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient)
@@ -71,10 +71,13 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel)
         {
             var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+
+            if (responseContext.Message.ExceptionName != null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
             var response = responseContext.Message.Entity;
 
             return response;
-
         }
     }
 }

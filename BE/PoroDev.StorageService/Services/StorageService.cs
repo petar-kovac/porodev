@@ -17,7 +17,7 @@ namespace PoroDev.StorageService.Services
         private readonly IRequestClient<FileDeleteRequestServiceToDatabase> _deleteRequestClient;
 
         public StorageService
-            (IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient, 
+            (IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient,
             IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient,
             IRequestClient<FileReadModel> readRequestClient,
             IRequestClient<FileDeleteRequestServiceToDatabase> deleteRequestClient)

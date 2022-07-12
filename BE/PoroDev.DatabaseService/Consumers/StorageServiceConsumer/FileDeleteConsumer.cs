@@ -17,14 +17,24 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
         public async Task Consume(ConsumeContext<FileDeleteRequestServiceToDatabase> context)
         {
             var entity = await _unitOfWork.UserFiles.GetByStringIdAsync(context.Message.FileId);
+
             if (entity == null)
             {
-                await context.RespondAsync(new CommunicationModel<FileDeleteMessage>(new PoroDev.Common.Exceptions.FileNotFoundException("File not found")));
+                await context.RespondAsync(new CommunicationModel<FileDeleteMessage>(new PoroDev.Common.Exceptions.FileNotFoundException("File with that file id not found")));
             }
             else
             {
-                entity.IsDeleted = true;
-                await _unitOfWork.UserFiles.UpdateAsyncStringId(entity, context.Message.FileId);
+                if (entity.IsDeleted == true)
+                {
+                    await context.RespondAsync(new CommunicationModel<FileDeleteMessage>(new PoroDev.Common.Exceptions.FileNotFoundException("File with that file id not found")));
+                }
+                else
+                {
+                    entity.IsDeleted = true;
+                    await _unitOfWork.UserFiles.UpdateAsyncStringId(entity, context.Message.FileId);
+
+                    
+                }
             }
 
             var model = new FileDeleteMessage(context.Message.FileId);

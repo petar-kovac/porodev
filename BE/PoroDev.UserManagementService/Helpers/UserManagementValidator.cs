@@ -250,8 +250,8 @@ namespace PoroDev.UserManagementService.Helpers
 
         private static async Task CheckEmailUpdate(string email)
         {
-            if (string.IsNullOrWhiteSpace(email)) 
-            { 
+            if (string.IsNullOrWhiteSpace(email))
+            {
                 throw new EmailFormatException(EMAIL_EMPTY_ERROR);
             }
 
@@ -279,9 +279,8 @@ namespace PoroDev.UserManagementService.Helpers
 
             if (!splitEmail[1].Equals(EMAIL_DOMAIN))
             {
-               throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
+                throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
             }
-
         }
     }
 }
