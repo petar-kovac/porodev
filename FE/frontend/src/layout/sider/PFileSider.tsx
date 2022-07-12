@@ -5,15 +5,19 @@ import {
   MouseEventHandler,
   ReactNode,
   SetStateAction,
+  useEffect,
 } from 'react';
 import styled from 'styled-components';
 
 import { PlusCircleOutlined } from '@ant-design/icons';
 import PButton from 'components/buttons/PButton';
 import { usePageContext } from 'context/PageContext';
+import { useSiderContext } from 'context/SiderContext';
 import { StyledClose } from 'styles/icons/styled-icons';
 import StyledIcon from 'styles/icons/StyledIcons';
 import { IFilesCard } from 'types/card-data';
+import { startRuntimeService } from 'service/runtime/runtime';
+import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
 import RuntimeInputSiderMapper from 'util/mappers/RuntimeInputSiderMapper';
 import RuntimeImageSiderMapper from 'util/mappers/RuntimeImageSiderMapper';
 import { CreateImageAsparameter } from 'util/util-components/CreateImageAsParameter';
@@ -25,6 +29,7 @@ interface IPFileSiderProps {
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
   type: 'folder' | 'file' | 'runtime';
+  selectedCardId?: number | null;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setData?: Dispatch<SetStateAction<IFilesCard[] | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
@@ -35,41 +40,65 @@ const PFileSider: FC<IPFileSiderProps> = ({
   cardData,
   data,
   setSelectedCardId = () => undefined,
-  setCardData = () => undefined,
+  selectedCardId,
   type,
-  onButtonClick,
 }) => {
   const {
     isLoading,
     isSiderVisible,
-    inputParameters,
-    imageParameters,
-    setImageParameters,
-    setInputParameters,
+    projectId,
+    setIsLoading,
     setIsSiderVisible,
-    setNumberOfInputFields,
     setIsModalVisible,
     setModalContent,
   } = usePageContext();
 
+  const {
+    inputParameters,
+    setInputParameters,
+    imageParameters,
+    setImageParameters,
+  } = useSiderContext();
+
   const handleClose = () => {
     setIsSiderVisible(false);
-    setCardData(null);
+    // setCardData(null);
     setSelectedCardId(null);
+  };
+
+  const onStartRuntime = async () => {
+    setIsLoading(true);
+    try {
+      const res = await startRuntimeService({
+        projectId,
+        arguments: [...imageParameters, ...inputParameters],
+      });
+      const modalDataToRender: ReactNode = GetRuntimeModalData(res);
+      setModalContent(modalDataToRender);
+      setIsSiderVisible(false);
+      setIsModalVisible(true);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+    }
   };
 
   const onAddImage = () => {
     if (data) {
       const modalDataToRender: ReactNode = CreateImageAsparameter(
-        data as IFilesCard[],
-        imageParameters as string[],
-        setImageParameters as Dispatch<SetStateAction<string[]>>,
+        data,
+        imageParameters,
+        setImageParameters,
       );
-
       setModalContent(modalDataToRender);
       setIsModalVisible(true);
     }
   };
+
+  useEffect(() => {
+    setInputParameters(['']);
+    setImageParameters([]);
+  }, [selectedCardId]);
 
   return (
     <StyledFileSider
@@ -93,7 +122,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
                 <StyledRow>
                   <StyledTitle>Add parameters</StyledTitle>
                   <PlusCircleOutlined
-                    onClick={() => setNumberOfInputFields((value) => value + 1)}
+                    onClick={() => setInputParameters([...inputParameters, ''])}
                   />
                 </StyledRow>
                 <RuntimeInputSiderMapper />
@@ -108,7 +137,7 @@ const PFileSider: FC<IPFileSiderProps> = ({
             )}
             <PButton
               text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
-              onClick={onButtonClick}
+              onClick={onStartRuntime}
               isLoading={isLoading}
             />
           </>

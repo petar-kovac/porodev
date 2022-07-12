@@ -4,6 +4,7 @@ import { useFetchData } from 'hooks/useFetchData';
 
 import { IFilesCard } from 'types/card-data';
 import { usePageContext } from 'context/PageContext';
+import { useSiderContext } from 'context/SiderContext';
 
 import GroupCard from 'components/card/GroupCard';
 import RuntimeCard from './RuntimeCard';
@@ -24,15 +25,9 @@ const RuntimeCards: FC<IGroupCardProps> = ({
   data,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
-  setIsModalVisible = () => undefined,
-  setIsSiderVisible = () => undefined,
 }) => {
-  const {
-    setInputParameters,
-    setNumberOfInputFields,
-    setProjectId,
-    setImageParameters,
-  } = usePageContext();
+  const { setProjectId, setIsModalVisible, setIsSiderVisible } =
+    usePageContext();
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
@@ -59,9 +54,6 @@ const RuntimeCards: FC<IGroupCardProps> = ({
           selected={selectedCardId === value.fileId}
           onClick={() => {
             handleClick(value);
-            setNumberOfInputFields(1);
-            setInputParameters([]);
-            setImageParameters([]);
             setProjectId(value.fileId);
           }}
           onDoubleClick={() => handleDoubleClick(value)}

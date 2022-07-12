@@ -30,41 +30,5 @@ export const CreateImageAsparameter = (
   setImageParameters: Dispatch<SetStateAction<string[]>>,
 ): ReactNode => {
   const aa: IFilesCard[] = data;
-
-  const onSelectImage = (value: ISelectProps) => {
-    setImageParameters([value.fileId]);
-  };
-
-  return (
-    <>
-      <PList data={data} onSelectImage={onSelectImage} />
-    </>
-  );
+  return <PList data={data} setImageParameters={setImageParameters} />;
 };
-
-// <StyledImage
-//   onClick={() => {
-//     onSelectImage(value);
-//   }}
-// >
-//   {value.fileName}
-//   {/* <div>{value.fileId}</div>
-
-//   <div>{value.uploadTime}</div> */}
-// </StyledImage>
-
-const StyledImageWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const StyledImage = styled.div`
-  width: 120px;
-  font-size: 12px;
-  height: 120px;
-  cursor: pointer;
-  background-color: lightgray;
-  border: 1px solid black;
-  border-radius: 12px;
-  padding: 20px;
-`;

@@ -1,13 +1,13 @@
 import { Input } from 'antd';
 import { usePageContext } from 'context/PageContext';
+import { useSiderContext } from 'context/SiderContext';
 import { FC } from 'react';
 
 /**
  * Component to set input fields in a Runtime sider.
  */
 const RuntimeSiderMapper: FC = () => {
-  const { numberOfInputFileds, inputParameters, setInputParameters } =
-    usePageContext();
+  const { inputParameters, setInputParameters } = useSiderContext();
 
   const setItems = (e: any, index: any) => {
     const newItem = [...inputParameters];
@@ -17,7 +17,7 @@ const RuntimeSiderMapper: FC = () => {
 
   return (
     <>
-      {[...Array(numberOfInputFileds)].map((value, index) => {
+      {inputParameters.map((value, index) => {
         return (
           <Input
             value={inputParameters[index] as unknown as string}

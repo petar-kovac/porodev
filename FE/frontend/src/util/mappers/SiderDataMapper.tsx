@@ -12,7 +12,6 @@ interface EntryType {
 }
 
 const mapResponseToCardData = (response: IFilesCard): MappedCardData => {
-  console.log(response, 'rs');
   let obj: MappedCardData = {};
   // eslint-disable-next-line array-callback-return
   Object.entries(response).map(([key, value]: any) => {

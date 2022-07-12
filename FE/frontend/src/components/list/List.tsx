@@ -1,15 +1,15 @@
 import { FileZipOutlined } from '@ant-design/icons';
-import { Avatar, List } from 'antd';
+import { List } from 'antd';
 import { usePageContext } from 'context/PageContext';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { formatDate } from 'util/helpers/date-formaters';
 
-const PList: React.FC<{ data?: unknown[] | undefined; onSelectImage: any }> = ({
-  data,
-  onSelectImage,
-}) => {
+const PList: React.FC<{
+  data?: unknown[] | undefined;
+  setImageParameters?: Dispatch<SetStateAction<string[]>>;
+}> = ({ data, setImageParameters = () => undefined }) => {
   const { setIsModalVisible } = usePageContext();
+
   return (
     <List
       dataSource={data}
@@ -17,8 +17,8 @@ const PList: React.FC<{ data?: unknown[] | undefined; onSelectImage: any }> = ({
         <StyledListItem
           aria-hidden="true"
           onClick={() => {
+            setImageParameters([item.fileId]);
             setIsModalVisible(false);
-            onSelectImage(item);
           }}
           key={item.fileName}
         >
