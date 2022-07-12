@@ -34,29 +34,12 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             int counter = 0;
 
             bool flagNoFileWithThatName = false;
-            bool flagFileWithThatNameExistDeleted = false;
+          
             bool flagFileWithThatNameExist = false;
 
             foreach(FileReadSingleModel file in readUserFiles.Content)
             {
-                //3 slucaja -> 1 nema fajla sa tim imenom; 2 ima ali je obrisan; 3 ima i nije obrisan
-                if(file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == true)
-                {
-                    flagFileWithThatNameExistDeleted = true;
-
-                    var entity = await _unitOfWork.UserFiles.GetByStringIdAsync(file.FileId);
-                    entity.IsDeleted = false;
-                    await _unitOfWork.UserFiles.UpdateAsyncStringId(entity, file.FileId);
-
-                    var model = new FileUploadModel(entity.CurrentUserId);
-                    var responseDeletedModel = new CommunicationModel<FileUploadModel>() { 
-                        Entity = model, 
-                        ExceptionName = null, 
-                        HumanReadableMessage = null };
-
-                    await context.RespondAsync(responseDeletedModel);
-                }
-
+                //3 slucaja -> 1 nema fajla sa tim imenom; 2 ima ali je obrisan; 3 ima i nije obrisan 2 SLUCAJ obrisan
                 if(file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == false)
                 {
                     flagFileWithThatNameExist = true;
@@ -78,7 +61,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 counter++;
             }
 
-            if(flagFileWithThatNameExistDeleted == false && flagFileWithThatNameExist == false)
+            if(flagFileWithThatNameExist == false)
             {
 
                 ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);

@@ -50,6 +50,11 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<FileDownloadMessage> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
             var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
+
+            if (responseContext.Message.ExceptionName != null)
+            {
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+            }
             var response = responseContext.Message.Entity;
 
             return response;
