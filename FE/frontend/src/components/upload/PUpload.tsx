@@ -10,6 +10,8 @@ import api from '../../service/base';
 
 const { Dragger } = Upload;
 
+const MAX_IMAGE_SIZE_MB: number = 50;
+
 interface PUploadProps {
   setFiles: (data: any) => unknown;
 }
@@ -20,6 +22,7 @@ const usePUploadProps = (setFiles: (data: any) => unknown) => {
     accept: '*',
     onChange(info) {
       const { status } = info.file;
+
       if (status !== 'uploading') {
         console.log('Uploading');
       }
@@ -34,6 +37,7 @@ const usePUploadProps = (setFiles: (data: any) => unknown) => {
     },
     async customRequest(options) {
       const { onError, file, onProgress, onSuccess, method } = options;
+
       const fmData = new FormData();
       const config = {
         headers: { 'content-type': 'multipart/form-data' },
@@ -82,10 +86,6 @@ const PUpload: React.FC<PUploadProps> = ({ setFiles }) => {
         </p>
         <p className="ant-upload-text">
           Click or drag file to this area to upload
-        </p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Max 50 files, 10 MB per file,
-          total 500 MB
         </p>
       </StyledDragger>
     </StyledUpload>

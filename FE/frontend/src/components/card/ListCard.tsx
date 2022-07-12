@@ -20,6 +20,8 @@ import DownloadButton from 'components/buttons/DownloadButton';
 
 import { downloadFile, findFiles, deleteFile } from 'service/files/files';
 
+import { formatDateListCard } from 'util/helpers/date-formaters';
+
 import RemoveModal from '../modal/RemoveModal';
 
 interface IListCardProps {
@@ -50,6 +52,8 @@ const ListCard: FC<IListCardProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
 
+  console.log(value);
+
   const [isRemoveModalVisible, setIsRemoveModalVisible] =
     useState<boolean>(false);
 
@@ -78,17 +82,18 @@ const ListCard: FC<IListCardProps> = ({
     setIsRemoveModalVisible(false);
   };
 
+  const formattedDate = formatDateListCard(value.uploadTime);
+
   return (
     <>
       <StyledListCardContainer>
         <StyledListCard ref={ref} hoverable selected={selected} id="remove-id">
           <StyledDescription>
-            <div>
+            <StyledHeading>
               <h3>{value.fileName}</h3>
-            </div>
+            </StyledHeading>
             <StyledDescriptionUploadDetails>
-              <h4>Uploaded:</h4>
-              <span>{value.uploadTime}</span>
+              <span>{formattedDate}</span>
             </StyledDescriptionUploadDetails>
             <StyledDescriptionButtons>
               <StyledFilesButton
@@ -131,7 +136,7 @@ export const StyledListCard = styled(Card).attrs({
   'data-testid': 'list-card',
 })<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 7.5rem;
+  /* height: 7.5rem; */
   border-radius: 1.5rem;
   overflow: hidden;
   border: 2px solid
@@ -164,6 +169,10 @@ const StyledListCardContainer = styled.div`
 
 const StyledFilesButton = styled(Button)`
   border-radius: 0.8rem;
+`;
+
+const StyledHeading = styled.div`
+  flex-basis: 40%;
 `;
 
 const StyledDescription = styled.div`

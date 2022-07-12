@@ -72,16 +72,19 @@ const Files: FC = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <h2>Files</h2>
-              <PFilter
-                isList={!isListView}
-                setIsList={setIsListView}
-                activeFilters={{
-                  showSortByTime: true,
-                  showSortByType: true,
-                  showToggleButton: true,
-                }}
-              />
+              <h2 style={{ flexBasis: '43%' }}>Files</h2>
+              {!isListView && <h4>Uploaded</h4>}
+              <div>
+                <PFilter
+                  isList={!isListView}
+                  setIsList={setIsListView}
+                  activeFilters={{
+                    showSortByTime: true,
+                    showSortByType: true,
+                    showToggleButton: true,
+                  }}
+                />
+              </div>
             </div>
             <StyledFilesWrapper>
               {!isListView ? (
