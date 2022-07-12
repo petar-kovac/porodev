@@ -85,7 +85,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             foreach (FileData file in allUserFiles)
             {
-               var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
+               DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
+               var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, user.Name, user.Lastname);
                returnModel.Content.Add(fileReadSingleModel);
             }
 

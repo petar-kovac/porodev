@@ -54,7 +54,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             foreach (FileData file in allAdminFiles)
             {
-                var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
+                DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
+                var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, user.Name, user.Lastname);
+                
                 returnModel.Content.Add(fileReadSingleModel);
             }
 
@@ -71,7 +73,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             {
                 if (file.IsDeleted == false)
                 {
-                    var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
+                    //DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
+                    var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, file.CurrentUser.Name, file.CurrentUser.Lastname);
                     returnModel.Content.Add(fileReadSingleModel);
                 }
             }
