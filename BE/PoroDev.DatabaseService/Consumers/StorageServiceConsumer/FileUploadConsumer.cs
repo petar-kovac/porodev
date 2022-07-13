@@ -8,6 +8,7 @@ using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
@@ -29,6 +30,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
             FileReadModel readUserFiles = await findAllUserFiles(user.Id);
             List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Id.Equals(context.Message.UserId))).ToList<FileData>();
+
+            
 
             int counter = 0;
 
@@ -61,9 +64,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             if(flagFileWithThatNameExist == false)
             {
-                ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
+                ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, await context.Message.File.Value, context.Message.ContentType, context.Message.UserId);
 
-                var model = new FileUploadModel(context.Message.FileName, context.Message.File, context.Message.ContentType, context.Message.UserId);
+                var model = new FileUploadModel(context.Message.FileName, context.Message.ContentType, context.Message.UserId);
                 var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
 
                 string fileId = id.ToString();

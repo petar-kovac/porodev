@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Models.UserModels.Data;
@@ -23,8 +24,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             var entity = await _unitOfWork.UserFiles.GetByStringIdAsync(context.Message.FileId);
 
             var isIDFormatInvalid = (await _unitOfWork.UserFiles.FindAsync(userFiles => userFiles.FileId.Equals(context.Message.FileId)));
-
-            // var isIDFormatInvalid = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
 
             if (isIDFormatInvalid.ExceptionName != null)
             {
@@ -63,14 +62,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 else
                 {
                     var downloadedFile = await _fileRepository.DownloadFile(context.Message.FileId, context.Message.UserId);
-                    FileDownloadMessage model = new()
-                    {
-                        File = downloadedFile.File,
-                        FileName = downloadedFile.FileName,
-                        ContentType = downloadedFile.ContentType
-                    };
 
-                    var response = new CommunicationModel<FileDownloadMessage>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
+                    var response = new CommunicationModel<FileDownloadMessage>() { Entity = downloadedFile, ExceptionName = null, HumanReadableMessage = null };
 
                     await context.RespondAsync(response);
                 }

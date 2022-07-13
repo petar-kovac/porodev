@@ -1,10 +1,14 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
+using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
+using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
@@ -14,20 +18,23 @@ namespace PoroDev.GatewayAPI.Services
     public class StorageService : IStorageService
     {
         private readonly IRequestClient<FileDownloadRequestGatewayToService> _downloadRequestClient;
-        private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
+        private readonly IRequestClient<IUploadRequest> _uploadRequestClient;
         private readonly IRequestClient<FileReadRequestGatewayToService> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
+        private readonly IMapper _mapper;
 
         public StorageService
             (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient,
-            IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
+            IRequestClient<IUploadRequest> uploadRequestClient,
             IRequestClient<FileReadRequestGatewayToService> readRequestClient,
-            IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient)
+            IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient,
+            IMapper mapper)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
             _readRequestClient = readRequestClient;
             _deleteRequestClient = deleteRequestClient;
+            _mapper = mapper;
         }
 
         public async Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel)
@@ -37,7 +44,13 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
             }
 
-            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
+            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(new
+            {
+                FileName = uploadModel.FileName,
+                File = uploadModel.File,
+                ContentType = uploadModel.ContentType,
+                UserId = uploadModel.UserId
+            });
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
@@ -47,7 +60,7 @@ namespace PoroDev.GatewayAPI.Services
             return response;
         }
 
-        public async Task<FileDownloadMessage> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
+        public async Task<FileDownloadResponse> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
             var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
 
@@ -55,7 +68,8 @@ namespace PoroDev.GatewayAPI.Services
             {
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
             }
-            var response = responseContext.Message.Entity;
+            var response = _mapper.Map<FileDownloadResponse>(responseContext.Message.Entity);
+            response.File = await responseContext.Message.Entity.File.Value;
 
             return response;
         }

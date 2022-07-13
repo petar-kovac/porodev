@@ -1,7 +1,9 @@
-﻿using PoroDev.Common.Contracts.StorageService.DeleteFile;
+﻿using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.GatewayAPI.Models.StorageService;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {
@@ -9,7 +11,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
     {
         Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel);
 
-        Task<FileDownloadMessage> DownloadFile(FileDownloadRequestGatewayToService downloadModel);
+        Task<FileDownloadResponse> DownloadFile(FileDownloadRequestGatewayToService downloadModel);
 
         Task<FileReadModel> ReadFiles(FileReadRequestGatewayToService readModel);
 
