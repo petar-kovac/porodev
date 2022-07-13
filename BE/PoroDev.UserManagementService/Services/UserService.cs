@@ -209,7 +209,6 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
-
         public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
         {
             var isException = await Helpers.UserManagementValidator.Validate(registerModel, _readUserByEmailClient);
@@ -229,7 +228,5 @@ namespace PoroDev.UserManagementService.Services
 
             return returnContext;
         }
-
-        
     }
 }

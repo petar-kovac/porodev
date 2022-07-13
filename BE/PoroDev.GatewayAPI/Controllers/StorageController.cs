@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers
@@ -32,7 +33,7 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("Download")]
-        public async Task<ActionResult<FileDownloadMessage>> Download([FromQuery] string fileId)
+        public async Task<ActionResult<FileDownloadResponse>> Download([FromQuery] string fileId)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileDownloadRequestGatewayToService(fileId, userId);

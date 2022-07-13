@@ -22,7 +22,7 @@ namespace PoroDev.StorageService.Consumers
                 UserId = context.Message.UserId
             });
 
-            await context.RespondAsync<CommunicationModel<FileDownloadMessage>>(modelToReturn);
+            await context.RespondAsync(modelToReturn);
         }
     }
 }

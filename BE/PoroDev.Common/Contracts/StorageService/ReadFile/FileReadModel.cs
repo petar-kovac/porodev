@@ -8,6 +8,7 @@
         {
             Content = new List<FileReadSingleModel>();
         }
+
         public FileReadModel(List<FileReadSingleModel> files)
         {
             Content = files;
