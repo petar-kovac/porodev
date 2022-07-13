@@ -1,27 +1,36 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { verifyEmail } from 'service/files/files';
 import styled from 'styled-components';
 import success from '../../assets/success.png';
 
 const EmailVerify = () => {
-  const [validUrl, setValidUrl] = useState<any>(false);
-  const param = useParams();
+  const [loading, setLoading] = useState(true);
+  const [validUrl, setValidUrl] = useState(false);
+  const { email, token } = useParams();
 
   useEffect(() => {
-    const verifyEmailUrl = async () => {
-      try {
-        const url = `http://localhost:7101/api/User/${param.id}/verify/${param.token}`;
-        const { data } = await axios.get(url);
-        console.log(data);
+    verifyEmail(email, token)
+      .then((response: any) => {
         setValidUrl(true);
-      } catch (error) {
+      })
+      .catch((error: any) => {
         console.log(error);
         setValidUrl(false);
-      }
-    };
-    verifyEmailUrl();
-  }, [param]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <p>Loading...</p>
+      </>
+    );
+  }
 
   return (
     <>

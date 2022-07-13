@@ -8,6 +8,16 @@ export const findFiles: () => Promise<any> = () => {
     .then((res) => res.data);
 };
 
+export const verifyEmail: (email: any, token: any) => Promise<any> = (
+  email,
+  token,
+) => {
+  return api
+    .service()
+    .post('api/User/Verify/', { email, token })
+    .then((res) => res);
+};
+
 export const downloadFile: (fileId: string) => Promise<any> = (fileId) => {
   return api
     .service()
