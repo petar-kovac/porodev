@@ -7,18 +7,17 @@ import { usePageContext } from 'context/PageContext';
 import StyledIcon from 'styles/icons/StyledIcons';
 import { IFilesCard } from 'types/card-data';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
+import { StyledFile } from 'styles/icons/styled-icons';
 
 const { Sider } = Layout;
 
 interface IPFileSiderProps {
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
-  type: 'folder' | 'file' | 'runtime';
   selectedCardId?: number | null;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setData?: Dispatch<SetStateAction<IFilesCard[] | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
-  onButtonClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const GroupSider: FC<IPFileSiderProps> = ({
@@ -26,7 +25,6 @@ const GroupSider: FC<IPFileSiderProps> = ({
   data,
   setSelectedCardId = () => undefined,
   selectedCardId,
-  type,
 }) => {
   const { isLoading, isSiderVisible, setIsSiderVisible } = usePageContext();
 
@@ -48,9 +46,8 @@ const GroupSider: FC<IPFileSiderProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
-        <div>groupssider</div>
         <StyledRow>
-          <StyledIcon type={type} />
+          <StyledFile />
         </StyledRow>
         <StyledTitle>{cardData?.title}</StyledTitle>
         <StyledContent>

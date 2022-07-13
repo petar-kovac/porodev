@@ -23,7 +23,7 @@ import { usePageContext } from 'context/PageContext';
 
 import { formatDateListCard } from 'util/helpers/date-formaters';
 
-import RemoveModal from '../modal/RemoveModal';
+import RemoveModal from '../../modal/RemoveModal';
 
 interface IListCardProps {
   fileId: any;

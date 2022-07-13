@@ -2,7 +2,7 @@ import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import DashboardCard from 'components/card/DashboardCard';
+import DashboardCard from 'components/cards/dashboard/DashboardCard';
 import StackedArea from 'components/dashboard/StackedArea';
 import ColumnChart from 'components/dashboard/ColumnChart';
 import useAdminsData from '../admins/hooks/useAdminsData';

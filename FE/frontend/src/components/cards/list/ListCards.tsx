@@ -17,13 +17,12 @@ import ListCard from './ListCard';
 
 interface IListCardProps {
   cardData?: IFilesCard | null;
+  data?: IFilesCard[] | null;
   selected?: boolean;
   selectedCardId?: number | null;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
-  setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
 }
 
@@ -31,19 +30,9 @@ const ListCards: FC<IListCardProps> = ({
   selectedCardId,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
+  data,
 }) => {
-  const [data, setData] = useState<any>(undefined);
-
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      const res = await findFiles();
-      setData(res);
-    };
-
-    fetchFiles();
-  }, []);
 
   const handleClick = (value: any) => {
     setSelectedCardId(value.fileId);
@@ -60,8 +49,8 @@ const ListCards: FC<IListCardProps> = ({
 
   return (
     <>
-      {data?.content
-        .map((value: any) => (
+      {data
+        ?.map((value: any) => (
           <ListCard
             fileId={value.fileId}
             fileName={value.fileName}

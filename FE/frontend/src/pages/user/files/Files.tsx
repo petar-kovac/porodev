@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 
 import { usePageContext } from 'context/PageContext';
-import ListCards from 'components/card/ListCards';
-import GridCards from 'components/card/GridCards';
+import ListCards from 'components/cards/list/ListCards';
+import GridCards from 'components/cards/grid/GridCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
@@ -20,6 +20,7 @@ import {
 } from './styles/files-styled';
 import FileSider from './sider/FileSider';
 import FileModal from './modal/FileModal';
+import useFilesData from './hooks/useFilesData';
 
 const Files: FC = () => {
   const [isListView, setIsListView] = useState<boolean>(false);
@@ -27,10 +28,7 @@ const Files: FC = () => {
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
-
-  useEffect(() => {
-    setIsSiderVisible(false);
-  }, []);
+  const { data, isLoading, error } = useFilesData();
 
   return (
     <StyledPageWrapper>
@@ -89,6 +87,7 @@ const Files: FC = () => {
             <StyledFilesWrapper>
               {!isListView ? (
                 <ListCards
+                  data={data}
                   cardData={cardData}
                   setCardData={setCardData}
                   selectedCardId={selectedCardId}
@@ -96,6 +95,7 @@ const Files: FC = () => {
                 />
               ) : (
                 <GridCards
+                  data={data}
                   cardData={cardData}
                   setCardData={setCardData}
                   selectedCardId={selectedCardId}

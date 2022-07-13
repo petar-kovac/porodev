@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 
 import { usePageContext } from 'context/PageContext';
-import ListCards from 'components/card/ListCards';
-import GridCards from 'components/card/GridCards';
+import ListCards from 'components/cards/list/ListCards';
+import GridCards from 'components/cards/grid/GridCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
@@ -78,8 +78,8 @@ const Files: FC = () => {
             {isListView ? (
               <ListCards
                 cardData={cardData}
-                setIsSiderVisible={setIsSiderVisible}
-                setIsModalVisible={setIsModalVisible}
+                // setIsSiderVisible={setIsSiderVisible}
+                // setIsModalVisible={setIsModalVisible}
                 setCardData={setCardData}
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
@@ -88,8 +88,8 @@ const Files: FC = () => {
               <GridCards
                 cardData={cardData}
                 setCardData={setCardData}
-                setIsSiderVisible={setIsSiderVisible}
-                setIsModalVisible={setIsModalVisible}
+                // setIsSiderVisible={setIsSiderVisible}
+                // setIsModalVisible={setIsModalVisible}
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
               />

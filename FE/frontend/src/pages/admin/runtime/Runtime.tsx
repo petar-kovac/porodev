@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 
-import GroupCards from 'components/card/GroupCards';
+import GroupCards from 'components/cards/group/GroupCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import { usePageContext } from 'context/PageContext';
 
-import RuntimeCards from 'components/card/RuntimeCards';
+import RuntimeCards from 'components/cards/runtime/RuntimeCards';
 import {
   StyledPageWrapper,
   StyledContent,

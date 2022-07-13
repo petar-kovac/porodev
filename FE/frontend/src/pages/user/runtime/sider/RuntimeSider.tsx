@@ -22,13 +22,13 @@ import RuntimeInputSiderMapper from 'util/mappers/RuntimeInputSiderMapper';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
 import { CreateImageAsparameter } from 'util/util-components/CreateImageAsParameter';
 import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
+import { StyledRuntimeIcon } from 'styles/icons/styled-icons';
 
 const { Sider } = Layout;
 
 interface IPFileSiderProps {
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
-  type: 'folder' | 'file' | 'runtime';
   selectedCardId?: number | null;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setData?: Dispatch<SetStateAction<IFilesCard[] | null>>;
@@ -41,7 +41,6 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
   data,
   setSelectedCardId = () => undefined,
   selectedCardId,
-  type,
 }) => {
   const {
     isLoading,
@@ -115,30 +114,29 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
         {cardData ? (
           <>
             <StyledRow>
-              <StyledIcon type={type} />
+              <StyledRuntimeIcon />
             </StyledRow>
             <StyledTitle>{cardData?.title}</StyledTitle>
+
             <StyledContent>
               {cardData && <SiderDataMapper data={cardData} />}
             </StyledContent>
-            {type === 'runtime' && (
-              <>
-                <StyledRow>
-                  <StyledTitle>Add parameters</StyledTitle>
-                  <PlusCircleOutlined
-                    onClick={() => setInputParameters([...inputParameters, ''])}
-                  />
-                </StyledRow>
-                <RuntimeInputSiderMapper />
-                <StyledRow>
-                  <StyledTitle>Add image</StyledTitle>
-                  <PlusCircleOutlined onClick={onAddImage} />
-                </StyledRow>
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <RuntimeImageSiderMapper />
-                </div>
-              </>
-            )}
+
+            <StyledRow>
+              <StyledTitle>Add parameters</StyledTitle>
+              <PlusCircleOutlined
+                onClick={() => setInputParameters([...inputParameters, ''])}
+              />
+            </StyledRow>
+            <RuntimeInputSiderMapper />
+            <StyledRow>
+              <StyledTitle>Add image</StyledTitle>
+              <PlusCircleOutlined onClick={onAddImage} />
+            </StyledRow>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <RuntimeImageSiderMapper />
+            </div>
+
             <PButton
               text="Start execution"
               onClick={onStartRuntime}

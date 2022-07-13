@@ -1,24 +1,22 @@
-import { FC, Dispatch, SetStateAction } from 'react';
-
-import { useFetchData } from 'hooks/useFetchData';
+import { Dispatch, FC, MouseEvent, SetStateAction } from 'react';
 
 import { IFilesCard } from 'types/card-data';
 
-import GroupCard from 'components/card/GroupCard';
 import { usePageContext } from 'context/PageContext';
+import GridCard from './GridCard';
 
-interface IGroupCardProps {
-  selected?: boolean | null;
-  selectedCardId?: number | null;
+interface IGridCardProps {
+  selected?: boolean;
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
-  setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
-  setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
-  setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
+  selectedCardId?: number | null;
+  onClick?: (event: MouseEvent) => unknown;
+  onDoubleClick?: (event: MouseEvent) => unknown;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
 }
 
-const GroupCards: FC<IGroupCardProps> = ({
+const GridCards: FC<IGridCardProps> = ({
   selectedCardId,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
@@ -42,13 +40,14 @@ const GroupCards: FC<IGroupCardProps> = ({
   return (
     <>
       {data?.map((value: any) => (
-        <GroupCard
-          groupName={value.groupName}
-          isModerator={value.isModerator}
-          moderatorName={value.moderatorName}
-          numberOfFiles={value.numberOfFiles}
-          numberOfUsers={value.numberOfUsers}
+        <GridCard
+          value={value}
+          key={value.fileId}
+          image={value.image}
+          heading={value.fileName}
+          description={value.description}
           selected={selectedCardId === value.fileId}
+          fileExtension={value.fileName.split('.')[1]}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />
@@ -57,4 +56,4 @@ const GroupCards: FC<IGroupCardProps> = ({
   );
 };
 
-export default GroupCards;
+export default GridCards;

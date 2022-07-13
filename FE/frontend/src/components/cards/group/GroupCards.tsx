@@ -3,11 +3,9 @@ import { FC, Dispatch, SetStateAction } from 'react';
 import { useFetchData } from 'hooks/useFetchData';
 
 import { IFilesCard } from 'types/card-data';
-import { usePageContext } from 'context/PageContext';
-import { useSiderContext } from 'context/SiderContext';
 
-import GroupCard from 'components/card/GroupCard';
-import RuntimeCard from './RuntimeCard';
+import GroupCard from 'components/cards/group/GroupCard';
+import { usePageContext } from 'context/PageContext';
 
 interface IGroupCardProps {
   selected?: boolean | null;
@@ -20,14 +18,13 @@ interface IGroupCardProps {
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
 }
 
-const RuntimeCards: FC<IGroupCardProps> = ({
+const GroupCards: FC<IGroupCardProps> = ({
   selectedCardId,
-  data,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
+  data,
 }) => {
-  const { setProjectId, setIsModalVisible, setIsSiderVisible } =
-    usePageContext();
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
@@ -44,18 +41,15 @@ const RuntimeCards: FC<IGroupCardProps> = ({
 
   return (
     <>
-      {data?.slice(0, 3).map((value: any) => (
-        <RuntimeCard
-          value={value}
-          key={value.fileId}
-          image={value.image}
-          heading={value.fileName}
-          description={value.description}
+      {data?.map((value: any) => (
+        <GroupCard
+          groupName={value.groupName}
+          isModerator={value.isModerator}
+          moderatorName={value.moderatorName}
+          numberOfFiles={value.numberOfFiles}
+          numberOfUsers={value.numberOfUsers}
           selected={selectedCardId === value.fileId}
-          onClick={() => {
-            handleClick(value);
-            setProjectId(value.fileId);
-          }}
+          onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />
       ))}
@@ -63,4 +57,4 @@ const RuntimeCards: FC<IGroupCardProps> = ({
   );
 };
 
-export default RuntimeCards;
+export default GroupCards;

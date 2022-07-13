@@ -3,7 +3,7 @@ import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Layout } from 'antd';
 
-import GroupCard from 'components/card/GroupCard';
+import GroupCard from 'components/cards/group/GroupCard';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';

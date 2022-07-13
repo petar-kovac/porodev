@@ -2,7 +2,7 @@ import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import GridCard from 'components/card/GridCard';
+import GridCard from 'components/cards/grid/GridCard';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
 
@@ -10,7 +10,7 @@ import { downloadFile, findFiles } from 'service/files/files';
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { IFilesCard } from 'types/card-data';
-import GridCards from 'components/card/GridCards';
+import GridCards from 'components/cards/grid/GridCards';
 import {
   StyledCardHeading,
   StyledCardListWrapper,

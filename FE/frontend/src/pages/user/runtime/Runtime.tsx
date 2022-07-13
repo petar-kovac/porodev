@@ -1,12 +1,15 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
 import PFilter from 'components/filter/PFilter';
 import { usePageContext } from 'context/PageContext';
 import { IFilesCard } from 'types/card-data';
 
-import RuntimeCards from 'components/card/RuntimeCards';
+import RuntimeCards from 'components/cards/runtime/RuntimeCards';
+import Spinner from 'components/spinner/Spinner';
 import SiderContextProvider from 'context/SiderContext';
-import { findFiles } from 'service/files/files';
+import Error from 'pages/error/ErrorPage';
+import { StyledSpinnerWrapper } from 'styles/shared-styles';
+import useRuntimeData from './hooks/useRuntimeData';
 import RuntimeModal from './modal/RuntimeModal';
 import RuntimeSider from './sider/RuntimeSider';
 import {
@@ -20,23 +23,22 @@ import {
 const Runtime: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
-  const [data, setData] = useState<any>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   const { setIsSiderVisible } = usePageContext();
 
-  useEffect(() => {
-    setIsSiderVisible(false);
-    const fetchFiles = async () => {
-      try {
-        const res = await findFiles();
-        setData(res.content);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchFiles();
-  }, []);
+  const { data, isLoading, error } = useRuntimeData();
+
+  if (isLoading) {
+    return (
+      <StyledSpinnerWrapper>
+        <Spinner color="#000" size={42} speed={1.2} />
+      </StyledSpinnerWrapper>
+    );
+  }
+  if (error) {
+    return <Error message={error} />;
+  }
 
   return (
     <StyledPageWrapper>
@@ -73,7 +75,6 @@ const Runtime: FC = () => {
             data={data}
             cardData={cardData}
             selectedCardId={selectedCardId}
-            type="runtime"
           />
         </SiderContextProvider>
       </StyledContent>

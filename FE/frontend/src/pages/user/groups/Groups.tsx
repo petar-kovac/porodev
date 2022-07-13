@@ -1,43 +1,43 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
-import GroupCards from 'components/card/GroupCards';
+import GroupCards from 'components/cards/group/GroupCards';
 import PFilter from 'components/filter/PFilter';
-import PModal from 'components/modal/PModal';
-import PFileSider from 'layout/sider/PFileSider';
-import { IFilesCard } from 'types/card-data';
+import Spinner from 'components/spinner/Spinner';
 import { usePageContext } from 'context/PageContext';
-import { findFiles } from 'service/files/files';
+import Error from 'pages/error/ErrorPage';
+import { StyledSpinnerWrapper } from 'styles/shared-styles';
+import { IFilesCard } from 'types/card-data';
 
+import useRuntimeData from '../runtime/hooks/useRuntimeData';
+import GroupModal from './modal/GroupModal';
+import GroupSider from './sider/GroupSider';
 import {
-  StyledPageWrapper,
   StyledContent,
-  StyledFilterWrapper,
   StyledFilesWrapper,
+  StyledFilterWrapper,
+  StyledPageWrapper,
   StyledStaticContent,
 } from './styles/groups-styled';
-import GroupSider from './sider/GroupSider';
-import GroupModal from './modal/GroupModal';
 
 const Groups: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
-  const [data, setData] = useState<any>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
   const { setIsSiderVisible } = usePageContext();
+  const { data, isLoading, error } = useRuntimeData();
 
-  useEffect(() => {
-    setIsSiderVisible(false);
-    const fetchFiles = async () => {
-      try {
-        const res = await findFiles();
-        setData(res.content);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchFiles();
-  }, []);
+  if (isLoading) {
+    return (
+      <StyledSpinnerWrapper>
+        <Spinner color="#000" size={42} speed={1.2} />
+      </StyledSpinnerWrapper>
+    );
+  }
+
+  if (error) {
+    return <Error message={error} />;
+  }
 
   return (
     <StyledPageWrapper>
@@ -70,7 +70,7 @@ const Groups: FC = () => {
           </StyledFilesWrapper>
         </StyledStaticContent>
 
-        <GroupSider cardData={cardData} type="file" />
+        <GroupSider cardData={cardData} />
       </StyledContent>
       <GroupModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
