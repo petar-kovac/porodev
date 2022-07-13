@@ -48,8 +48,8 @@ const Runtime: FC = () => {
               selectedCardId={selectedCardId}
               setCardData={setCardData}
               setSelectedCardId={setSelectedCardId}
-              setIsModalVisible={setIsModalVisible}
-              setIsSiderVisible={setIsSiderVisible}
+              // setIsModalVisible={setIsModalVisible}
+              // setIsSiderVisible={setIsSiderVisible}
             />
           </StyledFilesWrapper>
         </StyledStaticContent>

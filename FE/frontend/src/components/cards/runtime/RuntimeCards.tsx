@@ -15,8 +15,6 @@ interface IGroupCardProps {
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
-  setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
-  setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
 }
 

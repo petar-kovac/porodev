@@ -49,21 +49,19 @@ const ListCards: FC<IListCardProps> = ({
 
   return (
     <>
-      {data
-        ?.map((value: any) => (
-          <ListCard
-            fileId={value.fileId}
-            fileName={value.fileName}
-            data={data}
-            value={value}
-            selected={selectedCardId === value.fileId}
-            key={value.fileId}
-            setSelectedCardId={setSelectedCardId}
-            onClick={() => handleClick(value)}
-            onDoubleClick={() => handleDoubleClick(value)}
-          />
-        ))
-        .reverse()}
+      {data?.map((value: any) => (
+        <ListCard
+          fileId={value.fileId}
+          fileName={value.fileName}
+          data={data}
+          value={value}
+          selected={selectedCardId === value.fileId}
+          key={value.fileId}
+          setSelectedCardId={setSelectedCardId}
+          onClick={() => handleClick(value)}
+          onDoubleClick={() => handleDoubleClick(value)}
+        />
+      ))}
     </>
   );
 };
