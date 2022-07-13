@@ -84,7 +84,7 @@ const PRouter: FC = () => {
       <Routes>
         <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/User/:id/verify/:token" element={<EmailVerify />} />
+        <Route path="/User/:email/:token" element={<EmailVerify />} />
       </Routes>
     );
   }
