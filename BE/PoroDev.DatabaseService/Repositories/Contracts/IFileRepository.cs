@@ -8,7 +8,7 @@ namespace PoroDev.DatabaseService.Repositories.Contracts
     {
         public Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType, Guid id);
 
-        public Task<FileReadSingleModel> ReadFiles(string fileId);
+        public Task<FileReadSingleModel> ReadFiles(string fileId, string userName, string userLastName);
 
         public Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId);
     }

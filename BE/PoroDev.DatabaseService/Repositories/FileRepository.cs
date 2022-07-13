@@ -76,7 +76,7 @@ namespace PoroDev.DatabaseService.Repositories
             return modelToReturn;
         }
 
-        public async Task<FileReadSingleModel> ReadFiles(string fileId)
+        public async Task<FileReadSingleModel> ReadFiles(string fileId, string userName, string userLastName)
         {
             ObjectId fileObjectId = ObjectId.Parse(fileId);
             var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
@@ -87,7 +87,9 @@ namespace PoroDev.DatabaseService.Repositories
             {
                 FileId = fileEntry.Id.ToString(),
                 FileName = fileEntry.Filename,
-                UploadTime = fileEntry.UploadDateTime
+                UploadTime = fileEntry.UploadDateTime,
+                UserName = userName,
+                UserLastName = userLastName
             };
 
             return readModel;
