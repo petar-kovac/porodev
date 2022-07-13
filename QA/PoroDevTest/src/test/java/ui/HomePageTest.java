@@ -1,13 +1,16 @@
 package ui;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import common.ui_setup.FileControlUtil;
 import common.ui_setup.SetupConstants;
 import common.ui_setup.pom_setup.BasePage;
 import common.ui_setup.pom_setup.PoroDevPom.HomePage;
 import common.ui_setup.pom_setup.PoroDevPom.LoginPage;
 import common.ui_setup.pom_setup.PoroDevPom.RegistrationPage;
+import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.io.IOException;
@@ -24,7 +27,7 @@ public class HomePageTest extends BaseTest{
 
     // For the user login
     @BeforeMethod
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         registrationPage = new RegistrationPage(driver, SetupConstants.BASE_URL);
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
@@ -39,6 +42,7 @@ public class HomePageTest extends BaseTest{
                 file.getValue("VALID_DEPARTMENT"),
                 file.getValue("VALID_POSITION"));
         logger.info("User successfully registered.");
+        BasePage.waitForElementVisibility(registrationPage.we_successfulRegistration_message, driver);
 
         loginPage.logInUser(currentEmail, file.getValue("VALID_PASS"));
         BasePage.waitForElementVisibility(homePage.we_userFileUpload_message, driver);
@@ -54,19 +58,57 @@ public class HomePageTest extends BaseTest{
         logger.info("Profile info is displayed");
     }
 
-    @Test(priority = 2)
+   @Test(priority = 2)
     public void edit_firstName_profileInfo() {
-        //TODO test that user can edit his/hers first name and assert that is changed
+        homePage.goTo_profilePage();
+       logger.info("User is on Home page");
+
+
+       homePage.changeProfileAttribute(
+               homePage.we_editName_button,
+                homePage.we_editAttribute_entry,
+               "NewName",
+               homePage.we_profileFirstName_text);
+
+                String changedName = BasePage.getTextFromElement(homePage.we_profileLastName_text);
+                Assert.assertEquals(changedName,"newName");
+
     }
 
     @Test(priority = 3)
     public void edit_lastName_profileInfo() {
-        //TODO test that user can edit his/hers last name and assert that is changed
+        homePage.goTo_profilePage();
+        logger.info("User is on Home page");
+
+        homePage.changeProfileAttribute(
+                homePage.we_editLastName_button,
+                homePage.we_editAttribute_entry,
+                "NewLastName",
+                homePage.we_profileLastName_text);
+
+                String changedLastName = BasePage.getTextFromElement(homePage.we_profileLastName_text);
+                Assert.assertEquals(changedLastName, "NewLastName");
+
     }
 
     @Test(priority = 4)
     public void edit_password_profileInfo() {
-        //TODO test that user can edit his/hers password and assert that is changed
+        homePage.goTo_profilePage();
+        logger.info("User is on Home page");
+
+        homePage.changeProfileAttribute(
+                homePage.we_editPassword_button,
+                homePage.we_editAttribute_entry,
+                "NewPass##22",
+                homePage.we_profileLastName_text
+        );
+
+        homePage.logOutUser();
+
+       /* loginPage.logInUser(currentEmail, file.getValue("VALID_PASS"));
+        BasePage.waitForElementVisibility(homePage.we_userFileUpload_message, driver);
+        logger.info("User successfully logged in.");*/
+
     }
 
     @Test(priority = 5)

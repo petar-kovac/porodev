@@ -28,7 +28,9 @@ public class LoginPage extends BasePage {
     WebElement we_emailInputField;
     @FindBy(name = "password")
     WebElement we_passInputField;
-    @FindBy(className = "ant-btn-default")
+
+    public
+    @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/button")
     WebElement we_loginButton;
 
     //ASSERTION ELEMENTS

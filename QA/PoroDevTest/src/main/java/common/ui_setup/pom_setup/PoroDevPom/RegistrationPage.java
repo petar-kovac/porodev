@@ -59,7 +59,6 @@ public class RegistrationPage extends BasePage {
 
     //Methods section
     public void registerUser(String firstName, String lastName, String email, String password, String confirmPass, String department, String position)  {
-
         BasePage.clickElement(we_createNewAccount_button);
         BasePage.sendText(we_firstName_inputField, firstName);
         BasePage.sendText(we_lastName_inputField, lastName);
