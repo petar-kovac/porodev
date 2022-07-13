@@ -49,7 +49,7 @@ namespace PoroDev.GatewayAPI.Services
             });
 
             if (fileUploadResponseContext.Message.ExceptionName != null)
-                ThrowException(nameof(fileUploadResponseContext.Message.ExceptionName), fileUploadResponseContext.Message.HumanReadableMessage);
+                ThrowException(fileUploadResponseContext.Message.ExceptionName, fileUploadResponseContext.Message.HumanReadableMessage);
 
             FileUploadResponse fileUploadResponse = fileUploadResponseContext.Message.Entity;
 

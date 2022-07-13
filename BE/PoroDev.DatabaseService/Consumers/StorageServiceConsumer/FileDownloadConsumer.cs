@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
@@ -7,15 +8,10 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileDownloadConsumer : IConsumer<FileDownloadRequestServiceToDatabase>
+    public class FileDownloadConsumer : BaseDbConsumer, IConsumer<FileDownloadRequestServiceToDatabase>
     {
-        private IFileRepository _fileRepository;
-        private IUnitOfWork _unitOfWork;
-
-        public FileDownloadConsumer(IFileRepository fileRepository, IUnitOfWork unitOfWork)
+        public FileDownloadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
-            _fileRepository = fileRepository;
-            _unitOfWork = unitOfWork;
         }
 
 

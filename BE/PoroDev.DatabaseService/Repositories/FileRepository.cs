@@ -7,6 +7,7 @@ using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
+using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.Common.MassTransit.Extensions;
 
@@ -93,6 +94,19 @@ namespace PoroDev.DatabaseService.Repositories
             };
 
             return readModel;
+        }
+
+        public async Task<FileMetadata> ReadFileById(string fileId)
+        {
+            ObjectId id = ObjectId.Parse(fileId);
+            var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, id);
+
+            var searchResult = await _bucket.FindAsync(filter);
+            var fileEntry = searchResult.First();
+
+            FileMetadata fileData = new(fileEntry);
+
+            return fileData;
         }
     }
 }

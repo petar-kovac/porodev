@@ -10,7 +10,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserDeleteAllConsumer : BaseDbConsumer, IConsumer<UserDeleteAllRequestServiceToDataBase>
     {
-        public UserDeleteAllConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UserDeleteAllConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 
