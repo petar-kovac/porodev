@@ -33,9 +33,6 @@ const GridCards: FC<IGridCardProps> = ({
   setSelectedCardId = () => undefined,
   setIsModalVisible = () => undefined,
 }) => {
-  // const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  // const { data } = useFetchData(url);
-
   const [data, setData] = useState<any>(undefined);
 
   useEffect(() => {
@@ -46,8 +43,6 @@ const GridCards: FC<IGridCardProps> = ({
 
     fetchFiles();
   }, []);
-
-  console.log(data);
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);

@@ -40,11 +40,10 @@ export const PageConsumer = PageContext.Consumer;
 const PageProvider: FC<any> = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSiderVisible, setIsSiderVisible] = useState<boolean>(true);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalContent, setModalContent] = useState<ReactNode>(undefined);
-
   const [projectId, setProjectId] = useState<string>('');
+
+  const [modalContent, setModalContent] = useState<ReactNode>(undefined);
 
   const state: PageContextProps = useMemo(
     () => ({

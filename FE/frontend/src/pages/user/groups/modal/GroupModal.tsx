@@ -1,8 +1,6 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Button, Modal, Input } from 'antd';
+import { Modal } from 'antd';
 import { usePageContext } from 'context/PageContext';
-import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
-import { IRuntimeRsponse } from 'service/runtime/runtime.props';
+import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { IFilesCard } from 'types/card-data';
 
@@ -11,46 +9,36 @@ interface IPModalProps {
   content?: ReactNode;
   onOk?: any;
   onCancel?: any;
-  isRemoveModalVisible?: boolean;
-  fileName?: string;
-  setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  handleDelete?: any;
-  handleCancel?: any;
   cardData?: IFilesCard | null;
 }
 
-const RemoveModal: FC<IPModalProps> = ({
+const GroupModal: FC<IPModalProps> = ({
   title,
+  content,
   setCardData,
-  handleDelete,
-  handleCancel,
-  fileName,
-  isRemoveModalVisible,
+  onOk,
+  onCancel,
 }) => {
+  const { isModalVisible, setIsModalVisible } = usePageContext();
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <>
       <StyledFilesModal
-        okText="Yes"
-        cancelText="No"
         title={title}
-        visible={isRemoveModalVisible}
-        onOk={handleDelete}
+        visible={isModalVisible}
+        onOk={handleOk}
         onCancel={handleCancel}
-
-        // footer={[
-        //   <div className="footer-content">
-        //     <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
-        //     <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-        //       Download
-        //     </StyledFilesButton>
-        //   </div>,
-        // ]}
       >
-        <div>
-          <p>Are you sure you want to delete this file? </p>
-          <span>{fileName}</span>
-        </div>
+        <div>Group modal</div>
       </StyledFilesModal>
     </>
   );
@@ -93,4 +81,4 @@ const StyledFilesModal = styled(Modal).attrs({
   }
 `;
 
-export default RemoveModal;
+export default GroupModal;

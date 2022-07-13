@@ -11,31 +11,33 @@ interface IPModalProps {
   content?: ReactNode;
   onOk?: any;
   onCancel?: any;
-  isRemoveModalVisible?: boolean;
-  fileName?: string;
-  setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  handleDelete?: any;
-  handleCancel?: any;
   cardData?: IFilesCard | null;
 }
 
-const RemoveModal: FC<IPModalProps> = ({
+const RuntimeModal: FC<IPModalProps> = ({
   title,
+  content,
   setCardData,
-  handleDelete,
-  handleCancel,
-  fileName,
-  isRemoveModalVisible,
+  onOk,
+  onCancel,
 }) => {
+  const { isModalVisible, setIsModalVisible } = usePageContext();
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <>
-      <StyledFilesModal
-        okText="Yes"
-        cancelText="No"
+      <StyledRuntimeModal
         title={title}
-        visible={isRemoveModalVisible}
-        onOk={handleDelete}
+        visible={isModalVisible}
+        onOk={handleOk}
         onCancel={handleCancel}
 
         // footer={[
@@ -47,16 +49,13 @@ const RemoveModal: FC<IPModalProps> = ({
         //   </div>,
         // ]}
       >
-        <div>
-          <p>Are you sure you want to delete this file? </p>
-          <span>{fileName}</span>
-        </div>
-      </StyledFilesModal>
+        <div>Runtime modal</div>
+      </StyledRuntimeModal>
     </>
   );
 };
 
-const StyledFilesModal = styled(Modal).attrs({
+const StyledRuntimeModal = styled(Modal).attrs({
   'data-testid': 'modal',
 })`
   .ant-modal-header {
@@ -93,4 +92,4 @@ const StyledFilesModal = styled(Modal).attrs({
   }
 `;
 
-export default RemoveModal;
+export default RuntimeModal;

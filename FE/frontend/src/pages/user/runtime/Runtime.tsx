@@ -1,21 +1,21 @@
 import { FC, useEffect, useState } from 'react';
 
 import PFilter from 'components/filter/PFilter';
-import PModal from 'components/modal/PModal';
 import { usePageContext } from 'context/PageContext';
-import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 
 import RuntimeCards from 'components/card/RuntimeCards';
 import SiderContextProvider from 'context/SiderContext';
 import { findFiles } from 'service/files/files';
+import RuntimeModal from './modal/RuntimeModal';
+import RuntimeSider from './sider/RuntimeSider';
 import {
   StyledContent,
   StyledFilesWrapper,
   StyledFilterWrapper,
   StyledPageWrapper,
   StyledStaticContent,
-} from './runtime-styled';
+} from './styles/runtime-styled';
 
 const Runtime: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
@@ -23,9 +23,10 @@ const Runtime: FC = () => {
   const [data, setData] = useState<any>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { modalContent } = usePageContext();
+  const { setIsSiderVisible } = usePageContext();
 
   useEffect(() => {
+    setIsSiderVisible(false);
     const fetchFiles = async () => {
       try {
         const res = await findFiles();
@@ -43,6 +44,7 @@ const Runtime: FC = () => {
         onClick={() => {
           setSelectedCardId(null);
           setCardData(null);
+          setIsSiderVisible(false);
         }}
       >
         <StyledStaticContent>
@@ -67,7 +69,7 @@ const Runtime: FC = () => {
           </StyledFilesWrapper>
         </StyledStaticContent>
         <SiderContextProvider>
-          <PFileSider
+          <RuntimeSider
             data={data}
             cardData={cardData}
             selectedCardId={selectedCardId}
@@ -75,11 +77,7 @@ const Runtime: FC = () => {
           />
         </SiderContextProvider>
       </StyledContent>
-      <PModal
-        cardData={cardData}
-        setCardData={setCardData}
-        content={modalContent}
-      />
+      <RuntimeModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
   );
 };

@@ -5,11 +5,13 @@ import { useFetchData } from 'hooks/useFetchData';
 import { IFilesCard } from 'types/card-data';
 
 import GroupCard from 'components/card/GroupCard';
+import { usePageContext } from 'context/PageContext';
 
 interface IGroupCardProps {
   selected?: boolean | null;
   selectedCardId?: number | null;
   cardData?: IFilesCard | null;
+  data?: IFilesCard[] | null;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
   setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
   setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
@@ -20,21 +22,18 @@ const GroupCards: FC<IGroupCardProps> = ({
   selectedCardId,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
-  setIsModalVisible = () => undefined,
-  setIsSiderVisible = () => undefined,
+  data,
 }) => {
-  const url = `${process.env.REACT_APP_MOCK_URL}/groups`;
-  const { data } = useFetchData(url);
-  console.log(data);
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
     setCardData(value);
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.fileId);
   };
 
   const handleDoubleClick = (value: any) => {
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.fileId);
     setCardData(value);
     setIsSiderVisible(false);
     setIsModalVisible(true);
@@ -49,7 +48,7 @@ const GroupCards: FC<IGroupCardProps> = ({
           moderatorName={value.moderatorName}
           numberOfFiles={value.numberOfFiles}
           numberOfUsers={value.numberOfUsers}
-          selected={selectedCardId === value.id}
+          selected={selectedCardId === value.fileId}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />

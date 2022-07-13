@@ -17,7 +17,7 @@ type SiderContextProps = {
 };
 
 export const SiderContext = createContext<SiderContextProps>({
-  inputParameters: ['a'],
+  inputParameters: [''],
   setInputParameters: () => undefined,
   imageParameters: [],
   setImageParameters: () => undefined,

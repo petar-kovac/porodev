@@ -17,7 +17,9 @@ import {
   StyledFoldersContainer,
   StyledPageWrapper,
   StyledStaticContent,
-} from './files-styled';
+} from './styles/files-styled';
+import FileSider from './sider/FileSider';
+import FileModal from './modal/FileModal';
 
 const Files: FC = () => {
   const [isListView, setIsListView] = useState<boolean>(false);
@@ -56,8 +58,6 @@ const Files: FC = () => {
             <StyledFoldersWrapper>
               <PFolders
                 cardData={cardData}
-                setIsSiderVisible={setIsSiderVisible}
-                setIsModalVisible={setIsModalVisible}
                 setCardData={setCardData}
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
@@ -90,8 +90,6 @@ const Files: FC = () => {
               {!isListView ? (
                 <ListCards
                   cardData={cardData}
-                  setIsSiderVisible={setIsSiderVisible}
-                  setIsModalVisible={setIsModalVisible}
                   setCardData={setCardData}
                   selectedCardId={selectedCardId}
                   setSelectedCardId={setSelectedCardId}
@@ -100,8 +98,6 @@ const Files: FC = () => {
                 <GridCards
                   cardData={cardData}
                   setCardData={setCardData}
-                  setIsSiderVisible={setIsSiderVisible}
-                  setIsModalVisible={setIsModalVisible}
                   selectedCardId={selectedCardId}
                   setSelectedCardId={setSelectedCardId}
                 />
@@ -110,7 +106,7 @@ const Files: FC = () => {
           </StyledFilesContainer>
         </StyledStaticContent>
 
-        <PFileSider
+        <FileSider
           cardData={cardData}
           setCardData={setCardData}
           setSelectedCardId={setSelectedCardId}
@@ -118,7 +114,7 @@ const Files: FC = () => {
         />
       </StyledContent>
 
-      <PModal cardData={cardData} setCardData={setCardData} />
+      <FileModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
   );
 };

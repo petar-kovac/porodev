@@ -19,6 +19,7 @@ import useDoubleClick from 'hooks/useDoubleClick';
 import DownloadButton from 'components/buttons/DownloadButton';
 
 import { downloadFile, findFiles, deleteFile } from 'service/files/files';
+import { usePageContext } from 'context/PageContext';
 
 import { formatDateListCard } from 'util/helpers/date-formaters';
 
@@ -33,26 +34,20 @@ interface IListCardProps {
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
   setSelectedCardId: (value: number | null) => unknown;
-  setIsSiderVisible: (value: boolean) => unknown;
-  setIsModalVisible: (value: boolean) => unknown;
 }
 
 const ListCard: FC<IListCardProps> = ({
   fileId,
-  fileName,
-  data,
   value,
   selected,
   onClick = () => undefined,
   onDoubleClick = () => undefined,
   setSelectedCardId,
-  setIsSiderVisible,
-  setIsModalVisible,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
 
-  console.log(value);
+  const { setIsSiderVisible } = usePageContext();
 
   const [isRemoveModalVisible, setIsRemoveModalVisible] =
     useState<boolean>(false);

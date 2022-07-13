@@ -22,9 +22,6 @@ const GroupCard: FC<IGroupCardProps> = ({
   groupName,
   isModerator,
   moderatorName,
-  numberOfFiles,
-  numberOfUsers,
-  uuid,
   selected,
   onClick,
   onDoubleClick,
@@ -41,17 +38,17 @@ const GroupCard: FC<IGroupCardProps> = ({
       selected={selected}
     >
       <StyledTextWrapper>
-        <div>Moderator:</div>
+        <div>Shared space card</div>
         <div>{moderatorName}</div>
       </StyledTextWrapper>
-      <StyledTextWrapper>
+      {/* <StyledTextWrapper>
         <div>Number of files:</div>
         <div>{numberOfFiles}</div>
       </StyledTextWrapper>
       <StyledTextWrapper>
         <div>Number of users:</div>
         <div>{numberOfUsers}</div>
-      </StyledTextWrapper>
+      </StyledTextWrapper> */}
     </StyledGroupCard>
   );
 };

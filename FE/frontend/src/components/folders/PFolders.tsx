@@ -1,6 +1,7 @@
 import { FC, MouseEventHandler, Dispatch, SetStateAction } from 'react';
 import { useFetchData } from 'hooks/useFetchData';
 // import { IPFoldersProps } from 'types/folder-props';
+import { usePageContext } from 'context/PageContext';
 import { IFilesCard } from 'types/card-data';
 import PFolder from './PFolder';
 
@@ -23,11 +24,11 @@ const PFolders: FC<IPFoldersProps> = ({
   selectedCardId,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
-  setIsModalVisible = () => undefined,
-  setIsSiderVisible = () => undefined,
 }) => {
   const url = `${process.env.REACT_APP_MOCK_URL}/files`;
   const { data } = useFetchData(url);
+
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);

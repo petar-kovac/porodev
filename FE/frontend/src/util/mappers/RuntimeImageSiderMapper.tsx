@@ -7,8 +7,7 @@ import { FC } from 'react';
  * Component to show selected image .
  */
 const RuntimeImageSiderMapper: FC = () => {
-  const { inputParameters, setInputParameters, imageParameters } =
-    useSiderContext();
+  const { imageParameters } = useSiderContext();
 
   return (
     <>

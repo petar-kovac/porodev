@@ -6,6 +6,7 @@ import PModal from 'components/modal/PModal';
 import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import { usePageContext } from 'context/PageContext';
+import { findFiles } from 'service/files/files';
 
 import {
   StyledPageWrapper,
@@ -13,19 +14,36 @@ import {
   StyledFilterWrapper,
   StyledFilesWrapper,
   StyledStaticContent,
-} from './groups-styled';
+} from './styles/groups-styled';
+import GroupSider from './sider/GroupSider';
+import GroupModal from './modal/GroupModal';
 
 const Groups: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
+  const [data, setData] = useState<any>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+  const { setIsSiderVisible } = usePageContext();
+
+  useEffect(() => {
+    setIsSiderVisible(false);
+    const fetchFiles = async () => {
+      try {
+        const res = await findFiles();
+        setData(res.content);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchFiles();
+  }, []);
 
   return (
     <StyledPageWrapper>
       <StyledContent
         onClick={() => {
+          setIsSiderVisible(false);
           setSelectedCardId(null);
           setCardData(null);
         }}
@@ -43,19 +61,18 @@ const Groups: FC = () => {
           </StyledFilterWrapper>
           <StyledFilesWrapper>
             <GroupCards
+              data={data}
               cardData={cardData}
-              selectedCardId={selectedCardId}
               setCardData={setCardData}
+              selectedCardId={selectedCardId}
               setSelectedCardId={setSelectedCardId}
-              setIsModalVisible={setIsModalVisible}
-              setIsSiderVisible={setIsSiderVisible}
             />
           </StyledFilesWrapper>
         </StyledStaticContent>
 
-        <PFileSider cardData={cardData} type="file" />
+        <GroupSider cardData={cardData} type="file" />
       </StyledContent>
-      <PModal cardData={cardData} setCardData={setCardData} />
+      <GroupModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
   );
 };

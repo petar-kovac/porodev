@@ -9,6 +9,7 @@ import {
 
 import { IFilesCard } from 'types/card-data';
 import { useFetchData } from 'hooks/useFetchData';
+import { usePageContext } from 'context/PageContext';
 
 import { findFiles, downloadFile } from 'service/files/files';
 
@@ -29,14 +30,11 @@ interface IListCardProps {
 const ListCards: FC<IListCardProps> = ({
   selectedCardId,
   setCardData = () => undefined,
-  setIsSiderVisible = () => undefined,
-  setIsModalVisible = () => undefined,
   setSelectedCardId = () => undefined,
 }) => {
-  // const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  // const { data } = useFetchData(url);
-
   const [data, setData] = useState<any>(undefined);
+
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -46,18 +44,6 @@ const ListCards: FC<IListCardProps> = ({
 
     fetchFiles();
   }, []);
-
-  // console.log(data);
-
-  // const handleDownload = async () => {
-  //   const res = await downloadFile();
-  //   setFileData(window.URL.createObjectURL(new Blob([res.data])));
-  //   console.log(fileData);
-  // };
-
-  // // console.log(`${value.fileId}sss`);
-
-  // console.log(fileData);
 
   const handleClick = (value: any) => {
     setSelectedCardId(value.fileId);
@@ -84,8 +70,6 @@ const ListCards: FC<IListCardProps> = ({
             selected={selectedCardId === value.fileId}
             key={value.fileId}
             setSelectedCardId={setSelectedCardId}
-            setIsSiderVisible={setIsSiderVisible}
-            setIsModalVisible={setIsModalVisible}
             onClick={() => handleClick(value)}
             onDoubleClick={() => handleDoubleClick(value)}
           />
