@@ -2,11 +2,10 @@ package api_test.files;
 
 import common.api_setup.ApiConfig;
 import common.api_setup.Endpoints;
+import common.api_setup.api_common.DataControlUtil;
 import common.api_setup.api_common.UserDetailsGenerator;
 import common.ui_setup.FileControlUtil;
 import io.restassured.RestAssured;
-import io.restassured.config.HeaderConfig;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -21,7 +20,6 @@ public class UploadFile extends ApiConfig {
 
     @Test
     public void uploadFile() {
-        File uploadedFile = new File("C:\\Users\\User\\IdeaProjects\\porodev\\QA\\PoroDevTest\\pom.xml");
         String token = UserDetailsGenerator.takeTokenValueFromJson(fileControl.getValue("VALID_EMAIL"), fileControl.getValue( "VALID_PASS_CREATED_USER"));
 
         Response response = RestAssured
@@ -29,11 +27,16 @@ public class UploadFile extends ApiConfig {
                 //.config(RestAssuredConfig.config().headerConfig(HeaderConfig.headerConfig().overwriteHeadersWithName("Content-Type")))
                 .header("Content-Type", "multipart/form-data")
                 .header("Authorization","Bearer " + token)
-                .multiPart(uploadedFile)
+                .multiPart(new File("C:\\Users\\User\\IdeaProjects\\porodev\\QA\\PoroDevTest\\pom.xml"))
                 .when()
                 .post(Endpoints.UPLOAD_FILE);
 
-        String fileId = UserDetailsGenerator.takeValueFromResponseWithToken(Endpoints.READ_FILE, token,1,"fileId");
-        System.out.println("This is file id: " + fileId);
+        String fileId = UserDetailsGenerator.takeValueFromResponseWithToken(Endpoints.READ_FILE, token,0,"fileId");
+        System.out.println("File id: " + fileId);
+    }
+
+    @Test
+    public void uploadThenDeleteUploadedFiles() {
+        DataControlUtil.uploadThenDeleteFiles(8);
     }
 }

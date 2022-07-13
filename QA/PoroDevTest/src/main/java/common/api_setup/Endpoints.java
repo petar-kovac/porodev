@@ -23,4 +23,5 @@ public class Endpoints {
     public static String DOWNLOAD_FILE = "Storage/Download";
     public static String READ_FILE = "Storage/Read";
     public static String DELETE_FILE = "Storage/Delete";
+    public static String DELETE_FILE_PATH = "?fileId=";
 }
