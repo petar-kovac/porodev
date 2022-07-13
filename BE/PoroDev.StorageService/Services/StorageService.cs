@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
@@ -15,24 +16,29 @@ namespace PoroDev.StorageService.Services
         private readonly IRequestClient<FileDownloadRequestServiceToDatabase> _downloadRequestClient;
         private readonly IRequestClient<FileReadModel> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestServiceToDatabase> _deleteRequestClient;
+        private readonly IMapper _mapper;
 
         public StorageService
             (IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient,
             IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient,
             IRequestClient<FileReadModel> readRequestClient,
-            IRequestClient<FileDeleteRequestServiceToDatabase> deleteRequestClient)
+            IRequestClient<FileDeleteRequestServiceToDatabase> deleteRequestClient,
+            IMapper mapper)
         {
             _uploadRequestClient = uploadRequestClient;
             _downloadRequestClient = downloadRequestClient;
             _readRequestClient = readRequestClient;
             _deleteRequestClient = deleteRequestClient;
+            _mapper = mapper;
         }
 
-        public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
+        public async Task<CommunicationModel<FileUploadResponse>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
         {
-            var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
+            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
 
-            return response.Message;
+            var fileUploadResponse = _mapper.Map<CommunicationModel<FileUploadResponse>>(fileUploadResponseContext.Message);
+
+            return fileUploadResponse;
         }
 
         public async Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadModel)

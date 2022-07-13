@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common
+namespace PoroDev.Common.Contracts.StorageService.UploadFile
 {
-    public interface IDownloadRequest
+    public interface IUploadRequest
     {
-        public MessageData<byte[]> File { get; set; }
         public string FileName { get; set; }
+
+        public MessageData<byte[]> File { get; set; }
+
         public string ContentType { get; set; }
+
+        public Guid UserId { get; set; }
     }
 }

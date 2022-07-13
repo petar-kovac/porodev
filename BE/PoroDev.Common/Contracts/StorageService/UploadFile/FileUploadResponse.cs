@@ -1,4 +1,4 @@
-﻿namespace PoroDev.GatewayAPI.Models.StorageService
+﻿namespace PoroDev.Common.Contracts.StorageService.UploadFile
 {
     public class FileUploadResponse
     {

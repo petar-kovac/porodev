@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MassTransit;
-using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
