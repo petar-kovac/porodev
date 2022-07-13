@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using MassTransit;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
@@ -7,6 +8,7 @@ using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.DatabaseService.Repositories
 {
@@ -66,7 +68,7 @@ namespace PoroDev.DatabaseService.Repositories
 
             var modelToReturn = new FileDownloadMessage()
             {
-                File = downloadFile,
+                File = await messageDataRepository.PutBytes(downloadFile),
                 FileName = fileName,
                 ContentType = contentType
             };
@@ -74,7 +76,7 @@ namespace PoroDev.DatabaseService.Repositories
             return modelToReturn;
         }
 
-        public async Task<FileReadSingleModel> ReadFiles(string fileId)
+        public async Task<FileReadSingleModel> ReadFiles(string fileId, string userName, string userLastName)
         {
             ObjectId fileObjectId = ObjectId.Parse(fileId);
             var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, fileObjectId);
@@ -85,7 +87,9 @@ namespace PoroDev.DatabaseService.Repositories
             {
                 FileId = fileEntry.Id.ToString(),
                 FileName = fileEntry.Filename,
-                UploadTime = fileEntry.UploadDateTime
+                UploadTime = fileEntry.UploadDateTime,
+                UserName = userName,
+                UserLastName = userLastName
             };
 
             return readModel;

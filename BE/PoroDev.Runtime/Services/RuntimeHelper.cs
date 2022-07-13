@@ -38,7 +38,7 @@ namespace PoroDev.Runtime.Services
 
                 argList[i] = fileContext.Message.Entity.FileName;
 
-                await File.WriteAllBytesAsync(Path.Combine(_zipManipulator.ProjectPath, $"{fileContext.Message.Entity.FileName}"), fileContext.Message.Entity.File);
+                await File.WriteAllBytesAsync(Path.Combine(_zipManipulator.ProjectPath, $"{fileContext.Message.Entity.FileName}"), await fileContext.Message.Entity.File.Value);
             }
 
             return new CommunicationModel<List<string>>(argList);
@@ -53,7 +53,7 @@ namespace PoroDev.Runtime.Services
 
             var projectContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb);
 
-            await File.WriteAllBytesAsync(Path.Combine(RUNTIME_FOLDER_ROUTE, $"{projectContext.Message.Entity.FileName}"), projectContext.Message.Entity.File);
+            await File.WriteAllBytesAsync(Path.Combine(RUNTIME_FOLDER_ROUTE, $"{projectContext.Message.Entity.FileName}"), await projectContext.Message.Entity.File.Value);
 
             ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
 

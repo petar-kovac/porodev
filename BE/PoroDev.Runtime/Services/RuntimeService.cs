@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Runtime.Services.Contracts;
 
@@ -29,7 +28,7 @@ namespace PoroDev.Runtime.Services
         }
 
         public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, string projectId)
-        { 
+        {
             var exceptionThatHappened = await _runtimeHelper.InitializeAndExtract(projectId, userId);
             if (exceptionThatHappened != null)
                 return exceptionThatHappened;
@@ -44,7 +43,7 @@ namespace PoroDev.Runtime.Services
 
                 return responseModel;
             }
-            
+
             var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runTimeResult.Entity);
             return dbResponse.Message;
         }
