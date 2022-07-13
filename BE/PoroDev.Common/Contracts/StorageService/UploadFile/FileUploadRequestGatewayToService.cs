@@ -16,16 +16,20 @@ namespace PoroDev.Common.Contracts.StorageService.UploadFile
 
         public FileUploadRequestGatewayToService(IFormFile file, Guid userId)
         {
-            using Stream stream = file.OpenReadStream();
-            var memoryStream = new MemoryStream();
-            stream.CopyTo(memoryStream);
-            File = memoryStream.ToArray();
+            File = ConvertFormFileToBytes(file);
             FileName = file.FileName;
             ContentType = file.ContentType;
-
-            // var content = file.OpenReadStream().
-            //File = file;//izmjeniti na end point-u
             UserId = userId;
+        }
+
+        private byte[] ConvertFormFileToBytes(IFormFile file)
+        {
+            using (Stream stream = file.OpenReadStream())
+            {
+                var memoryStream = new MemoryStream();
+                stream.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
         }
     }
 }

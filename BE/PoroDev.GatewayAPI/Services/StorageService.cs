@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
@@ -37,14 +36,12 @@ namespace PoroDev.GatewayAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel)
+        public async Task<FileUploadResponse> UploadFile(FileUploadRequestGatewayToService uploadModel)
         {
             if (uploadModel.File is null)
-            {
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
-            }
 
-            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(new
+            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadResponse>>(new
             {
                 FileName = uploadModel.FileName,
                 File = uploadModel.File,
@@ -52,12 +49,12 @@ namespace PoroDev.GatewayAPI.Services
                 UserId = uploadModel.UserId
             });
 
-            if (responseContext.Message.ExceptionName != null)
-                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+            if (fileUploadResponseContext.Message.ExceptionName != null)
+                ThrowException(nameof(fileUploadResponseContext.Message.ExceptionName), fileUploadResponseContext.Message.HumanReadableMessage);
 
-            var response = responseContext.Message.Entity;
+            FileUploadResponse fileUploadResponse = fileUploadResponseContext.Message.Entity;
 
-            return response;
+            return fileUploadResponse;
         }
 
         public async Task<FileDownloadResponse> DownloadFile(FileDownloadRequestGatewayToService downloadModel)

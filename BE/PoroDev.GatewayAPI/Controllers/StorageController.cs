@@ -21,17 +21,22 @@ namespace PoroDev.GatewayAPI.Controllers
             _jwtValidatorService = jwtValidatorService;
         }
 
+        [RequireHttps]
         [HttpPost("Upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
-        public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file)
+        public async Task<ActionResult<FileUploadResponse>> Upload(IFormFile file)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            var returnModel = new FileUploadRequestGatewayToService(file, userId);
-            var response = await _storageService.UploadFile(returnModel);
-            return Ok(response);
+
+            var fileUploadRequest = new FileUploadRequestGatewayToService(file, userId);
+
+            FileUploadResponse fileUploadResponse = await _storageService.UploadFile(fileUploadRequest);
+
+            return Ok(fileUploadResponse);
         }
 
+        [RequireHttps]
         [HttpGet("Download")]
         public async Task<ActionResult<FileDownloadResponse>> Download([FromQuery] string fileId)
         {
