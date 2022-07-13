@@ -51,6 +51,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [loggedUser, setLoggedUser] = useState<ILoginResponse | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [msg, setMsg] = useState<string>('');
   const testMessage = 'test-test ';
   const location = useLocation();
   const navigate = useNavigate();

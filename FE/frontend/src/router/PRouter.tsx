@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Layout } from 'antd';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-
+import EmailVerify from 'pages/email-verify/EmailVerify';
 import Groups from 'pages/admin/groups/Groups';
 import Runtime from 'pages/admin/runtime/Runtime';
 import UserRuntime from 'pages/user/runtime/Runtime';
@@ -84,6 +84,7 @@ const PRouter: FC = () => {
       <Routes>
         <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/User/:id/verify/:token" element={<EmailVerify />} />
       </Routes>
     );
   }

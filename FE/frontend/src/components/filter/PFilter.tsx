@@ -1,4 +1,5 @@
 import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
+import { TrendingUpDimensions } from '@styled-icons/ionicons-outline/TrendingUp';
 import { DatePicker, Select, Slider, Input } from 'antd';
 import { DefaultOptionType } from 'antd/lib/select';
 import PSelect from 'components/select/PSelect';
@@ -107,7 +108,7 @@ const PFilter: FC<IPFilterProps> = ({
                 isList={isList}
                 onClick={(e: any) => {
                   e.stopPropagation();
-                  setIsList((prevState) => !prevState);
+                  setIsList(true);
                 }}
               />
 
@@ -115,7 +116,7 @@ const PFilter: FC<IPFilterProps> = ({
                 isList={isList}
                 onClick={(e: any) => {
                   e.stopPropagation();
-                  setIsList((prevState) => !prevState);
+                  setIsList(false);
                 }}
               />
             </>

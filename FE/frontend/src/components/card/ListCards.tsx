@@ -74,21 +74,23 @@ const ListCards: FC<IListCardProps> = ({
 
   return (
     <>
-      {data?.content.map((value: any) => (
-        <ListCard
-          fileId={value.fileId}
-          fileName={value.fileName}
-          data={data}
-          value={value}
-          selected={selectedCardId === value.fileId}
-          key={value.fileId}
-          setSelectedCardId={setSelectedCardId}
-          setIsSiderVisible={setIsSiderVisible}
-          setIsModalVisible={setIsModalVisible}
-          onClick={() => handleClick(value)}
-          onDoubleClick={() => handleDoubleClick(value)}
-        />
-      ))}
+      {data?.content
+        .map((value: any) => (
+          <ListCard
+            fileId={value.fileId}
+            fileName={value.fileName}
+            data={data}
+            value={value}
+            selected={selectedCardId === value.fileId}
+            key={value.fileId}
+            setSelectedCardId={setSelectedCardId}
+            setIsSiderVisible={setIsSiderVisible}
+            setIsModalVisible={setIsModalVisible}
+            onClick={() => handleClick(value)}
+            onDoubleClick={() => handleDoubleClick(value)}
+          />
+        ))
+        .reverse()}
     </>
   );
 };

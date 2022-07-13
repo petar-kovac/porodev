@@ -50,8 +50,7 @@ const Home: FC = () => {
           </StyledCardHeading>
           <StyledCardWrapper>
             {data?.content
-              .slice(0, 4)
-              .reverse()
+              .slice(-4)
               .map((value: any) => (
                 <GridCard
                   key={value.fileId}
@@ -60,7 +59,8 @@ const Home: FC = () => {
                   selected={false}
                   fileExtension={value.fileName.split('.')[1]}
                 />
-              ))}
+              ))
+              .reverse()}
           </StyledCardWrapper>
           <StyledShowMoreButton>
             <Link to="/user-files">
