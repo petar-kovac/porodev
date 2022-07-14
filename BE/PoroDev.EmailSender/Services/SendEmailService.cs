@@ -14,7 +14,7 @@ namespace PoroDev.EmailSender.Services
         {
             try
             {
-                var client = new SendGridClient("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");
+                var client = new SendGridClient("");//enter your api key 
                 EmailAddress from = new EmailAddress("srdjan.stanojcic@htecgroup.com");
                 EmailAddress to = new EmailAddress(emailModel.EmailReceiver);
                 string subject = emailModel.Subject;
