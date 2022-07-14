@@ -68,7 +68,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
                 var model = new FileUploadModel(context.Message.FileName, context.Message.ContentType, context.Message.UserId);
                 var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
-
+               
                 string fileId = id.ToString();
 
                 var createModel = new FileData(fileId, context.Message.UserId, false);

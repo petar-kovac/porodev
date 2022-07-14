@@ -25,6 +25,8 @@ builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IRunTimeService, RunTimeService>();
 builder.Services.AddScoped<IJwtValidatorService, JwtValidatorService>();
 builder.Services.AddScoped<IRuntimeQueryService, RuntimeQueryService>();
+builder.Services.AddScoped<IDashBoardService, DashBoardService>();
+
 
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddControllers();
