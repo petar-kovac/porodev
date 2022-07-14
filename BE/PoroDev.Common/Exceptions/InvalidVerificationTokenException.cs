@@ -2,7 +2,7 @@
 
 namespace PoroDev.Common.Exceptions
 {
-    public class InvalidVerificationTokenException
+    public class InvalidVerificationTokenException : Exception
     {
         public string HumanReadableErrorMessage { get; set; }
 

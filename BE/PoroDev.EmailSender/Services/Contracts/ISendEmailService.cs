@@ -6,8 +6,6 @@ namespace PoroDev.EmailSender.Services.Contracts
 {
     public interface ISendEmailService
     {
-        Task<CommunicationModel<SendEmailModel>> SendVerificationMail(string to);
-
         Task<CommunicationModel<SendEmailModel>> SendEmail(SendEmailRequest emailModel);
     }
 }

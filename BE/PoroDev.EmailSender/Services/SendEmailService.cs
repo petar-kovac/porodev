@@ -14,8 +14,8 @@ namespace PoroDev.EmailSender.Services
         {
             try
             {
-                var client = new SendGridClient("");//enter your api key 
-                EmailAddress from = new EmailAddress("srdjan.stanojcic@htecgroup.com");
+                var client = new SendGridClient("");//enter your sendgrid api key 
+                EmailAddress from = new EmailAddress("srdjan.coralic@htecgroup.com");
                 EmailAddress to = new EmailAddress(emailModel.EmailReceiver);
                 string subject = emailModel.Subject;
                 string plainTextContent = emailModel.plainTextContent;
@@ -43,30 +43,6 @@ namespace PoroDev.EmailSender.Services
                 };
                 return returnModel;
             }
-        }
-
-        public async Task<CommunicationModel<SendEmailModel>> SendVerificationMail(string reciever)
-        {
-            var client = new SendGridClient("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");
-            EmailAddress from = new EmailAddress(reciever);
-            EmailAddress to = new EmailAddress("srdjanstanojcic031@gmail.com", "Blabla");
-            string subject = "Verification email";
-            string plainTextContent = "Verification email.";
-            string htmlTextContent = "<h1>Confirm an email</h1><br><p style='color:blue'>Please confirm that you wanted to register on PoroDev platform.</p>";
-
-            var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlTextContent);
-            var response = await client.SendEmailAsync(message);
-            if (response.StatusCode == HttpStatusCode.Accepted)
-            {
-                var returnmodel = new CommunicationModel<SendEmailModel>()
-                {
-                    Entity = new SendEmailModel() { StatusCode = response.StatusCode },
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
-                return returnmodel;
-            }
-            return null;
         }
     }
 }

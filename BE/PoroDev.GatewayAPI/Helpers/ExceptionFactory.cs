@@ -25,6 +25,7 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(ZippedFileException) => new ZippedFileException(errorMessage),
                 nameof(DockerRuntimeException) => new DockerRuntimeException(errorMessage),
                 nameof(UserNotVerifiedException) => new UserNotVerifiedException(errorMessage),
+                nameof(InvalidVerificationTokenException) => new InvalidVerificationTokenException(errorMessage),
                 _ => new Exception("Exception not found!"),
             };
         }
