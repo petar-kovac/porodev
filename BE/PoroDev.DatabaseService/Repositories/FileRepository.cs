@@ -26,7 +26,7 @@ namespace PoroDev.DatabaseService.Repositories
             _bucket = new GridFSBucket(mongoDatabase);
         }
 
-        public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType, Guid userId)
+        public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType)
         {
             var options = new GridFSUploadOptions()
             {
@@ -54,7 +54,7 @@ namespace PoroDev.DatabaseService.Repositories
             return id;
         }
 
-        public async Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId)
+        public async Task<FileDownloadMessage> DownloadFile(string fileId)
         {
             ObjectId fileObjectId = ObjectId.Parse(fileId);
 
@@ -69,11 +69,13 @@ namespace PoroDev.DatabaseService.Repositories
 
             var modelToReturn = new FileDownloadMessage()
             {
-                File = await messageDataRepository.PutBytes(downloadFile),
+                File = null,
                 FileName = fileName,
                 ContentType = contentType
             };
 
+            modelToReturn.File = await messageDataRepository.PutBytes(downloadFile);
+            
             return modelToReturn;
         }
 

@@ -136,6 +136,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, fileUploadException);
                         break;
 
+                    case UserPermissionException userPermissionException:
+                        response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        HumanReadableErrorMessage = userPermissionException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userPermissionException);
+                        break;
+
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = "Internal server error";

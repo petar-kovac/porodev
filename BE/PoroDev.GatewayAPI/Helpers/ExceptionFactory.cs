@@ -27,6 +27,8 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(FileUploadExistException) => new FileUploadExistException(errorMessage),
                 nameof(FileUploadFormatException) => new FileUploadFormatException(errorMessage),
                 nameof(FileUploadException) => new FileUploadException(errorMessage),
+                nameof(UserPermissionException) => new UserPermissionException(errorMessage),
+
                 _ => new Exception("Exception not found!"),
             };
         }
