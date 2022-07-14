@@ -31,6 +31,7 @@ public class BasePage {
     }
 
 
+
     public static String getTextFromElement(WebElement element) {
         return element.getText();
     }
