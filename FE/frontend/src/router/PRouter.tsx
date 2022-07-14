@@ -1,8 +1,14 @@
 import { FC } from 'react';
 import { Layout } from 'antd';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 import styled from 'styled-components';
-import EmailVerify from 'pages/email-verify/EmailVerify';
+
 import Groups from 'pages/admin/groups/Groups';
 import Runtime from 'pages/admin/runtime/Runtime';
 import UserRuntime from 'pages/user/runtime/Runtime';
@@ -19,6 +25,8 @@ import AdminRoutes from './AdminRoutes';
 import UserRoutes from './UserRoutes';
 import Error from '../pages/error/ErrorPage';
 import Login from '../pages/login/Login';
+import EmailVerify from '../pages/email-verify/EmailVerify';
+import EmailConfirmed from '../pages/email-verify/EmailConfirmed';
 // admin routes
 import Home from '../pages/admin/home/Home';
 import Admins from '../pages/admin/admins/Admins';
@@ -63,6 +71,7 @@ const PRouter: FC = () => {
                     <Route path="/user-groups" element={<UserGroups />} />
                     <Route path="/user-runtime" element={<UserRuntime />} />
                   </Route>
+                  <Route path="/confirm" element={<EmailConfirmed />} />
                   <Route
                     path="/notallowed"
                     element={<Error message="Cant go here" />}
@@ -83,8 +92,9 @@ const PRouter: FC = () => {
     return (
       <Routes>
         <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/verify" element={<EmailVerify />} />
+        {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/verify/:email/:token" element={<EmailVerify />} />
       </Routes>
     );
   }

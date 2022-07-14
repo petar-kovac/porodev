@@ -25,7 +25,6 @@ const Login: FC = () => {
   };
   const handleRegister = (values: unknown) => {
     register(values as IRegisterRequest);
-    setIsLogin(true);
   };
   const handleFormChange: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

@@ -9,7 +9,15 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import { verifyEmail } from 'service/files/files';
+
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { StorageKey } from 'util/enums/storage-keys';
 
 import { loginApi, registerApi } from '../service/authorization/authorization';
@@ -51,33 +59,72 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [loggedUser, setLoggedUser] = useState<ILoginResponse | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const [loading, setLoading] = useState(false);
+  const [validUrl, setValidUrl] = useState(true);
   // const [msg, setMsg] = useState<string>('');
   const testMessage = 'test-test ';
   const location = useLocation();
   const navigate = useNavigate();
 
+  // const params = searchParams.getAll(location.search);
+
+  // console.log(params);
+
+  // useEffect(() => {
+  //   const getLastname = localStorage.getItem(StorageKey.LASTNAME);
+  //   // because backend is not finished, checking if its admin, if user's lastname is Admin
+  //   if (getLastname) {
+  //     if (getLastname === 'Admin') {
+  //       setIsAdmin(true);
+  //     }
+  //     setAuthenticated(true);
+  //     setIsLoading(false);
+
+  //     // change this when backend is implemented
+  //     if (isAdmin && location.pathname === '/') {
+  //       navigate('/');
+  //     } else {
+  //       navigate('/user-home');
+  //     }
+
+  //     navigate(location);
+  //   } else {
+  //     navigate('/login');
+  //   }
+  //   setIsLoading(false);
+  // }, []);
+
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const searchEmail = searchParams.get('Email');
+  const searchToken = searchParams.get('Token');
+
   useEffect(() => {
-    const getLastname = localStorage.getItem(StorageKey.LASTNAME);
-    // because backend is not finished, checking if its admin, if user's lastname is Admin
-    if (getLastname) {
-      if (getLastname === 'Admin') {
-        setIsAdmin(true);
-      }
-      setAuthenticated(true);
-      setIsLoading(false);
-
-      // change this when backend is implemented
-      if (isAdmin && location.pathname === '/') {
-        navigate('/');
-      } else {
-        navigate('/user-home');
-      }
-
-      navigate(location);
-    } else {
-      navigate('/login');
-    }
-    setIsLoading(false);
+    verifyEmail(searchEmail, searchToken)
+      .then((response: any) => {
+        console.log(response);
+        if (response.data.role === 1) {
+          setIsAdmin(true);
+          navigate('/');
+        }
+        if (response.data.role === 0) {
+          navigate('/user-home');
+        }
+        if (response.status === 200) {
+          navigate('/confirm');
+        }
+        setAuthenticated(true);
+        setIsLoading(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+        setValidUrl(false);
+        navigate('/login');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
 
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
@@ -126,7 +173,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           position: registerData.position,
           avatarUrl: 'aurl',
         });
-        navigate('/login');
+        navigate('/verify');
         localStorage.setItem(StorageKey.NAME, res.name);
         localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         message.success('Successful registration');
