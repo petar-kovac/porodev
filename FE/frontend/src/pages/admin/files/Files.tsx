@@ -6,7 +6,6 @@ import GridCards from 'components/cards/grid/GridCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
-import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import { useFetchData } from 'hooks/useFetchData';
 import {
@@ -96,12 +95,6 @@ const Files: FC = () => {
             )}
           </StyledFilesWrapper>
         </StyledStaticContent>
-        <PFileSider
-          cardData={cardData}
-          setCardData={setCardData}
-          setSelectedCardId={setSelectedCardId}
-          type="folder"
-        />
       </StyledContent>
 
       <PModal cardData={cardData} setCardData={setCardData} />

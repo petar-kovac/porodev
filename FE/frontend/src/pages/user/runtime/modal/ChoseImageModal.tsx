@@ -11,51 +11,48 @@ interface IPModalProps {
   content?: ReactNode;
   onOk?: any;
   onCancel?: any;
+  isSiderModalVisible: boolean;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  setIsSiderModalVisible?: Dispatch<SetStateAction<boolean>>;
   cardData?: IFilesCard | null;
 }
 
-const RuntimeModal: FC<IPModalProps> = ({
+const ChoseImageModal: FC<IPModalProps> = ({
   title,
   content,
-  setCardData,
-  onOk,
-  onCancel,
+  setIsSiderModalVisible = () => undefined,
+  isSiderModalVisible,
 }) => {
-  const { isModalVisible, setIsModalVisible } = usePageContext();
-
   const handleOk = () => {
-    setIsModalVisible(false);
+    setIsSiderModalVisible(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsSiderModalVisible(false);
   };
 
   return (
-    <>
-      <StyledRuntimeModal
-        title={title}
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+    <StyledImageModal
+      title={title}
+      visible={isSiderModalVisible}
+      onOk={handleOk}
+      onCancel={handleCancel}
 
-        // footer={[
-        //   <div className="footer-content">
-        //     <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
-        //     <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
-        //       Download
-        //     </StyledFilesButton>
-        //   </div>,
-        // ]}
-      >
-        <div>{content}</div>
-      </StyledRuntimeModal>
-    </>
+      // footer={[
+      //   <div className="footer-content">
+      //     <StyledFilesButton onClick={handleCancel}>Cancel</StyledFilesButton>
+      //     <StyledFilesButton type="primary" icon={<DownloadOutlined />}>
+      //       Download
+      //     </StyledFilesButton>
+      //   </div>,
+      // ]}
+    >
+      <div>{content}</div>
+    </StyledImageModal>
   );
 };
 
-const StyledRuntimeModal = styled(Modal).attrs({
+const StyledImageModal = styled(Modal).attrs({
   'data-testid': 'modal',
 })`
   .ant-modal-header {
@@ -92,4 +89,4 @@ const StyledRuntimeModal = styled(Modal).attrs({
   }
 `;
 
-export default RuntimeModal;
+export default ChoseImageModal;

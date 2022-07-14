@@ -1,6 +1,7 @@
 import { FileZipOutlined } from '@ant-design/icons';
 import { List } from 'antd';
 import { usePageContext } from 'context/PageContext';
+import { useSiderContext } from 'context/SiderContext';
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
@@ -22,12 +23,7 @@ const PList: React.FC<{
           }}
           key={item.fileName}
         >
-          <List.Item.Meta
-            // avatar={<Avatar src={item.avatar} />}
-            title={item.fileName}
-            description={item.uploadTime}
-          />
-
+          <List.Item.Meta title={item.fileName} description={item.uploadTime} />
           <StyledSelect>
             <FileZipOutlined />
           </StyledSelect>

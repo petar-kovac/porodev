@@ -6,7 +6,7 @@ import { IFilesCard } from 'types/card-data';
 
 import RuntimeCards from 'components/cards/runtime/RuntimeCards';
 import Spinner from 'components/spinner/Spinner';
-import SiderContextProvider from 'context/SiderContext';
+import SiderContextProvider, { useSiderContext } from 'context/SiderContext';
 import Error from 'pages/error/ErrorPage';
 import { StyledSpinnerWrapper } from 'styles/shared-styles';
 import useRuntimeData from './hooks/useRuntimeData';

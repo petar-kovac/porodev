@@ -42,7 +42,7 @@ const RuntimeCards: FC<IGroupCardProps> = ({
 
   return (
     <>
-      {data?.slice(0, 3).map((value: any) => (
+      {data?.map((value: any) => (
         <RuntimeCard
           value={value}
           key={value.fileId}

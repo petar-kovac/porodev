@@ -6,7 +6,6 @@ import GridCards from 'components/cards/grid/GridCards';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
-import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import {
   PFilterWrapper,

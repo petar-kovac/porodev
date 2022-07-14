@@ -6,6 +6,7 @@ import {
   ReactNode,
   SetStateAction,
   useEffect,
+  useState,
 } from 'react';
 import styled from 'styled-components';
 
@@ -14,7 +15,7 @@ import PButton from 'components/buttons/PButton';
 import { usePageContext } from 'context/PageContext';
 import { useSiderContext } from 'context/SiderContext';
 import { startRuntimeService } from 'service/runtime/runtime';
-import StyledIcon from 'styles/icons/StyledIcons';
+import { StyledRuntimeIcon } from 'styles/icons/styled-icons';
 import { IFilesCard } from 'types/card-data';
 import { inputParamsChecker } from 'util/helpers/input-params-checker';
 import RuntimeImageSiderMapper from 'util/mappers/RuntimeImageSiderMapper';
@@ -22,7 +23,7 @@ import RuntimeInputSiderMapper from 'util/mappers/RuntimeInputSiderMapper';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
 import { CreateImageAsparameter } from 'util/util-components/CreateImageAsParameter';
 import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
-import { StyledRuntimeIcon } from 'styles/icons/styled-icons';
+import ChoseImageModal from '../modal/ChoseImageModal';
 
 const { Sider } = Layout;
 
@@ -42,6 +43,10 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
   setSelectedCardId = () => undefined,
   selectedCardId,
 }) => {
+  const [isSiderModalVisible, setIsSiderModalVisible] =
+    useState<boolean>(false);
+  const [modalContent, setModalContent] = useState<ReactNode>(undefined);
+
   const {
     isLoading,
     isSiderVisible,
@@ -49,13 +54,12 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
     setIsLoading,
     setIsSiderVisible,
     setIsModalVisible,
-    setModalContent,
   } = usePageContext();
 
   const {
     inputParameters,
-    setInputParameters,
     imageParameters,
+    dispatchInput,
     setImageParameters,
   } = useSiderContext();
 
@@ -71,6 +75,8 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
     // function to check if arguments are empty strings
     const checkedInputParams = inputParamsChecker(inputParameters);
 
+    dispatchInput({ type: 'SUBMIT' });
+
     try {
       const res = await startRuntimeService({
         projectId,
@@ -79,7 +85,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
       const modalDataToRender: ReactNode = GetRuntimeModalData(res);
       setModalContent(modalDataToRender);
       setIsSiderVisible(false);
-      setIsModalVisible(true);
+      setIsSiderModalVisible(true);
       setIsLoading(false);
     } catch (err) {
       setIsLoading(false);
@@ -94,12 +100,12 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
         setImageParameters,
       );
       setModalContent(modalDataToRender);
-      setIsModalVisible(true);
+      setIsSiderModalVisible(true);
     }
   };
 
   useEffect(() => {
-    setInputParameters(['']);
+    dispatchInput({ type: 'DELETE' });
     setImageParameters([]);
   }, [selectedCardId]);
 
@@ -125,7 +131,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
             <StyledRow>
               <StyledTitle>Add parameters</StyledTitle>
               <PlusCircleOutlined
-                onClick={() => setInputParameters([...inputParameters, ''])}
+                onClick={() => dispatchInput({ type: 'ADD' })}
               />
             </StyledRow>
             <RuntimeInputSiderMapper />
@@ -141,6 +147,12 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
               text="Start execution"
               onClick={onStartRuntime}
               isLoading={isLoading}
+            />
+            <ChoseImageModal
+              title="Chose image"
+              isSiderModalVisible={isSiderModalVisible}
+              setIsSiderModalVisible={setIsSiderModalVisible}
+              content={modalContent}
             />
           </>
         ) : (
@@ -178,7 +190,7 @@ const StyledColumn = styled.div`
 `;
 
 const StyledRuntimeSider = styled(Sider).attrs({
-  'data-testid': 'file-sider',
+  'data-testid': 'runtime-sider',
 })`
   // change parent component if you know what are you doing, usually change .children class
   background-color: #fff;

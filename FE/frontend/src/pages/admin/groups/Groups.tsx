@@ -6,7 +6,6 @@ import { Layout } from 'antd';
 import GroupCard from 'components/cards/group/GroupCard';
 import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
-import PFileSider from 'layout/sider/PFileSider';
 import { IFilesCard } from 'types/card-data';
 import {
   StyledContent,
