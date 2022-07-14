@@ -17,14 +17,14 @@ namespace PoroDev.GatewayAPI.Services
     public class StorageService : IStorageService
     {
         private readonly IRequestClient<FileDownloadRequestGatewayToService> _downloadRequestClient;
-        private readonly IRequestClient<FileUploadRequestGatewayToService> _uploadRequestClient;
+        private readonly IRequestClient<IUploadRequest> _uploadRequestClient;
         private readonly IRequestClient<FileReadRequestGatewayToService> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
         private readonly IMapper _mapper;
 
         public StorageService
             (IRequestClient<FileDownloadRequestGatewayToService> downloadRequestClient,
-            IRequestClient<FileUploadRequestGatewayToService> uploadRequestClient,
+            IRequestClient<IUploadRequest> uploadRequestClient,
             IRequestClient<FileReadRequestGatewayToService> readRequestClient,
             IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient,
             IMapper mapper)
@@ -41,11 +41,13 @@ namespace PoroDev.GatewayAPI.Services
             if (uploadModel.File is null)
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
 
-            var uploadRequest = _mapper.Map<FileUploadRequestGatewayToService>(uploadModel);
-
-            uploadRequest.File = await messageDataRepository.PutBytes(uploadModel.File);
-
-            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadResponse>>(uploadRequest);
+            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadResponse>>(new
+            {
+                FileName = uploadModel.FileName,
+                File = uploadModel.File,
+                ContentType = uploadModel.ContentType,
+                UserId = uploadModel.UserId
+            });
 
             if (fileUploadResponseContext.Message.ExceptionName != null)
                 ThrowException(fileUploadResponseContext.Message.ExceptionName, fileUploadResponseContext.Message.HumanReadableMessage);

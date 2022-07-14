@@ -5,14 +5,14 @@ using PoroDev.StorageService.Services.Contracts;
 
 namespace PoroDev.StorageService.Consumers
 {
-    public class FileUploadConsumer : ConsumerBase, IConsumer<FileUploadRequestGatewayToService>
+    public class FileUploadConsumer : ConsumerBase, IConsumer<IUploadRequest>
     {
 
         public FileUploadConsumer(IStorageService storageService, IMapper mapper) : base(storageService, mapper)
         {
         }
 
-        public async Task Consume(ConsumeContext<FileUploadRequestGatewayToService> context)
+        public async Task Consume(ConsumeContext<IUploadRequest> context)
         {
             var uploadRequest = context.Message;
 

@@ -37,8 +37,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             try
             {
+                var file = await uploadRequest.File.Value;
                 ObjectId fileId = await _fileRepository.UploadFile(uploadRequest.FileName,
-                                                                       await uploadRequest.File.Value,
+                                                                       file,
                                                                        uploadRequest.ContentType);
 
                 var fileUploadModel = new FileData(fileId.ToString(), uploadRequest.UserId, false);
