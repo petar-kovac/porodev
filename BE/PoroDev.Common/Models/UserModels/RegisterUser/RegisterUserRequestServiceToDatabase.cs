@@ -25,5 +25,9 @@ namespace PoroDev.Common.Models.UserModels.RegisterUser
         public string AvatarUrl { get; set; }
 
         public DateTime DateCreated { get; set; }
+
+        public string VerificationToken { get; set; }
+
+        public DateTime? VerifiedAt { get; set; }
     }
 }

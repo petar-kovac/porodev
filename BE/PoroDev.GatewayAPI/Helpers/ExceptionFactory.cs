@@ -24,6 +24,7 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(RequestNullException) => new RequestNullException(errorMessage),
                 nameof(ZippedFileException) => new ZippedFileException(errorMessage),
                 nameof(DockerRuntimeException) => new DockerRuntimeException(errorMessage),
+                nameof(UserNotVerifiedException) => new UserNotVerifiedException(errorMessage),
                 _ => new Exception("Exception not found!"),
             };
         }

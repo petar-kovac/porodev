@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.EmailSender;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
@@ -9,12 +10,15 @@ using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.EmailSenderModels;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.UserManagementService.Services.Contracts;
+using System.Net;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 
@@ -26,11 +30,13 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserReadByEmailRequestServiceToDatabase> _readUserByEmailClient;
         private readonly IRequestClient<UserReadByIdRequestServiceToDataBase> _readUserByIdClient;
         private readonly IRequestClient<UserUpdateRequestServiceToDatabase> _updateRequestClient;
-        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestclient;
+        private readonly IRequestClient<UserDeleteRequestServiceToDatabase> _deleteUserRequestClient;
         private readonly IRequestClient<RegisterUserRequestServiceToDatabase> _registerUserClient;
         private readonly IRequestClient<UserLoginRequestServiceToDatabase> _loginUserRequestClient;
         private readonly IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> _readUserByIdWithRuntimeClient;
-        private readonly IRequestClient<UserDeleteAllRequestServiceToDataBase> _deleteAllUserRequestclient;
+        private readonly IRequestClient<UserDeleteAllRequestServiceToDataBase> _deleteAllUserRequestClient;
+        private readonly IRequestClient<SendEmailRequest> _verificationEmailSenderRequestClient;
+        private readonly IRequestClient<VerifyEmailRequestServiceToDatabase> _verifyEmailRequestClient;
 
         private readonly IMapper _mapper;
 
@@ -43,17 +49,21 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<UserReadByIdRequestServiceToDataBase> readByIdRequestClient,
                            IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> readUserByIdWithRuntimeClient,
                            IRequestClient<UserDeleteAllRequestServiceToDataBase> deleteAllUsersRequestClient,
+                           IRequestClient<SendEmailRequest> verificationEmailSenderRequestClient,
+                           IRequestClient<VerifyEmailRequestServiceToDatabase> verifyEmailRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
             _readUserByEmailClient = readByEmailRequestClient;
             _updateRequestClient = updateRequestClient;
-            _deleteUserRequestclient = deleteUserRequestClient;
+            _deleteUserRequestClient = deleteUserRequestClient;
             _registerUserClient = registerUserClient;
             _loginUserRequestClient = loginUserRequestClient;
             _readUserByIdClient = readByIdRequestClient;
             _readUserByIdWithRuntimeClient = readUserByIdWithRuntimeClient;
-            _deleteAllUserRequestclient = deleteAllUsersRequestClient;
+            _deleteAllUserRequestClient = deleteAllUsersRequestClient;
+            _verificationEmailSenderRequestClient = verificationEmailSenderRequestClient;
+            _verifyEmailRequestClient = verifyEmailRequestClient;
             _mapper = mapper;
         }
 
@@ -120,13 +130,13 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
         {
-            var response = await _deleteAllUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteAllUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
             return response.Message;
         }
 
@@ -209,7 +219,6 @@ namespace PoroDev.UserManagementService.Services
             return response.Message;
         }
 
-
         public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
         {
             var isException = await Helpers.UserManagementValidator.Validate(registerModel, _readUserByEmailClient);
@@ -222,14 +231,57 @@ namespace PoroDev.UserManagementService.Services
             var userToRegister = _mapper.Map<RegisterUserRequestServiceToDatabase>(registerModel);
             userToRegister.Salt = salt;
             userToRegister.Password = hash;
+            userToRegister.VerificationToken = CreateRandomVerificationToken();
 
             var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister);
+
+
+            var otherProperties = new Dictionary<string, string>();
+            otherProperties.Add("VerificationToken", userToRegister.VerificationToken);
+            var emailProperties = CreateVerificationEmailProperties("srdjancoralic5@gmail.com", otherProperties); //prvi argument ce biti userToRegister.Email
+
+            Response<CommunicationModel<SendEmailModel>> verificationEmailResponseContext;
+            do
+            {
+                verificationEmailResponseContext = await _verificationEmailSenderRequestClient.GetResponse<CommunicationModel<SendEmailModel>>(emailProperties);
+
+            } while (verificationEmailResponseContext.Message.Entity.StatusCode != HttpStatusCode.Accepted);
+
+            //if(verificationEmailResponseContext.Message.Entity.StatusCode != HttpStatusCode.Accepted)
+            //{
+            //    //Sta raditi??
+            //}
 
             var returnContext = _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);
 
             return returnContext;
         }
 
+        public async Task<CommunicationModel<DataUserModel>> VerifyEmail(VerifyEmailRequestGatewayToService tokenModel)
+        {
+            var returnContext = await _verifyEmailRequestClient.GetResponse<CommunicationModel<DataUserModel>>(tokenModel);
+
+            return returnContext.Message;
+        }
+
+        private string CreateRandomVerificationToken()
+        {
+            return Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
+        }
+
+        private SendEmailRequest CreateVerificationEmailProperties(string EmailReceiver, Dictionary<string, string> OtherProperties)
+        {
+            var returnModel = new SendEmailRequest()
+            {
+                EmailReceiver = EmailReceiver,
+                Subject = "Verification email",
+                plainTextContent = "Verification plan text",
+                OtherParametersForEmail = OtherProperties,
+                htmlTextContent = $"<h1>Verification email</h1><p>Please click on this link http://localhost:3000/verify/{EmailReceiver}/{OtherProperties["VerificationToken"]} to verify your account</p>"
+            };
+
+            return returnModel;
+        }
         
     }
 }

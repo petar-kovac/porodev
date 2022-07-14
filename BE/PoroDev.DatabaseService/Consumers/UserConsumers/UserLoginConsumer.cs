@@ -38,6 +38,13 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
                 await context.RespondAsync(returnModel);
                 return;
             }
+
+            if (!CheckIfUserIsVerified(returnModel, userToLogIn.Entity))
+            {
+                await context.RespondAsync(returnModel);
+                return;
+            }
+
             returnModel.Entity.Jwt = CreateToken(userToLogIn.Entity);
 
             await context.RespondAsync(returnModel);
@@ -58,6 +65,18 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+
+        private bool CheckIfUserIsVerified(CommunicationModel<LoginUserModel> returnModel, DataUserModel loginModel)
+        {
+            if (loginModel.VerifiedAt == null)
+            {
+                returnModel.Entity = null;
+                returnModel.HumanReadableMessage = UserNotVerifiedExceptionMessage;
+                returnModel.ExceptionName = nameof(UserNotVerifiedException);
+                return false;
+            }
+            return true;
         }
 
         private void CheckAndChangeErrorType(CommunicationModel<LoginUserModel> model)

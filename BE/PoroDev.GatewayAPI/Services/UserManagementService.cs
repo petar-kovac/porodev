@@ -8,6 +8,7 @@ using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -30,6 +31,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserReadByIdRequestGatewayToService> _readUserByIdRequestClient;
         private readonly IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> _readUserByIdWithRuntimedataRequestClient;
         private readonly IRequestClient<UserDeleteAllRequestGatewayToService> _deleteAllRequestClient;
+        private readonly IRequestClient<VerifyEmailRequestGatewayToService> _verifyUserRequestClient;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
@@ -40,7 +42,8 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<RegisterUserRequestGatewayToService> registerClient,
             IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> readUserByIdWithRuntimedataRequestClient,
             IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient,
-            IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers
+            IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers,
+            IRequestClient<VerifyEmailRequestGatewayToService> verifyUserRequestClient
             )
         {
             _createRequestClient = createRequestClient;
@@ -52,6 +55,7 @@ namespace PoroDev.GatewayAPI.Services
             _readUserByIdRequestClient = readUserByIdRequestClient;
             _deleteAllRequestClient = deleteAllUsers;
             _readUserByIdWithRuntimedataRequestClient = readUserByIdWithRuntimedataRequestClient;
+            _verifyUserRequestClient = verifyUserRequestClient;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -176,6 +180,24 @@ namespace PoroDev.GatewayAPI.Services
             }
 
             return requestReturnContext.Message.Entity;
+        }
+
+        public async Task<DataUserModel> VerifyEmail(VerifyEmailRequestGatewayToService verifyModel)
+        {
+            if(string.IsNullOrEmpty(verifyModel.Token.Trim()))
+            {
+                ThrowException(nameof(InvalidVerificationTokenException), InvalidToken);
+            }
+
+            var requestResponseContext = await _verifyUserRequestClient.GetResponse<CommunicationModel<DataUserModel>>(verifyModel);
+
+            if(requestResponseContext.Message.ExceptionName != null)
+            {
+                ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
+            }
+
+            return requestResponseContext.Message.Entity;
+
         }
     }
 }
