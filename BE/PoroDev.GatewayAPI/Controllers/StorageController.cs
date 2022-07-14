@@ -29,7 +29,7 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
-            var fileUploadRequest = new FileUploadRequestGatewayToService(file, userId);
+            FileUploadRequest fileUploadRequest = new(file, userId);
 
             FileUploadResponse fileUploadResponse = await _storageService.UploadFile(fileUploadRequest);
 

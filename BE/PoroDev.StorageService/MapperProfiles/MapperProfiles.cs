@@ -10,8 +10,7 @@ namespace PoroDev.StorageService.MapperProfiles
         {
             CreateMap<CommunicationModel<FileUploadModel>, CommunicationModel<FileUploadResponse>>();
 
-            //Didn't test this yet, may break
-            CreateMap<IUploadRequest, FileUploadRequestServiceToDatabase>();
+            CreateMap<FileUploadRequestGatewayToService, FileUploadRequestServiceToDatabase>();
 
             CreateMap<FileUploadModel, FileUploadResponse> ();
         }
