@@ -26,6 +26,8 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(DockerRuntimeException) => new DockerRuntimeException(errorMessage),
                 nameof(UserNotVerifiedException) => new UserNotVerifiedException(errorMessage),
                 nameof(InvalidVerificationTokenException) => new InvalidVerificationTokenException(errorMessage),
+                nameof(FailedToRegisterUserException) => new FailedToRegisterUserException(errorMessage),
+                nameof(UserAlreadyVerifiedException) => new UserAlreadyVerifiedException(errorMessage),
                 _ => new Exception("Exception not found!"),
             };
         }

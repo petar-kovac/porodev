@@ -21,6 +21,7 @@ using PoroDev.UserManagementService.Services.Contracts;
 using System.Net;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
+using static PoroDev.UserManagementService.Constants.Consts;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -235,32 +236,24 @@ namespace PoroDev.UserManagementService.Services
 
             var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister);
 
-
             var otherProperties = new Dictionary<string, string>();
             otherProperties.Add("VerificationToken", userToRegister.VerificationToken);
-            var emailProperties = CreateVerificationEmailProperties(userToRegister.Email, otherProperties); //prvi argument ce biti userToRegister.Email
+            var emailProperties = CreateVerificationEmailProperties(userToRegister.Email, otherProperties);
 
-            Response<CommunicationModel<SendEmailModel>> verificationEmailResponseContext;
-            do
+            var verificationEmailResponseContext = await _verificationEmailSenderRequestClient.GetResponse<CommunicationModel<SendEmailModel>>(emailProperties);
+
+            if (verificationEmailResponseContext.Message.Entity == null || verificationEmailResponseContext.Message.Entity.StatusCode != HttpStatusCode.Accepted)
             {
-                verificationEmailResponseContext = await _verificationEmailSenderRequestClient.GetResponse<CommunicationModel<SendEmailModel>>(emailProperties);
+                await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(new UserDeleteRequestServiceToDatabase() { Email = userToRegister.Email});
+                return CreateResponseModel<CommunicationModel<RegisterUserResponse>, RegisterUserResponse>(nameof(FailedToRegisterUserException), FailedToRegisterUserExceptionMessage);
+            }
 
-            } while (verificationEmailResponseContext.Message.Entity.StatusCode != HttpStatusCode.Accepted);
-
-            //if(verificationEmailResponseContext.Message.Entity.StatusCode != HttpStatusCode.Accepted)
-            //{
-            //    //Sta raditi??
-            //}
-
-            var returnContext = _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);
-
-            return returnContext;
+            return _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);
         }
 
         public async Task<CommunicationModel<DataUserModel>> VerifyEmail(VerifyEmailRequestGatewayToService tokenModel)
         {
             var returnContext = await _verifyEmailRequestClient.GetResponse<CommunicationModel<DataUserModel>>(tokenModel);
-
             return returnContext.Message;
         }
 

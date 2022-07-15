@@ -1,5 +1,6 @@
 ﻿using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.EmailSender;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Models.EmailSenderModels;
 using PoroDev.EmailSender.Services.Contracts;
 using SendGrid;
@@ -15,7 +16,7 @@ namespace PoroDev.EmailSender.Services
             try
             {
                 var client = new SendGridClient("");//enter your sendgrid api key 
-                EmailAddress from = new EmailAddress("srdjan.coralic@htecgroup.com");
+                EmailAddress from = new EmailAddress("srdjan.stanojcic@htecgroup.com");
                 EmailAddress to = new EmailAddress(emailModel.EmailReceiver);
                 string subject = emailModel.Subject;
                 string plainTextContent = emailModel.plainTextContent;
@@ -24,23 +25,12 @@ namespace PoroDev.EmailSender.Services
                 var message = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlTextContent);
                 var response = await client.SendEmailAsync(message);
                 Console.WriteLine(response.StatusCode.ToString());
-
-                var returnModel = new CommunicationModel<SendEmailModel>()
-                {
-                    Entity = new SendEmailModel() { StatusCode = response.StatusCode },
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
+                var returnModel = CreateResponseModel<CommunicationModel<SendEmailModel>, SendEmailModel>(new SendEmailModel() { StatusCode = response.StatusCode });
                 return returnModel;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                var returnModel = new CommunicationModel<SendEmailModel>()
-                {
-                    Entity = null,
-                    ExceptionName = nameof(ex),
-                    HumanReadableMessage = ex.Message
-                };
+                var returnModel = CreateResponseModel<CommunicationModel<SendEmailModel>, SendEmailModel>(nameof(exception), exception.Message);
                 return returnModel;
             }
         }

@@ -6,6 +6,7 @@ using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.DatabaseService.Constants.Constants;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 
 namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
@@ -23,6 +24,12 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             if(userToVerify.ExceptionName != null)
             {
                 await context.RespondAsync<CommunicationModel<DataUserModel>>(userToVerify);
+            }
+
+            if(userToVerify.Entity.VerifiedAt != null)
+            {
+                await context.RespondAsync<CommunicationModel<DataUserModel>>(CreateResponseModel<CommunicationModel<DataUserModel>, DataUserModel>(nameof(UserAlreadyVerifiedException), UserAlreadyVerifiedExceptionMessage));
+                return;
             }
 
             if(userToVerify.Entity.VerificationToken.Equals(context.Message.Token))

@@ -28,6 +28,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case UserAlreadyVerifiedException userAlreadyVerifiedException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = userAlreadyVerifiedException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userAlreadyVerifiedException);
+                        break;
+
+                    case FailedToRegisterUserException failedToRegisterUserException:
+                        response.StatusCode = (int)HttpStatusCode.FailedDependency;
+                        HumanReadableErrorMessage = failedToRegisterUserException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToRegisterUserException);
+                        break;
+
                     case InvalidVerificationTokenException invalidVerificationTokenException:
                         response.StatusCode = (int)HttpStatusCode.Unauthorized;
                         HumanReadableErrorMessage = invalidVerificationTokenException.HumanReadableErrorMessage;
