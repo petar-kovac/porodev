@@ -2,7 +2,9 @@
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.StorageModels.Data;
+using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
@@ -18,17 +20,47 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         public async Task Consume(ConsumeContext<TotalNumberOfUploadedFilesRequestServiceToDatabase> context)
         {
-            TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
-            returnModel._numberOfUploadedFiles = await countNumberOfUploadedFiles(); 
+            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
 
-            var response = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
+            if(user.Role == 0)
             {
-                Entity = returnModel,
-                ExceptionName = null,
-                HumanReadableMessage = null
-            };
+                TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
+                returnModel._numberOfUploadedFiles = await countNumberOfUploadedFiles();
 
-            await context.RespondAsync<CommunicationModel<TotalNumberOfUploadedFilesModel>>(response);
+                var response = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
+                {
+                    Entity = returnModel,
+                    ExceptionName = null,
+                    HumanReadableMessage = null
+                };
+
+                await context.RespondAsync<CommunicationModel<TotalNumberOfUploadedFilesModel>>(response);
+            }
+            else
+            {
+                string exceptionType = nameof(UserIsNotAdminException);
+                string humanReadableMessage = "User must be admin!";
+
+                var resposneException = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
+                {
+                    Entity = null,
+                    ExceptionName = exceptionType,
+                    HumanReadableMessage = humanReadableMessage
+                };
+
+                await context.RespondAsync(resposneException);
+            }
+            //TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
+            //returnModel._numberOfUploadedFiles = await countNumberOfUploadedFiles(); 
+
+            //var response = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
+            //{
+            //    Entity = returnModel,
+            //    ExceptionName = null,
+            //    HumanReadableMessage = null
+            //};
+
+            //await context.RespondAsync<CommunicationModel<TotalNumberOfUploadedFilesModel>>(response);
         }
 
         
