@@ -73,7 +73,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<FileReadModel> ReadFiles(FileReadRequestGatewayToService readModel)
         {
-            var responseContext = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel);
+            var responseContext = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel, CancellationToken.None, RequestTimeout.After(m: 5));
             var response = responseContext.Message.Entity;
 
             return response;
@@ -81,7 +81,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel)
         {
-            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);

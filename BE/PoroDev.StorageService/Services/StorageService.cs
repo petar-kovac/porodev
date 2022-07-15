@@ -50,14 +50,14 @@ namespace PoroDev.StorageService.Services
 
         public async Task<CommunicationModel<FileReadModel>> ReadFiles(FileReadRequestServiceToDatabase readModel)
         {
-            var response = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel);
+            var response = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
 
         public async Task<CommunicationModel<FileDeleteMessage>> DeleteFile(FileDeleteRequestServiceToDatabase deleteModel)
         {
-            var response = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+            var response = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
