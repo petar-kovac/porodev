@@ -1,27 +1,24 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.StorageService.Services.Contracts;
 
 namespace PoroDev.StorageService.Consumers
 {
-    public class FileUploadConsumer : IConsumer<FileUploadRequestGatewayToService>
+    public class FileUploadConsumer : ConsumerBase, IConsumer<IUploadRequest>
     {
-        private readonly IStorageService _storageService;
 
-        public FileUploadConsumer(IStorageService storageService)
+        public FileUploadConsumer(IStorageService storageService, IMapper mapper) : base(storageService, mapper)
         {
-            _storageService = storageService;
         }
 
-        public async Task Consume(ConsumeContext<FileUploadRequestGatewayToService> context)
+        public async Task Consume(ConsumeContext<IUploadRequest> context)
         {
-            var modelToReturn = await _storageService.UploadFile(new FileUploadRequestServiceToDatabase()
-            {
-                File = context.Message.File,
-                FileName = context.Message.FileName,
-                ContentType = context.Message.ContentType,
-                UserId = context.Message.UserId
-            });
+            var uploadRequest = context.Message;
+
+            var uploadRequestToDatabase = _mapper.Map<FileUploadRequestServiceToDatabase>(uploadRequest);
+
+            var modelToReturn = await _storageService.UploadFile(uploadRequestToDatabase);
 
             await context.RespondAsync(modelToReturn);
         }

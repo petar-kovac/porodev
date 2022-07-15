@@ -39,7 +39,7 @@ namespace PoroDev.GatewayAPI.Services
 
         private async Task<RuntimeData> ExecuteProgram(ExecuteProjectRequestGatewayToService model)
         {
-            var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(model);
+            var requestResponsecontext = await _executeProjet.GetResponse<CommunicationModel<RuntimeData>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (requestResponsecontext.Message.ExceptionName != null)
                 ThrowException(requestResponsecontext.Message.ExceptionName, requestResponsecontext.Message.HumanReadableMessage);
@@ -49,7 +49,7 @@ namespace PoroDev.GatewayAPI.Services
 
         private async Task<RuntimeData> ExecuteProgramWithArguments(ExecuteProjectWithArgumentsRequestGatewayToService model)
         {
-            var requestResponseContext = await _executeWithArguments.GetResponse<CommunicationModel<RuntimeData>>(model);
+            var requestResponseContext = await _executeWithArguments.GetResponse<CommunicationModel<RuntimeData>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);

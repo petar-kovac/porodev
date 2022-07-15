@@ -37,7 +37,6 @@ namespace PoroDev.DatabaseService.Repositories
             var responseModel = new UnitOfWorkResponseModel<List<RuntimeData>>(runtimeDatas.ToList());
 
             return responseModel;
-            
         }
     }
 }

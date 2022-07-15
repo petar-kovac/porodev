@@ -8,6 +8,7 @@ namespace PoroDev.StorageService.Consumers
     public class FileDeleteConsumer : IConsumer<FileDeleteRequestGatewayToService>
     {
         private readonly IStorageService _storageService;
+
         public FileDeleteConsumer(IStorageService storageService)
         {
             _storageService = storageService;

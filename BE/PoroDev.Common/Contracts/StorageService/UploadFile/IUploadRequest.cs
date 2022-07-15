@@ -1,9 +1,13 @@
 ﻿using MassTransit;
-using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PoroDev.Common.Contracts.StorageService.UploadFile
 {
-    public class FileUploadRequestGatewayToService
+    public interface IUploadRequest
     {
         public string FileName { get; set; }
 
@@ -12,6 +16,5 @@ namespace PoroDev.Common.Contracts.StorageService.UploadFile
         public string ContentType { get; set; }
 
         public Guid UserId { get; set; }
-
     }
 }

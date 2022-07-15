@@ -9,7 +9,7 @@ namespace PoroDev.DatabaseService.Consumers.RuntimeDataConsumers.Query
 {
     public class RuntimeDataQueryConsumer : BaseDbConsumer, IConsumer<RuntimeQueryRequestGatewayToDatabase>
     {
-        public RuntimeDataQueryConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public RuntimeDataQueryConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 

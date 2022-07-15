@@ -70,7 +70,7 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<LoginUserModel>> LoginUser(UserLoginRequestGatewayToService userToLoginModel)
         {
-            var modelToReturn = await _loginUserRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(userToLoginModel);
+            var modelToReturn = await _loginUserRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(userToLoginModel, CancellationToken.None, RequestTimeout.After(m: 5));
             return modelToReturn.Message;
         }
 
@@ -100,7 +100,7 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
-            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = model.Email });
+            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = model.Email }, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (exists.Message.Entity != null)
             {
@@ -124,20 +124,20 @@ namespace PoroDev.UserManagementService.Services
             modelToCreate.Password = hash;
             modelToCreate.Salt = salt;
 
-            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate);
+            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
         {
-            var response = await _deleteAllUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteAllUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
@@ -158,7 +158,7 @@ namespace PoroDev.UserManagementService.Services
                 Email = model.Email
             };
 
-            var response = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
+            var response = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(readUser, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
@@ -180,7 +180,7 @@ namespace PoroDev.UserManagementService.Services
                 Id = model.Id
             };
 
-            var response = await _readUserByIdClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
+            var response = await _readUserByIdClient.GetResponse<CommunicationModel<DataUserModel>>(readUser, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
@@ -196,7 +196,7 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
-            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id });
+            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id }, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
@@ -215,7 +215,7 @@ namespace PoroDev.UserManagementService.Services
             updateUserRequest.Password = hash;
             updateUserRequest.Salt = salt;
 
-            var response = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateUserRequest);
+            var response = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateUserRequest, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
@@ -233,7 +233,7 @@ namespace PoroDev.UserManagementService.Services
             userToRegister.Password = hash;
             userToRegister.VerificationToken = CreateRandomVerificationToken();
 
-            var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister);
+            var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister, CancellationToken.None, RequestTimeout.After(m: 5));
 
             var otherProperties = new Dictionary<string, string>() {{"VerificationToken", userToRegister.VerificationToken }};
             var emailProperties = CreateVerificationEmailProperties(userToRegister.Email, otherProperties);
