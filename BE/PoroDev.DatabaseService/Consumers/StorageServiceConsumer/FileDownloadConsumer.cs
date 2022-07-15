@@ -1,84 +1,59 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using static PoroDev.Common.Enums.UserEnums;
+using static PoroDev.DatabaseService.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileDownloadConsumer : IConsumer<FileDownloadRequestServiceToDatabase>
+    public class FileDownloadConsumer : BaseDbConsumer, IConsumer<FileDownloadRequestServiceToDatabase>
     {
-        private IFileRepository _fileRepository;
-        private IUnitOfWork _unitOfWork;
-
-        public FileDownloadConsumer(IFileRepository fileRepository, IUnitOfWork unitOfWork)
+        public FileDownloadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
-            _fileRepository = fileRepository;
-            _unitOfWork = unitOfWork;
         }
 
 
         public async Task Consume(ConsumeContext<FileDownloadRequestServiceToDatabase> context)
         {
-            var entity = await _unitOfWork.UserFiles.GetByStringIdAsync(context.Message.FileId);
+            var respondModel = await DownloadFile(context.Message);
 
-            var isIDFormatInvalid = (await _unitOfWork.UserFiles.FindAsync(userFiles => userFiles.FileId.Equals(context.Message.FileId)));
+            await context.RespondAsync(respondModel);         
+        }
 
-            if (isIDFormatInvalid.ExceptionName != null)
+        private async Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadRequest)
+        {
+            var fileEntry = await _unitOfWork.UserFiles.GetByStringIdAsync(downloadRequest.FileId);
+
+            if (fileEntry == null)
+                return new CommunicationModel<FileDownloadMessage>(new Common.Exceptions.FileNotFoundException("File with that file id not found"));
+
+            UserRole userRole = (await _unitOfWork.Users.FindAsync(user => user.Id.Equals(downloadRequest.UserId))).Entity.Role;
+
+            //If the user isn't an admin and if he doesn't own the file
+            if (!fileEntry.CurrentUserId.Equals(downloadRequest.UserId) && !(userRole == 0))
+                return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
+
+            //If the user isn't an admin and the file is deleted
+            if (((int)userRole) == 1 && fileEntry.IsDeleted)
+                return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
+
+            try
             {
-                var responseException = new CommunicationModel<FileDownloadMessage>(new PoroDev.Common.Exceptions.FileNotFoundException("File with that file id not found"));
+                var downloadedFile = await _fileRepository.DownloadFile(downloadRequest.FileId);
 
-                await context.RespondAsync(responseException);
+                return new CommunicationModel<FileDownloadMessage>(downloadedFile);
             }
-            else
+            catch (Exception)
             {
 
-                if (entity.IsDeleted == true)
-                {
-                    DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
-
-                    //super admin = 0; normal user = 1; admin can download deleted file
-                    if (user.Role == 0)
-                    {
-                        var downloadedFile = await _fileRepository.DownloadFile(context.Message.FileId, context.Message.UserId);
-                        FileDownloadMessage model = new()
-                        {
-                            File = downloadedFile.File,
-                            FileName = downloadedFile.FileName,
-                            ContentType = downloadedFile.ContentType
-                        };
-
-                        var response = new CommunicationModel<FileDownloadMessage>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
-
-                        await context.RespondAsync(response);
-                    }
-                    else
-                    {
-                        var responseException = new CommunicationModel<FileDownloadMessage>(new PoroDev.Common.Exceptions.FileNotFoundException("File with that file id not found"));
-                        await context.RespondAsync(responseException);
-                    }
-                }
-                else
-                {
-                    var downloadedFile = await _fileRepository.DownloadFile(context.Message.FileId, context.Message.UserId);
-
-                    var response = new CommunicationModel<FileDownloadMessage>() { Entity = downloadedFile, ExceptionName = null, HumanReadableMessage = null };
-
-                    await context.RespondAsync(response);
-                }
-
+                return new CommunicationModel<FileDownloadMessage>(new DatabaseException(InternalDatabaseError));
             }
-            //FileDownloadMessage model = new()
-            //{
-            //    File = downloadedFile.File,
-            //    FileName = downloadedFile.FileName,
-            //    ContentType = downloadedFile.ContentType
-            //};
 
-            //var response = new CommunicationModel<FileDownloadMessage>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
-
-            //await context.RespondAsync(response);
         }
     }
 }

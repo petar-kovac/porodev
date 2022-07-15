@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
@@ -15,43 +16,48 @@ namespace PoroDev.StorageService.Services
         private readonly IRequestClient<FileDownloadRequestServiceToDatabase> _downloadRequestClient;
         private readonly IRequestClient<FileReadModel> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestServiceToDatabase> _deleteRequestClient;
+        private readonly IMapper _mapper;
 
         public StorageService
             (IRequestClient<FileUploadRequestServiceToDatabase> uploadRequestClient,
             IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient,
             IRequestClient<FileReadModel> readRequestClient,
-            IRequestClient<FileDeleteRequestServiceToDatabase> deleteRequestClient)
+            IRequestClient<FileDeleteRequestServiceToDatabase> deleteRequestClient,
+            IMapper mapper)
         {
             _uploadRequestClient = uploadRequestClient;
             _downloadRequestClient = downloadRequestClient;
             _readRequestClient = readRequestClient;
             _deleteRequestClient = deleteRequestClient;
+            _mapper = mapper;
         }
 
-        public async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
+        public async Task<CommunicationModel<FileUploadResponse>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
         {
-            var response = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel);
+            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel,CancellationToken.None, RequestTimeout.After(m: 5));
 
-            return response.Message;
+            var fileUploadResponse = _mapper.Map<CommunicationModel<FileUploadResponse>>(fileUploadResponseContext.Message);
+
+            return fileUploadResponse;
         }
 
         public async Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadModel)
         {
-            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
+            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel,CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
 
         public async Task<CommunicationModel<FileReadModel>> ReadFiles(FileReadRequestServiceToDatabase readModel)
         {
-            var response = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel);
+            var response = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
 
         public async Task<CommunicationModel<FileDeleteMessage>> DeleteFile(FileDeleteRequestServiceToDatabase deleteModel)
         {
-            var response = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+            var response = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }

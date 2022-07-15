@@ -22,6 +22,8 @@ namespace PoroDev.Common.MassTransit
                     var configuration = context.GetService<IConfiguration>();
                     var serviceSettings = configuration.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>();
                     var rabbitMQSettings = configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+                    MessageDataDefaults.AlwaysWriteToRepository = false;
+                    MessageDataDefaults.Threshold = 8192;
                     configurator.UseMessageData(messageDataRepository);
                     configurator.Host(rabbitMQSettings.Host);
                     configurator.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(serviceSettings.ServiceName, false));

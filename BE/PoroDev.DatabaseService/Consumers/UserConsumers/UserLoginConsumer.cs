@@ -16,7 +16,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserLoginConsumer : BaseDbConsumer, IConsumer<UserLoginRequestServiceToDatabase>
     {
-        public UserLoginConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UserLoginConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 

@@ -7,6 +7,7 @@ using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
+using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.Common.MassTransit.Extensions;
 
@@ -25,7 +26,7 @@ namespace PoroDev.DatabaseService.Repositories
             _bucket = new GridFSBucket(mongoDatabase);
         }
 
-        public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType, Guid userId)
+        public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType)
         {
             var options = new GridFSUploadOptions()
             {
@@ -53,7 +54,7 @@ namespace PoroDev.DatabaseService.Repositories
             return id;
         }
 
-        public async Task<FileDownloadMessage> DownloadFile(string fileId, Guid userId)
+        public async Task<FileDownloadMessage> DownloadFile(string fileId)
         {
             ObjectId fileObjectId = ObjectId.Parse(fileId);
 
@@ -68,11 +69,13 @@ namespace PoroDev.DatabaseService.Repositories
 
             var modelToReturn = new FileDownloadMessage()
             {
-                File = await messageDataRepository.PutBytes(downloadFile),
+                File = null,
                 FileName = fileName,
                 ContentType = contentType
             };
 
+            modelToReturn.File = await messageDataRepository.PutBytes(downloadFile);
+            
             return modelToReturn;
         }
 
@@ -93,6 +96,19 @@ namespace PoroDev.DatabaseService.Repositories
             };
 
             return readModel;
+        }
+
+        public async Task<FileMetadata> ReadFileById(string fileId)
+        {
+            ObjectId id = ObjectId.Parse(fileId);
+            var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(x => x.Id, id);
+
+            var searchResult = await _bucket.FindAsync(filter);
+            var fileEntry = searchResult.First();
+
+            FileMetadata fileData = new(fileEntry);
+
+            return fileData;
         }
     }
 }

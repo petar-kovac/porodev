@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
@@ -12,6 +10,7 @@ using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -37,32 +36,30 @@ namespace PoroDev.GatewayAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<FileUploadModel> UploadFile(FileUploadRequestGatewayToService uploadModel)
+        public async Task<FileUploadResponse> UploadFile(FileUploadRequest uploadModel)
         {
             if (uploadModel.File is null)
-            {
                 ThrowException(nameof(FileUploadFormatException), FileUploadExceptionMessage);
-            }
 
-            var responseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(new
+            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadResponse>>(new
             {
                 FileName = uploadModel.FileName,
                 File = uploadModel.File,
                 ContentType = uploadModel.ContentType,
                 UserId = uploadModel.UserId
-            });
+            }, CancellationToken.None, RequestTimeout.After(m: 5));
 
-            if (responseContext.Message.ExceptionName != null)
-                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+            if (fileUploadResponseContext.Message.ExceptionName != null)
+                ThrowException(fileUploadResponseContext.Message.ExceptionName, fileUploadResponseContext.Message.HumanReadableMessage);
 
-            var response = responseContext.Message.Entity;
+            FileUploadResponse fileUploadResponse = fileUploadResponseContext.Message.Entity;
 
-            return response;
+            return fileUploadResponse;
         }
 
         public async Task<FileDownloadResponse> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
-            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
+            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
             {
@@ -76,7 +73,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<FileReadModel> ReadFiles(FileReadRequestGatewayToService readModel)
         {
-            var responseContext = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel);
+            var responseContext = await _readRequestClient.GetResponse<CommunicationModel<FileReadModel>>(readModel, CancellationToken.None, RequestTimeout.After(m: 5));
             var response = responseContext.Message.Entity;
 
             return response;
@@ -84,7 +81,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel)
         {
-            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel);
+            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);

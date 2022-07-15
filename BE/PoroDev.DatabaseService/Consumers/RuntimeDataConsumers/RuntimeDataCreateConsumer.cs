@@ -8,7 +8,7 @@ namespace PoroDev.DatabaseService.Consumers.RuntimeDataConsumers
 {
     public class RuntimeDataCreateConsumer : BaseDbConsumer, IConsumer<RuntimeData>
     {
-        public RuntimeDataCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public RuntimeDataCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 

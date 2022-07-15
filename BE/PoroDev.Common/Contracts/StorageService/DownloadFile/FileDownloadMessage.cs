@@ -11,12 +11,5 @@ namespace PoroDev.Common.Contracts.StorageService.DownloadFile
         public FileDownloadMessage()
         {
         }
-
-        //public FileDownloadMessage(byte[] file, string fileName, string contentType)
-        //{
-        //    File = file;
-        //    FileName = fileName;
-        //    ContentType = contentType;
-        //}
     }
 }

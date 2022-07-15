@@ -51,7 +51,7 @@ namespace PoroDev.UserManagementService.Helpers
             if (!splitEmail[1].Equals(EMAIL_DOMAIN))
                 throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
 
-            if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email })).Message.Entity != null)
+            if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email }, CancellationToken.None, RequestTimeout.After(m: 5))).Message.Entity != null)
                 throw new EmailFormatException(EMAIL_EXISTS_ERROR);
         }
 
