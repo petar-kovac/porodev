@@ -238,7 +238,7 @@ namespace PoroDev.UserManagementService.Services
 
             var otherProperties = new Dictionary<string, string>();
             otherProperties.Add("VerificationToken", userToRegister.VerificationToken);
-            var emailProperties = CreateVerificationEmailProperties("srdjancoralic5@gmail.com", otherProperties); //prvi argument ce biti userToRegister.Email
+            var emailProperties = CreateVerificationEmailProperties(userToRegister.Email, otherProperties); //prvi argument ce biti userToRegister.Email
 
             Response<CommunicationModel<SendEmailModel>> verificationEmailResponseContext;
             do
@@ -273,7 +273,7 @@ namespace PoroDev.UserManagementService.Services
         {
             var returnModel = new SendEmailRequest()
             {
-                EmailReceiver = EmailReceiver,
+                EmailReceiver = "srdjanstanojcic031@gmail.com",
                 Subject = "Verification email",
                 plainTextContent = "Verification plan text",
                 OtherParametersForEmail = OtherProperties,
