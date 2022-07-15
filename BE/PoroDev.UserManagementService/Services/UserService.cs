@@ -223,7 +223,6 @@ namespace PoroDev.UserManagementService.Services
         public async Task<CommunicationModel<RegisterUserResponse>> RegisterUser(RegisterUserRequestGatewayToService registerModel)
         {
             var isException = await Helpers.UserManagementValidator.Validate(registerModel, _readUserByEmailClient);
-
             if (isException.ExceptionName != null)
                 return isException;
 
@@ -236,8 +235,7 @@ namespace PoroDev.UserManagementService.Services
 
             var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister);
 
-            var otherProperties = new Dictionary<string, string>();
-            otherProperties.Add("VerificationToken", userToRegister.VerificationToken);
+            var otherProperties = new Dictionary<string, string>() {{"VerificationToken", userToRegister.VerificationToken }};
             var emailProperties = CreateVerificationEmailProperties(userToRegister.Email, otherProperties);
 
             var verificationEmailResponseContext = await _verificationEmailSenderRequestClient.GetResponse<CommunicationModel<SendEmailModel>>(emailProperties);
@@ -247,7 +245,6 @@ namespace PoroDev.UserManagementService.Services
                 await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(new UserDeleteRequestServiceToDatabase() { Email = userToRegister.Email});
                 return CreateResponseModel<CommunicationModel<RegisterUserResponse>, RegisterUserResponse>(nameof(FailedToRegisterUserException), FailedToRegisterUserExceptionMessage);
             }
-
             return _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);
         }
 
@@ -266,7 +263,7 @@ namespace PoroDev.UserManagementService.Services
         {
             var returnModel = new SendEmailRequest()
             {
-                EmailReceiver = "srdjanstanojcic031@gmail.com",
+                EmailReceiver = "srdjanstanojcic031@gmail.com",     //it's my private email right now since we do not have access to any boing.rs emails
                 Subject = "Verification email",
                 plainTextContent = "Verification plan text",
                 OtherParametersForEmail = OtherProperties,

@@ -11,12 +11,18 @@ namespace PoroDev.EmailSender.Services
 {
     public class SendEmailService : ISendEmailService
     {
+        private readonly IConfiguration _configuration;
+        public SendEmailService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public async Task<CommunicationModel<SendEmailModel>> SendEmail(SendEmailRequest emailModel)
         {
             try
             {
-                var client = new SendGridClient("");//enter your sendgrid api key 
-                EmailAddress from = new EmailAddress("srdjan.stanojcic@htecgroup.com");
+                var client = new SendGridClient(_configuration.GetValue<string>("SendGridSettings:ApiKey"));
+                EmailAddress from = new EmailAddress(_configuration.GetValue<string>("SendGridSettings:EmailAdress")); 
                 EmailAddress to = new EmailAddress(emailModel.EmailReceiver);
                 string subject = emailModel.Subject;
                 string plainTextContent = emailModel.plainTextContent;
