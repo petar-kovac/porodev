@@ -50,17 +50,6 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
                 await context.RespondAsync(resposneException);
             }
-            //TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
-            //returnModel._numberOfUploadedFiles = await countNumberOfUploadedFiles(); 
-
-            //var response = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
-            //{
-            //    Entity = returnModel,
-            //    ExceptionName = null,
-            //    HumanReadableMessage = null
-            //};
-
-            //await context.RespondAsync<CommunicationModel<TotalNumberOfUploadedFilesModel>>(response);
         }
 
         

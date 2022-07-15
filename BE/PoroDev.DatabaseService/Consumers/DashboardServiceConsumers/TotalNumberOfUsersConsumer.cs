@@ -50,19 +50,6 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
                 await context.RespondAsync(resposneException);
             }
-
-            //List<DataUserModel> users = (await _unitOfWork.Users.FindAllAsync(users => users.Email.Contains(""))).ToList<DataUserModel>();
-            //TotalNumberOfUsersModel returnModel = new TotalNumberOfUsersModel();
-            //returnModel._numberOfUsers = users.Count;
-
-            //var response = new CommunicationModel<TotalNumberOfUsersModel>()
-            //{
-            //    Entity = returnModel,
-            //    ExceptionName = null,
-            //    HumanReadableMessage = null
-            //};
-
-            //await context.RespondAsync<CommunicationModel<TotalNumberOfUsersModel>>(response);
         }
     }
 }
