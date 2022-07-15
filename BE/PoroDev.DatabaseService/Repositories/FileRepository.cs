@@ -9,6 +9,7 @@ using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using PoroDev.DatabaseService.Services.Contracts;
 using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.DatabaseService.Repositories
@@ -54,7 +55,7 @@ namespace PoroDev.DatabaseService.Repositories
             return id;
         }
 
-        public async Task<FileDownloadMessage> DownloadFile(string fileId)
+        public async Task<FileDownload> DownloadFile(string fileId)
         {
             ObjectId fileObjectId = ObjectId.Parse(fileId);
 
@@ -67,14 +68,12 @@ namespace PoroDev.DatabaseService.Repositories
 
             var downloadFile = await _bucket.DownloadAsBytesAsync(fileObjectId);
 
-            var modelToReturn = new FileDownloadMessage()
+            var modelToReturn = new FileDownload()
             {
-                File = null,
+                File = downloadFile,
                 FileName = fileName,
                 ContentType = contentType
             };
-
-            modelToReturn.File = await messageDataRepository.PutBytes(downloadFile);
             
             return modelToReturn;
         }

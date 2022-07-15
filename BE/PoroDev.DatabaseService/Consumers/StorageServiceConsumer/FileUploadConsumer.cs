@@ -6,13 +6,17 @@ using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using PoroDev.DatabaseService.Services.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
     public class FileUploadConsumer : BaseDbConsumer, IConsumer<FileUploadRequestServiceToDatabase>
     {
-        public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
+        private readonly IEncryptionService _encryptionService;
+
+        public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository, IEncryptionService encryptionService) : base(unitOfWork, mapper, fileRepository)
         {
+            _encryptionService = encryptionService;
         }
 
         public async Task Consume(ConsumeContext<FileUploadRequestServiceToDatabase> context)
@@ -38,6 +42,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             try
             {
                 var file = await uploadRequest.File.Value;
+
+                file = _encryptionService.EncryptBytes(file);
+
                 ObjectId fileId = await _fileRepository.UploadFile(uploadRequest.FileName,
                                                                        file,
                                                                        uploadRequest.ContentType);

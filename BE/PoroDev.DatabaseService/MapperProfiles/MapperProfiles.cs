@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.Update;
@@ -9,6 +10,7 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.DatabaseService.Models;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {
@@ -44,6 +46,9 @@ namespace PoroDev.DatabaseService.MapperProfiles
                 .ForSourceMember(source => source.DateCreated, option => option.DoNotValidate());
 
             CreateMap<UnitOfWorkResponseModel<FileUploadModel>, CommunicationModel<FileUploadModel>>();
+
+            CreateMap<FileDownload, FileDownloadMessage>()
+                .ForMember(destination => destination.File, options => options.Ignore());
         }
 
         private bool ValidateUserDeletion(DataUserModel src)

@@ -11,7 +11,7 @@ namespace PoroDev.DatabaseService.Repositories.Contracts
 
         Task<FileReadSingleModel> ReadFiles(string fileId, string userName, string userLastName);
 
-        Task<FileDownloadMessage> DownloadFile(string fileId);
+        Task<FileDownload> DownloadFile(string fileId);
 
         Task<FileMetadata> ReadFileById(string fileId);
     }
