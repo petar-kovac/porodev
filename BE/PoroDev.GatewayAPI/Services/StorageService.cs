@@ -47,7 +47,7 @@ namespace PoroDev.GatewayAPI.Services
                 File = uploadModel.File,
                 ContentType = uploadModel.ContentType,
                 UserId = uploadModel.UserId
-            });
+            }, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (fileUploadResponseContext.Message.ExceptionName != null)
                 ThrowException(fileUploadResponseContext.Message.ExceptionName, fileUploadResponseContext.Message.HumanReadableMessage);
@@ -59,7 +59,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<FileDownloadResponse> DownloadFile(FileDownloadRequestGatewayToService downloadModel)
         {
-            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel);
+            var responseContext = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
             {
