@@ -38,8 +38,10 @@ const Profile: FC = () => {
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
-              <p className="name">First name: </p>
-              <p> {localStorage.getItem(StorageKey.NAME)}</p>
+              <StyledPHeading className="name">First name: </StyledPHeading>
+              <StyledPContent>
+                {localStorage.getItem(StorageKey.NAME)}
+              </StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
@@ -49,12 +51,14 @@ const Profile: FC = () => {
                   });
                 }}
               >
-                <EditOutlined />
+                <StyledEditIcon />
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
-              <p>Last name: </p>
-              <p> {localStorage.getItem(StorageKey.LASTNAME)}</p>
+              <StyledPHeading>Last name: </StyledPHeading>
+              <StyledPContent>
+                {localStorage.getItem(StorageKey.LASTNAME)}
+              </StyledPContent>
 
               <StyledProfileIcon
                 onClick={() => {
@@ -67,19 +71,21 @@ const Profile: FC = () => {
                   });
                 }}
               >
-                <EditOutlined />
+                <StyledEditIcon />
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
-              <p>Email</p>
-              <p>{localStorage.getItem(StorageKey.EMAIL)}</p>
+              <StyledPHeading>Email</StyledPHeading>
+              <StyledPContent>
+                {localStorage.getItem(StorageKey.EMAIL)}
+              </StyledPContent>
               <StyledProfileIcon>
-                <MinusCircleOutlined />
+                <StyledDisableIcon />
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
-              <p>Password</p>
-              <p>******</p>
+              <StyledPHeading>Password</StyledPHeading>
+              <StyledPContent>******</StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
@@ -88,7 +94,7 @@ const Profile: FC = () => {
                   });
                 }}
               >
-                <EditOutlined />
+                <StyledEditIcon />
               </StyledProfileIcon>
             </StyledProfileCardItem>
           </StyledProfileCardContent>
@@ -151,5 +157,21 @@ const StyledProfileCardItem = styled.div<{ avatar?: boolean }>`
 const StyledProfileIcon = styled.div`
   cursor: pointer;
 `;
+
+const StyledPHeading = styled.p.attrs(() => ({
+  'data-testid': 'paragraph-heading',
+}))``;
+
+const StyledPContent = styled.p.attrs(() => ({
+  'data-testid': 'paragraph-description',
+}))``;
+
+const StyledEditIcon = styled(EditOutlined).attrs(() => ({
+  'data-testid': 'edit-icon',
+}))``;
+
+const StyledDisableIcon = styled(MinusCircleOutlined).attrs(() => ({
+  'data-testid': 'disable-icon',
+}))``;
 
 export default Profile;

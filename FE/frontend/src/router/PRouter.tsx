@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import Groups from 'pages/admin/groups/Groups';
 import Runtime from 'pages/admin/runtime/Runtime';
 import UserRuntime from 'pages/user/runtime/Runtime';
+import EmailVerified from 'pages/email-verify/EmailVerified';
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
 import PageProvider from '../context/PageContext';
@@ -71,7 +72,7 @@ const PRouter: FC = () => {
                     <Route path="/user-groups" element={<UserGroups />} />
                     <Route path="/user-runtime" element={<UserRuntime />} />
                   </Route>
-                  <Route path="/confirm" element={<EmailConfirmed />} />
+                  {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}
                   <Route
                     path="/notallowed"
                     element={<Error message="Cant go here" />}
@@ -92,8 +93,9 @@ const PRouter: FC = () => {
     return (
       <Routes>
         <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="/verified" element={<EmailVerified />} />
         <Route path="/verify" element={<EmailVerify />} />
-        {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}
+        <Route path="/confirm" element={<EmailConfirmed />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     );
