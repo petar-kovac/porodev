@@ -44,12 +44,18 @@ namespace PoroDev.Common.Models.UserModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<RuntimeData> runtimeDatas { get; set; }
 
+        public string VerificationToken { get; set; }
+
+        public DateTime? VerifiedAt { get; set; }
+
         public DataUserModel()
         {
 
         }
 
-        public DataUserModel(Guid id, string name, string lastname, string email, byte[] password, UserEnums.UserRole role, UserEnums.UserDepartment department, string position, string avatarUrl, DateTime dateCreated, byte[] salt)
+        public DataUserModel(Guid id, string name, string lastname, string email, byte[] password, UserEnums.UserRole role,
+                            UserEnums.UserDepartment department, string position, string avatarUrl, DateTime dateCreated, byte[] salt,
+                            string verificationToken, DateTime? verifiedAt)
         {
             Id = id;
             Name = name;
@@ -62,6 +68,8 @@ namespace PoroDev.Common.Models.UserModels.Data
             AvatarUrl = avatarUrl;
             DateCreated = dateCreated;
             Salt = salt;
+            VerificationToken = verificationToken;
+            VerifiedAt = verifiedAt;
         }
     }
 }

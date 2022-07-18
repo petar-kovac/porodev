@@ -26,5 +26,6 @@ namespace PoroDev.Common.Contracts.UserManagement.Create
 
         public DateTime DateCreated { get; set; }
 
+        public string VerificationToken { get; set; }
     }
 }

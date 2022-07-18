@@ -26,6 +26,10 @@ namespace PoroDev.Common.Models.UserModels.RegisterUser
 
         public DateTime DateCreated { get; set; }
 
+        public string VerificationToken { get; set; }
+
+        public DateTime? VerifiedAt { get; set; }
+
         public ulong FileDownloadTotal { get; set; }
 
         public ulong FileUploadTotal { get; set; }
