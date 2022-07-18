@@ -240,7 +240,7 @@ namespace PoroDev.Runtime.Services
         {
             try
             {
-                await Process.Start("CMD.exe", $"/C docker cp runtime-container:/imageEdited.jpg {RUNTIME_FOLDER_ROUTE}").WaitForExitAsync();
+                await Process.Start("CMD.exe", $"/C docker cp runtime-container:/imageEdited.jpg {Directory.GetParent(RUNTIME_FOLDER_ROUTE)}").WaitForExitAsync();
             }
             catch (Exception ex)
             {
