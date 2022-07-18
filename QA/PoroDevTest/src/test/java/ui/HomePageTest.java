@@ -138,4 +138,6 @@ public class HomePageTest extends BaseTest{
                 "The user is not logged out");
         logger.info("User successfully logged out");
     }
+
+
 }
