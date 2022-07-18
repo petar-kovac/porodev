@@ -35,7 +35,7 @@ public class HomePageTest extends BaseTest{
         homePage = new HomePage(driver);
         String currentEmail = BasePage.getRandomBoingEmail();
 
-        registrationPage.registerUser(
+/*        registrationPage.registerUser(
                 file.getValue("VALID_FIRSTNAME"),
                 file.getValue("VALID_LASTNAME"),
                 currentEmail,
@@ -44,9 +44,9 @@ public class HomePageTest extends BaseTest{
                 file.getValue("VALID_DEPARTMENT"),
                 file.getValue("VALID_POSITION"));
         logger.info("User successfully registered.");
-        BasePage.waitForElementVisibility(registrationPage.we_successfulRegistration_message, driver);
+        BasePage.waitForElementVisibility(registrationPage.we_successfulRegistration_message, driver);*/
 
-        loginPage.logInUser(currentEmail, file.getValue("VALID_PASS"));
+        loginPage.logInUser(file.getValue("VALID_EMAIL"), file.getValue("VALID_PASS"));
         BasePage.waitForElementVisibility(homePage.we_userFileUpload_message, driver);
         logger.info("User successfully logged in.");
     }
@@ -74,6 +74,7 @@ public class HomePageTest extends BaseTest{
 
                 String changedName = BasePage.getTextFromElement(homePage.we_profileFirstName_text);
                 Assert.assertEquals(changedName,file.getValue("VALID_CHANGED_NAME"));
+                logger.info("User successfully changed first name");
 
     }
 
@@ -90,6 +91,7 @@ public class HomePageTest extends BaseTest{
 
                 String changedLastName = BasePage.getTextFromElement(homePage.we_profileLastName_text);
                 Assert.assertEquals(changedLastName, file.getValue("VALID_CHANGED_LAST_NAME"));
+                logger.info("User successfully changed last name");
 
     }
 
@@ -111,7 +113,7 @@ public class HomePageTest extends BaseTest{
 
         loginPage.logInUser(usersCurrentEmail, file.getValue("VALID_CHANGED_PASS"));
         BasePage.waitForElementVisibility(homePage.we_userFileUpload_message, driver);
-        logger.info("User successfully logged in.");
+        logger.info("User successfully changed the password.");
 
     }
 
@@ -119,11 +121,13 @@ public class HomePageTest extends BaseTest{
     public void upload_file_functionality() {
         homePage.uploadFile(fileUpload.getValue("VALID_FILE_PATH"),
                 fileUpload.getValue("VALID_FILE_NAME"));
+        logger.info("User successfully uploaded the file");
     }
 
     @Test(priority = 6, description = "User leading to files page from home page")
     public void show_more_files_functionality() {
         homePage.leadToFilesPage();
+        logger.info("User successfully landed on files page");
     }
 
     @Test(priority = 7, description = "User logging out")
@@ -132,5 +136,6 @@ public class HomePageTest extends BaseTest{
         homePage.logOutUser();
         loginPage.assert_thatElement_isDisplayed(loginPage.we_login_title,
                 "The user is not logged out");
+        logger.info("User successfully logged out");
     }
 }

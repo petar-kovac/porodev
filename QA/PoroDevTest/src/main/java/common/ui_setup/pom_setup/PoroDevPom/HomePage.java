@@ -23,9 +23,9 @@ public class HomePage extends BasePage {
     public WebElement we_userFileUpload_message;
     @FindBy(xpath = "//h2[contains(text(),'Profile Info')]")
     public WebElement we_profileInfo_message;
-    @FindBy(xpath = "//div/div/div/div[2]/p[2]")
+    @FindBy(css = "[data-testid='paragraph-description']")
     public WebElement we_profileFirstName_text;
-    @FindBy(xpath = "//div/div[3]/p[2]")
+    @FindBy(xpath = "//div[3]/p[2]")
     public WebElement we_profileLastName_text;
     @FindBy(xpath = "//div[4]/p[2]")
     public WebElement we_profileEmail_text;
@@ -41,9 +41,9 @@ public class HomePage extends BasePage {
     public WebElement we_profile_button;
     @FindBy(css = "[data-icon='edit']")
     public WebElement we_editName_button;
-    @FindBy(xpath = "//div[2]/div[3]/button[2]")
+    @FindBy(xpath = "//button[2]")
     public WebElement we_confirmChange_button;
-    @FindBy(xpath = "//main/div/div/div/div[3]/div")
+    @FindBy(css = "[data-testid='edit-icon']")
     public WebElement we_editLastName_button;
     @FindBy(xpath = "//div[5]/div/span")
     public WebElement we_editPassword_button;
@@ -59,7 +59,7 @@ public class HomePage extends BasePage {
     //Entry section
     @FindBy(className = "ant-input")
     public WebElement we_editAttribute_entry;
-    @FindBy(xpath = "//div[2]/span/div[1]/span/input")
+    @FindBy(xpath = "//span/input")
     public WebElement we_uploadFile_field;
 
 
