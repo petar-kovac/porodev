@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { findFiles } from 'service/files/files';
+import { usePageContext } from 'context/PageContext';
 
 const useGroupData = () => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [data, setData] = useState<[] | undefined>(undefined);
   const [error, setError] = useState<string>('');
 
+  const { setIsSiderVisible } = usePageContext();
+
   useEffect(() => {
+    setIsSiderVisible(false);
     const fetchFiles = async () => {
       setisLoading(true);
       try {

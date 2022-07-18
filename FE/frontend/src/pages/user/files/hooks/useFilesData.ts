@@ -1,3 +1,4 @@
+import { usePageContext } from 'context/PageContext';
 import { useEffect, useState } from 'react';
 import { findFiles } from 'service/files/files';
 
@@ -6,7 +7,10 @@ const useFilesData = () => {
   const [data, setData] = useState<[] | undefined>(undefined);
   const [error, setError] = useState<string>('');
 
+  const { setIsSiderVisible } = usePageContext();
+
   useEffect(() => {
+    setIsSiderVisible(false);
     const fetchFiles = async () => {
       setisLoading(true);
       try {

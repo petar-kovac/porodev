@@ -29,16 +29,16 @@ const Runtime: FC = () => {
 
   const { data, isLoading, error } = useRuntimeData();
 
-  if (isLoading) {
-    return (
-      <StyledSpinnerWrapper>
-        <Spinner color="#000" size={42} speed={1.2} />
-      </StyledSpinnerWrapper>
-    );
-  }
-  if (error) {
-    return <Error message={error} />;
-  }
+  // if (isLoading) {
+  //   return (
+  //     <StyledSpinnerWrapper>
+  //       <Spinner color="#000" size={42} speed={1.2} />
+  //     </StyledSpinnerWrapper>
+  //   );
+  // }
+  // if (error) {
+  //   return <Error message={error} />;
+  // }
 
   return (
     <StyledPageWrapper>
