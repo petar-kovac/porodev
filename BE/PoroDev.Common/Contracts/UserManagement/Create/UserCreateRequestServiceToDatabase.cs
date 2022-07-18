@@ -25,5 +25,6 @@ namespace PoroDev.Common.Contracts.UserManagement.Create
         public string AvatarUrl { get; set; }
 
         public DateTime DateCreated { get; set; }
+
     }
 }

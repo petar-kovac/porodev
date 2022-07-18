@@ -1,9 +1,11 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
@@ -17,14 +19,17 @@ namespace PoroDev.DatabaseService.Repositories
     public class FileRepository : IFileRepository
     {
         private readonly IGridFSBucket _bucket;
+        private readonly IMapper _mapper;
 
-        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings)
+        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings, IMapper mapper)
         {
             var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString);
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
             _bucket = new GridFSBucket(mongoDatabase);
+
+            _mapper = mapper;
         }
 
         public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType)
@@ -108,6 +113,28 @@ namespace PoroDev.DatabaseService.Repositories
             FileMetadata fileData = new(fileEntry);
 
             return fileData;
+        }
+
+        public async Task<List<SingleFileQueryModel>> QueryFiles(SingleFileQueryServiceToDatabase queryReqeust)
+        {
+            List<SingleFileQueryModel> singleFileQueryModels = new List<SingleFileQueryModel>();
+
+            if (queryReqeust.FileId is not null)
+            { 
+                ObjectId fileId = ObjectId.Parse(queryReqeust.FileId);
+
+                var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(file => file.Id, fileId);
+
+                var queryResult = await (await _bucket.FindAsync(filter)).FirstAsync();
+
+                var returnModel = _mapper.Map<SingleFileQueryModel>(queryResult);
+
+                singleFileQueryModels.Add(returnModel);
+
+                return singleFileQueryModels;
+            }
+
+            return singleFileQueryModels;
         }
     }
 }

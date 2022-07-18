@@ -219,8 +219,13 @@ namespace PoroDev.UserManagementService.Services
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
             var userToRegister = _mapper.Map<RegisterUserRequestServiceToDatabase>(registerModel);
+
             userToRegister.Salt = salt;
             userToRegister.Password = hash;
+
+            userToRegister.FileUploadTotal = 0;
+            userToRegister.FileDownloadTotal = 0;
+            userToRegister.RuntimeTotal = 0;
 
             var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister, CancellationToken.None, RequestTimeout.After(m: 5));
 
