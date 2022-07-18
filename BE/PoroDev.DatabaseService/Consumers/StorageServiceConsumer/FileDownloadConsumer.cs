@@ -37,14 +37,14 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             if (fileEntry == null)
                 return new CommunicationModel<FileDownloadMessage>(new Common.Exceptions.FileNotFoundException("File with that file id not found"));
 
-            UserRole userRole = (await _unitOfWork.Users.FindAsync(user => user.Id.Equals(downloadRequest.UserId))).Entity.Role;
+            var userModel = (await _unitOfWork.Users.FindAsync(user => user.Id.Equals(downloadRequest.UserId))).Entity;
 
             //If the user isn't an admin and if he doesn't own the file
-            if (!fileEntry.CurrentUserId.Equals(downloadRequest.UserId) && !(userRole == 0))
+            if (!fileEntry.CurrentUserId.Equals(downloadRequest.UserId) && !(userModel.Role == 0))
                 return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
 
             //If the user isn't an admin and the file is deleted
-            if (((int)userRole) == 1 && fileEntry.IsDeleted)
+            if (((int)userModel.Role) == 1 && fileEntry.IsDeleted)
                 return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
 
             try
@@ -56,6 +56,10 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 var downloadedFileAsMessage = _mapper.Map<FileDownloadMessage>(downloadedFile);
 
                 downloadedFileAsMessage.File = await messageDataRepository.PutBytes(downloadedFile.File);
+
+                userModel.FileDownloadTotal += (ulong)downloadedFile.File.LongLength;
+
+                await _unitOfWork.SaveChanges();
 
                 return new CommunicationModel<FileDownloadMessage>(downloadedFileAsMessage);
             }

@@ -45,6 +45,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
                 file = _encryptionService.EncryptBytes(file);
 
+                
+
                 ObjectId fileId = await _fileRepository.UploadFile(uploadRequest.FileName,
                                                                        file,
                                                                        uploadRequest.ContentType);
@@ -52,6 +54,10 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 var fileUploadModel = new FileData(fileId.ToString(), uploadRequest.UserId, false);
 
                 await _unitOfWork.UserFiles.CreateAsync(fileUploadModel);
+
+                var userModel = await _unitOfWork.Users.GetByIdAsync(uploadRequest.UserId);
+                userModel.FileUploadTotal += (ulong)file.LongLength;
+
                 await _unitOfWork.SaveChanges();
             }
             catch (Exception ex)
