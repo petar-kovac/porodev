@@ -14,5 +14,13 @@ namespace PoroDev.Common.Contracts.StorageService.UploadFile
         public FileUploadRequestServiceToDatabase()
         {
         }
+
+        public FileUploadRequestServiceToDatabase(string fileName, MessageData<byte[]> file, string contentType, Guid userId)
+        {
+            FileName = fileName;
+            File = file;
+            ContentType = contentType;
+            UserId = userId;
+        }
     }
 }

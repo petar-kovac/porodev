@@ -12,6 +12,8 @@
 
         public static readonly string CANNOT_VALIDATE_JWT = "Could not validate JWT token";
 
+        public const string InvalidToken = "Invalid verification token.";
+
         public const string FileUploadExceptionMessage = "File or Id is invalid or null";
     }
 }

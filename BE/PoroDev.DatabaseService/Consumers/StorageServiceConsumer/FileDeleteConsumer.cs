@@ -1,17 +1,15 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileDeleteConsumer : IConsumer<FileDeleteRequestServiceToDatabase>
+    public class FileDeleteConsumer : BaseDbConsumer, IConsumer<FileDeleteRequestServiceToDatabase>
     {
-        private IUnitOfWork _unitOfWork;
-
-        public FileDeleteConsumer(IUnitOfWork unitOfWork)
+        public FileDeleteConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
-            _unitOfWork = unitOfWork;
         }
 
         public async Task Consume(ConsumeContext<FileDeleteRequestServiceToDatabase> context)

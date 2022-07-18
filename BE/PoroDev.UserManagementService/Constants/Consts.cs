@@ -45,5 +45,6 @@
         public const string POSITION_TOO_LONG_ERROR = "Postion cannot exceed 50 characters!";
         public const string POSITION_NUMBER_ERROR = "Position cannot contain numbers!";
         public const string POSITION_SPECIAL_CHARACTER_ERROR = "Position cannot contain special characters!";
+        public const string FailedToRegisterUserExceptionMessage = "Failed to send verification email, please try to register again.";
     }
 }

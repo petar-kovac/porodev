@@ -2,98 +2,74 @@
 using MassTransit;
 using MongoDB.Bson;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.StorageModels.Data;
-using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
-using static PoroDev.Common.MassTransit.Extensions;
+using PoroDev.DatabaseService.Services.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileUploadConsumer : IConsumer<FileUploadRequestServiceToDatabase>
+    public class FileUploadConsumer : BaseDbConsumer, IConsumer<FileUploadRequestServiceToDatabase>
     {
-        private IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
-        private IFileRepository _fileRepository;
+        private readonly IEncryptionService _encryptionService;
 
-        public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository)
+        public FileUploadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository, IEncryptionService encryptionService) : base(unitOfWork, mapper, fileRepository)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _fileRepository = fileRepository;
+            _encryptionService = encryptionService;
         }
 
         public async Task Consume(ConsumeContext<FileUploadRequestServiceToDatabase> context)
         {
-            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
-            FileReadModel readUserFiles = await findAllUserFiles(user.Id);
-            List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Id.Equals(context.Message.UserId))).ToList<FileData>();
+            var fileUploadResult = await UploadFile(context.Message);
 
-            
-
-            int counter = 0;
-
-            bool flagNoFileWithThatName = false;
-          
-            bool flagFileWithThatNameExist = false;
-
-            foreach (FileReadSingleModel file in readUserFiles.Content)
-            {
-                //3 slucaja -> 1 nema fajla sa tim imenom; 2 ima ali je obrisan; 3 ima i nije obrisan 2 SLUCAJ obrisan
-                if(file.FileName == context.Message.FileName && allUserFiles[counter].IsDeleted == false)
-                {
-                    flagFileWithThatNameExist = true;
-
-                    string exceptionType = nameof(FileUploadExistException);
-                    string humanReadableMessage = "File already exists!";
-
-                    var resposneException = new CommunicationModel<FileUploadModel>()
-                    {
-                        Entity = null,
-                        ExceptionName = exceptionType,
-                        HumanReadableMessage = humanReadableMessage
-                    };
-
-                    await context.RespondAsync(resposneException);
-                }
-
-                counter++;
-            }
-
-            if(flagFileWithThatNameExist == false)
-            {
-                ObjectId id = await _fileRepository.UploadFile(context.Message.FileName, await context.Message.File.Value, context.Message.ContentType, context.Message.UserId);
-
-                var model = new FileUploadModel(context.Message.FileName, context.Message.ContentType, context.Message.UserId);
-                var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
-
-                string fileId = id.ToString();
-
-                var createModel = new FileData(fileId, context.Message.UserId, false);
-
-                await _unitOfWork.UserFiles.CreateAsync(createModel);
-                await _unitOfWork.SaveChanges();
-
-                await context.RespondAsync(response);
-            }
+            await context.RespondAsync(fileUploadResult);
         }
 
-        public async Task<FileReadModel> findAllUserFiles(Guid userId)
+        private async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadRequest)
         {
-            List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Id.Equals(userId))).ToList<FileData>();
 
-            FileReadModel returnModel = new FileReadModel();
-
-            foreach (FileData file in allUserFiles)
+            var userFileIds = (await _unitOfWork.UserFiles.FindAllAsync(userFile => userFile.CurrentUserId.Equals(uploadRequest.UserId)
+                                                                                 && userFile.IsDeleted == false)).Select(a => a.FileId);
+            foreach (var userFileId in userFileIds)
             {
-               DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
-               var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, user.Name, user.Lastname);
-               returnModel.Content.Add(fileReadSingleModel);
+                var fileData = await _fileRepository.ReadFileById(userFileId);
+
+                if (fileData.FileName.Equals(uploadRequest.FileName))
+                    return new CommunicationModel<FileUploadModel>(new FileUploadExistException("File already exists"));
             }
 
-            return returnModel;
+            try
+            {
+                var file = await uploadRequest.File.Value;
+
+                file = _encryptionService.EncryptBytes(file);
+
+                
+
+                ObjectId fileId = await _fileRepository.UploadFile(uploadRequest.FileName,
+                                                                       file,
+                                                                       uploadRequest.ContentType);
+
+                var fileUploadModel = new FileData(fileId.ToString(), uploadRequest.UserId, false);
+
+                await _unitOfWork.UserFiles.CreateAsync(fileUploadModel);
+
+                var userModel = await _unitOfWork.Users.GetByIdAsync(uploadRequest.UserId);
+                userModel.FileUploadTotal += (ulong)file.LongLength;
+
+                await _unitOfWork.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return new CommunicationModel<FileUploadModel>(new FileUploadException("Exception happened while upload file to db"));
+            }
+
+            var model = new FileUploadModel(uploadRequest.FileName, uploadRequest.ContentType, uploadRequest.UserId);
+
+            var response = new CommunicationModel<FileUploadModel>() { Entity = model, ExceptionName = null, HumanReadableMessage = null };
+
+            return response;
         }
     }
 }
