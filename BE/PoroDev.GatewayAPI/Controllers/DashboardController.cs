@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryLimitUsedForUploadPerMonth;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPerMonth;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
@@ -65,7 +68,26 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         //[HttpGet("TotalRunTimePerMonth")]
-        //[HttpGet("TotalMemoryLimitUsedForDownloadPerMonth")]
-        //[HttpGet("TotalMemoryLimitUsedForUploadPerMonth")]
+        [HttpGet("TotalMemoryLimitUsedForDownloadPerMonth")]
+        public async Task<ActionResult<TotalMemoryUsedForDownloadPerMonthModel>> GetTotalMemoryUsedForDownload()
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new TotalMemoryUsedForDownloadPerMonthRequestGatewayToService(userId);
+
+            var response = await _dashBoardService.GetTotalMemoryUsedForDownloadPerMonth(returnModel);
+
+            return Ok(response);
+        }
+
+        [HttpGet("TotalMemoryLimitUsedForUploadPerMonth")]
+        public async Task<ActionResult<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUpload()
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new TotalMemoryUsedForUploadPerMonthRequestGatewayToService(userId);
+
+            var response = await _dashBoardService.GetTotalMemoryUsedForUploadPerMonth(returnModel);
+
+            return Ok(response);
+        }
     }
 }

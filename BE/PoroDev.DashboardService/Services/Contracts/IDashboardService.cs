@@ -1,4 +1,6 @@
 ﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPerMonth;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
@@ -15,5 +17,10 @@ namespace PoroDev.DashboardService.Services.Contracts
         public Task<CommunicationModel<TotalNumberOfDeletedFilesModel>> GetTotalNumberOfDeletedFiles(TotalNumberOFDeletedFilesRequestServiceToDatabase totalNumberOfDeletedFiles);
 
         public Task<CommunicationModel<TotalNumberOfUsersModel>> GetTotalNumberOfUsers(TotalNumberOfUsersRequestServiceToDatabase totalNumberOfUsersModel);
+
+        public Task<TotalMemoryUsedForUploadPerMonthModel> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase totalMemoryUsedForUploadModel);
+
+        public Task<TotalMemoryUsedForDownloadPerMonthModel> GetTotalMemoryUsedForDownloadPerMonth(TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadModel);
+
     }
 }

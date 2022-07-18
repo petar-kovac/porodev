@@ -1,5 +1,7 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPerMonth;
+using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
@@ -56,5 +58,14 @@ namespace PoroDev.DashboardService.Services
             return response.Message;
         }
 
+        public Task<TotalMemoryUsedForUploadPerMonthModel> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase totalMemoryUsedForUploadModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TotalMemoryUsedForDownloadPerMonthModel> GetTotalMemoryUsedForDownloadPerMonth(TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
