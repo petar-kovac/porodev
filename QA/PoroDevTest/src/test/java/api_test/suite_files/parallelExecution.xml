@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Users" verbose="1" parallel="classes" thread-count="3" >
+    <test name="Register user" >
+        <classes>
+            <class name="api_test.negative_tests.RegisterUser" />
+            <class name="api_test.negative_tests.LogInUser" />
+            <class name="api_test.negative_tests.GetUser" />
+            <class name="api_test.negative_tests.DeleteUser"/>
+            <class name="api_test.negative_tests.UpdateUser"/>
+            <class name="api_test.negative_tests.Runtime"/>
+            <class name="api_test.files.UploadAndDeleteFile"/>
+        </classes>
+    </test>
+</suite>

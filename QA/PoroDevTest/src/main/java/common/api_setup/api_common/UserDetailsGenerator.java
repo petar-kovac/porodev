@@ -53,12 +53,11 @@ public class UserDetailsGenerator {
 
     // Taking the jwt token attribute based on users email and password
     public static String takeTokenValueFromJson(String email, String password){
-        String loginJsonObject = "{\n" +
-                "  \"email\": \""+email+"\",\n" +
-                "  \"password\": \""+password+"\"\n" +
-                "}";
         String json = given().relaxedHTTPSValidation().
-                body(loginJsonObject)
+                body("{\n" +
+                        "  \"email\": \""+email+"\",\n" +
+                        "  \"password\": \""+password+"\"\n" +
+                        "}")
                 .when()
                 .post(Endpoints.USER_LOGIN).asString();
 
