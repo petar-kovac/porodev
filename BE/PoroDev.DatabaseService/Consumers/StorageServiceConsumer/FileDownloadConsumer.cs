@@ -8,13 +8,18 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.Common.Enums.UserEnums;
 using static PoroDev.DatabaseService.Constants.Constants;
+using static PoroDev.Common.MassTransit.Extensions;
+using PoroDev.DatabaseService.Services.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
     public class FileDownloadConsumer : BaseDbConsumer, IConsumer<FileDownloadRequestServiceToDatabase>
     {
-        public FileDownloadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
+        private readonly IEncryptionService _encryptionService;
+
+        public FileDownloadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository, IEncryptionService encryptionService) : base(unitOfWork, mapper, fileRepository)
         {
+            _encryptionService = encryptionService;
         }
 
 
@@ -46,7 +51,13 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             {
                 var downloadedFile = await _fileRepository.DownloadFile(downloadRequest.FileId);
 
-                return new CommunicationModel<FileDownloadMessage>(downloadedFile);
+                downloadedFile.File = _encryptionService.DecryptBytes(downloadedFile.File);
+
+                var downloadedFileAsMessage = _mapper.Map<FileDownloadMessage>(downloadedFile);
+
+                downloadedFileAsMessage.File = await messageDataRepository.PutBytes(downloadedFile.File);
+
+                return new CommunicationModel<FileDownloadMessage>(downloadedFileAsMessage);
             }
             catch (Exception)
             {
