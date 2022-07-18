@@ -8,17 +8,10 @@ using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
-    public class FileReadConsumer : IConsumer<FileReadRequestGatewayToService>
+    public class FileReadConsumer : BaseDbConsumer, IConsumer<FileReadRequestGatewayToService>
     {
-        private IUnitOfWork _unitOfWork;
-        private IMapper _mapper;
-        private IFileRepository _fileRepository;
-
-        public FileReadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository)
+        public FileReadConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _fileRepository = fileRepository;
         }
 
         public async Task Consume(ConsumeContext<FileReadRequestGatewayToService> context)
@@ -54,7 +47,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
             foreach (FileData file in allAdminFiles)
             {
-                var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
+                DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
+                var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, user.Name, user.Lastname);
+                
                 returnModel.Content.Add(fileReadSingleModel);
             }
 
@@ -71,7 +66,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             {
                 if (file.IsDeleted == false)
                 {
-                    var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId);
+                    //DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
+                    var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, file.CurrentUser.Name, file.CurrentUser.Lastname);
                     returnModel.Content.Add(fileReadSingleModel);
                 }
             }

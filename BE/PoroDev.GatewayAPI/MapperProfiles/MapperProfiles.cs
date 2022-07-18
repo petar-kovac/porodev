@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
+using MassTransit;
 using PoroDev.Common.Contracts.RunTime.Query;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.GatewayAPI.Models.Runtime;
+using PoroDev.GatewayAPI.Models.StorageService;
 
 namespace PoroDev.GatewayAPI.MapperProfiles
 {
@@ -10,6 +14,12 @@ namespace PoroDev.GatewayAPI.MapperProfiles
         {
             CreateMap<RuntimeQueryRequest, RuntimeQueryRequestGatewayToDatabase>()
                 .ForMember(destionation => destionation.Arguments, option => option.MapFrom(source => ConvertListToArgumentString(source.Arguments)));
+
+            CreateMap<FileDownloadMessage, FileDownloadResponse>()
+                .ForMember(destination => destination.File, options => options.Ignore());
+
+            CreateMap<FileUploadRequest, FileUploadRequestGatewayToService>()
+                .ForMember(destination => destination.File, option => option.Ignore());
         }
 
         private string ConvertListToArgumentString(List<string>? argumentList)

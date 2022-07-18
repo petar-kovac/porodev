@@ -56,7 +56,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
         {
-            var requestReturnContext = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(createModel);
+            var requestReturnContext = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(createModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (requestReturnContext.Message.ExceptionName != null)
                 ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);
@@ -73,7 +73,7 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(EmailFormatException), EmptyEmail);
             }
 
-            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(deleteModel);
+            var responseContext = await _deleteRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(deleteModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
@@ -83,7 +83,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DeleteUserModel> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
         {
-            var responseContext = await _deleteAllRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var responseContext = await _deleteAllRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
@@ -101,7 +101,7 @@ namespace PoroDev.GatewayAPI.Services
             {
                 ThrowException(nameof(PasswordFormatException), EmptyPassword);
             }
-            var responseContext = await _loginRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(loginModel);
+            var responseContext = await _loginRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(loginModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
@@ -116,7 +116,7 @@ namespace PoroDev.GatewayAPI.Services
                 Email = email
             };
 
-            var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readUserByEmail);
+            var requestResponseContext = await _readUserByEmailRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readUserByEmail, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
@@ -128,7 +128,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DataUserModel> ReadUserById(UserReadByIdRequestGatewayToService model)
         {
-            var requestResponseContext = await _readUserByIdRequestClient.GetResponse<CommunicationModel<DataUserModel>>(model);
+            var requestResponseContext = await _readUserByIdRequestClient.GetResponse<CommunicationModel<DataUserModel>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
 
@@ -138,7 +138,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DataUserModel> ReadUserByIdWithRuntimeData(UserReadByIdWithRuntimeRequestGatewayToService readModel)
         {
-            var requestResponseContext = await _readUserByIdWithRuntimedataRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readModel);
+            var requestResponseContext = await _readUserByIdWithRuntimedataRequestClient.GetResponse<CommunicationModel<DataUserModel>>(readModel, CancellationToken.None, RequestTimeout.After(m: 5));
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
 
@@ -151,7 +151,7 @@ namespace PoroDev.GatewayAPI.Services
             if (registerModel is null)
                 ThrowException(nameof(RequestNullException), NullRequest);
 
-            var requestResponseContext = await _registerClient.GetResponse<CommunicationModel<RegisterUserResponse>>(registerModel);
+            var requestResponseContext = await _registerClient.GetResponse<CommunicationModel<RegisterUserResponse>>(registerModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
@@ -168,7 +168,7 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(EmailFormatException), EmptyEmail);
             }
 
-            var requestReturnContext = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateModel);
+            var requestReturnContext = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (requestReturnContext.Message.ExceptionName != null)
             {

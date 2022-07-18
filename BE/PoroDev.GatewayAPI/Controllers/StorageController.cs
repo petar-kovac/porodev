@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers
@@ -20,19 +21,24 @@ namespace PoroDev.GatewayAPI.Controllers
             _jwtValidatorService = jwtValidatorService;
         }
 
+        [RequireHttps]
         [HttpPost("Upload")]
         [DisableRequestSizeLimit]
         [RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue)]
-        public async Task<ActionResult<FileUploadRequestGatewayToService>> Upload(IFormFile file)
+        public async Task<ActionResult<FileUploadResponse>> Upload(IFormFile file)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            var returnModel = new FileUploadRequestGatewayToService(file, userId);
-            var response = await _storageService.UploadFile(returnModel);
-            return Ok(response);
+
+            FileUploadRequest fileUploadRequest = new(file, userId);
+
+            FileUploadResponse fileUploadResponse = await _storageService.UploadFile(fileUploadRequest);
+
+            return Ok(fileUploadResponse);
         }
 
+        [RequireHttps]
         [HttpGet("Download")]
-        public async Task<ActionResult<FileDownloadMessage>> Download([FromQuery] string fileId)
+        public async Task<ActionResult<FileDownloadResponse>> Download([FromQuery] string fileId)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var returnModel = new FileDownloadRequestGatewayToService(fileId, userId);

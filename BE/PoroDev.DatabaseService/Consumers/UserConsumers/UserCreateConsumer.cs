@@ -9,7 +9,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserCreateConsumer : BaseDbConsumer, IConsumer<UserCreateRequestServiceToDatabase>
     {
-        public UserCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UserCreateConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 

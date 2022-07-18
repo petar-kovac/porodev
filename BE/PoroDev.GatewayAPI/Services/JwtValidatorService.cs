@@ -29,7 +29,7 @@ namespace PoroDev.GatewayAPI.Services
 
             var id = Guid.Parse(jsonToken.Claims.First(claim => claim.Type == "Id").Value);
 
-            var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService(id));
+            var readUserByIdResponseContext = await _readUserById.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService(id), CancellationToken.None, RequestTimeout.After(m: 5));
             if (readUserByIdResponseContext.Message.ExceptionName != null)
                 ThrowException(readUserByIdResponseContext.Message.ExceptionName, readUserByIdResponseContext.Message.HumanReadableMessage);
 
