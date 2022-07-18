@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { FC } from 'react';
+import styled from 'styled-components';
 import { IFilesCard } from 'types/card-data';
 import { ApiTranslation } from 'util/enums/api-translation-data';
 import { formatDate } from 'util/helpers/date-formaters';
@@ -38,13 +39,25 @@ const SiderData: FC<{ data: IFilesCard }> = ({ data }) => {
     <>
       {Object.entries(obj).map(([key, value]) => (
         <div key={key}>
-          <p>
-            {key}: {value}
-          </p>
+          <StyledText>
+            <Left>{key}:</Left> <Right>{value}</Right>
+          </StyledText>
         </div>
       ))}
     </>
   );
 };
+
+const StyledText = styled.div`
+  display: flex;
+  height: 35px;
+`;
+const Left = styled.div`
+  flex: 0.4;
+  font-weight: 500;
+`;
+const Right = styled.div`
+  flex: 1;
+`;
 
 export default SiderData;

@@ -13,7 +13,7 @@ export const GetRuntimeModalData = ({
 }: IRuntimeRsponse): ReactNode => {
   return (
     <div>
-      {!exceptionHappened ? (
+      {exceptionHappened ? (
         <p>Exception has happened : {`${exceptionHappened}`}</p>
       ) : null}
       <p>Execution output : {executionOutput}</p>

@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import {
   ChangeEvent,
   createContext,
@@ -14,9 +15,16 @@ import {
 interface Action<T> {
   type: T;
 }
-interface NewAction extends Action<'ADD' | 'CHANGE' | 'DELETE' | 'SUBMIT'> {
+interface NewAction
+  extends Action<
+    | 'ADD_INPUT_FIELD'
+    | 'CHANGE_INPUT_FIELD_VALUE'
+    | 'DELETE_ALL_FIELDS'
+    | 'FORMAT_FIELDS_FOR_SUBMITION'
+    | 'DELETE_SINGLE_FIELD'
+  > {
   payload?: {
-    e: ChangeEvent<HTMLInputElement>;
+    e?: ChangeEvent<HTMLInputElement>;
     index: number;
   };
 }
@@ -37,18 +45,40 @@ export const SiderContext = createContext<SiderContextProps>({
 
 const inputReducer = (state: string[], action: NewAction) => {
   switch (action.type) {
-    case 'ADD':
-      return [...state, ''];
-    case 'CHANGE': {
-      const newItem = [...state];
-      if (action.payload) {
-        newItem[action.payload.index] = action.payload.e.target.value;
+    case 'ADD_INPUT_FIELD': {
+      if (state[state.length - 1] === '') {
+        message.error('Enter value in the field');
+        return [...state];
       }
-      return [...newItem];
+      return [...state, ''];
     }
-    case 'DELETE':
+
+    case 'CHANGE_INPUT_FIELD_VALUE': {
+      if (action.payload) {
+        state[action.payload.index] = action.payload.e?.target.value as string;
+      }
+      return [...state];
+    }
+
+    case 'DELETE_ALL_FIELDS':
       return [''];
-    case 'SUBMIT':
+
+    case 'DELETE_SINGLE_FIELD': {
+      // cant delete input field, set its value to ''
+      if (state.length === 1) {
+        state[0] = '';
+        return [...state];
+      }
+      if (action.payload) {
+        state[action.payload.index] = '';
+        return state.filter((value: string) => {
+          return value !== '';
+        });
+      }
+      return [...state];
+    }
+
+    case 'FORMAT_FIELDS_FOR_SUBMITION':
       return state.filter((value: string) => {
         return value !== '';
       });

@@ -75,7 +75,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
     // function to check if arguments are empty strings
     const checkedInputParams = inputParamsChecker(inputParameters);
 
-    dispatchInput({ type: 'SUBMIT' });
+    dispatchInput({ type: 'FORMAT_FIELDS_FOR_SUBMITION' });
 
     try {
       const res = await startRuntimeService({
@@ -105,7 +105,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
   };
 
   useEffect(() => {
-    dispatchInput({ type: 'DELETE' });
+    dispatchInput({ type: 'DELETE_ALL_FIELDS' });
     setImageParameters([]);
   }, [selectedCardId]);
 
@@ -119,30 +119,35 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
       <StyledColumn>
         {cardData ? (
           <>
-            <StyledRow>
-              <StyledRuntimeIcon />
-            </StyledRow>
-            <StyledTitle>{cardData?.title}</StyledTitle>
+            <StyledUpperColumn>
+              <StyledRow>
+                <StyledRuntimeIcon />
+              </StyledRow>
+              <StyledRow>
+                <StyledTitle>Info</StyledTitle>
+              </StyledRow>
 
-            <StyledContent>
-              {cardData && <SiderDataMapper data={cardData} />}
-            </StyledContent>
+              <StyledContent>
+                {cardData && <SiderDataMapper data={cardData} />}
+              </StyledContent>
 
-            <StyledRow>
-              <StyledTitle>Add parameters</StyledTitle>
-              <PlusCircleOutlined
-                onClick={() => dispatchInput({ type: 'ADD' })}
-              />
-            </StyledRow>
-            <RuntimeInputSiderMapper />
-            <StyledRow>
-              <StyledTitle>Add image</StyledTitle>
-              <PlusCircleOutlined onClick={onAddImage} />
-            </StyledRow>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <RuntimeImageSiderMapper />
-            </div>
-
+              <StyledRow>
+                <StyledTitle>Add parameters</StyledTitle>
+                <PlusCircleOutlined
+                  onClick={() => dispatchInput({ type: 'ADD_INPUT_FIELD' })}
+                />
+              </StyledRow>
+              <StyledInputParametersList>
+                <RuntimeInputSiderMapper />
+              </StyledInputParametersList>
+              <StyledRow>
+                <StyledTitle>Add image</StyledTitle>
+                <PlusCircleOutlined onClick={onAddImage} />
+              </StyledRow>
+              <StyledImageParametersList>
+                <RuntimeImageSiderMapper />
+              </StyledImageParametersList>
+            </StyledUpperColumn>
             <PButton
               text="Start execution"
               onClick={onStartRuntime}
@@ -162,6 +167,27 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
     </StyledRuntimeSider>
   );
 };
+
+const StyledImageParametersList = styled.div`
+  display: flex;
+  gap: 10px;
+  background-color: aqua;
+`;
+
+const StyledInputParametersList = styled.div`
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+`;
+
+const StyledUpperColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const StyledContent = styled.div`
   display: flex;
@@ -184,9 +210,11 @@ const StyledColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-around;
-  width: 290px;
-  flex: 1;
+  width: 275px;
   gap: 15px;
+  height: 95%;
+  justify-content: space-between;
+  padding-bottom: 20px;
 `;
 
 const StyledRuntimeSider = styled(Sider).attrs({
@@ -197,6 +225,7 @@ const StyledRuntimeSider = styled(Sider).attrs({
   overflow-x: hidden;
   display: flex;
   width: 400px;
+  height: 100%;
 
   flex-direction: column;
   box-shadow: 1px 0px 6px rgba(34, 25, 25, 0.1);
@@ -209,7 +238,6 @@ const StyledRuntimeSider = styled(Sider).attrs({
     display: flex;
     flex-direction: column;
     width: 400px;
-
     position: fixed;
     padding: 20px;
   }
