@@ -20,6 +20,8 @@ type PageContextProps = {
   setProjectId: Dispatch<SetStateAction<string>>;
   modalContent: ReactNode;
   setModalContent: Dispatch<SetStateAction<ReactNode>>;
+  isCollapsed: boolean;
+  setIsCollapsed: Dispatch<SetStateAction<boolean>>;
 };
 
 export const PageContext = createContext<PageContextProps>({
@@ -33,6 +35,8 @@ export const PageContext = createContext<PageContextProps>({
   setProjectId: () => undefined,
   modalContent: undefined,
   setModalContent: () => undefined,
+  isCollapsed: false,
+  setIsCollapsed: () => undefined,
 });
 
 export const PageConsumer = PageContext.Consumer;
@@ -44,6 +48,10 @@ const PageProvider: FC<any> = ({ children }) => {
   const [projectId, setProjectId] = useState<string>('');
 
   const [modalContent, setModalContent] = useState<ReactNode>(undefined);
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(
+    localStorage.getItem('collapsedMenu') === 'true',
+  );
 
   const state: PageContextProps = useMemo(
     () => ({
@@ -57,8 +65,17 @@ const PageProvider: FC<any> = ({ children }) => {
       setModalContent,
       setProjectId,
       projectId,
+      isCollapsed,
+      setIsCollapsed,
     }),
-    [isLoading, isModalVisible, isSiderVisible, modalContent, projectId],
+    [
+      isLoading,
+      isModalVisible,
+      isSiderVisible,
+      modalContent,
+      projectId,
+      isCollapsed,
+    ],
   );
   return <PageContext.Provider value={state}>{children}</PageContext.Provider>;
 };

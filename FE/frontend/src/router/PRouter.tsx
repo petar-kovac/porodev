@@ -49,9 +49,9 @@ const PRouter: FC = () => {
         <StyledLayout>
           <PHeader />
           <Layout>
-            <PSider />
-            <PContent>
-              <PageProvider>
+            <PageProvider>
+              <PSider />
+              <PContent>
                 <Routes>
                   <Route
                     element={
@@ -84,8 +84,8 @@ const PRouter: FC = () => {
                   {/* if user is logged in, user cant get /login route */}
                   <Route path="/login" element={<Navigate to="/" />} />
                 </Routes>
-              </PageProvider>
-            </PContent>
+              </PContent>
+            </PageProvider>
           </Layout>
         </StyledLayout>
       );

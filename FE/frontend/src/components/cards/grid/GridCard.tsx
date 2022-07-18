@@ -4,6 +4,8 @@ import { FC, RefObject, useRef, MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
+import { usePageContext } from 'context/PageContext';
+
 interface IGridCardProps {
   fileId?: any;
   fileName?: string;
@@ -17,6 +19,7 @@ interface IGridCardProps {
   fileExtension?: string;
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
+  isCollapsed?: boolean;
 }
 
 const GridCard: FC<IGridCardProps> = ({
@@ -35,19 +38,21 @@ const GridCard: FC<IGridCardProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
 
-  console.log(fileExtension);
+  const { isCollapsed } = usePageContext();
+  console.log(isCollapsed);
 
   return (
     <StyledGridCard
       ref={ref}
       selected={selected}
+      isCollapsed={isCollapsed}
       hoverable
       cover={
         <img
           alt="example"
           src={`https://pro.alchemdigital.com/api/extension-image/${fileExtension}`}
           // src="https://pro.alchemdigital.com/api/extension-image/exe"
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '8rem', height: '8rem' }}
         />
       }
       role="button"
@@ -63,12 +68,16 @@ const GridCard: FC<IGridCardProps> = ({
 
 const StyledGridCard = styled(Card).attrs({
   'data-testid': 'grid-card',
-})<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
+})<{
+  selected: boolean;
+  ref: RefObject<HTMLDivElement | null>;
+  isCollapsed: boolean;
+}>`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 24rem;
+  height: 21.5rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  width: 23rem;
+  max-width: 23rem;
   cursor: pointer;
   border: 2px solid
     ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};
@@ -83,10 +92,14 @@ const StyledGridCard = styled(Card).attrs({
 
   .ant-card-cover {
     height: 14rem;
-    width: 23rem;
+    max-width: 23rem;
     overflow: hidden;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .ant-card-body {

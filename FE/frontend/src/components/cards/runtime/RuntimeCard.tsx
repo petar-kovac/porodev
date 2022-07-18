@@ -48,10 +48,10 @@ const StyledRuntimeCard = styled(Card).attrs({
   'data-testid': 'grid-card',
 })<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 24rem;
+  height: 21.5rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  width: 23rem;
+  max-width: 23rem;
   cursor: pointer;
   border: 2px solid
     ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};

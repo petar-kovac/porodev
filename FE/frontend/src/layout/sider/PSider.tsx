@@ -13,13 +13,12 @@ import styled from 'styled-components';
 
 import { Airplane } from '@styled-icons/ionicons-outline';
 import { useAuthStateValue } from 'context/AuthContext';
+import { usePageContext } from 'context/PageContext';
 
 const { Sider } = Layout;
 
 const PSider: FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean | undefined>(
-    localStorage.getItem('collapsedMenu') === 'true',
-  );
+  const { isCollapsed, setIsCollapsed } = usePageContext();
 
   const { pathname } = useLocation();
 

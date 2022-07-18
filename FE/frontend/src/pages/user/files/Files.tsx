@@ -16,6 +16,8 @@ import {
   StyledFoldersContainer,
   StyledPageWrapper,
   StyledStaticContent,
+  StyledGridCardsWrapper,
+  StyledListCardsWrapper,
 } from './styles/files-styled';
 import FileSider from './sider/FileSider';
 import FileModal from './modal/FileModal';
@@ -26,7 +28,8 @@ const Files: FC = () => {
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+  const { setIsSiderVisible, setIsModalVisible, isCollapsed } =
+    usePageContext();
   const { data, isLoading, error } = useFilesData();
 
   return (
@@ -38,7 +41,7 @@ const Files: FC = () => {
           setCardData(null);
         }}
       >
-        <StyledStaticContent>
+        <StyledStaticContent isCollapsed={isCollapsed}>
           <PFilterWrapper>
             <PFilter
               isList={isListView}
@@ -85,21 +88,25 @@ const Files: FC = () => {
             </div>
             <StyledFilesWrapper>
               {!isListView ? (
-                <ListCards
-                  data={data}
-                  cardData={cardData}
-                  setCardData={setCardData}
-                  selectedCardId={selectedCardId}
-                  setSelectedCardId={setSelectedCardId}
-                />
+                <StyledListCardsWrapper>
+                  <ListCards
+                    data={data}
+                    cardData={cardData}
+                    setCardData={setCardData}
+                    selectedCardId={selectedCardId}
+                    setSelectedCardId={setSelectedCardId}
+                  />
+                </StyledListCardsWrapper>
               ) : (
-                <GridCards
-                  data={data}
-                  cardData={cardData}
-                  setCardData={setCardData}
-                  selectedCardId={selectedCardId}
-                  setSelectedCardId={setSelectedCardId}
-                />
+                <StyledGridCardsWrapper>
+                  <GridCards
+                    data={data}
+                    cardData={cardData}
+                    setCardData={setCardData}
+                    selectedCardId={selectedCardId}
+                    setSelectedCardId={setSelectedCardId}
+                  />
+                </StyledGridCardsWrapper>
               )}
             </StyledFilesWrapper>
           </StyledFilesContainer>

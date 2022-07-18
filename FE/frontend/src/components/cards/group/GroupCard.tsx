@@ -56,10 +56,10 @@ const StyledGroupCard = styled(Card).attrs({
   'data-testid': 'group-card',
 })<{ selected: boolean; ref: RefObject<HTMLDivElement | null> }>`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 24rem;
+  height: 21.5rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  width: 23rem;
+  max-width: 23rem;
   cursor: pointer;
   border: 2px solid
     ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};
@@ -74,7 +74,7 @@ const StyledGroupCard = styled(Card).attrs({
 
   .ant-card-cover {
     height: 14rem;
-    width: 23rem;
+    max-width: 23rem;
     overflow: hidden;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;

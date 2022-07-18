@@ -93,6 +93,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         });
     } else {
       setIsLoading(false);
+      // temporarily
+      setAuthenticated(true);
     }
   }, []);
 
