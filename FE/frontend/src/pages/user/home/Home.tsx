@@ -49,15 +49,18 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.content.slice(-4).map((value: any) => (
-              <GridCard
-                key={value.fileId}
-                heading={value.fileName}
-                description={value.uploadTime}
-                selected={false}
-                fileExtension={value.fileName.split('.')[1]}
-              />
-            ))}
+            {data?.content
+              .slice(-4)
+              .reverse()
+              .map((value: any) => (
+                <GridCard
+                  key={value.fileId}
+                  heading={value.fileName}
+                  description={value.uploadTime}
+                  selected={false}
+                  fileExtension={value.fileName.split('.')[1]}
+                />
+              ))}
           </StyledCardWrapper>
           <StyledShowMoreButton>
             <Link to="/user-files">

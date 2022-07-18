@@ -39,19 +39,21 @@ const GridCards: FC<IGridCardProps> = ({
 
   return (
     <>
-      {data?.map((value: any) => (
-        <GridCard
-          value={value}
-          key={value.fileId}
-          image={value.image}
-          heading={value.fileName}
-          description={value.description}
-          selected={selectedCardId === value.fileId}
-          fileExtension={value.fileName.split('.')[1]}
-          onClick={() => handleClick(value)}
-          onDoubleClick={() => handleDoubleClick(value)}
-        />
-      ))}
+      {data
+        ?.map((value: any) => (
+          <GridCard
+            value={value}
+            key={value.fileId}
+            image={value.image}
+            heading={value.fileName}
+            description={value.description}
+            selected={selectedCardId === value.fileId}
+            fileExtension={value.fileName.split('.')[1]}
+            onClick={() => handleClick(value)}
+            onDoubleClick={() => handleDoubleClick(value)}
+          />
+        ))
+        .reverse()}
     </>
   );
 };
