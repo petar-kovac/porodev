@@ -28,18 +28,14 @@ export const StyledCardListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 20px;
+  gap: 2rem;
 `;
 export const StyledCardWrapper = styled.div`
-  flex: 1;
   display: flex;
-  gap: 20px;
-  /* margin: 0 5% 10px; */
+  gap: 2rem;
   justify-content: center;
   align-items: flex-start;
-  overflow-x: auto;
-  height: 100px;
-  padding-bottom: 10px;
+  padding-bottom: 1rem;
 `;
 export const StyledCardHeading = styled.div`
   font-size: 20px;
@@ -54,4 +50,8 @@ export const StyledShowMoreButton = styled.div`
   font-weight: 300;
   color: #555;
   margin-bottom: 5%;
+`;
+
+export const StyledHomeCard = styled.div`
+  width: 23rem;
 `;

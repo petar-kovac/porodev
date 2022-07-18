@@ -20,6 +20,7 @@ import {
   StyledShowMoreButton,
   StyledSpinnerWrappper,
   StyledUploadWrapper,
+  StyledHomeCard,
 } from './home-styled';
 
 const Home: FC = () => {
@@ -53,13 +54,15 @@ const Home: FC = () => {
               .slice(-4)
               .reverse()
               .map((value: any) => (
-                <GridCard
-                  key={value.fileId}
-                  heading={value.fileName}
-                  description={value.uploadTime}
-                  selected={false}
-                  fileExtension={value.fileName.split('.')[1]}
-                />
+                <StyledHomeCard>
+                  <GridCard
+                    key={value.fileId}
+                    heading={value.fileName}
+                    description={value.uploadTime}
+                    selected={false}
+                    fileExtension={value.fileName.split('.')[1]}
+                  />
+                </StyledHomeCard>
               ))}
           </StyledCardWrapper>
           <StyledShowMoreButton>
