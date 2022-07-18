@@ -76,6 +76,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToLogIn);
                         break;
 
+                    case PoroDev.Common.Exceptions.FileNotFoundException fileNotFound:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = fileNotFound.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, fileNotFound);
+                        break;
+
                     case EmailFormatException emailFormatException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = emailFormatException.HumanReadableErrorMessage;
@@ -110,6 +116,30 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = zippedFileException.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, zippedFileException);
+                        break;
+
+                    case FileUploadExistException fileUploadExistException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = fileUploadExistException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, fileUploadExistException);
+                        break;
+
+                    case FileUploadFormatException fileUploadFormatException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = fileUploadFormatException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, fileUploadFormatException);
+                        break;
+
+                    case FileUploadException fileUploadException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = fileUploadException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, fileUploadException);
+                        break;
+
+                    case UserPermissionException userPermissionException:
+                        response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        HumanReadableErrorMessage = userPermissionException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userPermissionException);
                         break;
 
                     default:

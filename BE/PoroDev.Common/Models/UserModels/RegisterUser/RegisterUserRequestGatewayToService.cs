@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Models.UserModels.RegisterUser
+﻿namespace PoroDev.Common.Models.UserModels.RegisterUser
 {
     public class RegisterUserRequestGatewayToService
     {
@@ -24,7 +18,6 @@ namespace PoroDev.Common.Models.UserModels.RegisterUser
 
         public RegisterUserRequestGatewayToService()
         {
-
         }
 
         public RegisterUserRequestGatewayToService(string name, string lastname, string email, string password, int department, string position, string avatarUrl)

@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
-using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
-using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
-using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -66,7 +66,6 @@ namespace PoroDev.GatewayAPI.Controllers
             var returnModel = await _userService.UpdateUser(model);
             return Ok(returnModel);
         }
-
 
         [HttpPost("register/user")]
         public async Task<ActionResult<RegisterUserResponse>> RegisterUser([FromBody] RegisterUserRequestGatewayToService registerModel)

@@ -11,6 +11,7 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(DatabaseException) => new DatabaseException(errorMessage),
                 nameof(EmailFormatException) => new EmailFormatException(errorMessage),
                 nameof(FailedToLogInException) => new FailedToLogInException(errorMessage),
+                nameof(PoroDev.Common.Exceptions.FileNotFoundException) => new PoroDev.Common.Exceptions.FileNotFoundException(errorMessage),
                 nameof(PasswordFormatException) => new PasswordFormatException(errorMessage),
                 nameof(PositionFormatException) => new PositionFormatException(errorMessage),
                 nameof(UserNotFoundException) => new UserNotFoundException(errorMessage),
@@ -23,6 +24,11 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(RequestNullException) => new RequestNullException(errorMessage),
                 nameof(ZippedFileException) => new ZippedFileException(errorMessage),
                 nameof(DockerRuntimeException) => new DockerRuntimeException(errorMessage),
+                nameof(FileUploadExistException) => new FileUploadExistException(errorMessage),
+                nameof(FileUploadFormatException) => new FileUploadFormatException(errorMessage),
+                nameof(FileUploadException) => new FileUploadException(errorMessage),
+                nameof(UserPermissionException) => new UserPermissionException(errorMessage),
+
                 _ => new Exception("Exception not found!"),
             };
         }

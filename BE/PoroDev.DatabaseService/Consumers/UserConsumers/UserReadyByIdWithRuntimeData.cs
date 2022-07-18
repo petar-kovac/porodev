@@ -9,7 +9,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserReadyByIdWithRuntimeData : BaseDbConsumer, IConsumer<UserReadByIdWithRuntimeRequestServiceToDataBase>
     {
-        public UserReadyByIdWithRuntimeData(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UserReadyByIdWithRuntimeData(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 

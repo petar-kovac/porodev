@@ -4,14 +4,12 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
-using static PoroDev.DatabaseService.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserUpdateConsumer : BaseDbConsumer, IConsumer<UserUpdateRequestServiceToDatabase>
     {
-        public UserUpdateConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UserUpdateConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 
@@ -21,7 +19,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 
             var userToBeUpdated = await _unitOfWork.Users.FindAsync(user => user.Email.Trim().Equals(model.Email.Trim()));
 
-            if(userToBeUpdated.ExceptionName != null)
+            if (userToBeUpdated.ExceptionName != null)
             {
                 var returnModelException = _mapper.Map<CommunicationModel<DataUserModel>>(userToBeUpdated);
                 await context.RespondAsync(returnModelException);
@@ -40,16 +38,13 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             updatedModel.Entity.Password = userToBeUpdated.Entity.Password;
             updatedModel.Entity.Salt = userToBeUpdated.Entity.Salt;
 
-
             var updatedUser = await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
             await _unitOfWork.SaveChanges();
 
             var returnModel = _mapper.Map<CommunicationModel<DataUserModel>>(updatedUser);
             await context.RespondAsync(returnModel);
         }
-
     }
-
 
     /* public async Task Consume(ConsumeContext<UserUpdateRequestServiceToDatabase> context)
      {

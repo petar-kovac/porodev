@@ -1,9 +1,11 @@
 ﻿using PoroDev.Common.Exceptions;
 
-namespace PoroDev.Runtime.Extensions.Contracts
+namespace PoroDev.Runtime.Services.Contracts
 {
     public interface IZipManipulator
     {
+        public string ProjectPath { get; }
+
         ZippedFileException DeleteUnzippedFile();
 
         ZippedFileException ExtractZipToPath();

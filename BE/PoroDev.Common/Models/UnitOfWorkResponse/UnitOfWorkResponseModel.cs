@@ -7,5 +7,16 @@
         public string? ExceptionName { get; set; }
 
         public string? HumanReadableMessage { get; set; }
+
+        public UnitOfWorkResponseModel()
+        {
+        }
+
+        public UnitOfWorkResponseModel(T entity)
+        {
+            Entity = entity;
+            ExceptionName = null;
+            HumanReadableMessage = null;
+        }
     }
 }

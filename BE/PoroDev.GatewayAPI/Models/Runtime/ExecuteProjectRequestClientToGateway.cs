@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.GatewayAPI.Models.Runtime
+﻿namespace PoroDev.GatewayAPI.Models.Runtime
 {
     public class ExecuteProjectRequestClientToGateway
     {
@@ -13,8 +7,8 @@ namespace PoroDev.GatewayAPI.Models.Runtime
 
         public ExecuteProjectRequestClientToGateway()
         {
-
         }
+
         public ExecuteProjectRequestClientToGateway(string jwt, Guid fileID)
         {
             Jwt = jwt;

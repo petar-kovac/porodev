@@ -14,7 +14,7 @@ namespace PoroDev.UserManagementService.Consumers
         {
             _userService = userService;
         }
-        
+
         public async Task Consume(ConsumeContext<UserDeleteAllRequestGatewayToService> context)
         {
             var modelToReturn = await _userService.DeleteAllUsers(context.Message);

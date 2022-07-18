@@ -2,9 +2,11 @@
 using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
+using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Exceptions;
@@ -15,16 +17,6 @@ using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.UserManagementService.Services.Contracts;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
-using static PoroDev.UserManagementService.Constants.Consts;
-using PoroDev.Common.Models.UserModels.RegisterUser;
-using PoroDev.Common.Contracts.UserManagement.Create;
-using PoroDev.Common.Contracts.UserManagement.Update;
-using PoroDev.Common.Contracts.UserManagement.DeleteUser;
-using PoroDev.Common.Contracts.UserManagement.LoginUser;
-using PoroDev.Common.Contracts.UserManagement.ReadUser;
-using PoroDev.Common.Contracts.UserManagement.ReadById;
-using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
-using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -67,80 +59,8 @@ namespace PoroDev.UserManagementService.Services
 
         public async Task<CommunicationModel<LoginUserModel>> LoginUser(UserLoginRequestGatewayToService userToLoginModel)
         {
-            var modelToReturn = await _loginUserRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(userToLoginModel);
+            var modelToReturn = await _loginUserRequestClient.GetResponse<CommunicationModel<LoginUserModel>>(userToLoginModel, CancellationToken.None, RequestTimeout.After(m: 5));
             return modelToReturn.Message;
-        }
-
-        private void VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                if (!computeHash.SequenceEqual(passwordHash))
-                    throw new FailedToLogInException(LOGIN_FAIL_ERROR);
-            }
-        }
-
-        private void CheckPassword(string password)
-        {
-            if (password.Length < MIN_PASSWORD_LENGTH)
-                throw new PasswordFormatException(PASSWORD_MIN_LENGTH_ERROR);
-
-            if (!password.Any(char.IsUpper))
-                throw new PasswordFormatException(PASSWORD_MIN_UPPERCASE_ERROR);
-
-            if (!password.Any(char.IsLower))
-                throw new PasswordFormatException(PASSWORD_MIN_LOWERCASE_ERROR);
-
-            if (!password.Any(char.IsDigit))
-                throw new PasswordFormatException(PASSWORD_MIN_NUMBER_ERROR);
-
-            if (!CheckStringForCharacters(password, SPECIAL_CHARACTERS_STRING))
-                throw new PasswordFormatException(PASSWORD_MIN_SPECIAL_ERROR);
-        }
-
-        private async Task<CommunicationModel<RegisterUserResponse>> CheckEmail(string email)
-        {
-            CommunicationModel<DataUserModel> resposneUpdateExceptionModel = new();
-            try
-            {
-                CheckEmailIsNullOrWhiteSpace(email);
-                CheckEmailLength(email);
-
-                var splitEmail = email.Split('@');
-
-                CheckEmailFormat(splitEmail);
-                CheckEmailContainsWhitespace(splitEmail);
-                CheckEmailSpecialCharacters(splitEmail);
-                CheckEmailDomainError(splitEmail);
-                await CheckEmailIsExist(email);
-            }
-            catch (EmailFormatException ex)
-            {
-                var responseException = new CommunicationModel<RegisterUserResponse>()
-                {
-                    Entity = null,
-                    ExceptionName = nameof(EmailFormatException),
-                    HumanReadableMessage = ex.HumanReadableErrorMessage,
-                };
-
-                return responseException;
-            }
-
-            return new CommunicationModel<RegisterUserResponse>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
-        }
-
-        private bool CheckStringForCharacters(string stringToCheck, string specialCharacters)
-        {
-            char[] specialChArray = specialCharacters.ToCharArray();
-            bool flag = false;
-
-            foreach (char ch in specialChArray)
-            {
-                if (stringToCheck.Contains(ch))
-                    flag = true;
-            }
-            return flag;
         }
 
         private void GetHashAndSalt(string password, out byte[] salt, out byte[] hash)
@@ -150,99 +70,6 @@ namespace PoroDev.UserManagementService.Services
                 salt = hmac.Key;
                 hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
-        }
-
-        private void CheckFullName(string name, string lastname)
-        {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastname) || name.Equals(string.Empty) || lastname.Equals(string.Empty))
-                throw new FullNameFormatException(FULLNAME_EMPTY_ERROR);
-
-            if (name.Length > MAX_NAME_AND_LASTNAME_LENGTH || lastname.Length > MAX_NAME_AND_LASTNAME_LENGTH)
-                throw new FullNameFormatException(FULLNAME_TOO_LONG_ERROR);
-
-            if (name.Any(x => char.IsWhiteSpace(x)) || lastname.Any(x => char.IsWhiteSpace(x)))
-                throw new FullNameFormatException(FULLNAME_WHITESPACE_ERROR);
-
-            if (name.Any(x => char.IsNumber(x)) || lastname.Any(x => char.IsNumber(x)))
-                throw new FullNameFormatException(FULLNAME_NUMBER_ERROR);
-
-            if (CheckStringForCharacters(name, SPECIAL_CHARACTERS_STRING) || CheckStringForCharacters(lastname, SPECIAL_CHARACTERS_STRING))
-                throw new FullNameFormatException(FULLNAME_SPECIAL_CHARACTER_ERORR);
-        }
-
-        private void CheckPosition(string position)
-        {
-            if (string.IsNullOrWhiteSpace(position) || position.Equals(string.Empty))
-                throw new PositionFormatException(POSITION_EMPTY_ERROR);
-
-            if (position.Length > MAX_POSITION_LENGTH)
-                throw new PositionFormatException(POSITION_TOO_LONG_ERROR);
-
-            if (position.Any(x => char.IsNumber(x)))
-                throw new PositionFormatException(POSITION_NUMBER_ERROR);
-
-            if (CheckStringForCharacters(position, SPECIAL_CHARACTERS_STRING))
-                throw new PositionFormatException(POSITION_SPECIAL_CHARACTER_ERROR);
-        }
-
-        private async Task<CommunicationModel<RegisterUserResponse>> CheckUserFields(RegisterUserRequestGatewayToService registerModel)
-        {
-            var isException = await CheckEmail(registerModel.Email);
-            if (isException.ExceptionName != null)
-            {
-                return isException;
-            }
-
-            try
-            {
-                CheckFullName(registerModel.Name, registerModel.Lastname);
-                CheckPassword(registerModel.Password);
-                CheckPosition(registerModel.Position);
-            }
-            catch (PasswordFormatException ex)
-            {
-                string exceptionType = nameof(PasswordFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseException = new CommunicationModel<RegisterUserResponse>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                return responseException;
-            }
-            catch (FullNameFormatException ex)
-            {
-                string exceptionType = nameof(FullNameFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseException = new CommunicationModel<RegisterUserResponse>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                return responseException;
-            }
-            catch (PositionFormatException ex)
-            {
-                string exceptionType = nameof(PositionFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseException = new CommunicationModel<RegisterUserResponse>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                return responseException;
-            }
-
-            return new CommunicationModel<RegisterUserResponse>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
         }
 
         public async Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model)
@@ -262,7 +89,7 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
-            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = model.Email });
+            var exists = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = model.Email }, CancellationToken.None, RequestTimeout.After(m: 5));
 
             if (exists.Message.Entity != null)
             {
@@ -286,20 +113,20 @@ namespace PoroDev.UserManagementService.Services
             modelToCreate.Password = hash;
             modelToCreate.Salt = salt;
 
-            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate);
+            var response = await _createRequestClient.GetResponse<CommunicationModel<DataUserModel>>(modelToCreate, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteUser(UserDeleteRequestGatewayToService model)
         {
-            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
         public async Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model)
         {
-            var response = await _deleteAllUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model);
+            var response = await _deleteAllUserRequestclient.GetResponse<CommunicationModel<DeleteUserModel>>(model, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
@@ -320,7 +147,7 @@ namespace PoroDev.UserManagementService.Services
                 Email = model.Email
             };
 
-            var response = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
+            var response = await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(readUser, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
@@ -342,7 +169,7 @@ namespace PoroDev.UserManagementService.Services
                 Id = model.Id
             };
 
-            var response = await _readUserByIdClient.GetResponse<CommunicationModel<DataUserModel>>(readUser);
+            var response = await _readUserByIdClient.GetResponse<CommunicationModel<DataUserModel>>(readUser, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
         }
 
@@ -358,14 +185,13 @@ namespace PoroDev.UserManagementService.Services
                 return responseException;
             }
 
-            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id});
+            var response = await _readUserByIdWithRuntimeClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestServiceToDataBase() { Id = model.Id }, CancellationToken.None, RequestTimeout.After(m: 5));
             return response.Message;
-
         }
 
         public async Task<CommunicationModel<DataUserModel>> UpdateUser(UserUpdateRequestGatewayToService model)
         {
-            var isException = await CheckUserFieldsUpdate(model);
+            var isException = Helpers.UserManagementValidator.ValidateUpdate(model);
 
             if (isException.ExceptionName != null)
             {
@@ -378,7 +204,7 @@ namespace PoroDev.UserManagementService.Services
             updateUserRequest.Password = hash;
             updateUserRequest.Salt = salt;
 
-            var response = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateUserRequest);
+            var response = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateUserRequest, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
@@ -396,144 +222,11 @@ namespace PoroDev.UserManagementService.Services
             userToRegister.Salt = salt;
             userToRegister.Password = hash;
 
-            var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister);
+            var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister, CancellationToken.None, RequestTimeout.After(m: 5));
 
             var returnContext = _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);
 
             return returnContext;
-        }
-
-        private async Task<CommunicationModel<DataUserModel>> CheckUserFieldsUpdate(UserUpdateRequestGatewayToService updateModel)
-        {
-            var isException = CheckEmailUpdate(updateModel.Email);
-            if (isException.ExceptionName != null)
-            {
-                return isException;
-            }
-
-            try
-            {
-                CheckFullName(updateModel.Name, updateModel.Lastname);
-                CheckPassword(updateModel.PasswordUnhashed);
-                CheckPosition(updateModel.Position);
-            }
-            catch (FullNameFormatException ex)
-            {
-                string exceptionType = nameof(FullNameFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
-
-                return responseUpdateExceptionModel;
-            }
-            catch (PositionFormatException ex)
-            {
-                string exceptionType = nameof(PositionFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
-
-                return responseUpdateExceptionModel;
-            }
-
-            return new CommunicationModel<DataUserModel>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
-        }
-
-        private CommunicationModel<DataUserModel> CreateUpdateExceptionModel(string exceptionType, string humanReadableMessage)
-        {
-            var responseUpdateExceptionModel = new CommunicationModel<DataUserModel>()
-            {
-                Entity = null,
-                ExceptionName = exceptionType,
-                HumanReadableMessage = humanReadableMessage
-            };
-
-            return responseUpdateExceptionModel;
-        }
-
-        private CommunicationModel<DataUserModel> CheckEmailUpdate(string email)
-        {
-            CommunicationModel<DataUserModel> resposneUpdateExceptionModel = new();
-
-            try
-            {
-                CheckEmailIsNullOrWhiteSpace(email);
-                CheckEmailLength(email);
-
-                var splitEmail = email.Split('@');
-
-                CheckEmailFormat(splitEmail);
-                CheckEmailContainsWhitespace(splitEmail);
-                CheckEmailSpecialCharacters(splitEmail);
-                CheckEmailDomainError(splitEmail);
-            }
-            catch (EmailFormatException ex)
-            {
-                string exceptionType = nameof(EmailFormatException);
-                string humanReadableMessage = ex.HumanReadableErrorMessage;
-
-                var responseUpdateExceptionModel = CreateUpdateExceptionModel(exceptionType, humanReadableMessage);
-
-                return responseUpdateExceptionModel;
-            }
-
-            return new CommunicationModel<DataUserModel>() { Entity = null, ExceptionName = null, HumanReadableMessage = null };
-        }
-
-        private void CheckEmailIsNullOrWhiteSpace(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                throw new EmailFormatException(EMAIL_EMPTY_ERROR);
-            }
-        }
-
-        private void CheckEmailLength(string email)
-        {
-            if (email.Length > MAX_EMAIL_LENGTH)
-            {
-                throw new EmailFormatException(EMAIL_LENGTH_ERROR);
-            }
-        }
-
-        private void CheckEmailFormat(string[] splitEmail)
-        {
-            if (splitEmail.Length != 2 || string.IsNullOrWhiteSpace(splitEmail[0]))
-            {
-                throw new EmailFormatException(EMAIL_FORMAT_ERROR);
-            }
-        }
-
-        private void CheckEmailContainsWhitespace(string[] splitEmail)
-        {
-            if (splitEmail[0].Any(x => char.IsWhiteSpace(x)))
-            {
-                throw new EmailFormatException(EMAIL_WHITESPACE_ERROR);
-            }
-        }
-
-        private void CheckEmailSpecialCharacters(string[] splitEmail)
-        {
-            if (CheckStringForCharacters(splitEmail[0], SPECIAL_CHARACTERS_EMAIL_STRING))
-            {
-                throw new EmailFormatException(EMAIL_SPECIAL_CHARACTERS_ERROR);
-            }
-        }
-
-        private void CheckEmailDomainError(string[] splitEmail)
-        {
-            if (!splitEmail[1].Equals(EMAIL_DOMAIN))
-            {
-                throw new EmailFormatException(EMAIL_DOMAIN_ERROR);
-            }
-        }
-
-        private async Task CheckEmailIsExist(string email)
-        {
-            if ((await _readUserByEmailClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByEmailRequestServiceToDatabase() { Email = email })).Message.Entity != null)
-            {
-                throw new EmailFormatException(EMAIL_EXISTS_ERROR);
-            }
         }
     }
 }

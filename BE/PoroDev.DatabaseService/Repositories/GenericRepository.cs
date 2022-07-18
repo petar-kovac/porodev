@@ -23,7 +23,17 @@ namespace PoroDev.DatabaseService.Repositories
             TemplateEntity createdEntity;
             try
             {
-                createdEntity = (await _context.Set<TemplateEntity>().AddAsync(entity)).Entity;
+                var entityDto = await _context.Set<TemplateEntity>().AddAsync(entity);
+                createdEntity = entityDto.Entity;
+
+                UnitOfWorkResponseModel<TemplateEntity> response = new()
+                {
+                    Entity = createdEntity,
+                    ExceptionName = null,
+                    HumanReadableMessage = null
+                };
+
+                return response;
             }
             catch (Exception)
             {
@@ -36,15 +46,6 @@ namespace PoroDev.DatabaseService.Repositories
 
                 return responseException;
             }
-
-            UnitOfWorkResponseModel<TemplateEntity> response = new()
-            {
-                Entity = createdEntity,
-                ExceptionName = null,
-                HumanReadableMessage = null
-            };
-
-            return response;
         }
 
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> Delete(TemplateEntity entity)
@@ -89,6 +90,11 @@ namespace PoroDev.DatabaseService.Repositories
             return await _context.Set<TemplateEntity>().FindAsync(id);
         }
 
+        public async Task<TemplateEntity?> GetByStringIdAsync(string id)
+        {
+            return await _context.Set<TemplateEntity>().FindAsync(id);
+        }
+
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> FindAsync(Expression<Func<TemplateEntity, bool>> filter)
         {
             TemplateEntity? entity;
@@ -127,7 +133,41 @@ namespace PoroDev.DatabaseService.Repositories
 
         public async Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsync(TemplateEntity entity, Guid id)
         {
+            TemplateEntity exist = await _context.Set<TemplateEntity>().FindAsync(id);
+            UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
 
+            try
+            {
+                _context.Entry(exist).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                UnitOfWorkResponseModel<TemplateEntity> responseDataBaseError = new UnitOfWorkResponseModel<TemplateEntity>();
+                response.Entity = null;
+                response.ExceptionName = nameof(DatabaseException);
+                response.HumanReadableMessage = InternalDatabaseError;
+                return response;
+            }
+
+            if (entity != null)
+            {
+                response.Entity = entity;
+                response.ExceptionName = null;
+                response.HumanReadableMessage = null;
+                return response;
+            }
+            else
+            {
+                response.Entity = null;
+                response.ExceptionName = nameof(UserNotFoundException);
+                response.HumanReadableMessage = UserNotFoundExceptionMessage;
+                return response;
+            }
+        }
+
+        public async Task<UnitOfWorkResponseModel<TemplateEntity>> UpdateAsyncStringId(TemplateEntity entity, string id)
+        {
             TemplateEntity exist = await _context.Set<TemplateEntity>().FindAsync(id);
             UnitOfWorkResponseModel<TemplateEntity> response = new UnitOfWorkResponseModel<TemplateEntity>();
 

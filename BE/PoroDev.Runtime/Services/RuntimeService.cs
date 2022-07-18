@@ -1,204 +1,39 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Runtime.Extensions.Contracts;
 using PoroDev.Runtime.Services.Contracts;
-using System.Diagnostics;
-using static PoroDev.Runtime.Constants.Consts;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
-using PoroDev.Runtime.Extensions;
 
 namespace PoroDev.Runtime.Services
 {
     public class RuntimeService : IRuntimeService
     {
-
         private readonly IRequestClient<RuntimeData> _createRequestClient;
         private readonly IMapper _mapper;
         private readonly IDockerImageService _dockerImageService;
         private readonly IZipManipulator _zipManipulator;
+        private readonly IRuntimeHelper _runtimeHelper;
 
-        public RuntimeService(IRequestClient<RuntimeData> createRequestClient, 
-            IMapper mapper, 
-            IDockerImageService dockerImageService, 
-            IZipManipulator  zipManipulator)
+        public RuntimeService(IRequestClient<RuntimeData> createRequestClient,
+            IMapper mapper,
+            IDockerImageService dockerImageService,
+            IRuntimeHelper runtimeHelper,
+            IZipManipulator zipManipulator)
         {
             _createRequestClient = createRequestClient;
             _mapper = mapper;
+            _runtimeHelper = runtimeHelper;
             _dockerImageService = dockerImageService;
             _zipManipulator = zipManipulator;
         }
 
-        public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId)
+        public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, string projectId)
         {
-            ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
+            var exceptionThatHappened = await _runtimeHelper.InitializeAndExtract(projectId, userId);
+            if (exceptionThatHappened != null)
+                return exceptionThatHappened;
 
-            if (pathException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(pathException);
-
-                return responseModel;
-            }
-
-            DockerRuntimeException dockerException = _dockerImageService.Initialize(RUNTIME_FOLDER_ROUTE);
-
-            if (dockerException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(dockerException);
-
-                return responseModel;
-            }
-
-            ZippedFileException extractionException = _zipManipulator.ExtractZipToPath();
-
-            if(extractionException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(extractionException);
-
-                return responseModel;
-            }
-
-            var imageName = Guid.NewGuid().ToString();
-            Stopwatch stopwatch = new();
-
-            await _dockerImageService.CreateDockerfile();          
-
-            await _dockerImageService.CreateDockerImage(imageName);
-
-            DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
-            
-            stopwatch.Start();
-
-            string imageOutput = String.Empty;
-
-            try
-            {
-                imageOutput = await _dockerImageService.RunDockerImageUnsafe(imageName);
-            }
-            catch (DockerRuntimeException ex)
-            {
-                stopwatch.Stop();
-
-                await _dockerImageService.DeleteDockerImage(imageName);
-
-                _zipManipulator.DeleteUnzippedFile();
-
-                var responseModel = new CommunicationModel<RuntimeData>(ex);
-
-                return responseModel;
-            }
-
-            stopwatch.Stop();
-
-            await _dockerImageService.DeleteDockerImage(imageName);
-
-            RuntimeData newRuntimeData = new()
-            {
-                ExceptionHappened = imageOutput == "" ? true : false,
-                ExecutionStart = dateStarted,
-                ExecutionTime = imageOutput == String.Empty ? 0 : stopwatch.ElapsedMilliseconds,
-                UserId = userId,
-                FileId = projectId,
-                Id = Guid.NewGuid(),
-                ExecutionOutput = imageOutput
-            };
-
-            var deleteException = _zipManipulator.DeleteUnzippedFile();
-
-            if(deleteException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(deleteException);
-
-                return responseModel;
-            }
-
-            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(newRuntimeData);
-
-            return dbResponse.Message;
-
-        }
-
-        public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, Guid projectId, List<string> argumentList)
-        {
-            foreach (var argument in argumentList)
-            {
-                if (Guid.TryParse(argument, out Guid argumentId));
-                    //postoji ID slike u argumentima
-            }
-
-            ZippedFileException pathException = _zipManipulator.Initialize(RUNTIME_FOLDER_ROUTE);
-
-            if (pathException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(pathException);
-
-                return responseModel;
-            }
-
-            DockerRuntimeException dockerException = _dockerImageService.Initialize(RUNTIME_FOLDER_ROUTE);
-
-            if (dockerException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(dockerException);
-
-                return responseModel;
-            }
-
-            ZippedFileException extractionException = _zipManipulator.ExtractZipToPath();
-
-            if (extractionException != null)
-            {
-                var responseModel = new CommunicationModel<RuntimeData>(extractionException);
-
-                return responseModel;
-            }
-
-            var imageName = Guid.NewGuid().ToString();
-            Stopwatch stopwatch = new();
-
-            await _dockerImageService.CreateDockerfile();
-
-            await _dockerImageService.CreateDockerImage(imageName);
-
-            DateTimeOffset dateStarted = DateTimeOffset.UtcNow;
-
-            stopwatch.Start();
-
-            string imageOutput = String.Empty;
-
-            try
-            {
-                imageOutput = await _dockerImageService.RunDockerImageUnsafeWithArguments(imageName, argumentList);
-            }
-            catch (DockerRuntimeException ex)
-            {
-                stopwatch.Stop();
-
-                await _dockerImageService.DeleteDockerImage(imageName);
-
-                _zipManipulator.DeleteUnzippedFile();
-
-                var responseModel = new CommunicationModel<RuntimeData>(ex);
-
-                return responseModel;
-            }
-
-            stopwatch.Stop();
-
-            await _dockerImageService.DeleteDockerImage(imageName);
-
-            RuntimeData newRuntimeData = new()
-            {
-                ExceptionHappened = imageOutput == "" ? true : false,
-                ExecutionStart = dateStarted,
-                ExecutionTime = imageOutput == String.Empty ? 0 : stopwatch.ElapsedMilliseconds,
-                UserId = userId,
-                FileId = projectId,
-                Id = Guid.NewGuid(),
-                ExecutionOutput = imageOutput
-            };
+            var runTimeResult = await _dockerImageService.CreateAndRunDockerImage(userId, projectId);
 
             var deleteException = _zipManipulator.DeleteUnzippedFile();
 
@@ -209,8 +44,43 @@ namespace PoroDev.Runtime.Services
                 return responseModel;
             }
 
-            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(newRuntimeData);
+            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runTimeResult.Entity, CancellationToken.None, RequestTimeout.After(m: 5));
+            return dbResponse.Message;
+        }
 
+        public async Task<CommunicationModel<RuntimeData>> ExecuteProject(Guid userId, string projectId, List<string> argumentList)
+        {
+            var exceptionThatHappened = await _runtimeHelper.InitializeAndExtract(projectId, userId);
+            if (exceptionThatHappened != null)
+                return exceptionThatHappened;
+
+            List<String> argsWithFileNames = new(argumentList);
+
+            await _runtimeHelper.InitializeFileArguments(argsWithFileNames, userId);
+
+            var runtimeResult = await _dockerImageService.CreateAndRunDockerImageWithParameteres(argsWithFileNames, userId, projectId);
+
+            string argumentsAsString = string.Empty;
+
+            foreach (var argument in argumentList)
+            {
+                argumentsAsString += argument + "|";
+            }
+
+            argumentsAsString = argumentsAsString.Remove(argumentsAsString.Length - 1);
+
+            runtimeResult.Entity.Arguments = argumentsAsString;
+
+            var deleteException = _zipManipulator.DeleteUnzippedFile();
+
+            if (deleteException != null)
+            {
+                var responseModel = new CommunicationModel<RuntimeData>(deleteException);
+
+                return responseModel;
+            }
+
+            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runtimeResult.Entity, CancellationToken.None, RequestTimeout.After(m: 5));
             return dbResponse.Message;
         }
     }
