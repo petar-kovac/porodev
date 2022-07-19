@@ -37,5 +37,7 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
         Task<CommunicationModel<DataUserModel>> VerifyEmail(VerifyEmailRequestGatewayToService tokenModel);
 
+        Task<CommunicationModel<List<DataUserModel>>> QueryAll();
+
     }
 }
