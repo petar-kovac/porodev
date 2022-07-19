@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Contracts.DashboardService.TotalMemoryLimitUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
@@ -30,7 +29,7 @@ namespace PoroDev.GatewayAPI.Controllers
 
             var returnModel = new TotalRunTimeForAllUsersRequestGatewayToService(userId);
             var response = await _dashBoardService.GetTotalRunTimeForAllUsers(returnModel);
-            
+
             return Ok(response);
         }
 
@@ -63,7 +62,7 @@ namespace PoroDev.GatewayAPI.Controllers
             var returnModel = new TotalNumberOfUsersRequestGatewayToService(userId);
 
             var response = await _dashBoardService.GetTotalNumberOfUsers(returnModel);
-           
+
             return Ok(response);
         }
 
