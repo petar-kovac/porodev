@@ -1,34 +1,54 @@
-import axios from 'axios';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { Layout } from 'antd';
+import { FC, useState } from 'react';
 
-import GroupCard from 'components/cards/group/GroupCard';
+import GroupCards from 'components/cards/group/GroupCards';
 import PFilter from 'components/filter/PFilter';
-import PModal from 'components/modal/PModal';
+import Spinner from 'components/spinner/Spinner';
+import { usePageContext } from 'context/PageContext';
+import Error from 'pages/error/ErrorPage';
+import { StyledSpinnerWrapper } from 'styles/shared-styles';
 import { IFilesCard } from 'types/card-data';
+
+import useRuntimeData from '../runtime/hooks/useRuntimeData';
+import GroupModal from './modal/GroupModal';
+import GroupSider from './sider/GroupSider';
 import {
   StyledContent,
   StyledFilesWrapper,
   StyledFilterWrapper,
-  StyledHeadingText,
-  StyledHeadingWrapper,
+  StyledPageWrapper,
   StyledStaticContent,
-} from './groups-styled';
-
-const { Sider, Content } = Layout;
+} from './styles/groups-styled';
 
 const Groups: FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isSiderVisible, setIsSiderVisible] = useState(false);
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+
+  const { setIsSiderVisible } = usePageContext();
+  const { data, isLoading, error } = useRuntimeData();
+
+  if (isLoading) {
+    return (
+      <StyledSpinnerWrapper>
+        <Spinner color="#000" size={42} speed={1.2} />
+      </StyledSpinnerWrapper>
+    );
+  }
+
+  if (error) {
+    return <Error message={error} />;
+  }
 
   return (
-    <Layout>
-      <StyledContent>
-        <StyledHeadingWrapper>
-          <StyledHeadingText>Your groups: </StyledHeadingText>
+    <StyledPageWrapper>
+      <StyledContent
+        onClick={() => {
+          setIsSiderVisible(false);
+          setSelectedCardId(null);
+          setCardData(null);
+        }}
+      >
+        <StyledStaticContent>
           <StyledFilterWrapper>
             <PFilter
               isList={isList}
@@ -39,55 +59,21 @@ const Groups: FC = () => {
               }}
             />
           </StyledFilterWrapper>
-        </StyledHeadingWrapper>
-        <StyledStaticContent
-          onClick={() => {
-            setIsSiderVisible(false);
-            setCardData(null); // to trigger rerender, simulating onBlur effect
-          }}
-        >
           <StyledFilesWrapper>
-            {/* {data?.map((value: any) => (
-              <>
-                <GroupCard
-                  groupName={value.groupName}
-                  isModerator={value.isModerator}
-                  moderatorName={value.moderatorName}
-                  numberOfFiles={value.numberOfFiles}
-                  numberOfUsers={value.numberOfUsers}
-                  selected={value?.id === cardData?.id}
-                  onClick={(e) => {
-                    setCardData(value);
-                    e.stopPropagation();
-                    setIsSiderVisible(true);
-                  }}
-                  onDoubleClick={(e) => {
-                    e.stopPropagation();
-                    setCardData(value);
-                    setIsSiderVisible(false);
-                    setIsModalVisible(true);
-                  }}
-                  uuid={value.uuid}
-                />
-              </>
-            ))} */}
+            <GroupCards
+              data={data}
+              cardData={cardData}
+              setCardData={setCardData}
+              selectedCardId={selectedCardId}
+              setSelectedCardId={setSelectedCardId}
+            />
           </StyledFilesWrapper>
         </StyledStaticContent>
 
-        {/* <PModal
-          isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}
-          cardData={cardData}
-          setCardData={setCardData}
-        /> */}
+        <GroupSider cardData={cardData} />
       </StyledContent>
-      {/* <PFileSider
-        isSiderVisible={isSiderVisible}
-        setIsSiderVisible={setIsSiderVisible}
-        cardData={cardData}
-        type="file"
-      /> */}
-    </Layout>
+      <GroupModal cardData={cardData} setCardData={setCardData} />
+    </StyledPageWrapper>
   );
 };
 

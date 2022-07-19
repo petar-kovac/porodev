@@ -1,26 +1,44 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
-import GroupCards from 'components/cards/group/GroupCards';
 import PFilter from 'components/filter/PFilter';
-import PModal from 'components/modal/PModal';
-import { IFilesCard } from 'types/card-data';
 import { usePageContext } from 'context/PageContext';
+import { IFilesCard } from 'types/card-data';
 
 import RuntimeCards from 'components/cards/runtime/RuntimeCards';
+import Spinner from 'components/spinner/Spinner';
+import SiderContextProvider, { useSiderContext } from 'context/SiderContext';
+import Error from 'pages/error/ErrorPage';
+import { StyledSpinnerWrapper } from 'styles/shared-styles';
+import useRuntimeData from './hooks/useRuntimeData';
+import RuntimeModal from './modal/RuntimeModal';
+import RuntimeSider from './sider/RuntimeSider';
 import {
-  StyledPageWrapper,
   StyledContent,
-  StyledFilterWrapper,
   StyledFilesWrapper,
+  StyledFilterWrapper,
+  StyledPageWrapper,
   StyledStaticContent,
-} from './runtime-styled';
+} from './styles/runtime-styled';
 
 const Runtime: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+  const { setIsSiderVisible } = usePageContext();
+
+  const { data, isLoading, error } = useRuntimeData();
+
+  // if (isLoading) {
+  //   return (
+  //     <StyledSpinnerWrapper>
+  //       <Spinner color="#000" size={42} speed={1.2} />
+  //     </StyledSpinnerWrapper>
+  //   );
+  // }
+  // if (error) {
+  //   return <Error message={error} />;
+  // }
 
   return (
     <StyledPageWrapper>
@@ -28,6 +46,7 @@ const Runtime: FC = () => {
         onClick={() => {
           setSelectedCardId(null);
           setCardData(null);
+          setIsSiderVisible(false);
         }}
       >
         <StyledStaticContent>
@@ -43,17 +62,23 @@ const Runtime: FC = () => {
           </StyledFilterWrapper>
           <StyledFilesWrapper>
             <RuntimeCards
+              data={data}
               cardData={cardData}
               selectedCardId={selectedCardId}
               setCardData={setCardData}
               setSelectedCardId={setSelectedCardId}
-              // setIsModalVisible={setIsModalVisible}
-              // setIsSiderVisible={setIsSiderVisible}
             />
           </StyledFilesWrapper>
         </StyledStaticContent>
+        <SiderContextProvider>
+          <RuntimeSider
+            data={data}
+            cardData={cardData}
+            selectedCardId={selectedCardId}
+          />
+        </SiderContextProvider>
       </StyledContent>
-      <PModal cardData={cardData} setCardData={setCardData} />
+      <RuntimeModal cardData={cardData} setCardData={setCardData} />
     </StyledPageWrapper>
   );
 };
