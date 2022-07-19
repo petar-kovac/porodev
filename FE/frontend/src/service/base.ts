@@ -49,8 +49,9 @@ instance.interceptors.response.use(
     // because backhend  is not returning properly
 
     if (!error.response || error.response.status !== StatusCode.UNAUTHORIZED) {
-      window.location.href = '/login';
-      localStorage.clear();
+      // bad request check wrong message bacnekd
+      // window.location.href = '/login';
+      // localStorage.clear();
       throw error;
     }
 
