@@ -20,8 +20,9 @@ namespace PoroDev.DatabaseService.Repositories
     {
         private readonly IGridFSBucket _bucket;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings, IMapper mapper)
+        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings, IMapper mapper, IUnitOfWork unitOfWork)
         {
             var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString);
 
@@ -30,6 +31,8 @@ namespace PoroDev.DatabaseService.Repositories
             _bucket = new GridFSBucket(mongoDatabase);
 
             _mapper = mapper;
+
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType)
@@ -119,20 +122,54 @@ namespace PoroDev.DatabaseService.Repositories
         {
             List<SingleFileQueryModel> singleFileQueryModels = new List<SingleFileQueryModel>();
 
+            List<ObjectId> fileIds = await _unitOfWork.UserFiles.Find
+
             if (queryReqeust.FileId is not null)
             { 
                 ObjectId fileId = ObjectId.Parse(queryReqeust.FileId);
 
-                var filter = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(file => file.Id, fileId);
+                var filterByFileId = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(file => file.Id, fileId);
 
-                var queryResult = await (await _bucket.FindAsync(filter)).FirstAsync();
+                var queryResultSingle = await (await _bucket.FindAsync(filterByFileId)).FirstAsync();
 
-                var returnModel = _mapper.Map<SingleFileQueryModel>(queryResult);
+                var returnModel = _mapper.Map<SingleFileQueryModel>(queryResultSingle);
 
                 singleFileQueryModels.Add(returnModel);
 
                 return singleFileQueryModels;
             }
+
+            var builder = Builders<GridFSFileInfo<ObjectId>>.Filter;
+            var filter = builder.In(file => file.Id, fileIds);
+
+            if (queryReqeust.FileName is not null)
+            {
+                var filterByFileName = builder.Eq(file => file.Filename.Contains(queryReqeust.FileName), true);
+                filter &= filterByFileName;
+            }
+
+            if (queryReqeust.UploadTime.HasValue)
+            {
+                var filterByUploadTime = builder.Eq(file => file.UploadDateTime == queryReqeust.UploadTime, true);
+                filter &= filterByUploadTime;
+            }
+
+            if (queryReqeust.Size.HasValue)
+            {
+                var filterBySize = builder.Eq(file => (ulong)file.Length == queryReqeust.Size, true);
+                filter &= filterBySize;
+            }
+
+            if(queryReqeust.ContentType is not null)
+            {
+                var filterByContentType = builder.Eq(file => file.Metadata.GetValue("ContentType").ToString().Equals(queryReqeust.ContentType), true);
+                filter &= filterByContentType;
+            }
+
+            var queryResult = await (await _bucket.FindAsync(filter)).ToListAsync();
+
+
+
 
             return singleFileQueryModels;
         }
