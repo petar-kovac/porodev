@@ -3,9 +3,12 @@ import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { usePageContext } from 'context/PageContext';
+
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
+
 import { StyledButtonWrapper } from './LoginForm';
 import {
   StyledForm,

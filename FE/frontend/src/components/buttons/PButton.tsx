@@ -63,6 +63,8 @@ const StyledButton = styled(Button).attrs((props) => ({
   background-color: ${(props) =>
     props.background ? props.background : theme.colors.primary};
 
+  z-index: 1000;
+
   &:hover,
   &:focus,
   &:active {
