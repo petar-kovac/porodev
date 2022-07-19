@@ -75,8 +75,6 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
     // function to check if arguments are empty strings
     const checkedInputParams = inputParamsChecker(inputParameters);
 
-    dispatchInput({ type: 'FORMAT_FIELDS_FOR_SUBMITION' });
-
     try {
       const res = await startRuntimeService({
         projectId,

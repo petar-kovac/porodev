@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import JwtDecode from 'jwt-decode';
 import {
   createContext,
   FC,
@@ -9,15 +10,10 @@ import {
   useMemo,
   useState,
 } from 'react';
-
 import { verifyEmail } from 'service/files/files';
+import { Role } from 'util/enums/roles';
 
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { StorageKey } from 'util/enums/storage-keys';
 
 import { loginApi, registerApi } from '../service/authorization/authorization';
@@ -34,11 +30,13 @@ type AuthContextProps = {
   login: (loginData: ILoginRequest) => Promise<void>;
   register: (registerData: IRegisterRequest) => Promise<void>;
   logout: () => void;
-  testMessage: string;
-  loggedUser: ILoginResponse | null;
+  loggedUser: string;
   isAdmin: boolean;
   isLoading: boolean;
 };
+interface IToken {
+  exp: number;
+}
 
 export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
@@ -46,8 +44,7 @@ export const AuthContext = createContext<AuthContextProps>({
   login: async (loginData: ILoginRequest) => {},
   register: async (registerData: IRegisterRequest) => {},
   logout: () => {},
-  testMessage: '',
-  loggedUser: null,
+  loggedUser: '',
   isAdmin: false,
   isLoading: true,
 });
@@ -56,34 +53,32 @@ export const AuthConsumer = AuthContext.Consumer;
 
 const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const [loggedUser, setLoggedUser] = useState<ILoginResponse | null>(null);
+  const [loggedUser, setLoggedUser] = useState<string>('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const testMessage = 'test-test ';
   const navigate = useNavigate();
+  const { search, pathname } = useLocation();
 
-  const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const searchEmail = searchParams.get('Email');
   const searchToken = searchParams.get('Token');
 
   useEffect(() => {
+    // first check if is it tryting to verify on initialization
     if (searchEmail !== null && searchToken !== null) {
       verifyEmail(searchEmail, searchToken)
         .then((response: any) => {
-          console.log(response);
           if (response.status === 200) {
             navigate('/confirm');
           }
-
-          setAuthenticated(false);
           setIsLoading(false);
         })
         .catch((error: any) => {
-          // console.log(error);
-
           if (error.response.status === 400) {
+            navigate('/verified');
+          }
+          if (error.response.status === 401) {
             navigate('/verified');
           }
           message.error(error.message);
@@ -92,8 +87,43 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           setIsLoading(false);
         });
     } else {
+      // try to go directrly on a route or F5 behaviour
+      const currentDate = Math.round(new Date().getTime() / 1000);
+      const accessToken = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+      const localRole = localStorage.getItem(StorageKey.ROLE);
+      try {
+        if (accessToken) {
+          const tokenDecoded: IToken = JwtDecode(accessToken);
+          if (currentDate < tokenDecoded.exp) {
+            // need to save role in storage because it is not implemented in the token
+            if (localRole === Role.ADMIN) {
+              setLoggedUser(Role.ADMIN);
+              setAuthenticated(true);
+              navigate(pathname);
+            }
+            if (localRole === Role.USER) {
+              setLoggedUser(Role.USER);
+              setAuthenticated(true);
+              navigate(pathname);
+            }
+          } else {
+            setAuthenticated(false);
+            setIsLoading(false);
+            localStorage.clear();
+            navigate('/login');
+            throw new Error('Invalid token');
+          }
+        } else {
+          setAuthenticated(false);
+          setIsLoading(false);
+          navigate('/login');
+          localStorage.clear();
+          throw new Error('Expired token');
+        }
+      } catch (error: any) {
+        message.error(error.message);
+      }
       setIsLoading(false);
-      setAuthenticated(true);
     }
   }, []);
 
@@ -109,19 +139,21 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         localStorage.setItem(StorageKey.LASTNAME, res.lastname);
         localStorage.setItem(StorageKey.EMAIL, res.email);
         localStorage.setItem(StorageKey.ACCESS_TOKEN, res.jwt);
+        localStorage.setItem(StorageKey.ROLE, res.role);
 
-        if (res.position === '1') {
-          setIsAdmin(true);
+        if (res.role === Role.ADMIN) {
+          setLoggedUser(Role.ADMIN);
           navigate('/');
-        } else {
+        } else if (res.role === Role.USER) {
+          setLoggedUser(Role.USER);
           navigate('/user-home');
+        } else {
+          throw new Error('No user role');
         }
-        console.log(res);
         setAuthenticated(true);
         setIsLoading(false);
-      } catch (err: any) {
-        message.error(err.message);
-        navigate('/login');
+      } catch (error: any) {
+        message.error(error.message);
       }
     },
     [],
@@ -151,9 +183,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }, []);
 
   const logout: () => void = useCallback(() => {
-    localStorage.removeItem(StorageKey.NAME);
-    localStorage.removeItem(StorageKey.LASTNAME);
     message.success('Logged out');
+    localStorage.clear();
     setIsAdmin(false);
     setAuthenticated(false);
     navigate('/login');
@@ -167,7 +198,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       login,
       register,
       loggedUser,
-      testMessage,
       isAdmin,
       isLoading,
     }),
@@ -178,7 +208,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       login,
       register,
       loggedUser,
-      testMessage,
       isAdmin,
       isLoading,
     ],

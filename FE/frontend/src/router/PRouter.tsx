@@ -13,6 +13,7 @@ import Groups from 'pages/admin/groups/Groups';
 import Runtime from 'pages/admin/runtime/Runtime';
 import UserRuntime from 'pages/user/runtime/Runtime';
 import EmailVerified from 'pages/email-verify/EmailVerified';
+import { Role } from 'util/enums/roles';
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
 import PageProvider from '../context/PageContext';
@@ -40,7 +41,8 @@ import Profile from '../pages/user/profile/Profile';
 import UserGroups from '../pages/user/groups/Groups';
 
 const PRouter: FC = () => {
-  const { isAuthenticated, isLoading, isAdmin } = useAuthStateValue();
+  const { isAuthenticated, isLoading, isAdmin, loggedUser } =
+    useAuthStateValue();
   const location = useLocation();
 
   if (!isLoading) {
@@ -55,7 +57,10 @@ const PRouter: FC = () => {
                 <Routes>
                   <Route
                     element={
-                      <AdminRoutes isAdmin={isAdmin} location={location} />
+                      <AdminRoutes
+                        isAdmin={loggedUser === Role.ADMIN}
+                        location={location}
+                      />
                     }
                   >
                     <Route path="/" element={<Home />} />
@@ -65,7 +70,9 @@ const PRouter: FC = () => {
                     <Route path="/groups" element={<Groups />} />
                     <Route path="/runtime" element={<Runtime />} />
                   </Route>
-                  <Route element={<UserRoutes isUser={!isAdmin} />}>
+                  <Route
+                    element={<UserRoutes isUser={loggedUser === Role.USER} />}
+                  >
                     <Route path="/user-home" element={<UserHome />} />
                     <Route path="/user-files" element={<UserFiles />} />
                     <Route path="/profile" element={<Profile />} />

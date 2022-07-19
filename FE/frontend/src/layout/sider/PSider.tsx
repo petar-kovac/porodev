@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { Airplane } from '@styled-icons/ionicons-outline';
 import { useAuthStateValue } from 'context/AuthContext';
 import { usePageContext } from 'context/PageContext';
+import { Role } from 'util/enums/roles';
 
 const { Sider } = Layout;
 
@@ -22,7 +23,7 @@ const PSider: FC = () => {
 
   const { pathname } = useLocation();
 
-  const { isAdmin } = useAuthStateValue();
+  const { isAdmin, loggedUser } = useAuthStateValue();
 
   return (
     <StyledSider
@@ -50,7 +51,7 @@ const PSider: FC = () => {
         style={{ height: '144px' }}
         selectedKeys={[pathname]}
       >
-        {isAdmin && (
+        {loggedUser === Role.ADMIN && (
           <>
             <Menu.Item key="/" icon={<HomeOutlined />}>
               <Link to="/">Home</Link>
@@ -72,7 +73,7 @@ const PSider: FC = () => {
             </Menu.Item>
           </>
         )}
-        {!isAdmin && ( // later change it to isUser when backend is implemented
+        {loggedUser === Role.USER && (
           <>
             <Menu.Item key="/user-home" icon={<HomeOutlined />}>
               <Link to="/user-home">Home</Link>

@@ -11,6 +11,7 @@ export interface ILoginResponse {
   position: string;
   avatarUrl: string;
   jwt: string;
+  role: string;
 }
 
 export interface IRegisterRequest {

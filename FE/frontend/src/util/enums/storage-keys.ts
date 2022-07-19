@@ -4,4 +4,5 @@ export const StorageKey = {
   LASTNAME: 'lastName',
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
+  ROLE: 'role',
 };

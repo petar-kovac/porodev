@@ -5,4 +5,5 @@ export const StatusCode = {
   FORBIDDEN: 403,
   NOTFOUND: 404,
   CONFLICT: 409,
+  BADREQUEST: 400,
 };

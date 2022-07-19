@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const AdminRoutes: FC<{

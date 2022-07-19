@@ -4,6 +4,7 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { StorageKey } from 'util/enums/storage-keys';
 import { StatusCode } from '../util/enums/status-codes';
 
@@ -49,53 +50,26 @@ instance.interceptors.response.use(
       throw error;
     }
 
+    // because backhend  is not returning properly
+    if (error.response.status === StatusCode.BADREQUEST) {
+      localStorage.clear();
+      window.location.href = '/login';
+    }
+
     if (
-      error.response.status === StatusCode.UNAUTHORIZED &&
-      originalRequest.url !== '/refresh' &&
-      // eslint-disable-next-line no-underscore-dangle
-      !originalRequest._retry
+      error.response.status === StatusCode.UNAUTHORIZED
+      // originalRequest.url !== '/refresh' &&
+      // // eslint-disable-next-line no-underscore-dangle
+      // !originalRequest._retry
     ) {
-      delete instance.defaults.headers.common.Authorization; // mentor suggestion to check
+      delete instance.defaults.headers.common.Authorization;
       // eslint-disable-next-line no-underscore-dangle
       originalRequest._retry = true;
       const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
-      const oldRefresh = localStorage.getItem(StorageKey.REFRESH_TOKEN);
+
       if (oldAccess) {
-        try {
-          const { accessToken, refreshToken } = await instance
-            .post(
-              '/refresh',
-              { accessToken: oldAccess, refreshToken: oldRefresh },
-              {
-                transformRequest: [
-                  (data: any, headers: any) => {
-                    if (headers) {
-                      // eslint-disable-next-line no-param-reassign
-                      delete headers.Authorization;
-                      // eslint-disable-next-line no-param-reassign
-                      headers['Content-Type'] = 'application/json';
-                    }
-                    return JSON.stringify({
-                      accessToken: oldAccess,
-                      refreshToken: oldRefresh,
-                    });
-                  },
-                ],
-              },
-            )
-            .then((response: AxiosResponse) => response.data);
-
-          localStorage.setItem(StorageKey.ACCESS_TOKEN, accessToken);
-          localStorage.setItem(StorageKey.REFRESH_TOKEN, refreshToken);
-          instance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-          return await instance(originalRequest);
-        } catch (err) {
-          if (originalRequest.url !== '/login') {
-            localStorage.clear();
-          }
-
-          throw err;
-        }
+        localStorage.clear();
+        window.location.href = '/login';
       }
     } else {
       localStorage.clear();

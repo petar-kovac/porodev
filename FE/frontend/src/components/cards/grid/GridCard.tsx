@@ -104,6 +104,7 @@ const StyledGridCard = styled(Card).attrs({
 
   .ant-card-body {
     padding: 1rem 2rem;
+    word-break: break-all;
   }
 `;
 

@@ -46,7 +46,7 @@ export const SiderContext = createContext<SiderContextProps>({
 const inputReducer = (state: string[], action: NewAction) => {
   switch (action.type) {
     case 'ADD_INPUT_FIELD': {
-      if (state[state.length - 1] === '') {
+      if (state.length === 1 && state[0] === '') {
         message.error('Enter value in the field');
         return [...state];
       }
