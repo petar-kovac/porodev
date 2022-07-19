@@ -22,11 +22,11 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             //super admin = 0; normal user = 1
             if (user.Role == 0)
             {
-                returnModel = await findAdminFiles();
+                returnModel = await FindAdminFiles();
             }
             else
             {
-                returnModel = await findUserFiles(user.Id);
+                returnModel = await FindUserFiles(user.Id);
             }
 
             var response = new CommunicationModel<FileReadModel>()
@@ -36,12 +36,12 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 HumanReadableMessage = null
             };
 
-            await context.RespondAsync<CommunicationModel<FileReadModel>>(response);
+            await context.RespondAsync(response);
         }
 
-        public async Task<FileReadModel> findAdminFiles()
+        public async Task<FileReadModel> FindAdminFiles()
         {
-            List<FileData> allAdminFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
+            List<FileData> allAdminFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList();
 
             FileReadModel returnModel = new FileReadModel();
 
@@ -56,9 +56,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             return returnModel;
         }
 
-        public async Task<FileReadModel> findUserFiles(Guid userId)
+        public async Task<FileReadModel> FindUserFiles(Guid userId)
         {
-            List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Id.Equals(userId))).ToList<FileData>();
+            List<FileData> allUserFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Id.Equals(userId))).ToList();
 
             FileReadModel returnModel = new FileReadModel();
 
@@ -66,7 +66,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             {
                 if (file.IsDeleted == false)
                 {
-                    //DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
                     var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, file.CurrentUser.Name, file.CurrentUser.Lastname);
                     returnModel.Content.Add(fileReadSingleModel);
                 }

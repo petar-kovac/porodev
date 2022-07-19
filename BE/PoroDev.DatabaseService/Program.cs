@@ -5,6 +5,8 @@ using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.MapperProfiles;
 using PoroDev.DatabaseService.Repositories;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using PoroDev.DatabaseService.Services;
+using PoroDev.DatabaseService.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 builder.Services.AddScoped<IRuntimeDataRepository, RuntimeDataRepository>();
+builder.Services.AddScoped<IEncryptionService, AesEncryptionService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

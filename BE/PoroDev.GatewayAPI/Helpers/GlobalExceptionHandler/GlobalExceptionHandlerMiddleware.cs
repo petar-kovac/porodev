@@ -28,6 +28,36 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case UserAlreadyVerifiedException userAlreadyVerifiedException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = userAlreadyVerifiedException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userAlreadyVerifiedException);
+                        break;
+
+                    case FailedToRegisterUserException failedToRegisterUserException:
+                        response.StatusCode = (int)HttpStatusCode.FailedDependency;
+                        HumanReadableErrorMessage = failedToRegisterUserException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToRegisterUserException);
+                        break;
+
+                    case InvalidVerificationTokenException invalidVerificationTokenException:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = invalidVerificationTokenException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, invalidVerificationTokenException);
+                        break;
+
+                    case UserNotVerifiedException userNotVerified:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = userNotVerified.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userNotVerified);
+                        break;
+
+                    case UserLimitException userLimitException:
+                        response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        HumanReadableErrorMessage = userLimitException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userLimitException);
+                        break;
+
                     case NoHeaderWithJwtException noHeaderWithJwtException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = noHeaderWithJwtException.HumanReadableErrorMessage;
@@ -76,8 +106,8 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, failedToLogIn);
                         break;
 
-                    case PoroDev.Common.Exceptions.FileNotFoundException fileNotFound:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    case Common.Exceptions.FileNotFoundException fileNotFound:
+                        response.StatusCode = (int)HttpStatusCode.NotFound;
                         HumanReadableErrorMessage = fileNotFound.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, fileNotFound);
                         break;
