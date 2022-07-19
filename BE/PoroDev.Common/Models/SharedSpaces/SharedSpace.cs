@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace PoroDev.Common.Models.StorageModels.Data
+namespace PoroDev.Common.Models.SharedSpaces
 {
     public class SharedSpace
     {

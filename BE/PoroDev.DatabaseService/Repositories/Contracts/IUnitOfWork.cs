@@ -8,6 +8,8 @@
 
         IStorageRepository UserFiles { get; }
 
+        ISharedSpaceRepository SharedSpaces { get; }
+
         Task<int> SaveChanges();
     }
 }

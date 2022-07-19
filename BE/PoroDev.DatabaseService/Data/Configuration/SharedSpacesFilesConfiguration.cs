@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PoroDev.Common.Models.StorageModels.Data;
+using PoroDev.Common.Models.SharedSpaces;
 
 namespace PoroDev.DatabaseService.Data.Configuration
 {
