@@ -1,8 +1,13 @@
 package common.api_setup.api_common;
 
-import com.jayway.jsonpath.JsonPath;
 import common.api_setup.Endpoints;
 import common.ui_setup.FileControlUtil;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,60 +28,75 @@ public class DataControlUtil {
     }
 
     //This method upload number of files that are located in "filePath.properties" file, located in TestResources
-    public static void uploadThenDeleteFiles(int numOfFiles) {
-        String token = UserDetailsGenerator.takeTokenValueFromJson(fileLogin.getValue("VALID_EMAIL"), fileLogin.getValue( "VALID_PASS_CREATED_USER"));
+    public static void uploadThenDeleteFiles(int numOfFiles) throws ParseException {
 
         for (int i = 0; i <= numOfFiles; i++) {
-            given().relaxedHTTPSValidation()
-                    .header("Content-Type", "multipart/form-data")
-                    .header("Authorization","Bearer " + token)
-                    .multiPart(new File(filePath.getValue("FILEPATH" + i)))
-            .when()
-                    .post(Endpoints.UPLOAD_FILE)
-            .then()
-                    .statusCode(200);
+            String currentFileName = uploadFile(
+                    fileLogin.getValue("VALID_EMAIL"),
+                    fileLogin.getValue("VALID_PASS_CREATED_USER"),
+                    filePath.getValue("FILEPATH" + i));
 
-            fileIds.add(UserDetailsGenerator.takeValueFromResponseWithToken(Endpoints.READ_FILE, token,i,"fileId"));
+            fileIds.add(
+                    getFileIdFromFileName(
+                            fileLogin.getValue("VALID_EMAIL"),
+                            fileLogin.getValue("VALID_PASS_CREATED_USER"),
+                            currentFileName));
         }
+
         for (int i = 0; i <= numOfFiles; i++) {
-            given().relaxedHTTPSValidation()
-                    .header("Authorization","Bearer " + token)
-            .when()
-                    .delete(Endpoints.DELETE_FILE + Endpoints.DELETE_FILE_PATH + fileIds.get(i))
-            .then()
-                    .statusCode(200);
+            deleteFile(
+                    fileLogin.getValue("VALID_EMAIL"),
+                    fileLogin.getValue("VALID_PASS_CREATED_USER"),
+                    fileIds.get(i));
         }
     }
 
-    public static void uploadFile(String email, String pass, String pathToFile) {
+    public static String uploadFile(String email, String pass, String pathToFile) {
         String token = UserDetailsGenerator.takeTokenValueFromJson(email, pass);
 
-        given().relaxedHTTPSValidation()
+        Response response = given().relaxedHTTPSValidation()
                 .header("Content-Type", "multipart/form-data")
                 .header("Authorization", "Bearer " + token)
                 .multiPart(new File(pathToFile))
-        .when()
+                .when()
                 .post(Endpoints.UPLOAD_FILE)
-        .then()
-                .statusCode(200);
+                .then()
+                .statusCode(200).extract().response();
+
+        return JsonPath.from(response.asString()).get("fileName");
     }
 
     public static void deleteFile(String email, String pass, String fileId) {
         String token = UserDetailsGenerator.takeTokenValueFromJson(email, pass);
 
         given().relaxedHTTPSValidation()
-                .header("Authorization","Bearer " + token)
-        .when()
+                .header("Authorization", "Bearer " + token)
+                .when()
                 .delete(Endpoints.DELETE_FILE + Endpoints.DELETE_FILE_PATH + fileId)
-        .then()
-                .statusCode(200);
+                .then();
     }
 
-    public static String getFileIdFromFileName(String email, String pass, int fileIndexPosition) {
+    public static String getFileIdFromFileName(String email, String pass, String fileName) throws ParseException {
         String token = UserDetailsGenerator.takeTokenValueFromJson(email, pass);
 
-        String json = given().relaxedHTTPSValidation().header("Authorization", "Bearer " + token).when().get(Endpoints.READ_FILE).asString();
+        Response response = given().relaxedHTTPSValidation().header("Authorization", "Bearer " + token).when().get(Endpoints.READ_FILE).then().extract().response();
+        JSONParser jsonParser = new JSONParser();
+        JSONObject object = (JSONObject) jsonParser.parse(response.asString());
+        JSONArray jsonArray = (JSONArray) object.get("content");
 
-        return JsonPath.read(json, "$.content.[" + fileIndexPosition + "]" + "fileId").toString();
+        String currentId = "";
+
+        for (Object obj : jsonArray) {
+            if (!JsonPath.from(obj.toString()).get("fileName").equals("") && JsonPath.from(obj.toString()).get("fileName").equals(fileName)) {
+                currentId = JsonPath.from(obj.toString()).get("fileId");
+                break;
+            }
+        }
+           return currentId;
+    }
+
+    public static boolean fileExists(String email, String pass, String fileName) throws ParseException {
+
+        return !getFileIdFromFileName(email, pass, fileName).equals("");
     }
 }

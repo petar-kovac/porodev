@@ -46,11 +46,6 @@ public class UserDetailsGenerator {
         return JsonPath.read(json, "$."+attribute).toString();
     }
 
-    public static String takeValueFromResponseWithToken(String endpoint, String token, int number, String attribute) {
-        String json = given().relaxedHTTPSValidation().header("Authorization", "Bearer " + token).when().get(endpoint).asString();
-        return JsonPath.read(json, "$.content.[" + number + "]" + attribute).toString();
-    }
-
     // Taking the jwt token attribute based on users email and password
     public static String takeTokenValueFromJson(String email, String password){
         String json = given().relaxedHTTPSValidation().
