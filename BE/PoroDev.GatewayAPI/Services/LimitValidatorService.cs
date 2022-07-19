@@ -12,9 +12,9 @@ namespace PoroDev.GatewayAPI.Services
     public class LimitValidatorService : ILimitValidatorService
     {
         private readonly IRequestClient<UserReadByIdRequestGatewayToService> _userReadClient;
-        private readonly IRequestClient<SingleFileQueryServiceToDatabase> _queryClient;
+        private readonly IRequestClient<FileQueryServiceToDatabase> _queryClient;
 
-        public LimitValidatorService(IRequestClient<UserReadByIdRequestGatewayToService> userReadClient, IRequestClient<SingleFileQueryServiceToDatabase> queryClient)
+        public LimitValidatorService(IRequestClient<UserReadByIdRequestGatewayToService> userReadClient, IRequestClient<FileQueryServiceToDatabase> queryClient)
         {
             _userReadClient = userReadClient;
             _queryClient = queryClient;
@@ -36,7 +36,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task ValidateDownload(Guid userId, string fileId)
         {
-            var downloadRequestSize = (await _queryClient.GetResponse<CommunicationModel<List<SingleFileQueryModel>>>(new SingleFileQueryServiceToDatabase(userId, fileId))).Message.Entity.First().Length;
+            var downloadRequestSize = (await _queryClient.GetResponse<CommunicationModel<List<FileQueryModel>>>(new FileQueryServiceToDatabase(userId, fileId))).Message.Entity.First().Length;
 
             var currentTotal = (await _userReadClient.GetResponse<CommunicationModel<DataUserModel>>(new UserReadByIdRequestGatewayToService(userId))).Message
                                                                                                                                                      .Entity

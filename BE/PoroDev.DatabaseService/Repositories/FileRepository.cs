@@ -12,6 +12,7 @@ using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using PoroDev.DatabaseService.Services.Contracts;
+using System.Text.RegularExpressions;
 using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.DatabaseService.Repositories
@@ -118,60 +119,66 @@ namespace PoroDev.DatabaseService.Repositories
             return fileData;
         }
 
-        public async Task<List<SingleFileQueryModel>> QueryFiles(SingleFileQueryServiceToDatabase queryReqeust)
+        public async Task<List<FileQueryModel>> QueryFiles(FileQueryServiceToDatabase queryReqeust)
         {
-            List<SingleFileQueryModel> singleFileQueryModels = new List<SingleFileQueryModel>();
+            List<FileQueryModel> fileQueryModels = new List<FileQueryModel>();
 
-            List<ObjectId> fileIds = await _unitOfWork.UserFiles.Find
+            string userName = (await _unitOfWork.Users.GetByIdAsync(queryReqeust.UserId)).Name;
+            string userLastname = (await _unitOfWork.Users.GetByIdAsync(queryReqeust.UserId)).Lastname;
 
             if (queryReqeust.FileId is not null)
-            { 
+            {
                 ObjectId fileId = ObjectId.Parse(queryReqeust.FileId);
 
                 var filterByFileId = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(file => file.Id, fileId);
 
                 var queryResultSingle = await (await _bucket.FindAsync(filterByFileId)).FirstAsync();
 
-                var returnModel = _mapper.Map<SingleFileQueryModel>(queryResultSingle);
+                var returnModel = new FileQueryModel(queryResultSingle, userName, userLastname);
 
-                singleFileQueryModels.Add(returnModel);
+                fileQueryModels.Add(returnModel);
 
-                return singleFileQueryModels;
+                return fileQueryModels;
             }
+
+            var stringFileIds = (await _unitOfWork.UserFiles.FindAllAsync(file => file.CurrentUserId == queryReqeust.UserId)).Select(file => file.FileId).ToList();
+
+            List<ObjectId> fileIds = new();
+
+            stringFileIds.ForEach(fileId => fileIds.Add(ObjectId.Parse(fileId)));
 
             var builder = Builders<GridFSFileInfo<ObjectId>>.Filter;
             var filter = builder.In(file => file.Id, fileIds);
 
             if (queryReqeust.FileName is not null)
             {
-                var filterByFileName = builder.Eq(file => file.Filename.Contains(queryReqeust.FileName), true);
+                var filterByFileName = builder.Regex(file => file.Filename, new Regex(@$".*{queryReqeust.FileName}.*"));
                 filter &= filterByFileName;
             }
 
             if (queryReqeust.UploadTime.HasValue)
             {
-                var filterByUploadTime = builder.Eq(file => file.UploadDateTime == queryReqeust.UploadTime, true);
+                var filterByUploadTime = builder.Eq(file => file.UploadDateTime.Date, queryReqeust.UploadTime.Value.Date );
                 filter &= filterByUploadTime;
             }
 
             if (queryReqeust.Size.HasValue)
             {
-                var filterBySize = builder.Eq(file => (ulong)file.Length == queryReqeust.Size, true);
+                var filterBySize = builder.Eq(file => (ulong)file.Length, queryReqeust.Size);
                 filter &= filterBySize;
             }
 
-            if(queryReqeust.ContentType is not null)
-            {
-                var filterByContentType = builder.Eq(file => file.Metadata.GetValue("ContentType").ToString().Equals(queryReqeust.ContentType), true);
-                filter &= filterByContentType;
-            }
+            //if(queryReqeust.ContentType is not null)
+            //{
+            //    var filterByContentType = builder.Eq(file => file.Metadata.GetValue(1).AsString, queryReqeust.ContentType);
+            //    filter &= filterByContentType;
+            //}
 
             var queryResult = await (await _bucket.FindAsync(filter)).ToListAsync();
 
+            queryResult.ForEach(result => fileQueryModels.Add(new FileQueryModel(result, userName, userLastname)));
 
-
-
-            return singleFileQueryModels;
+            return fileQueryModels;
         }
     }
 }

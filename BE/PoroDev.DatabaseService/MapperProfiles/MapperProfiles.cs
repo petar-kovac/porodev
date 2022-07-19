@@ -53,16 +53,22 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<FileDownload, FileDownloadMessage>()
                 .ForMember(destination => destination.File, options => options.Ignore());
 
-            CreateMap<GridFSFileInfo<ObjectId>, SingleFileQueryModel>()
-                .ForMember(dst => dst.ContentType, opt => opt.MapFrom(src => GetMetadata(src, "ContentType")));
+            //CreateMap<GridFSFileInfo<ObjectId>, FileQueryModel>()
+            //    .ForMember(dst => dst.Id, options => options.MapFrom(src => src.Id.ToString()))
+            //    .ForMember(dst => dst.Length, options => options.MapFrom(src => (ulong)src.Length))
+            //    .ForMember(dst => dst.ContentType, opt => opt.MapFrom(src => GetMetadata(src, "ContentType")))
+            //    .ForMember(dst => dst.UserName, opt => opt.Ignore())
+            //    .ForMember(dst => dst.UserLastname, opt => opt.Ignore());
+
+            //CreateMap<List<GridFSFileInfo<ObjectId>>, List<FileQueryModel>>();
         }
 
-        private string GetMetadata(GridFSFileInfo<ObjectId> doc, string metadataName)
-        {
-            var metadataTypeReturn = doc.Metadata.GetValue(metadataName).ToString();
+        //private string GetMetadata(GridFSFileInfo<ObjectId> doc, string metadataName)
+        //{
+        //    var metadataTypeReturn = doc.Metadata.GetValue(metadataName).ToString();
 
-            return metadataTypeReturn;
-        }
+        //    return metadataTypeReturn;
+        //}
 
         private bool ValidateUserDeletion(DataUserModel src)
         {
