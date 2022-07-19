@@ -8,5 +8,16 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers
 {
     public class TotalNumberOfUsersModel
     {
+        public int _numberOfUsers { get; set; }
+
+        public TotalNumberOfUsersModel()
+        {
+
+        }
+
+        public TotalNumberOfUsersModel(int numberOfUsers)
+        {
+            _numberOfUsers = numberOfUsers;
+        }
     }
 }

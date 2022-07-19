@@ -1,6 +1,13 @@
+using PoroDev.Common.MassTransit;
+using PoroDev.DashboardService.Services;
+using PoroDev.DashboardService.Services.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

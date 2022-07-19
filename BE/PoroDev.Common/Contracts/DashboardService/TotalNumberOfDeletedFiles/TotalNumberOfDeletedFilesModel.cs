@@ -8,5 +8,15 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles
 {
     public class TotalNumberOfDeletedFilesModel
     {
+        public int _numberOfDeletedFiles { get; set; }
+
+        public TotalNumberOfDeletedFilesModel()
+        {
+
+        }
+        public TotalNumberOfDeletedFilesModel(int numberOfDeletedFiles)
+        {
+            _numberOfDeletedFiles = numberOfDeletedFiles;
+        }
     }
 }

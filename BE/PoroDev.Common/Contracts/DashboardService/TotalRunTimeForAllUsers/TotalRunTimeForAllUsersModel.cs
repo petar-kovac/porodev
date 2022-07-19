@@ -8,5 +8,16 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers
 {
     public class TotalRunTimeForAllUsersModel
     {
+        public int _numberOfTotalRunTimeForAllUsers { get; set; }
+
+        public TotalRunTimeForAllUsersModel()
+        {
+
+        }
+
+        public TotalRunTimeForAllUsersModel(int numberOfTotalRunTimeForAllUsers)
+        {
+            _numberOfTotalRunTimeForAllUsers = numberOfTotalRunTimeForAllUsers;
+        }
     }
 }
