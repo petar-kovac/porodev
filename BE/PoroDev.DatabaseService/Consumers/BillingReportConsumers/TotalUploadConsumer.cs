@@ -30,7 +30,7 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
                 return new CommunicationModel<TotalUploadResponse>(new UserPermissionException());
 
             var user = await _unitOfWork.Users.GetByIdAsync(totalUpload.UserId);
-            var totalUploadSize = Convert.ToDouble(user.FileUploadTotal / 1000.0);
+            var totalUploadSize = Convert.ToDouble(user.FileUploadTotal / 1024.0);
 
             TotalUploadResponse uploadSize = new()
             {
