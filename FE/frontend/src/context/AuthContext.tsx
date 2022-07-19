@@ -118,7 +118,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
           setIsLoading(false);
           navigate('/login');
           localStorage.clear();
-          throw new Error('Expired token');
         }
       } catch (error: any) {
         message.error(error.message);

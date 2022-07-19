@@ -46,14 +46,12 @@ instance.interceptors.response.use(
   // eslint-disable-next-line consistent-return
   async function (error: any) {
     const originalRequest = error.config;
-    if (!error.response || error.response.status !== StatusCode.UNAUTHORIZED) {
-      throw error;
-    }
-
     // because backhend  is not returning properly
-    if (error.response.status === StatusCode.BADREQUEST) {
-      localStorage.clear();
+
+    if (!error.response || error.response.status !== StatusCode.UNAUTHORIZED) {
       window.location.href = '/login';
+      localStorage.clear();
+      throw error;
     }
 
     if (
