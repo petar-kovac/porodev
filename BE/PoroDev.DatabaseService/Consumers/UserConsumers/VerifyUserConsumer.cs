@@ -12,7 +12,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class VerifyUserConsumer : BaseDbConsumer, IConsumer<VerifyEmailRequestServiceToDatabase>
     {
-        public VerifyUserConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public VerifyUserConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
 
         }

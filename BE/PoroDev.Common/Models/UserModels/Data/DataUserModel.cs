@@ -38,6 +38,12 @@ namespace PoroDev.Common.Models.UserModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<RuntimeData> runtimeDatas { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public ICollection<SharedSpacesUsers> SharedSpaceUser { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public ICollection<SharedSpace> UsersSharedSpaces { get; set; }
+
         public string VerificationToken { get; set; }
 
         public DateTime? VerifiedAt { get; set; }
