@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using MongoDB.Bson;
+using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.Update;
@@ -9,6 +13,7 @@ using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
+using PoroDev.DatabaseService.Models;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {
@@ -44,6 +49,19 @@ namespace PoroDev.DatabaseService.MapperProfiles
                 .ForSourceMember(source => source.DateCreated, option => option.DoNotValidate());
 
             CreateMap<UnitOfWorkResponseModel<FileUploadModel>, CommunicationModel<FileUploadModel>>();
+
+            CreateMap<FileDownload, FileDownloadMessage>()
+                .ForMember(destination => destination.File, options => options.Ignore());
+
+            CreateMap<GridFSFileInfo<ObjectId>, SingleFileQueryModel>()
+                .ForMember(dst => dst.ContentType, opt => opt.MapFrom(src => GetMetadata(src, "ContentType")));
+        }
+
+        private string GetMetadata(GridFSFileInfo<ObjectId> doc, string metadataName)
+        {
+            var metadataTypeReturn = doc.Metadata.GetValue(metadataName).ToString();
+
+            return metadataTypeReturn;
         }
 
         private bool ValidateUserDeletion(DataUserModel src)

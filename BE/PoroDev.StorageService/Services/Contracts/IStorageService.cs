@@ -8,8 +8,7 @@ namespace PoroDev.StorageService.Services.Contracts
 {
     public interface IStorageService
     {
-        // Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model);
-        Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadModel);
+        Task<CommunicationModel<FileUploadResponse>> UploadFile(FileUploadRequestServiceToDatabase uploadModel);
 
         Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadModel);
 

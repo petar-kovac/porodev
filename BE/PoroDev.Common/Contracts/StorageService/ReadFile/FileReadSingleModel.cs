@@ -1,4 +1,6 @@
-﻿namespace PoroDev.Common.Contracts.StorageService.ReadFile
+﻿using MongoDB.Driver.GridFS;
+
+namespace PoroDev.Common.Contracts.StorageService.ReadFile
 {
     public class FileReadSingleModel
     {

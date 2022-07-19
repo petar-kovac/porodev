@@ -9,7 +9,7 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
 {
     public class UserReadByEmailConsumer : BaseDbConsumer, IConsumer<UserReadByEmailRequestServiceToDatabase>
     {
-        public UserReadByEmailConsumer(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        public UserReadByEmailConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
         }
 

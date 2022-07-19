@@ -44,7 +44,7 @@ namespace PoroDev.Runtime.Services
                 return responseModel;
             }
 
-            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runTimeResult.Entity);
+            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runTimeResult.Entity, CancellationToken.None, RequestTimeout.After(m: 5));
             return dbResponse.Message;
         }
 
@@ -80,7 +80,8 @@ namespace PoroDev.Runtime.Services
                 return responseModel;
             }
 
-            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runtimeResult.Entity);
+            var dbResponse = await _createRequestClient.GetResponse<CommunicationModel<RuntimeData>>(runtimeResult.Entity, CancellationToken.None, RequestTimeout.After(m: 5));
+
             return dbResponse.Message;
         }
     }

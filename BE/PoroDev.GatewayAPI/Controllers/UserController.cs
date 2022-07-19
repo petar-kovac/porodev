@@ -6,6 +6,7 @@ using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -71,6 +72,12 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<RegisterUserResponse>> RegisterUser([FromBody] RegisterUserRequestGatewayToService registerModel)
         {
             return Ok(await _userService.RegisterUser(registerModel));
+        }
+
+        [HttpPost("Verify")]
+        public async Task<ActionResult<DataUserModel>> Verify([FromQuery] VerifyEmailRequestGatewayToService tokenModel)
+        {
+            return Ok(await _userService.VerifyEmail(tokenModel));
         }
 
         [HttpPost("LoginUser")]

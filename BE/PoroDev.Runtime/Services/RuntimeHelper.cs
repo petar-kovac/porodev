@@ -34,7 +34,7 @@ namespace PoroDev.Runtime.Services
             {
                 FileDownloadRequestServiceToDatabase requestToDb = new(argList[i], userId);
 
-                var fileContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb);
+                var fileContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb, CancellationToken.None, RequestTimeout.After(m: 5));
 
                 argList[i] = fileContext.Message.Entity.FileName;
 
@@ -51,7 +51,7 @@ namespace PoroDev.Runtime.Services
 
             FileDownloadRequestServiceToDatabase requestToDb = new(projectId, userId);
 
-            var projectContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb);
+            var projectContext = await _downloadFileRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(requestToDb, CancellationToken.None, RequestTimeout.After(m: 5));
 
             await File.WriteAllBytesAsync(Path.Combine(RUNTIME_FOLDER_ROUTE, $"{projectContext.Message.Entity.FileName}"), await projectContext.Message.Entity.File.Value);
 
