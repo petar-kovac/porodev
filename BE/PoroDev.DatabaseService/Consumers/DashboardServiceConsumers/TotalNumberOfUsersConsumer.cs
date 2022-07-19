@@ -25,7 +25,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             {
                 List<DataUserModel> users = (await _unitOfWork.Users.FindAllAsync(users => users.Email.Contains(""))).ToList<DataUserModel>();
                 TotalNumberOfUsersModel returnModel = new TotalNumberOfUsersModel();
-                returnModel._numberOfUsers = users.Count;
+                returnModel._numberOfUsers = users.Count; 
 
                 var response = new CommunicationModel<TotalNumberOfUsersModel>()
                 {

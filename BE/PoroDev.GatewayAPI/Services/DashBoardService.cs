@@ -99,7 +99,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<TotalMemoryUsedForUploadPerMonthModel> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestGatewayToService totalMemoryUsedForUploadModel)
         {
-            var responseContext = await _totalMemoryUsedForUploadClient.GetResponse<CommunicationModel<TotalMemoryUsedForUploadPerMonthModel>>(totalNumberOfUsersModel);
+            var responseContext = await _totalMemoryUsedForUploadClient.GetResponse<CommunicationModel<TotalMemoryUsedForUploadPerMonthModel>>(totalMemoryUsedForUploadModel);
 
             if (responseContext.Message.ExceptionName != null)
             {

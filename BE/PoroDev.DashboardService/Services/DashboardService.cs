@@ -16,17 +16,23 @@ namespace PoroDev.DashboardService.Services
         private readonly IRequestClient<TotalNumberOfUploadedFilesRequestServiceToDatabase> _totalNumberOfUploadedFilesClient;
         private readonly IRequestClient<TotalNumberOFDeletedFilesRequestServiceToDatabase> _totalNumberOfDeletedFilesClient;
         private readonly IRequestClient<TotalRunTimeForAllUsersRequestServiceToDatabase> _totalRunTimeForAllUsersClient;
+        private readonly IRequestClient<TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase> _totalMemoryUsedForDownloadPerMonthClient;
+        private readonly IRequestClient<TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase> _totalMemoryUsedForUploadPerMonthClient;
 
         public DashboardService
             (IRequestClient<TotalNumberOfUsersRequestServiceToDatabase> totalNumberOfUsersClient, 
             IRequestClient<TotalNumberOfUploadedFilesRequestServiceToDatabase> totalNumberOfUploadedFilesClient,
             IRequestClient<TotalNumberOFDeletedFilesRequestServiceToDatabase> totalNumberOfDeletedFilesClient,
-            IRequestClient<TotalRunTimeForAllUsersRequestServiceToDatabase> totalRunTimeForAllUsersClient)
+            IRequestClient<TotalRunTimeForAllUsersRequestServiceToDatabase> totalRunTimeForAllUsersClient,
+            IRequestClient<TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase> totalMemoryUsedForDownloadPerMonthClient,
+            IRequestClient<TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase> totalMemoryUsedForUploadPerMonthClient)
         {
             _totalNumberOfUsersClient = totalNumberOfUsersClient;
             _totalNumberOfUploadedFilesClient = totalNumberOfUploadedFilesClient;
             _totalNumberOfDeletedFilesClient = totalNumberOfDeletedFilesClient;
             _totalRunTimeForAllUsersClient = totalRunTimeForAllUsersClient;
+            _totalMemoryUsedForDownloadPerMonthClient = totalMemoryUsedForDownloadPerMonthClient;
+            _totalMemoryUsedForUploadPerMonthClient = totalMemoryUsedForUploadPerMonthClient;
         }
 
 
@@ -58,14 +64,18 @@ namespace PoroDev.DashboardService.Services
             return response.Message;
         }
 
-        public Task<TotalMemoryUsedForUploadPerMonthModel> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase totalMemoryUsedForUploadModel)
+        public async Task<CommunicationModel<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase totalMemoryUsedForUploadModel)
         {
-            throw new NotImplementedException();
+            var response = await _totalMemoryUsedForUploadPerMonthClient.GetResponse<CommunicationModel<TotalMemoryUsedForUploadPerMonthModel>>(totalMemoryUsedForUploadModel);
+
+            return response.Message;
         }
 
-        public Task<TotalMemoryUsedForDownloadPerMonthModel> GetTotalMemoryUsedForDownloadPerMonth(TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadModel)
+        public async Task<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>> GetTotalMemoryUsedForDownloadPerMonth(TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadModel)
         {
-            throw new NotImplementedException();
+           var response = await _totalMemoryUsedForDownloadPerMonthClient.GetResponse<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>>(totalMemoryUsedForDownloadModel);
+
+           return response.Message;
         }
     }
 }

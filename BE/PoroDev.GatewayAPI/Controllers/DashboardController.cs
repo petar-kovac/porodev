@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Contracts.DashboardService.TotalMemoryLimitUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForUploadPerMonth;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
@@ -68,7 +67,19 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         //[HttpGet("TotalRunTimePerMonth")]
-        [HttpGet("TotalMemoryLimitUsedForDownloadPerMonth")]
+
+        [HttpGet("TotalMemoryUsedForUploadPerMonth")]
+        public async Task<ActionResult<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUpload()
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new TotalMemoryUsedForUploadPerMonthRequestGatewayToService(userId);
+
+            var response = await _dashBoardService.GetTotalMemoryUsedForUploadPerMonth(returnModel);
+
+            return Ok(response);
+        }
+
+        [HttpGet("TotalMemoryUsedForDownloadPerMonth")]
         public async Task<ActionResult<TotalMemoryUsedForDownloadPerMonthModel>> GetTotalMemoryUsedForDownload()
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
@@ -79,15 +90,5 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(response);
         }
 
-        [HttpGet("TotalMemoryLimitUsedForUploadPerMonth")]
-        public async Task<ActionResult<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUpload()
-        {
-            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            var returnModel = new TotalMemoryUsedForUploadPerMonthRequestGatewayToService(userId);
-
-            var response = await _dashBoardService.GetTotalMemoryUsedForUploadPerMonth(returnModel);
-
-            return Ok(response);
-        }
     }
 }
