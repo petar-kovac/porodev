@@ -42,7 +42,7 @@ const GroupSider: FC<IPFileSiderProps> = ({
     <StyledGroupSider
       collapsedWidth={0}
       collapsed={!isSiderVisible}
-      width={320}
+      width={300}
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
@@ -92,7 +92,7 @@ const StyledGroupSider = styled(Sider).attrs({
   background-color: #fff;
   overflow-x: hidden;
   display: flex;
-  width: 400px;
+  width: 380px;
 
   flex-direction: column;
   box-shadow: 1px 0px 6px rgba(34, 25, 25, 0.1);
@@ -104,7 +104,7 @@ const StyledGroupSider = styled(Sider).attrs({
   .ant-layout-sider-children {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 380px;
 
     position: fixed;
     padding: 20px;

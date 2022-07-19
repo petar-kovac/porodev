@@ -113,7 +113,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
     <StyledRuntimeSider
       collapsedWidth={0}
       collapsed={!isSiderVisible}
-      width={320}
+      width={300}
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
@@ -224,7 +224,7 @@ const StyledRuntimeSider = styled(Sider).attrs({
   background-color: #fff;
   overflow-x: hidden;
   display: flex;
-  width: 400px;
+  width: 380px;
   height: 100%;
 
   flex-direction: column;
@@ -237,7 +237,7 @@ const StyledRuntimeSider = styled(Sider).attrs({
   .ant-layout-sider-children {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 380px;
     position: fixed;
     padding: 20px;
   }

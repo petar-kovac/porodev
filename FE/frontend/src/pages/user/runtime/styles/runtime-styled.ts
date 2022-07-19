@@ -38,7 +38,7 @@ export const StyledFoldersContainer = styled.div`
 
 export const StyledFilesWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(7, minmax(17rem, 22rem));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 16%));
+  gap: 1rem;
   padding-left: 2rem;
 `;

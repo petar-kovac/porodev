@@ -51,7 +51,7 @@ const StyledRuntimeCard = styled(Card).attrs({
   height: 21.5rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  max-width: 23rem;
+  max-width: auto;
   cursor: pointer;
   border: 2px solid
     ${({ selected }) => (selected ? `${theme.colors.selected}` : '#fff')};
@@ -69,7 +69,7 @@ const StyledRuntimeCard = styled(Card).attrs({
     justify-content: center;
     align-items: center;
     height: 14rem;
-    max-width: 23rem;
+    max-width: auto;
     overflow: hidden;
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
