@@ -69,19 +69,18 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     if (searchEmail !== null && searchToken !== null) {
       verifyEmail(searchEmail, searchToken)
         .then((response: any) => {
-          if (response.status === 200) {
-            navigate('/confirm');
-          }
-          setIsLoading(false);
+          navigate('/confirm');
         })
         .catch((error: any) => {
+          console.log(error);
           if (error.response.status === 400) {
             navigate('/verified');
           }
+          if (error.response.status === 401) {
+            navigate('/verification');
+          }
         })
-        .finally(() => {
-          setIsLoading(false);
-        });
+        .finally(() => setIsLoading(false));
     } else {
       // try to go directrly on a route or F5 behaviour
       const currentDate = Math.round(new Date().getTime() / 1000);
@@ -109,8 +108,10 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
             navigate('/login');
             throw new Error('Invalid token');
           }
-        } else if (pathname === '/verify') {
-          navigate('/verify');
+        } else if (pathname === '/verified') {
+          navigate('/verified');
+        } else if (pathname === '/verification') {
+          navigate('/verification');
         } else {
           setAuthenticated(false);
           setIsLoading(false);
@@ -171,7 +172,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
         message.success('Successful registration');
 
-        navigate('/verify');
+        navigate('/verification');
         setIsLoading(false);
       } catch (err: any) {
         message.error(err.message);

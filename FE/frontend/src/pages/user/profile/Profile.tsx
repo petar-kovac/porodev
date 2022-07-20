@@ -16,12 +16,21 @@ import { usePageContext } from 'context/PageContext';
 interface IModalTitleProps {
   title?: string;
   content?: ReactNode;
+  avatarUrl?: string;
+  email?: string;
+  name?: string;
+  lastname?: string;
+  passwordUnhashed?: string;
+  position?: string;
+  role?: 0;
 }
 
 const Profile: FC = () => {
   const [modalData, setModalData] = useState<IModalTitleProps | undefined>(
     undefined,
   );
+
+  console.log(modalData);
   const { setIsModalVisible } = usePageContext();
 
   return (
@@ -46,8 +55,17 @@ const Profile: FC = () => {
                 onClick={() => {
                   setIsModalVisible(true);
                   setModalData({
-                    title: 'Change Your Firstname',
-                    content: localStorage.getItem(StorageKey.NAME) as string,
+                    // title: 'Change Your Firstname',
+                    // content: localStorage.getItem(StorageKey.NAME) as string,
+                    // title:;
+                    // content?: ReactNode;
+                    // avatarUrl?: string;
+                    // email?: string;
+                    // name?: string;
+                    // lastname?: string;
+                    // passwordUnhashed?: string;
+                    // position?: string;
+                    // role?: 0;
                   });
                 }}
               >

@@ -97,13 +97,14 @@ const PRouter: FC = () => {
         </StyledLayout>
       );
     }
+
     return (
       <Routes>
-        <Route path="*" element={<Navigate to="/login" />} />
         <Route path="/verified" element={<EmailVerified />} />
-        <Route path="/verify" element={<EmailVerify />} />
+        <Route path="/verification" element={<EmailVerify />} />
         <Route path="/confirm" element={<EmailConfirmed />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     );
   }

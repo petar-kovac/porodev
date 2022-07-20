@@ -44,13 +44,10 @@ instance.interceptors.response.use(
     return response;
   },
   // eslint-disable-next-line consistent-return
-  async function (error: any) {
-    if (
-      error.response.status === StatusCode.BADREQUEST &&
-      window.location.href !== 'http://localhost:3000/login'
-    ) {
-      window.location.href = '/login';
-    }
+  function (error: any) {
+    // if (error.response.status === StatusCode.BADREQUEST) {
+    //   window.location.href = '/verified';
+    // }
 
     // if (
     //   !error.response ||
@@ -68,7 +65,7 @@ instance.interceptors.response.use(
 
     if (error.response.status === StatusCode.UNAUTHORIZED) {
       if (window.location.href === 'http://localhost:3000/login') {
-        window.location.href = '/verify';
+        window.location.href = '/verification';
       } else {
         window.location.href = '/login';
         localStorage.clear();
@@ -77,15 +74,10 @@ instance.interceptors.response.use(
       delete instance.defaults.headers.common.Authorization;
       // eslint-disable-next-line no-underscore-dangle
       const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
-      if (oldAccess) {
-        localStorage.clear();
-        window.location.href = '/login';
-      }
-    } else {
       localStorage.clear();
       window.location.href = '/login';
-      throw error;
     }
+    throw error;
   },
 );
 
