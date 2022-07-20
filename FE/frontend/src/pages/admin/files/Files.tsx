@@ -90,6 +90,7 @@ const Files: FC = () => {
               {!isListView ? (
                 <StyledListCardsWrapper>
                   <ListCards
+                    isAdmin
                     data={data}
                     cardData={cardData}
                     setCardData={setCardData}

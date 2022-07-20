@@ -16,6 +16,7 @@ import { findFiles, downloadFile } from 'service/files/files';
 import ListCard from './ListCard';
 
 interface IListCardProps {
+  isAdmin?: boolean;
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
   selected?: boolean;
@@ -27,12 +28,15 @@ interface IListCardProps {
 }
 
 const ListCards: FC<IListCardProps> = ({
+  isAdmin,
   selectedCardId,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
   data,
 }) => {
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+
+  console.log(data);
 
   const handleClick = (value: any) => {
     setSelectedCardId(value.fileId);
@@ -52,8 +56,11 @@ const ListCards: FC<IListCardProps> = ({
       {data
         ?.map((value: any) => (
           <ListCard
+            isAdmin={isAdmin}
             fileId={value.fileId}
             fileName={value.fileName}
+            userName={value.userName}
+            userLastName={value.userLastName}
             data={data}
             value={value}
             selected={selectedCardId === value.fileId}

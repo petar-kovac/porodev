@@ -26,20 +26,26 @@ import { formatDateListCard } from 'util/helpers/date-formaters';
 import RemoveModal from '../../modal/RemoveModal';
 
 interface IListCardProps {
+  isAdmin?: boolean;
   fileId: any;
   fileName: any;
   data: any;
   value: any;
   selected: boolean;
+  userName: string;
+  userLastName: string;
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
   setSelectedCardId: (value: number | null) => unknown;
 }
 
 const ListCard: FC<IListCardProps> = ({
+  isAdmin,
   fileId,
   value,
   selected,
+  userName,
+  userLastName,
   onClick = () => undefined,
   onDoubleClick = () => undefined,
   setSelectedCardId,
@@ -86,6 +92,11 @@ const ListCard: FC<IListCardProps> = ({
           <StyledDescription>
             <StyledHeading>
               <h3>{value.fileName}</h3>
+              {isAdmin && (
+                <span>
+                  by {userName} {userLastName}
+                </span>
+              )}
             </StyledHeading>
             <StyledDescriptionUploadDetails>
               <span>{formattedDate}</span>
