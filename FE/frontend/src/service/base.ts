@@ -45,36 +45,38 @@ instance.interceptors.response.use(
   },
   // eslint-disable-next-line consistent-return
   async function (error: any) {
-    const originalRequest = error.config;
-    // because backhend  is not returning properly
-
-    if (!error.response || error.response.status !== StatusCode.UNAUTHORIZED) {
-      // bad request check wrong message bacnekd
-      // window.location.href = '/login';
-      // localStorage.clear();
-      throw error;
+    if (
+      error.response.status === StatusCode.BADREQUEST &&
+      window.location.href !== 'http://localhost:3000/login'
+    ) {
+      window.location.href = '/login';
     }
 
-    if (
-      error.response.status === StatusCode.UNAUTHORIZED
+    // if (
+    //   !error.response ||
+    //   error.response.status !== StatusCode.UNAUTHORIZED ||
+    //   error.response.status !== StatusCode.BADREQUEST
+    // ) {
+    //   // bad request check wrong message bacnekd
+    //   if (window.location.href !== 'http://localhost:3000/login') {
+    //     window.location.href = '/login';
+    //     localStorage.clear();
+    //   }
 
-      // originalRequest.url !== '/refresh' &&
-      // // eslint-disable-next-line no-underscore-dangle
-      // !originalRequest._retry
-    ) {
+    //   throw error;
+    // }
+
+    if (error.response.status === StatusCode.UNAUTHORIZED) {
       if (window.location.href === 'http://localhost:3000/login') {
-        console.log('cddc');
         window.location.href = '/verify';
+      } else {
+        window.location.href = '/login';
+        localStorage.clear();
       }
-
+      // tu sam 2
       delete instance.defaults.headers.common.Authorization;
       // eslint-disable-next-line no-underscore-dangle
-      originalRequest._retry = true;
       const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
-
-      console.log(error);
-      console.log(window.location.href);
-
       if (oldAccess) {
         localStorage.clear();
         window.location.href = '/login';
