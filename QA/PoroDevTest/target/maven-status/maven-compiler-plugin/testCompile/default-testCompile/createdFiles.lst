@@ -1,0 +1,10 @@
+ui\RegisterTest.class
+api_test\FunctionalTest.class
+api_test\GetUserByEmail.class
+api_test\CreateUser.class
+ui\BaseTest.class
+api_test\RegisterUser.class
+api_test\UpdateUser.class
+api_test\DeleteUser.class
+api_test\LogInUser.class
+ui\LoginTest.class

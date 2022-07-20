@@ -1,0 +1,15 @@
+common\api_setup\api_common\UserSerialization.class
+common\ui_setup\ElementControl.class
+common\ui_setup\pom_setup\PoroDevPom\LoginPage.class
+common\api_setup\Endpoints.class
+common\ui_setup\SetupConstants.class
+common\ui_setup\pom_setup\PoroDevPom\RegistrationPage.class
+common\api_setup\api_common\UserDetailsGenerator.class
+common\ui_setup\DriverSetup.class
+common\api_setup\api_common\User.class
+common\api_setup\api_common\UserDetailsList.class
+common\ui_setup\DriverType.class
+common\api_setup\ApiConfig.class
+common\ui_setup\DriverSetup$1.class
+common\ui_setup\FileControl.class
+common\ui_setup\pom_setup\BasePage.class

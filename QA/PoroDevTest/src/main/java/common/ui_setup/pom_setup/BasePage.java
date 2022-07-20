@@ -1,6 +1,7 @@
 package common.ui_setup.pom_setup;
 
 import common.ui_setup.SetupConstants;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -28,6 +29,8 @@ public class BasePage {
         element.clear();
         element.sendKeys(text);
     }
+
+
 
     public static String getTextFromElement(WebElement element) {
         return element.getText();
@@ -76,4 +79,10 @@ public class BasePage {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
         wait.until(ExpectedConditions.visibilityOf(element));
     }
+
+    public static void waitForElementToBeClickable(WebElement element, WebDriver driver) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(SetupConstants.ELEMENT_DETECTION_TIMEOUT));
+        wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
 }

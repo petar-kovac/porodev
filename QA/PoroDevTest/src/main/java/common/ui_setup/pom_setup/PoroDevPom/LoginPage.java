@@ -28,7 +28,9 @@ public class LoginPage extends BasePage {
     WebElement we_emailInputField;
     @FindBy(name = "password")
     WebElement we_passInputField;
-    @FindBy(className = "ant-btn-default")
+
+    public
+    @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/button")
     WebElement we_loginButton;
 
     //ASSERTION ELEMENTS
@@ -43,11 +45,16 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//span[contains(text(),'Request failed with status code 400')]")
     public WebElement we_badRequest_statusCode400;
 
+    @FindBy(xpath = "//span[contains(text(),'Create new account')]")
+    public WebElement we_login_title;
+
+
     //functional methods section
 
     public void logInUser(String email, String password) {
         BasePage.sendText(we_emailInputField,email);
         BasePage.sendText(we_passInputField, password);
+        BasePage.waitForElementToBeClickable(we_loginButton, driver);
         BasePage.clickElement(we_loginButton);
     }
 
