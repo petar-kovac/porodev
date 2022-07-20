@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.Update;
@@ -91,6 +92,13 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<DataUserModel>> ReadUserByIdWithRuntimeData([FromBody] UserReadByIdWithRuntimeRequestGatewayToService model)
         {
             var returnModel = await _userService.ReadUserByIdWithRuntimeData(model);
+            return Ok(returnModel);
+        }
+
+        [HttpGet("ReadAllUsers")]
+        public async Task<ActionResult<List<DataUserModel>>> ReadAllUsers([FromQuery]ReadAllUsersRequestGatewayToService model)
+        {
+            var returnModel = await _userService.ReadAllUsers(model);
             return Ok(returnModel);
         }
     }

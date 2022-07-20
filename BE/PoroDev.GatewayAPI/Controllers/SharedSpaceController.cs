@@ -20,11 +20,11 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<ActionResult<SharedSpace>> Create([FromQuery] string name)
+        public async Task<ActionResult<SharedSpace>> Create([FromBody] CreateSharedSpaceRequestModel model)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
-            var response = await _sharedSpaceService.Create(new CreateSharedSpaceRequestGatewayToService { Name = name, OwnerId = userId });
+            var response = await _sharedSpaceService.Create(new CreateSharedSpaceRequestGatewayToService { Name = model.Name, OwnerId = userId });
 
             if (response.ExceptionName != null)
                 ThrowException(nameof(response.ExceptionName), response.HumanReadableMessage);

@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
@@ -22,6 +23,8 @@ namespace PoroDev.UserManagementService.Services.Contracts
         Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
 
         Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model);
+
+        Task<CommunicationModel<List<DataUserModel>>> ReadAllUsers(ReadAllUsersRequestGatewayToService model);
 
         Task<CommunicationModel<DataUserModel>> ReadUserById(UserReadByIdRequestGatewayToService model);
 
