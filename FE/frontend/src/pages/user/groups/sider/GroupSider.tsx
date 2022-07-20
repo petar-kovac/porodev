@@ -1,13 +1,12 @@
 import { Layout } from 'antd';
-import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import PButton from 'components/buttons/PButton';
 import { usePageContext } from 'context/PageContext';
-import StyledIcon from 'styles/icons/StyledIcons';
+import { StyledFile } from 'styles/icons/styled-icons';
 import { IFilesCard } from 'types/card-data';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
-import { StyledFile } from 'styles/icons/styled-icons';
 
 const { Sider } = Layout;
 
@@ -46,18 +45,26 @@ const GroupSider: FC<IPFileSiderProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
-        <StyledRow>
-          <StyledFile />
-        </StyledRow>
-        <StyledTitle>{cardData?.title}</StyledTitle>
-        <StyledContent>
-          {cardData && <SiderDataMapper data={cardData} />}
-        </StyledContent>
-        <PButton text="Groups button" onClick={onClick} isLoading={isLoading} />
+        <StyledFirstPart>
+          <StyledRow>
+            <StyledFile />
+          </StyledRow>
+          <StyledTitle>Info</StyledTitle>
+          <StyledContent>
+            {cardData && <SiderDataMapper data={cardData} />}
+          </StyledContent>
+        </StyledFirstPart>
+        <PButton text="Show files" onClick={onClick} isLoading={isLoading} />
       </StyledColumn>
     </StyledGroupSider>
   );
 };
+
+const StyledFirstPart = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const StyledContent = styled.div`
   display: flex;
@@ -80,9 +87,11 @@ const StyledColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-around;
-  width: 290px;
-  flex: 1;
+  width: 275px;
   gap: 15px;
+  height: 95%;
+  justify-content: space-between;
+  padding-bottom: 20px;
 `;
 
 const StyledGroupSider = styled(Sider).attrs({

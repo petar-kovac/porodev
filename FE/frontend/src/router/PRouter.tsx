@@ -14,6 +14,7 @@ import Runtime from 'pages/admin/runtime/Runtime';
 import UserRuntime from 'pages/user/runtime/Runtime';
 import EmailVerified from 'pages/email-verify/EmailVerified';
 import { Role } from 'util/enums/roles';
+import SingleGroup from 'pages/user/groups/SingleGroup';
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
 import PageProvider from '../context/PageContext';
@@ -77,6 +78,7 @@ const PRouter: FC = () => {
                     <Route path="/user-files" element={<UserFiles />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/user-groups" element={<UserGroups />} />
+                    <Route path="/user-groups/:id" element={<SingleGroup />} />
                     <Route path="/user-runtime" element={<UserRuntime />} />
                   </Route>
                   {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}
