@@ -1,19 +1,15 @@
-import axios from 'axios';
-import { useState, useEffect, FC } from 'react';
-import { Link, useParams, useLocation } from 'react-router-dom';
-import { useAuthStateValue } from 'context/AuthContext';
-import { verifyEmail } from 'service/files/files';
+import { FC } from 'react';
+
 import styled from 'styled-components';
 import emailImage from '../../assets/email-sent.png';
-import success from '../../assets/success.png';
 
 const EmailVerify: FC = () => {
   return (
     <StyledContainer>
-      <StyledRegistrationBox>
+      {/* <StyledRegistrationBox>
         <img src={success} alt="tick" style={{ width: '12rem' }} />
         <h1>Registration successful!</h1>
-      </StyledRegistrationBox>
+      </StyledRegistrationBox> */}
 
       <StyledVerificationBox>
         <StyledVerificationImage
@@ -46,7 +42,9 @@ const StyledContainer = styled.div`
   flex-direction: column;
   gap: 3rem;
   background-color: #f3f3f3;
-  padding-top: 6rem;
+  /* padding-top: 6rem; */
+
+  justify-content: center;
 `;
 
 const StyledRegistrationBox = styled.div`
