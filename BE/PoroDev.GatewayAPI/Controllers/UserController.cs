@@ -3,11 +3,13 @@ using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -21,10 +23,12 @@ namespace PoroDev.GatewayAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserManagementService _userService;
+        private readonly IJwtValidatorService _jwtValidatorService;
 
-        public UserController(IUserManagementService userService)
+        public UserController(IUserManagementService userService, IJwtValidatorService jwtValidatorService)
         {
             _userService = userService;
+            _jwtValidatorService = jwtValidatorService;
         }
 
         [HttpPost("CreateUser")]
@@ -99,6 +103,15 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<List<DataUserModel>>> ReadAllUsers([FromQuery]ReadAllUsersRequestGatewayToService model)
         {
             var returnModel = await _userService.ReadAllUsers(model);
+            return Ok(returnModel);
+        }
+
+        [HttpGet("ReadAllSharedSpacesForUser")]
+        public async Task<ActionResult<List<SharedSpace>>> ReadAllSharedSpacesForUser([FromQuery]ReadAllSharedSpacesRequest model)
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var modelToPass = new ReadAllSharedSpacesForUserRequestGatewayToService() { UserId = userId };
+            var returnModel = await _userService.ReadAllSharedSpacesForUser(modelToPass);
             return Ok(returnModel);
         }
     }

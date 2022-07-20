@@ -6,6 +6,7 @@ using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
@@ -14,6 +15,7 @@ using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.EmailSenderModels;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -40,7 +42,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<SendEmailRequest> _verificationEmailSenderRequestClient;
         private readonly IRequestClient<VerifyEmailRequestServiceToDatabase> _verifyEmailRequestClient;
         private readonly IRequestClient<ReadAllUsersRequestServiceToDatabase> _readAllUsersRequestClient;
-
+        private readonly IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> _readAllSharedSpacesForUserRequestClient;
         private readonly IMapper _mapper;
 
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
@@ -55,6 +57,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<SendEmailRequest> verificationEmailSenderRequestClient,
                            IRequestClient<VerifyEmailRequestServiceToDatabase> verifyEmailRequestClient,
                            IRequestClient<ReadAllUsersRequestServiceToDatabase> readAllUsersRequestClient,
+                           IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> readAllSharedSpacesForUserRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
@@ -69,6 +72,7 @@ namespace PoroDev.UserManagementService.Services
             _verificationEmailSenderRequestClient = verificationEmailSenderRequestClient;
             _verifyEmailRequestClient = verifyEmailRequestClient;
             _readAllUsersRequestClient = readAllUsersRequestClient;
+            _readAllSharedSpacesForUserRequestClient = readAllSharedSpacesForUserRequestClient;
             _mapper = mapper;
         }
 
@@ -282,6 +286,11 @@ namespace PoroDev.UserManagementService.Services
 
             return returnModel;
         }
-        
+
+        public async Task<CommunicationModel<List<SharedSpace>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
+        {
+            var returnModel = await _readAllSharedSpacesForUserRequestClient.GetResponse<CommunicationModel<List<SharedSpace>>>(model);
+            return returnModel.Message;
+        }
     }
 }
