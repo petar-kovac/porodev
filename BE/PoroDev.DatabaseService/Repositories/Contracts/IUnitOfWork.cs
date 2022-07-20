@@ -12,6 +12,8 @@
 
         ISharedSpacesWithFilesRepository SharedSpacesWithFiles { get; }
 
+        ISharedSpacesUsersRepository SharedSpacesUsers { get; }
+
         Task<int> SaveChanges();
     }
 }

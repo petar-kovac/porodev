@@ -1,8 +1,10 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.SharedSpace;
+using PoroDev.Common.Contracts.SharedSpace.AddUser;
+using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.SharedSpaces;
+using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.SharedSpaceService.Services.Contracts;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using static PoroDev.SharedSpaceService.Constants.Constants;
@@ -12,19 +14,29 @@ namespace PoroDev.SharedSpaceService.Services
     public class SharedSpaceService : ISharedSpaceService
     {
         private readonly IRequestClient<CreateSharedSpaceRequestServiceToDatabase> _createSharedSpaceRequestClient;
+        private readonly IRequestClient<AddUserToSharedSpaceRequestServiceToDatabase> _addUserToSharedSpaceRequestClient;
         private readonly IRequestClient<AddFileToSharedSpaceServiceToDatabase> _addFileClient;
 
-        public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestServiceToDatabase> createSharedSpaceRequestClient, IRequestClient<AddFileToSharedSpaceServiceToDatabase> addFileClient)
+        public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestServiceToDatabase> createSharedSpaceRequestClient, 
+            IRequestClient<AddFileToSharedSpaceServiceToDatabase> addFileClient,
+            IRequestClient<AddUserToSharedSpaceRequestServiceToDatabase> addUserToSharedSpaceRequestClient)
         {
             _createSharedSpaceRequestClient = createSharedSpaceRequestClient;
             _addFileClient = addFileClient;
+            _addUserToSharedSpaceRequestClient = addUserToSharedSpaceRequestClient;
         }
 
         public async Task<CommunicationModel<SharedSpacesFiles>> AddFile(AddFileToSharedSpaceGatewayToService requestModel)
         {
             return (await _addFileClient.GetResponse<CommunicationModel<SharedSpacesFiles>>(new AddFileToSharedSpaceServiceToDatabase(requestModel.SharedSpaceId,
                                                                                                                                       requestModel.FileId,
-                                                                                                                                      requestModel.UserId))).Message;
+                                                                                                                                      requestModel.UserId))).Message;     
+        }
+
+        public async Task<CommunicationModel<SharedSpacesUsers>> AddUserToSharedSpace(AddUserToSharedSpaceRequestGatewayToService addModel)
+        {
+            var response = await _addUserToSharedSpaceRequestClient.GetResponse<CommunicationModel<SharedSpacesUsers>>(addModel);
+            return response.Message;
         }
 
         public async Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel)

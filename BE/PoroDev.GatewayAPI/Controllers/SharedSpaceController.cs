@@ -4,6 +4,9 @@ using PoroDev.GatewayAPI.Services.Contracts;
 using PoroDev.Common.Contracts.SharedSpace;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using PoroDev.GatewayAPI.Models.SharedSpace;
+using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Contracts.SharedSpace.AddUser;
+using PoroDev.Common.Contracts.SharedSpace.Create;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -30,7 +33,20 @@ namespace PoroDev.GatewayAPI.Controllers
             if (response.ExceptionName != null)
                 ThrowException(nameof(response.ExceptionName), response.HumanReadableMessage);
 
-            return Ok(response);
+            return Ok(response.Entity);
+        }
+
+        [HttpPost("AddUserToSharedSpace")]
+        public async Task<ActionResult<SharedSpacesUsers>> AddUserToSharedSpace([FromBody] AddUserToSharedSpaceRequestGatewayToService model)
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var response = await _sharedSpaceService.AddUserToSharedSpace(model);
+
+            if (response.ExceptionName != null)
+                ThrowException(nameof(response.ExceptionName), response.HumanReadableMessage);
+
+            return Ok(response.Entity);
+
         }
 
         [HttpPost("AddFile")]

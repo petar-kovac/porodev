@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.SharedSpace;
+using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.SharedSpaceService.Services.Contracts;
 
