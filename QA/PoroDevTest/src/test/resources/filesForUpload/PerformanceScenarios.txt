@@ -1,0 +1,8 @@
+1. Create object model
+2. Implement automation tests
+3. Getling 
+
+Gatling
+
+1. 100 zahteva u vremenskom periodu (od 30 sec) svake 2 3 sec 10 15 req (incrementalni)
+2. 100 zahteva odjednom (flat)
