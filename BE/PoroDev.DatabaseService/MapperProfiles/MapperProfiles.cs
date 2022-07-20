@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
-using PoroDev.Common.Contracts.SharedSpace;
+using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.Create;
@@ -25,6 +25,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<UnitOfWorkResponseModel<List<RuntimeData>>, CommunicationModel<List<RuntimeData>>>();
 
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
+
+            CreateMap<UnitOfWorkResponseModel<SharedSpacesUsers>, CommunicationModel<SharedSpacesUsers>>();
 
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
             CreateMap<UserUpdateRequestServiceToDatabase, DataUserModel>();

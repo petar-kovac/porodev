@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Contracts.SharedSpace
+namespace PoroDev.Common.Contracts.SharedSpace.Create
 {
-    public class CreateSharedSpaceRequestGatewayToService
+    public class CreateSharedSpaceRequestServiceToDatabase
     {
         public string Name { get; set; }
 
