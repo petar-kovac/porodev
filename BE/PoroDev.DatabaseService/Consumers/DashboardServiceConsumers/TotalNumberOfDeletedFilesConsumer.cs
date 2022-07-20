@@ -24,7 +24,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             if(user.Role == 0)
             {
                 TotalNumberOfDeletedFilesModel returnModel = new TotalNumberOfDeletedFilesModel();
-                returnModel._numberOfDeletedFiles = await countNumberOfUploadedFiles();
+                returnModel.NumberOfDeletedFiles = await countNumberOfUploadedFiles();
 
                 var response = new CommunicationModel<TotalNumberOfDeletedFilesModel>()
                 {

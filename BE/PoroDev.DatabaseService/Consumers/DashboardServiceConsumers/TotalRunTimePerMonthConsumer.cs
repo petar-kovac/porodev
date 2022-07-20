@@ -24,8 +24,8 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             if(user.Role == 0)
             {
                 TotalRunTimePerMonthModel returnModel = new TotalRunTimePerMonthModel();
-                returnModel._totalRunTime = await CountTotalMemoryUsedForUploadPerMonth();
-                returnModel._month = currentMonth;
+                returnModel.TotalRunTime = await CountTotalMemoryUsedForUploadPerMonth();
+                returnModel.Month = currentMonth;
 
                 var response = new CommunicationModel<TotalRunTimePerMonthModel>()
                 {

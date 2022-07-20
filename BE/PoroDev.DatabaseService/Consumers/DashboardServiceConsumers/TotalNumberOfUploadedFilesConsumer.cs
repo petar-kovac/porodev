@@ -25,7 +25,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             if(user.Role == 0)
             {
                 TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
-                returnModel._numberOfUploadedFiles = await CountNumberOfUploadedFiles();
+                returnModel.NumberOfUploadedFiles = await CountNumberOfUploadedFiles();
 
                 var response = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
                 {

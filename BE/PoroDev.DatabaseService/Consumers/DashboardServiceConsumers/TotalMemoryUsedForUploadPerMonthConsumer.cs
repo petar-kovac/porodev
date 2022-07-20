@@ -24,8 +24,8 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             if(user.Role == 0)
             {
                 TotalMemoryUsedForUploadPerMonthModel returnModel = new TotalMemoryUsedForUploadPerMonthModel();
-                returnModel._totalMemoryUsedForUploadInMBs = await CountTotalMemoryUsedForUploadPerMonth();
-                returnModel._month = currentMonth;
+                returnModel.TotalMemoryUsedForUploadInMBs = await CountTotalMemoryUsedForUploadPerMonth();
+                returnModel.Month = currentMonth;
 
                 var response = new CommunicationModel<TotalMemoryUsedForUploadPerMonthModel>()
                 {

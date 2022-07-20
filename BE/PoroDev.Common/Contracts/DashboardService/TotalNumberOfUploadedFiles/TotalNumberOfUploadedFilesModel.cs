@@ -8,7 +8,7 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles
 {
     public class TotalNumberOfUploadedFilesModel
     {
-        public int _numberOfUploadedFiles { get; set; }
+        public int NumberOfUploadedFiles { get; set; }
 
         public TotalNumberOfUploadedFilesModel()
         {
@@ -16,7 +16,7 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles
         }
         public TotalNumberOfUploadedFilesModel(int numberOfUploadedFiles)
         {
-            _numberOfUploadedFiles = numberOfUploadedFiles;
+            NumberOfUploadedFiles = numberOfUploadedFiles;
         }
     }
 }

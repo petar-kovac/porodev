@@ -8,9 +8,9 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPe
 {
     public class TotalMemoryUsedForDownloadPerMonthModel
     {
-        public string _month { get; set; }
+        public string Month { get; set; }
 
-        public double _totalMemoryUsedForDownloadInMBs { get; set; }
+        public double TotalMemoryUsedForDownloadInMBs { get; set; }
         
         public TotalMemoryUsedForDownloadPerMonthModel()
         {
@@ -19,8 +19,8 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPe
 
         public TotalMemoryUsedForDownloadPerMonthModel(double totalMemoryUsedForDownloadInMBs, string month)
         {
-            _totalMemoryUsedForDownloadInMBs = totalMemoryUsedForDownloadInMBs;
-            _month = month;
+            TotalMemoryUsedForDownloadInMBs = totalMemoryUsedForDownloadInMBs;
+            Month = month;
         }
     }
 }
