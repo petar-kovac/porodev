@@ -6,6 +6,7 @@ using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers;
+using PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
@@ -22,6 +23,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<TotalRunTimeForAllUsersRequestGatewayToService> _totalNumberOfRunTimeForAllUsersClient;
         private readonly IRequestClient<TotalMemoryUsedForUploadPerMonthRequestGatewayToService> _totalMemoryUsedForUploadClient;
         private readonly IRequestClient<TotalMemoryUsedForDownloadPerMonthRequestGatewayToService> _totalMemoryUsedForDownloadClient;
+        private readonly IRequestClient<TotalRunTimePerMonthRequestGatewayToService> _totalRunTimePerMonthClient;
 
 
         public DashBoardService(
@@ -30,14 +32,16 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<TotalNumberOfDeletedFilesRequestGatewayToService> totalNumberOfDeletedFilesClient,
             IRequestClient<TotalRunTimeForAllUsersRequestGatewayToService> totalNumberOfRunTimeForAllUsersClient,
             IRequestClient<TotalMemoryUsedForUploadPerMonthRequestGatewayToService> totalMemoryUsedForUploadClient,
-            IRequestClient<TotalMemoryUsedForDownloadPerMonthRequestGatewayToService> totalMemoryUsedForDownloadClient)
+            IRequestClient<TotalMemoryUsedForDownloadPerMonthRequestGatewayToService> totalMemoryUsedForDownloadClient,
+            IRequestClient<TotalRunTimePerMonthRequestGatewayToService> totalRunTimePerMonthClient)
         {
             _totalNumberOfUsersClient = totalNumberOfUsersClient;
             _totalNumberOfUploadedFilesClient = totalNumberOfUploadedFilesClient;
             _totalNumberOfDeletedFilesClient = totalNumberOfDeletedFilesClient;
             _totalNumberOfRunTimeForAllUsersClient = totalNumberOfRunTimeForAllUsersClient;
             _totalMemoryUsedForUploadClient = totalMemoryUsedForUploadClient;
-            _totalMemoryUsedForDownloadClient = totalMemoryUsedForDownloadClient; 
+            _totalMemoryUsedForDownloadClient = totalMemoryUsedForDownloadClient;
+            _totalRunTimePerMonthClient = totalRunTimePerMonthClient;
         }
 
 
@@ -86,6 +90,20 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<TotalNumberOfUsersModel> GetTotalNumberOfUsers(TotalNumberOfUsersRequestGatewayToService totalNumberOfUsersModel)
         {
             var responseContext = await _totalNumberOfUsersClient.GetResponse<CommunicationModel<TotalNumberOfUsersModel>>(totalNumberOfUsersModel);
+
+            if (responseContext.Message.ExceptionName != null)
+            {
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+            }
+
+            var response = responseContext.Message.Entity;
+
+            return response;
+        }
+
+        public async Task<TotalRunTimePerMonthModel> GetTotalRuntimePerMonth(TotalRunTimePerMonthRequestGatewayToService totalRunTimePerMonthModel)
+        {
+            var responseContext = await _totalRunTimePerMonthClient.GetResponse<CommunicationModel<TotalRunTimePerMonthModel>>(totalRunTimePerMonthModel);
 
             if (responseContext.Message.ExceptionName != null)
             {

@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers;
+using PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth;
 
 namespace PoroDev.GatewayAPI.Services.Contracts
 {
@@ -16,6 +17,8 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         public Task<TotalNumberOfDeletedFilesModel> GetTotalNumberOfDeletedFiles(TotalNumberOfDeletedFilesRequestGatewayToService totalNumberOfDeletedFilesModel);
 
         public Task<TotalNumberOfUsersModel> GetTotalNumberOfUsers(TotalNumberOfUsersRequestGatewayToService totalNumberOfUsersModel);
+         
+        public Task<TotalRunTimePerMonthModel> GetTotalRuntimePerMonth(TotalRunTimePerMonthRequestGatewayToService totalRunTimePerMonthModel);
 
         public Task<TotalMemoryUsedForUploadPerMonthModel> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestGatewayToService totalMemoryUsedForUploadModel);
 

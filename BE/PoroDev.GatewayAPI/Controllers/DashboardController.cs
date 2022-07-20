@@ -5,6 +5,7 @@ using PoroDev.Common.Contracts.DashboardService.TotalNumberOfDeletedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers;
+using PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth;
 using PoroDev.GatewayAPI.Services.Contracts;
 
 namespace PoroDev.GatewayAPI.Controllers
@@ -26,8 +27,8 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<TotalRunTimeForAllUsersModel>> GetTotalRunTimeForAllUsers()
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-
             var returnModel = new TotalRunTimeForAllUsersRequestGatewayToService(userId);
+
             var response = await _dashBoardService.GetTotalRunTimeForAllUsers(returnModel);
             
             return Ok(response);
@@ -37,8 +38,8 @@ namespace PoroDev.GatewayAPI.Controllers
         public async Task<ActionResult<TotalNumberOfUploadedFilesModel>> GetTotalNumberOfUploadedFiles()
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-
             var returnModel = new TotalNumberOfUploadedFilesRequestGatewayToService(userId);
+
             var response = await _dashBoardService.GetTotalNumberOfUploadedFiles(returnModel);
 
             return Ok(response);
@@ -66,7 +67,16 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(response);
         }
 
-        //[HttpGet("TotalRunTimePerMonth")]
+        [HttpGet("TotalRunTimePerMonth")]
+        public async Task<ActionResult<TotalRunTimePerMonthModel>> GetTotalRunTimePerMonth()
+        {
+           Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+           var returnModel = new TotalRunTimePerMonthRequestGatewayToService(userId);
+
+           var response = await _dashBoardService.GetTotalRuntimePerMonth(returnModel);
+
+           return Ok(response);
+        }
 
         [HttpGet("TotalMemoryUsedForUploadPerMonth")]
         public async Task<ActionResult<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUpload()
