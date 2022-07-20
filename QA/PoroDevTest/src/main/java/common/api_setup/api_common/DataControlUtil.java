@@ -8,9 +8,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.testng.Assert;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 
 public class DataControlUtil {
@@ -30,17 +34,25 @@ public class DataControlUtil {
     //This method upload number of files that are located in "filePath.properties" file, located in TestResources
     public static void uploadThenDeleteFiles(int numOfFiles) throws ParseException {
 
+        List<String> fileNames = new ArrayList<>();
         for (int i = 0; i <= numOfFiles; i++) {
-            String currentFileName = uploadFile(
+            fileNames.add(uploadFile(
                     fileLogin.getValue("VALID_EMAIL"),
                     fileLogin.getValue("VALID_PASS_CREATED_USER"),
-                    filePath.getValue("FILEPATH" + i));
+                    filePath.getValue("FILEPATH" + i)));
 
             fileIds.add(
                     getFileIdFromFileName(
                             fileLogin.getValue("VALID_EMAIL"),
                             fileLogin.getValue("VALID_PASS_CREATED_USER"),
-                            currentFileName));
+                            fileNames.get(i)));
+
+            boolean isUploaded = fileExists(
+                    fileLogin.getValue("VALID_EMAIL"),
+                    fileLogin.getValue("VALID_PASS_CREATED_USER"),
+                    fileNames.get(i));
+
+            Assert.assertTrue(isUploaded, "File is not uploaded.");
         }
 
         for (int i = 0; i <= numOfFiles; i++) {
@@ -48,6 +60,13 @@ public class DataControlUtil {
                     fileLogin.getValue("VALID_EMAIL"),
                     fileLogin.getValue("VALID_PASS_CREATED_USER"),
                     fileIds.get(i));
+
+            boolean fileExist = fileExists(
+                    fileLogin.getValue("VALID_EMAIL"),
+                    fileLogin.getValue("VALID_PASS_CREATED_USER"),
+                    fileNames.get(i));
+
+            Assert.assertFalse(fileExist, "File is not deleted, still exists in database.");
         }
     }
 
