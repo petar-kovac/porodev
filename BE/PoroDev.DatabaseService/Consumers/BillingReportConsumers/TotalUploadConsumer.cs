@@ -15,12 +15,6 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task Consume(ConsumeContext<TotalUploadRequestServiceToDatabase> context)
-        {
-            var respondModel = await TotalUpload(context.Message);
-
-            await context.RespondAsync(respondModel);
-        }
 
         private async Task<CommunicationModel<TotalUploadResponse>> TotalUpload(TotalUploadRequestServiceToDatabase totalUpload)
         {
@@ -38,6 +32,13 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
             };
 
             return new CommunicationModel<TotalUploadResponse>(uploadSize);
+        }
+
+        public async Task Consume(ConsumeContext<TotalUploadRequestServiceToDatabase> context)
+        {
+            var respondModel = await TotalUpload(context.Message);
+
+            await context.RespondAsync(respondModel);
         }
     }
 }

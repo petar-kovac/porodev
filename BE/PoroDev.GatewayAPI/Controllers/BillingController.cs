@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.BillingReport.TotalDownload;
+using PoroDev.Common.Contracts.BillingReport.TotalRuntime;
 using PoroDev.Common.Contracts.BillingReport.TotalUpload;
 using PoroDev.GatewayAPI.Services.Contracts;
 
@@ -18,13 +20,36 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("TotalUpload")]
-        public async Task<ActionResult> TotalUpload(Guid userId)
+        public async Task<ActionResult> TotalUpload([FromQuery]Guid userId)
         {
             Guid adminId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
             var returnModel = new TotalUploadRequestGatewayToService(adminId, userId);
+            var uploadCount = await _billingReportService.TotalUpload(returnModel);
 
-            return Ok(returnModel);
+            return Ok(uploadCount);
+        }
+
+        [HttpGet("TotalDownload")]
+        public async Task<ActionResult> TotalDownload([FromQuery]Guid userId)
+        {
+            Guid adminId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var returnModel = new TotalDownloadRequestGatewayToService(adminId, userId);
+            var downloadCount = await _billingReportService.TotalDownload(returnModel);
+
+            return Ok(downloadCount);
+        }
+
+        [HttpGet("TotalRuntime")]
+        public async Task<ActionResult> TotalRuntime([FromQuery] Guid userId)
+        {
+            Guid adminId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var returnModel = new TotalRuntimeRequestGatewayToService(adminId, userId);
+            var runtimeCount = await _billingReportService.TotalRuntime(returnModel);
+
+            return Ok(runtimeCount);
         }
     }
 }

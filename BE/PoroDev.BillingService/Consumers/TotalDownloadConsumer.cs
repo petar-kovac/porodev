@@ -1,21 +1,21 @@
 ﻿using MassTransit;
 using PoroDev.BillingService.Services.Contracts;
-using PoroDev.Common.Contracts.BillingReport.TotalUpload;
+using PoroDev.Common.Contracts.BillingReport.TotalDownload;
 
 namespace PoroDev.BillingService.Consumers
 {
-    public class TotalUploadConsumer : IConsumer<TotalUploadRequestGatewayToService>
+    public class TotalDownloadConsumer : IConsumer<TotalDownloadRequestGatewayToService>
     {
         private readonly IBillingService _billingService;
 
-        public TotalUploadConsumer(IBillingService billingService)
+        public TotalDownloadConsumer(IBillingService billingService)
         {
             _billingService = billingService;
         }
 
-        public async Task Consume(ConsumeContext<TotalUploadRequestGatewayToService> context)
+        public async Task Consume(ConsumeContext<TotalDownloadRequestGatewayToService> context)
         {
-            var modelToReturn = await _billingService.TotalUpload(new TotalUploadRequestServiceToDatabase()
+            var modelToReturn = await _billingService.TotalDownload(new TotalDownloadRequestServiceToDatabase()
             {
                 AdminId = context.Message.AdminId,
                 UserId = context.Message.UserId
