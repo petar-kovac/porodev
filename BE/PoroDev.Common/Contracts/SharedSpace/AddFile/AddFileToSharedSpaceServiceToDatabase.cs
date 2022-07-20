@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoroDev.Common.Contracts.SharedSpace
+namespace PoroDev.Common.Contracts.SharedSpace.AddFile
 {
-    public class AddFileToSharedSpaceGatewayToService
+    public class AddFileToSharedSpaceServiceToDatabase
     {
         public Guid SharedSpaceId { get; set; }
 
@@ -14,12 +14,12 @@ namespace PoroDev.Common.Contracts.SharedSpace
 
         public Guid UserId { get; set; }
 
-        public AddFileToSharedSpaceGatewayToService()
+        public AddFileToSharedSpaceServiceToDatabase()
         {
 
         }
 
-        public AddFileToSharedSpaceGatewayToService(Guid sharedSpaceId, string fileId, Guid userId)
+        public AddFileToSharedSpaceServiceToDatabase(Guid sharedSpaceId, string fileId, Guid userId)
         {
             SharedSpaceId = sharedSpaceId;
             FileId = fileId;

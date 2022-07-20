@@ -7,6 +7,8 @@ using PoroDev.GatewayAPI.Models.SharedSpace;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
+using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -57,6 +59,16 @@ namespace PoroDev.GatewayAPI.Controllers
             var requestWithId = new AddFileToSharedSpaceGatewayToService(requestModel.SharedSpaceId, requestModel.FileId, userId);
 
             await _sharedSpaceService.AddFile(requestWithId);
+
+            return Ok();
+        }
+
+        [HttpGet("GetAllFiles")]
+        public async Task<ActionResult<List<QueryFilesResponse>>> GetAllFiles([FromQuery] string spaceId)
+        {
+            await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var spaceIdGuid = Guid.Parse(spaceId);
 
             return Ok();
         }

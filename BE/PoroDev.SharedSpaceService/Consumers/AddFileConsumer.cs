@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MassTransit;
-using PoroDev.Common.Contracts.SharedSpace;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.SharedSpaceService.Services.Contracts;
 
 namespace PoroDev.SharedSpaceService.Consumers

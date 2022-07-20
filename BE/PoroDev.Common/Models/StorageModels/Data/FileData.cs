@@ -20,6 +20,7 @@ namespace PoroDev.Common.Models.StorageModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DataUserModel CurrentUser { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<SharedSpacesFiles> SharedSpaces { get; set; }
 
         public FileData()

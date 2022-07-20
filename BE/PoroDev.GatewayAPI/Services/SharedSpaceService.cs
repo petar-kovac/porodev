@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Models.SharedSpaces;
@@ -21,13 +22,13 @@ namespace PoroDev.GatewayAPI.Services
         {
             _createSharedSpaceRequestClient = createSharedSpaceRequestClient;
             _addUserToSharedSpaceRequestGatewayToService = addUserToSharedSpaceRequestGatewayToService;
+            _addFileRequestClient = addFileRequestClient;
         }
 
         public async Task<CommunicationModel<SharedSpacesUsers>> AddUserToSharedSpace(AddUserToSharedSpaceRequestGatewayToService addModel)
         {
             var requestReturnContext = await _addUserToSharedSpaceRequestGatewayToService.GetResponse<CommunicationModel<SharedSpacesUsers>>(addModel, CancellationToken.None, RequestTimeout.After(m: 5));
-            return requestReturnContext.Message;
-            _addFileRequestClient = addFileRequestClient;
+            return requestReturnContext.Message;  
         }
 
         public async Task AddFile(AddFileToSharedSpaceGatewayToService requestModel)
