@@ -57,14 +57,23 @@ instance.interceptors.response.use(
 
     if (
       error.response.status === StatusCode.UNAUTHORIZED
+
       // originalRequest.url !== '/refresh' &&
       // // eslint-disable-next-line no-underscore-dangle
       // !originalRequest._retry
     ) {
+      if (window.location.href === 'http://localhost:3000/login') {
+        console.log('cddc');
+        window.location.href = '/verify';
+      }
+
       delete instance.defaults.headers.common.Authorization;
       // eslint-disable-next-line no-underscore-dangle
       originalRequest._retry = true;
       const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+
+      console.log(error);
+      console.log(window.location.href);
 
       if (oldAccess) {
         localStorage.clear();

@@ -57,6 +57,8 @@ const StyledRegistrationBox = styled.div`
   justify-content: center;
   flex-direction: column;
 
+  z-index: 10;
+
   box-shadow: 1px 3px 8px rgba(34, 25, 25, 0.2);
   border-radius: 1.5rem;
 
