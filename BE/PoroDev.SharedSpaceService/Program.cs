@@ -1,4 +1,5 @@
 using PoroDev.Common.MassTransit;
+using PoroDev.SharedSpaceService.MapperProfiles;
 using PoroDev.SharedSpaceService.Services;
 using PoroDev.SharedSpaceService.Services.Contracts;
 
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISharedSpaceService, SharedSpaceService>();
 
 builder.Services.AddMassTransitWithRabbitMq();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 

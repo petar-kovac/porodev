@@ -10,6 +10,8 @@
 
         ISharedSpaceRepository SharedSpaces { get; }
 
+        ISharedSpacesWithFilesRepository SharedSpacesWithFiles { get; }
+
         Task<int> SaveChanges();
     }
 }

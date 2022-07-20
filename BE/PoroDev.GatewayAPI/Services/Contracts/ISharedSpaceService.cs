@@ -7,5 +7,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
     public interface ISharedSpaceService
     {
         Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel);
+
+        Task AddFile(AddFileToSharedSpaceGatewayToService requestModel);
     }
 }

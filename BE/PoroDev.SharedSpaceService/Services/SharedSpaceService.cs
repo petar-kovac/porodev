@@ -12,11 +12,21 @@ namespace PoroDev.SharedSpaceService.Services
     public class SharedSpaceService : ISharedSpaceService
     {
         private readonly IRequestClient<CreateSharedSpaceRequestServiceToDatabase> _createSharedSpaceRequestClient;
+        private readonly IRequestClient<AddFileToSharedSpaceServiceToDatabase> _addFileClient;
 
-        public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestServiceToDatabase> createSharedSpaceRequestClient)
+        public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestServiceToDatabase> createSharedSpaceRequestClient, IRequestClient<AddFileToSharedSpaceServiceToDatabase> addFileClient)
         {
             _createSharedSpaceRequestClient = createSharedSpaceRequestClient;
+            _addFileClient = addFileClient;
         }
+
+        public async Task<CommunicationModel<SharedSpacesFiles>> AddFile(AddFileToSharedSpaceGatewayToService requestModel)
+        {
+            return (await _addFileClient.GetResponse<CommunicationModel<SharedSpacesFiles>>(new AddFileToSharedSpaceServiceToDatabase(requestModel.SharedSpaceId,
+                                                                                                                                      requestModel.FileId,
+                                                                                                                                      requestModel.UserId))).Message;
+        }
+
         public async Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel)
         {
             if (String.IsNullOrEmpty(createModel.Name.Trim()))

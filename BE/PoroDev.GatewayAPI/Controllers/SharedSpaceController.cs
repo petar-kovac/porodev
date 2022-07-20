@@ -3,6 +3,7 @@ using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.GatewayAPI.Services.Contracts;
 using PoroDev.Common.Contracts.SharedSpace;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using PoroDev.GatewayAPI.Models.SharedSpace;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -30,6 +31,18 @@ namespace PoroDev.GatewayAPI.Controllers
                 ThrowException(nameof(response.ExceptionName), response.HumanReadableMessage);
 
             return Ok(response);
+        }
+
+        [HttpPost("AddFile")]
+        public async Task<IActionResult> AddFile([FromBody] AddFileToSharedSpaceRequest requestModel)
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var requestWithId = new AddFileToSharedSpaceGatewayToService(requestModel.SharedSpaceId, requestModel.FileId, userId);
+
+            await _sharedSpaceService.AddFile(requestWithId);
+
+            return Ok();
         }
     }
 }

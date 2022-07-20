@@ -10,10 +10,23 @@ namespace PoroDev.GatewayAPI.Services
     public class SharedSpaceService : ISharedSpaceService
     {
         private readonly IRequestClient<CreateSharedSpaceRequestGatewayToService> _createSharedSpaceRequestClient;
+        private readonly IRequestClient<AddFileToSharedSpaceGatewayToService> _addFileRequestClient;
 
-        public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestGatewayToService> createSharedSpaceRequestClient)
+        public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestGatewayToService> createSharedSpaceRequestClient,
+                                  IRequestClient<AddFileToSharedSpaceGatewayToService> addFileRequestClient)
         {
             _createSharedSpaceRequestClient = createSharedSpaceRequestClient;
+            _addFileRequestClient = addFileRequestClient;
+        }
+
+        public async Task AddFile(AddFileToSharedSpaceGatewayToService requestModel)
+        {
+            var responseContext = await _addFileRequestClient.GetResponse<CommunicationModel<SharedSpacesFiles>>(requestModel);
+
+            if (responseContext.Message.ExceptionName is not null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
+            return;
         }
 
         public async Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel)

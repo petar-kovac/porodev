@@ -54,6 +54,10 @@ namespace PoroDev.DatabaseService.MapperProfiles
 
             CreateMap<CreateSharedSpaceRequestServiceToDatabase, SharedSpace>();
             CreateMap<UnitOfWorkResponseModel<SharedSpace>, CommunicationModel<SharedSpace>>();
+
+            CreateMap<AddFileToSharedSpaceServiceToDatabase, SharedSpacesFiles>();
+
+            CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
         }
 
         private bool ValidateUserDeletion(DataUserModel src)
