@@ -3,9 +3,12 @@ using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.GatewayAPI.Services.Contracts;
 using PoroDev.Common.Contracts.SharedSpace;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using PoroDev.GatewayAPI.Models.SharedSpace;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
+using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -46,6 +49,28 @@ namespace PoroDev.GatewayAPI.Controllers
 
             return Ok(response.Entity);
 
+        }
+
+        [HttpPost("AddFile")]
+        public async Task<IActionResult> AddFile([FromBody] AddFileToSharedSpaceRequest requestModel)
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var requestWithId = new AddFileToSharedSpaceGatewayToService(requestModel.SharedSpaceId, requestModel.FileId, userId);
+
+            await _sharedSpaceService.AddFile(requestWithId);
+
+            return Ok();
+        }
+
+        [HttpGet("GetAllFiles")]
+        public async Task<ActionResult<List<QueryFilesResponse>>> GetAllFiles([FromQuery] string spaceId)
+        {
+            await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var spaceIdGuid = Guid.Parse(spaceId);
+
+            return Ok();
         }
     }
 }

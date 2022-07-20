@@ -13,6 +13,10 @@ namespace PoroDev.DatabaseService.Data.Configuration
             builder.HasOne<SharedSpace>(x => x.SharedSpace)
                 .WithMany(x => x.SharedSpaceFile)
                 .HasForeignKey(x => x.SharedSpaceId);
+
+            builder.HasOne(x => x.File)
+                .WithMany(x => x.SharedSpaces)
+                .HasForeignKey(x => x.FileId);
         }
     }
 }

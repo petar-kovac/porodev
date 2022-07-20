@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Models.SharedSpaces;
@@ -10,5 +11,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
     {
         Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel);
         Task<CommunicationModel<SharedSpacesUsers>> AddUserToSharedSpace(AddUserToSharedSpaceRequestGatewayToService addModel);
+
+        Task AddFile (AddFileToSharedSpaceGatewayToService requestModel);
     }
 }

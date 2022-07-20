@@ -33,6 +33,7 @@ builder.Services.AddScoped<IRuntimeDataRepository, RuntimeDataRepository>();
 builder.Services.AddScoped<IEncryptionService, AesEncryptionService>();
 builder.Services.AddScoped<ISharedSpaceRepository, SharedSpaceRepository>();
 builder.Services.AddScoped<ISharedSpacesUsersRepository, SharedSpacesUsersRepository>();
+builder.Services.AddScoped<ISharedSpacesWithFilesRepository, SharedSpacesFilesRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoroDev.Common.Models.StorageModels.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,8 @@ namespace PoroDev.Common.Models.SharedSpaces
         public SharedSpace SharedSpace { get; set; }
 
         public string FileId { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public FileData File { get; set; }
     }
 }

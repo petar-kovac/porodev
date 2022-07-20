@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Models.SharedSpaces;
@@ -13,18 +14,31 @@ namespace PoroDev.GatewayAPI.Services
     {
         private readonly IRequestClient<CreateSharedSpaceRequestGatewayToService> _createSharedSpaceRequestClient;
         private readonly IRequestClient<AddUserToSharedSpaceRequestGatewayToService> _addUserToSharedSpaceRequestGatewayToService;
+        private readonly IRequestClient<AddFileToSharedSpaceGatewayToService> _addFileRequestClient;
 
         public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestGatewayToService> createSharedSpaceRequestClient,
-                                    IRequestClient<AddUserToSharedSpaceRequestGatewayToService> addUserToSharedSpaceRequestGatewayToService)
+                                  IRequestClient<AddFileToSharedSpaceGatewayToService> addFileRequestClient,
+                                  IRequestClient<AddUserToSharedSpaceRequestGatewayToService> addUserToSharedSpaceRequestGatewayToService)
         {
             _createSharedSpaceRequestClient = createSharedSpaceRequestClient;
             _addUserToSharedSpaceRequestGatewayToService = addUserToSharedSpaceRequestGatewayToService;
+            _addFileRequestClient = addFileRequestClient;
         }
 
         public async Task<CommunicationModel<SharedSpacesUsers>> AddUserToSharedSpace(AddUserToSharedSpaceRequestGatewayToService addModel)
         {
             var requestReturnContext = await _addUserToSharedSpaceRequestGatewayToService.GetResponse<CommunicationModel<SharedSpacesUsers>>(addModel, CancellationToken.None, RequestTimeout.After(m: 5));
-            return requestReturnContext.Message;
+            return requestReturnContext.Message;  
+        }
+
+        public async Task AddFile(AddFileToSharedSpaceGatewayToService requestModel)
+        {
+            var responseContext = await _addFileRequestClient.GetResponse<CommunicationModel<SharedSpacesFiles>>(requestModel);
+
+            if (responseContext.Message.ExceptionName is not null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
+            return;
         }
 
         public async Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel)
