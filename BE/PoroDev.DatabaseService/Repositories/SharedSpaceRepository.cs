@@ -8,7 +8,7 @@ namespace PoroDev.DatabaseService.Repositories
     {
         public SharedSpaceRepository(SqlDataContext context) : base(context)
         {
-
+           
         }
     }
 }

@@ -10,6 +10,8 @@ namespace PoroDev.Common.Contracts.SharedSpace.QueryFiles
     {
         public string FileId { get; set; }
 
+        public string FileName { get; set; }
+
         public Guid OwnerId { get; set; }
 
         public string UserName { get; set; }

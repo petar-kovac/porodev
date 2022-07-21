@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
+using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
@@ -17,14 +18,17 @@ namespace PoroDev.SharedSpaceService.Services
         private readonly IRequestClient<CreateSharedSpaceRequestServiceToDatabase> _createSharedSpaceRequestClient;
         private readonly IRequestClient<AddUserToSharedSpaceRequestServiceToDatabase> _addUserToSharedSpaceRequestClient;
         private readonly IRequestClient<AddFileToSharedSpaceServiceToDatabase> _addFileClient;
+        private readonly IRequestClient<QueryFilesServiceToDatabase> _queryFilesClient;
 
         public SharedSpaceService(IRequestClient<CreateSharedSpaceRequestServiceToDatabase> createSharedSpaceRequestClient, 
             IRequestClient<AddFileToSharedSpaceServiceToDatabase> addFileClient,
-            IRequestClient<AddUserToSharedSpaceRequestServiceToDatabase> addUserToSharedSpaceRequestClient)
+            IRequestClient<AddUserToSharedSpaceRequestServiceToDatabase> addUserToSharedSpaceRequestClient,
+            IRequestClient<QueryFilesServiceToDatabase> queryFilesClient)
         {
             _createSharedSpaceRequestClient = createSharedSpaceRequestClient;
             _addFileClient = addFileClient;
             _addUserToSharedSpaceRequestClient = addUserToSharedSpaceRequestClient;
+            _queryFilesClient = queryFilesClient;
         }
 
         public async Task<CommunicationModel<SharedSpacesFiles>> AddFile(AddFileToSharedSpaceGatewayToService requestModel)
@@ -50,6 +54,11 @@ namespace PoroDev.SharedSpaceService.Services
             var response = await _createSharedSpaceRequestClient.GetResponse<CommunicationModel<SharedSpace>>(createModel); //createModel flag
 
             return response.Message;
+        }
+
+        public async Task<CommunicationModel<List<QueryFilesResponse>>> QueryFiles(QueryFilesServiceToDatabase requestModel)
+        {
+            return (await _queryFilesClient.GetResponse<CommunicationModel<List<QueryFilesResponse>>>(requestModel)).Message;
         }
     }
 }

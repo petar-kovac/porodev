@@ -68,9 +68,11 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
-            var spaceIdGuid = Guid.Parse(spaceId);
+            QueryFilesGatewayToService query = new() { SpaceId =  Guid.Parse(spaceId) };
 
-            return Ok();
+            var responseList = await _sharedSpaceService.QueryFiles(query);
+
+            return Ok(responseList);
         }
     }
 }
