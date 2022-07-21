@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.BillingReport.TotalRuntime;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using static PoroDev.Common.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
 {
@@ -25,10 +26,12 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
 
             var user = await _unitOfWork.Users.GetByIdAsync(totalRuntime.UserId);
             var totalRuntimeNumber = user.RuntimeTotal;
+            var runtimePrice = totalRuntimeNumber * PRICE_RUNTIME;
 
             TotalRuntimeResponse runtimeNumber = new()
             {
-                RuntimeNumber = totalRuntimeNumber
+                RuntimeNumber = totalRuntimeNumber,
+                RuntimePrice = runtimePrice
             };
 
             return new CommunicationModel<TotalRuntimeResponse>(runtimeNumber);

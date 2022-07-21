@@ -4,13 +4,16 @@
     {
         public double UploadSize { get; set; }
 
+        public double UploadPrice { get; set; }
+
         public TotalUploadResponse()
         {
         }
 
-        public TotalUploadResponse(double uploadSize)
+        public TotalUploadResponse(double uploadSize, double uploadPrice)
         {
             UploadSize = uploadSize;
+            UploadPrice = uploadPrice;
         }
     }
 }

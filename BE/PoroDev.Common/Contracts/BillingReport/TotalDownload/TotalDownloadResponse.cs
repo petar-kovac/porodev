@@ -10,13 +10,16 @@ namespace PoroDev.Common.Contracts.BillingReport.TotalDownload
     {
         public double DownloadSize { get; set; }
 
+        public double DownloadPrice { get; set; }
+
         public TotalDownloadResponse()
         {
         }
 
-        public TotalDownloadResponse(double downloadSize)
+        public TotalDownloadResponse(double downloadSize, double downloadPrice)
         {
             DownloadSize = downloadSize;
+            DownloadPrice = downloadPrice;
         }
     }
 }

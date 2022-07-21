@@ -4,13 +4,16 @@
     {
         public int RuntimeNumber { get; set; }
 
+        public double RuntimePrice { get; set; }
+
         public TotalRuntimeResponse()
         {
         }
 
-        public TotalRuntimeResponse(int runtimeNumber)
+        public TotalRuntimeResponse(int runtimeNumber, double runtimePrice)
         {
             RuntimeNumber = runtimeNumber;
+            RuntimePrice = runtimePrice;
         }
     }
 }

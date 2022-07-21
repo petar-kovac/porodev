@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.BillingReport.TotalUpload;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
+using static PoroDev.Common.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
 {
@@ -25,10 +26,12 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
 
             var user = await _unitOfWork.Users.GetByIdAsync(totalUpload.UserId);
             var totalUploadSize = Convert.ToDouble(user.FileUploadTotal / 1024.0);
+            var updatePrice = totalUploadSize * PRICE_PER_MB;
 
             TotalUploadResponse uploadSize = new()
             {
-                UploadSize = totalUploadSize
+                UploadSize = totalUploadSize,
+                UploadPrice = updatePrice
             };
 
             return new CommunicationModel<TotalUploadResponse>(uploadSize);
