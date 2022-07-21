@@ -13,12 +13,15 @@ namespace PoroDev.DatabaseService.Repositories
 
         public IRuntimeDataRepository RuntimeData { get; }
 
-        public UnitOfWork(SqlDataContext context, IUserRepository users, IStorageRepository userFiles, IRuntimeDataRepository runtimeData)
+        public IUserReportsRepository UserReports { get; }
+
+        public UnitOfWork(SqlDataContext context, IUserRepository users, IStorageRepository userFiles, IRuntimeDataRepository runtimeData, IUserReportsRepository userReports)
         {
             _context = context;
             Users = users;
             RuntimeData = runtimeData;
             UserFiles = userFiles;
+            UserReports = userReports;
         }
 
         public async Task<int> SaveChanges()

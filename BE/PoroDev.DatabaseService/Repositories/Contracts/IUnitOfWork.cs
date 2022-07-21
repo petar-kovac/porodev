@@ -8,6 +8,8 @@
 
         IStorageRepository UserFiles { get; }
 
+        IUserReportsRepository UserReports { get; }
+
         Task<int> SaveChanges();
     }
 }

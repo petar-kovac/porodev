@@ -8,19 +8,16 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPe
 {
     public class TotalMemoryUsedForDownloadPerMonthModel
     {
-        public string Month { get; set; }
-
-        public double TotalMemoryUsedForDownloadInMBs { get; set; }
+       public List<TotalMemoryUsedForDownloadPerMonthSingleModel> Content { get; set; }
         
         public TotalMemoryUsedForDownloadPerMonthModel()
         {
 
         }
 
-        public TotalMemoryUsedForDownloadPerMonthModel(double totalMemoryUsedForDownloadInMBs, string month)
+        public TotalMemoryUsedForDownloadPerMonthModel(List<TotalMemoryUsedForDownloadPerMonthSingleModel> content)
         {
-            TotalMemoryUsedForDownloadInMBs = totalMemoryUsedForDownloadInMBs;
-            Month = month;
+            Content = content;
         }
     }
 }
