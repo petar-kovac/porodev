@@ -52,7 +52,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         }
 
-        public async Task<int> countNumberOfUploadedFiles()
+        private async Task<int> countNumberOfUploadedFiles()
         {
             List<FileData> userFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
             int countTotalNumberOfDeletedFiles = 0;
