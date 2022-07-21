@@ -11,6 +11,7 @@ using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 using static PoroDev.Common.MassTransit.Extensions;
+using PoroDev.Common.Contracts.StorageService.Query;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -20,6 +21,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<IUploadRequest> _uploadRequestClient;
         private readonly IRequestClient<FileReadRequestGatewayToService> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
+        private readonly IRequestClient<FileQueryGatewayToService> _queryClient;
         private readonly IMapper _mapper;
 
         public StorageService
@@ -27,12 +29,14 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<IUploadRequest> uploadRequestClient,
             IRequestClient<FileReadRequestGatewayToService> readRequestClient,
             IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient,
+            IRequestClient<FileQueryGatewayToService> queryClient,
             IMapper mapper)
         {
             _downloadRequestClient = downloadRequestClient;
             _uploadRequestClient = uploadRequestClient;
             _readRequestClient = readRequestClient;
             _deleteRequestClient = deleteRequestClient;
+            _queryClient = queryClient;
             _mapper = mapper;
         }
 
@@ -89,6 +93,20 @@ namespace PoroDev.GatewayAPI.Services
             var response = responseContext.Message.Entity;
 
             return response;
+        }
+
+        public async Task<List<FileQueryModel>> QueryFiles(FileQueryGatewayToService queryModel)
+        {
+            var responseContext = await _queryClient.GetResponse<CommunicationModel<List<FileQueryModel>>>(queryModel, CancellationToken.None, RequestTimeout.After(m: 1));
+
+            var responseCommunicationModel = responseContext.Message;
+
+            if (responseCommunicationModel.ExceptionName != null)
+                ThrowException(responseCommunicationModel.ExceptionName, responseCommunicationModel.HumanReadableMessage);
+
+            var responseModel = responseCommunicationModel.Entity;
+
+            return responseModel;
         }
     }
 }

@@ -1,14 +1,14 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
-<suite name="Suite1" verbose="1" >
-    <test name="Login Tests" >
-        <classes>
-            <class name="functional_tests.UserTests" />
-        </classes>
-    </test>
+<suite name="User basic functionalities" verbose="1">
     <test name="Registration Tests" >
         <classes>
             <class name="ui.RegisterTest" />
+        </classes>
+    </test>
+    <test name="Login Tests" >
+        <classes>
+            <class name="ui.LoginTest" />
         </classes>
     </test>
     <test name="Functional Tests" >

@@ -8,6 +8,7 @@ using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
+using PoroDev.Common.Contracts.UserManagement.Query;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
@@ -41,6 +42,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserDeleteAllRequestServiceToDataBase> _deleteAllUserRequestClient;
         private readonly IRequestClient<SendEmailRequest> _verificationEmailSenderRequestClient;
         private readonly IRequestClient<VerifyEmailRequestServiceToDatabase> _verifyEmailRequestClient;
+        private readonly IRequestClient<QueryAllUsersRequestServiceToDatabase> _queryAllClient;
         private readonly IRequestClient<ReadAllUsersRequestServiceToDatabase> _readAllUsersRequestClient;
         private readonly IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> _readAllSharedSpacesForUserRequestClient;
         private readonly IMapper _mapper;
@@ -55,6 +57,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> readUserByIdWithRuntimeClient,
                            IRequestClient<UserDeleteAllRequestServiceToDataBase> deleteAllUsersRequestClient,
                            IRequestClient<SendEmailRequest> verificationEmailSenderRequestClient,
+                           IRequestClient<QueryAllUsersRequestServiceToDatabase> queryAllClient,
                            IRequestClient<VerifyEmailRequestServiceToDatabase> verifyEmailRequestClient,
                            IRequestClient<ReadAllUsersRequestServiceToDatabase> readAllUsersRequestClient,
                            IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> readAllSharedSpacesForUserRequestClient,
@@ -70,6 +73,7 @@ namespace PoroDev.UserManagementService.Services
             _readUserByIdWithRuntimeClient = readUserByIdWithRuntimeClient;
             _deleteAllUserRequestClient = deleteAllUsersRequestClient;
             _verificationEmailSenderRequestClient = verificationEmailSenderRequestClient;
+            _queryAllClient = queryAllClient;
             _verifyEmailRequestClient = verifyEmailRequestClient;
             _readAllUsersRequestClient = readAllUsersRequestClient;
             _readAllSharedSpacesForUserRequestClient = readAllSharedSpacesForUserRequestClient;
@@ -243,9 +247,14 @@ namespace PoroDev.UserManagementService.Services
             GetHashAndSalt(registerModel.Password, out byte[] salt, out byte[] hash);
 
             var userToRegister = _mapper.Map<RegisterUserRequestServiceToDatabase>(registerModel);
+
             userToRegister.Salt = salt;
             userToRegister.Password = hash;
             userToRegister.VerificationToken = CreateRandomVerificationToken();
+
+            userToRegister.FileUploadTotal = 0;
+            userToRegister.FileDownloadTotal = 0;
+            userToRegister.RuntimeTotal = 0;
 
             var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister, CancellationToken.None, RequestTimeout.After(m: 5));
 
@@ -285,6 +294,13 @@ namespace PoroDev.UserManagementService.Services
             };
 
             return returnModel;
+        }
+
+        public async Task<CommunicationModel<List<DataUserModel>>> QueryAll()
+        {
+            var responseContext = await _queryAllClient.GetResponse<CommunicationModel<List<DataUserModel>>>(new QueryAllUsersRequestServiceToDatabase());
+
+            return responseContext.Message;
         }
 
         public async Task<CommunicationModel<List<SharedSpace>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)

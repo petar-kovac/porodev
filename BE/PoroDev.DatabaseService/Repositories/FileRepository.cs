@@ -1,15 +1,18 @@
-﻿using MassTransit;
+﻿using AutoMapper;
+using MassTransit;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using PoroDev.DatabaseService.Services.Contracts;
+using System.Text.RegularExpressions;
 using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.DatabaseService.Repositories
@@ -17,14 +20,20 @@ namespace PoroDev.DatabaseService.Repositories
     public class FileRepository : IFileRepository
     {
         private readonly IGridFSBucket _bucket;
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings)
+        public FileRepository(IOptions<MongoDBSettings> mongoDBSettings, IMapper mapper, IUnitOfWork unitOfWork)
         {
             var mongoClient = new MongoClient(mongoDBSettings.Value.ConnectionString);
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDBSettings.Value.DatabaseName);
 
             _bucket = new GridFSBucket(mongoDatabase);
+
+            _mapper = mapper;
+
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ObjectId> UploadFile(string fileName, byte[] fileArray, string contentType)
@@ -108,6 +117,62 @@ namespace PoroDev.DatabaseService.Repositories
             FileMetadata fileData = new(fileEntry);
 
             return fileData;
+        }
+
+        public async Task<List<FileQueryModel>> QueryFiles(FileQueryServiceToDatabase queryReqeust)
+        {
+            List<FileQueryModel> fileQueryModels = new List<FileQueryModel>();
+
+            string userName = (await _unitOfWork.Users.GetByIdAsync(queryReqeust.UserId)).Name;
+            string userLastname = (await _unitOfWork.Users.GetByIdAsync(queryReqeust.UserId)).Lastname;
+
+            if (queryReqeust.FileId is not null)
+            {
+                ObjectId fileId = ObjectId.Parse(queryReqeust.FileId);
+
+                var filterByFileId = Builders<GridFSFileInfo<ObjectId>>.Filter.Eq(file => file.Id, fileId);
+
+                var queryResultSingle = await (await _bucket.FindAsync(filterByFileId)).FirstAsync();
+
+                var returnModel = new FileQueryModel(queryResultSingle, userName, userLastname);
+
+                fileQueryModels.Add(returnModel);
+
+                return fileQueryModels;
+            }
+
+            var stringFileIds = (await _unitOfWork.UserFiles.FindAllAsync(file => file.CurrentUserId == queryReqeust.UserId)).Select(file => file.FileId).ToList();
+
+            List<ObjectId> fileIds = new();
+
+            stringFileIds.ForEach(fileId => fileIds.Add(ObjectId.Parse(fileId)));
+
+            var builder = Builders<GridFSFileInfo<ObjectId>>.Filter;
+            var filter = builder.In(file => file.Id, fileIds);
+
+            if (queryReqeust.FileName is not null)
+            {
+                var filterByFileName = builder.Regex(file => file.Filename, new Regex(@$".*{queryReqeust.FileName}.*"));
+                filter &= filterByFileName;
+            }
+
+            if (queryReqeust.UploadTime.HasValue)
+            {
+                var filterByUploadTime = builder.Eq(file => file.UploadDateTime.Date, queryReqeust.UploadTime.Value.Date );
+                filter &= filterByUploadTime;
+            }
+
+            if (queryReqeust.Size.HasValue)
+            {
+                var filterBySize = builder.Eq(file => (ulong)file.Length, queryReqeust.Size);
+                filter &= filterBySize;
+            }
+
+            var queryResult = await (await _bucket.FindAsync(filter)).ToListAsync();
+
+            queryResult.ForEach(result => fileQueryModels.Add(new FileQueryModel(result, userName, userLastname)));
+
+            return fileQueryModels;
         }
     }
 }
