@@ -1,5 +1,5 @@
 import api from '../base';
-import { IFilesRequest } from './files.props';
+import { IFilesRequest, IProfileRequest } from './files.props';
 
 export const findFiles: () => Promise<any> = () => {
   return api
@@ -37,5 +37,14 @@ export const postFiles: (payload: IFilesRequest) => Promise<string> = (
   return api
     .service()
     .post('/api/files', payload)
+    .then((res) => res.data);
+};
+
+export const postProfile: (payload: IProfileRequest) => Promise<any> = (
+  payload,
+) => {
+  return api
+    .service()
+    .put('/api/User/UpdateUser', { ...payload, passwordUnhashed: 'Srdjan123!' })
     .then((res) => res.data);
 };

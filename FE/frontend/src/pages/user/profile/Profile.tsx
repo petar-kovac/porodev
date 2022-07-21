@@ -1,6 +1,10 @@
-import { FC, useState, ReactNode, ReactElement } from 'react';
+import { FC, useState, ReactNode, ReactElement, useEffect } from 'react';
 import styled from 'styled-components';
 import { StorageKey } from 'util/enums/storage-keys';
+
+import { findUserById } from 'service/authorization/authorization';
+
+import JwtDecode from 'jwt-decode';
 
 import type { UploadProps } from 'antd';
 import { Avatar, Input, Upload, message, Button } from 'antd';
@@ -29,6 +33,55 @@ const Profile: FC = () => {
   const [modalData, setModalData] = useState<IModalTitleProps | undefined>(
     undefined,
   );
+  const [inputField, setInputField] = useState<string>('');
+
+  const accessToken = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+
+  // const allowed = ['item1', 'item3'];
+
+  const allowed = [
+    'avatarUrl',
+    'department',
+    'email',
+    'name',
+    'lastname',
+    'passwordUnhashed',
+    'position',
+    'role',
+  ];
+
+  // const filtered = Object.keys(raw)
+  //   .filter((key) => allowed.includes(key))
+  //   .reduce((obj, key) => {
+  //     return {
+  //       ...obj,
+  //       [key]: raw[key],
+  //     };
+  //   }, {});
+
+  useEffect(() => {
+    if (accessToken) {
+      const { Id }: any = JwtDecode(accessToken);
+      console.log(Id);
+      findUserById(Id)
+        .then((res) => {
+          const { data } = res;
+          const filteredResponse = Object.keys(data)
+            .filter((key) => {
+              console.log(key);
+              return allowed.includes(key);
+            })
+            .reduce((obj, key) => {
+              console.log(obj);
+              return { ...obj, [key]: data[key] };
+            }, {});
+          console.log(filteredResponse);
+          setModalData(filteredResponse);
+          console.log(res.data);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, []);
 
   console.log(modalData);
   const { setIsModalVisible } = usePageContext();
@@ -54,19 +107,11 @@ const Profile: FC = () => {
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
-                  setModalData({
-                    // title: 'Change Your Firstname',
-                    // content: localStorage.getItem(StorageKey.NAME) as string,
-                    // title:;
-                    // content?: ReactNode;
-                    // avatarUrl?: string;
-                    // email?: string;
-                    // name?: string;
-                    // lastname?: string;
-                    // passwordUnhashed?: string;
-                    // position?: string;
-                    // role?: 0;
-                  });
+                  setInputField('firstname');
+                  // setModalData({
+                  //   title: 'Change Your Firstname',
+                  //   content: localStorage.getItem(StorageKey.NAME) as string,
+                  // });
                 }}
               >
                 <StyledEditIcon />
@@ -81,12 +126,13 @@ const Profile: FC = () => {
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
-                  setModalData({
-                    title: 'Change Your Lastname',
-                    content: localStorage.getItem(
-                      StorageKey.LASTNAME,
-                    ) as string,
-                  });
+                  setInputField('lastname');
+                  // setModalData({
+                  //   title: 'Change Your Lastname',
+                  //   content: localStorage.getItem(
+                  //     StorageKey.LASTNAME,
+                  //   ) as string,
+                  // });
                 }}
               >
                 <StyledEditIcon />
@@ -120,14 +166,9 @@ const Profile: FC = () => {
       </StyledPage>
       <PModal
         title={modalData?.title}
-        content={
-          <Input
-            onChange={(e) =>
-              setModalData({ ...modalData, content: e.target.value })
-            }
-            value={modalData?.content as string}
-          />
-        }
+        inputField={inputField}
+        modalData={modalData}
+        setModalData={setModalData}
       />
     </>
   );

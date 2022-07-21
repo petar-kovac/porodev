@@ -2,6 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Button, Modal, Input } from 'antd';
 import { usePageContext } from 'context/PageContext';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
+import { postProfile } from 'service/files/files';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import styled from 'styled-components';
 import { IFilesCard } from 'types/card-data';
@@ -11,20 +12,24 @@ interface IPModalProps {
   content?: ReactNode;
   onOk?: any;
   onCancel?: any;
-  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  cardData?: IFilesCard | null;
+  setModalData?: any;
+  modalData?: any | null;
+  inputField?: string;
 }
 
 const PModal: FC<IPModalProps> = ({
   title,
   content,
-  setCardData,
+  modalData,
+  setModalData = () => undefined,
   onOk,
   onCancel,
+  inputField,
 }) => {
   const { isModalVisible, setIsModalVisible } = usePageContext();
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    await postProfile(modalData);
     setIsModalVisible(false);
   };
 
@@ -49,7 +54,24 @@ const PModal: FC<IPModalProps> = ({
         //   </div>,
         // ]}
       >
-        <div>{content}</div>
+        <>
+          {inputField === 'firstname' && (
+            <Input
+              onChange={(e) =>
+                setModalData({ ...modalData, name: e.target.value })
+              }
+              value={modalData?.content as string}
+            />
+          )}
+          {inputField === 'lastname' && (
+            <Input
+              onChange={(e) =>
+                setModalData({ ...modalData, lastname: e.target.value })
+              }
+              value={modalData?.content as string}
+            />
+          )}
+        </>
       </StyledFilesModal>
     </>
   );

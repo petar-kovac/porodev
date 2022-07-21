@@ -42,82 +42,81 @@ import Profile from '../pages/user/profile/Profile';
 import UserGroups from '../pages/user/groups/Groups';
 
 const PRouter: FC = () => {
-  const { isAuthenticated, isLoading, isAdmin, loggedUser } =
-    useAuthStateValue();
+  const { isAuthenticated, isAdmin, loggedUser } = useAuthStateValue();
   const location = useLocation();
 
-  if (!isLoading) {
-    if (isAuthenticated) {
-      return (
-        <StyledLayout>
-          <PHeader />
-          <Layout>
-            <PageProvider>
-              <PSider />
-              <PContent>
-                <Routes>
-                  <Route
-                    element={
-                      <AdminRoutes
-                        isAdmin={loggedUser === Role.ADMIN}
-                        location={location}
-                      />
-                    }
-                  >
-                    <Route path="/" element={<Home />} />
-                    <Route path="/files" element={<Files />} />
-                    <Route path="/admins" element={<Admins />} />
-                    <Route path="/users" element={<Users />} />
-                    <Route path="/groups" element={<Groups />} />
-                    <Route path="/runtime" element={<Runtime />} />
-                  </Route>
-                  <Route
-                    element={<UserRoutes isUser={loggedUser === Role.USER} />}
-                  >
-                    <Route path="/user-home" element={<UserHome />} />
-                    <Route path="/user-files" element={<UserFiles />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/user-groups" element={<UserGroups />} />
-                    <Route path="/user-groups/:id" element={<SingleGroup />} />
-                    <Route path="/user-runtime" element={<UserRuntime />} />
-                  </Route>
-                  {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}
-                  <Route
-                    path="/notallowed"
-                    element={<Error message="Cant go here" />}
-                  />
-                  <Route
-                    path="*"
-                    element={<Error message="Router error 404" />}
-                  />
-                  {/* if user is logged in, user cant get /login route */}
-                  <Route path="/login" element={<Navigate to="/" />} />
-                </Routes>
-              </PContent>
-            </PageProvider>
-          </Layout>
-        </StyledLayout>
-      );
-    }
-
+  // if (!isLoading) {
+  if (isAuthenticated) {
     return (
-      <Routes>
-        <Route path="/verified" element={<EmailVerified />} />
-        <Route path="/verification" element={<EmailVerify />} />
-        <Route path="/confirm" element={<EmailConfirmed />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
+      <StyledLayout>
+        <PHeader />
+        <Layout>
+          <PageProvider>
+            <PSider />
+            <PContent>
+              <Routes>
+                <Route
+                  element={
+                    <AdminRoutes
+                      isAdmin={loggedUser === Role.ADMIN}
+                      location={location}
+                    />
+                  }
+                >
+                  <Route path="/" element={<Home />} />
+                  <Route path="/files" element={<Files />} />
+                  <Route path="/admins" element={<Admins />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/groups" element={<Groups />} />
+                  <Route path="/runtime" element={<Runtime />} />
+                </Route>
+                <Route
+                  element={<UserRoutes isUser={loggedUser === Role.USER} />}
+                >
+                  <Route path="/user-home" element={<UserHome />} />
+                  <Route path="/user-files" element={<UserFiles />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/user-groups" element={<UserGroups />} />
+                  <Route path="/user-groups/:id" element={<SingleGroup />} />
+                  <Route path="/user-runtime" element={<UserRuntime />} />
+                </Route>
+                {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}
+                <Route
+                  path="/notallowed"
+                  element={<Error message="Cant go here" />}
+                />
+                <Route
+                  path="*"
+                  element={<Error message="Router error 404" />}
+                />
+                {/* if user is logged in, user cant get /login route */}
+                <Route path="/login" element={<Navigate to="/" />} />
+              </Routes>
+            </PContent>
+          </PageProvider>
+        </Layout>
+      </StyledLayout>
     );
   }
+
   return (
-    <StyledPage>
-      <SpinnerWrapper>
-        <Spinner color="#000" size={42} speed={2} />
-      </SpinnerWrapper>
-    </StyledPage>
+    <Routes>
+      <Route path="/verified" element={<EmailVerified />} />
+      <Route path="/verification" element={<EmailVerify />} />
+      <Route path="/confirm" element={<EmailConfirmed />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
   );
 };
+// return (
+//   <StyledPage>
+//     <SpinnerWrapper>
+//       <Spinner color="#000" size={42} speed={2} />
+//     </SpinnerWrapper>
+//   </StyledPage>
+// );
+// };
 
 export default PRouter;
 

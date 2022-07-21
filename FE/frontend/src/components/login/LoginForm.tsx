@@ -6,6 +6,8 @@ import styled from 'styled-components';
 
 import theme from 'theme/theme';
 
+import { useAuthStateValue } from 'context/AuthContext';
+
 import { loginSchema } from 'util/validation-schema/ValidationSchema';
 import PButton from 'components/buttons/PButton';
 import {
@@ -20,7 +22,7 @@ import Spinner from '../spinner/Spinner';
 interface ILoginFormProps {
   onSubmit: (values: unknown) => void;
   onFailed: ((errorInfo: ValidateErrorEntity<unknown>) => void) | undefined;
-  isLoading: boolean;
+  // isLoading: boolean;
 }
 
 type IFormValues = {
@@ -29,7 +31,7 @@ type IFormValues = {
 };
 
 const LoginForm: FC<ILoginFormProps> = ({
-  isLoading,
+  // isLoading,
   onSubmit,
   onFailed = undefined,
 }) => {
@@ -41,14 +43,12 @@ const LoginForm: FC<ILoginFormProps> = ({
     resolver: yupResolver(loginSchema),
   });
 
+  const { isLoading } = useAuthStateValue();
+
   return (
     <>
       <StyledHeader>Login</StyledHeader>
-      <StyledForm
-        id="loginForm"
-        onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
-      >
+      <StyledForm id="loginForm" autoComplete="off">
         <Controller
           name="email"
           control={control}
@@ -88,11 +88,13 @@ const LoginForm: FC<ILoginFormProps> = ({
           htmlType="submit"
           form="loginForm"
           background={theme.colors.primary}
+          onClick={handleSubmit(onSubmit)}
+          isLoading={isLoading}
         />
         <StyledSpace>
-          <StyledSpinWrapper>
-            {isLoading && <Spinner color="#000" size={24} speed={1.2} />}
-          </StyledSpinWrapper>
+          {/*  <StyledSpinWrapper>
+            {isLoading && <Spinner color="#000" size={24} speed={1.2} />} 
+          </StyledSpinWrapper> */}
         </StyledSpace>
       </StyledButtonWrapper>
     </>

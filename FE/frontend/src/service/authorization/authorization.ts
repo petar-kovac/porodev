@@ -1,5 +1,7 @@
 import api from '../base';
 import {
+  IFindUserByIdRequest,
+  IFindUserByIdResponse,
   ILoginRequest,
   ILoginResponse,
   IRegisterRequest,
@@ -21,4 +23,11 @@ export const registerApi: (
     .service()
     .post('/api/User/register/user', payload)
     .then((response) => response.data);
+};
+
+export const findUserById: (id: string) => Promise<any> = (id) => {
+  return api
+    .service()
+    .get(`/api/User/ReadUserById?id=${id}`)
+    .then((res) => res);
 };

@@ -127,6 +127,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
     async (loginData: ILoginRequest) => {
+      setIsLoading(true);
+      console.log('lglgl');
       try {
         const res: ILoginResponse = await loginApi({
           email: loginData.email,
@@ -159,6 +161,7 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const register: (registerData: IRegisterRequest) => Promise<void> =
     useCallback(async (registerData: IRegisterRequest) => {
+      setIsLoading(true);
       try {
         const res: IRegisterResponse = await registerApi({
           name: registerData.name,

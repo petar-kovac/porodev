@@ -20,6 +20,7 @@ interface IPButtonProps {
     | 'dashed'
     | undefined;
   icon?: ReactNode;
+  loading?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   isLoading?: boolean;
 }
@@ -34,6 +35,7 @@ const PButton: FC<IPButtonProps> = ({
   type,
   icon,
   isLoading,
+  loading,
   onClick,
 }) => {
   return (

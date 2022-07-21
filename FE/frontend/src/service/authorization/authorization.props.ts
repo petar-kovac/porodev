@@ -32,3 +32,23 @@ export interface IRegisterResponse {
   position: string;
   avatarUrl: string;
 }
+
+export interface IFindUserByIdRequest {
+  id: string;
+}
+
+export interface IFindUserByIdResponse {
+  id: string;
+  name: string;
+  lastname: string;
+  email: string;
+  role: number;
+  department: number;
+  position: string;
+  avatarUrl: string;
+  fileDownloadTotal: number;
+  fileUploadTotal: number;
+  runtimeTotal: number;
+  verificationToken: string;
+  verifiedAt: string;
+}

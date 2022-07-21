@@ -37,7 +37,7 @@ const Login: FC = () => {
       <StyledFormWrapper>
         {isLogin ? (
           <LoginForm
-            isLoading={isLoading}
+            // isLoading={isLoading}
             onSubmit={handleLogin}
             onFailed={undefined}
           />

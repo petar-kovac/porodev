@@ -5,6 +5,8 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { usePageContext } from 'context/PageContext';
 
+import { useAuthStateValue } from 'context/AuthContext';
+
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
@@ -45,14 +47,12 @@ const RegisterForm: FC<ILoginFormProps> = ({
     resolver: yupResolver(registrationSchema),
   });
 
+  const { isLoading } = useAuthStateValue();
+
   return (
     <>
       <StyledHeader>SignUp</StyledHeader>
-      <StyledForm
-        id="registerForm"
-        onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
-      >
+      <StyledForm id="registerForm" autoComplete="off">
         <Controller
           name="name"
           control={control}
@@ -157,6 +157,8 @@ const RegisterForm: FC<ILoginFormProps> = ({
           htmlType="submit"
           form="registerForm"
           background={theme.colors.primary}
+          onClick={handleSubmit(onSubmit)}
+          isLoading={isLoading}
         />
       </StyledButtonWrapper>
     </>
