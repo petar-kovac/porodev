@@ -115,7 +115,7 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task ChangeFileEx(FileExeReq request)
         {
-            await _updateFileExeClient.GetResponse <CommunicationModel<EmptyResponse>>(new {FileName = request.FileName, UserId = request.UserId, IsExe = request.IsExe });
+            await _updateFileExeClient.GetResponse <CommunicationModel<EmptyResponse>>(new {FileName = request.FileName, UserId = request.UserId.Value, IsExe = request.IsExe });
         }
     }
 }
