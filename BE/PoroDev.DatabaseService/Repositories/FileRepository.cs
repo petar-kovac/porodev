@@ -168,12 +168,6 @@ namespace PoroDev.DatabaseService.Repositories
                 filter &= filterBySize;
             }
 
-            //if(queryReqeust.ContentType is not null)
-            //{
-            //    var filterByContentType = builder.Eq(file => file.Metadata.GetValue(1).AsString, queryReqeust.ContentType);
-            //    filter &= filterByContentType;
-            //}
-
             var queryResult = await (await _bucket.FindAsync(filter)).ToListAsync();
 
             queryResult.ForEach(result => fileQueryModels.Add(new FileQueryModel(result, userName, userLastname)));
