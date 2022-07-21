@@ -20,7 +20,7 @@ namespace PoroDev.UserManagementService.Mapper
                 .ForMember(destination => destination.Id, options => options.MapFrom(src => Guid.NewGuid()))
                 .ForMember(destination => destination.DateCreated, options => options.MapFrom(src => DateTime.Now))
                 .ForMember(destination => destination.Role, options => options.MapFrom(src => UserEnums.UserRole.User))
-                .ForMember(destination => destination.Role, options => options.MapFrom(src => (UserEnums.UserDepartment)src.Department))
+                .ForMember(destination => destination.Department, options => options.MapFrom(src => (UserEnums.UserDepartment)src.Department))
                 .ForMember(dst => dst.Password, opt => opt.Ignore());
 
             CreateMap<CommunicationModel<DataUserModel>, CommunicationModel<RegisterUserResponse>>();

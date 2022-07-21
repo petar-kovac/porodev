@@ -24,9 +24,6 @@ public class Runtime extends ApiConfig {
     }
 
 
-
-
-
     // Sending the runtime request with invalid token (header part with invalid list)
     @Test(dataProvider = "invalidJwtHeaderTokenList", dataProviderClass = DataProviderBeUtil.class,
     description = "Sending the runtime request with invalid Header part of token")
@@ -95,7 +92,7 @@ public class Runtime extends ApiConfig {
                 .takeTokenValueFromJson(file.getValue("VALID_EMAIL"),
                         file.getValue("VALID_PASS"));
         given().relaxedHTTPSValidation()
-                .header("authorization", "Bearer"+token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .header("Authorization", "Bearer"+token+"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 .when()
                 .body(UserDetailsGenerator.createRuntimeJsonReq(
                         fileRuntime.getValue("VALID_FILE_ID"),

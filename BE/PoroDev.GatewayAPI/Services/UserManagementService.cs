@@ -4,6 +4,7 @@ using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.Query;
 using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
@@ -37,6 +38,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<VerifyEmailRequestGatewayToService> _verifyUserRequestClient;
         private readonly IRequestClient<ReadAllUsersRequestGatewayToService> _readAllusersRequestClient;
         private readonly IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> _readAllSharedSpacesForUser;
+        private readonly IRequestClient<QueryAllUsersRequestGatewayToService> _queryAllUsers;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
@@ -50,7 +52,8 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers,
             IRequestClient<VerifyEmailRequestGatewayToService> verifyUserRequestClient,
             IRequestClient<ReadAllUsersRequestGatewayToService> readAllUsersRequestClient,
-            IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser
+            IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser,
+            IRequestClient<QueryAllUsersRequestGatewayToService> queryAllUsers
             )
         {
             _createRequestClient = createRequestClient;
@@ -61,6 +64,7 @@ namespace PoroDev.GatewayAPI.Services
             _registerClient = registerClient;
             _readUserByIdRequestClient = readUserByIdRequestClient;
             _deleteAllRequestClient = deleteAllUsers;
+            _queryAllUsers = queryAllUsers;
             _readUserByIdWithRuntimedataRequestClient = readUserByIdWithRuntimedataRequestClient;
             _verifyUserRequestClient = verifyUserRequestClient;
             _readAllusersRequestClient = readAllUsersRequestClient;
@@ -217,6 +221,16 @@ namespace PoroDev.GatewayAPI.Services
 
             return requestResponseContext.Message.Entity;
 
+        }
+
+        public async Task<List<DataUserModel>> QueryAll()
+        {
+            var responseContext = await _queryAllUsers.GetResponse<CommunicationModel<List<DataUserModel>>>(new QueryAllUsersRequestGatewayToService());
+
+            if(responseContext.Message.ExceptionName!= null)
+                ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
+
+            return responseContext.Message.Entity;
         }
 
         public async Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)

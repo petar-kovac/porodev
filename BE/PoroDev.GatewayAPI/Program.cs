@@ -26,6 +26,7 @@ builder.Services.AddScoped<IRunTimeService, RunTimeService>();
 builder.Services.AddScoped<IJwtValidatorService, JwtValidatorService>();
 builder.Services.AddScoped<IRuntimeQueryService, RuntimeQueryService>();
 builder.Services.AddScoped<ISharedSpaceService, SharedSpaceService>();
+builder.Services.AddScoped<ILimitValidatorService, LimitValidatorService>();
 
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddControllers();
