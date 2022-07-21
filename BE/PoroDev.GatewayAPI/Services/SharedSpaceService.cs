@@ -60,12 +60,6 @@ namespace PoroDev.GatewayAPI.Services
             return;
         }
 
-        public async Task<CommunicationModel<SharedSpace>> Create(CreateSharedSpaceRequestGatewayToService createModel)
-        {
-            var requestReturnContext = await _createSharedSpaceRequestClient.GetResponse<CommunicationModel<SharedSpace>>(createModel, CancellationToken.None, RequestTimeout.After(m: 5));
-            return requestReturnContext.Message;
-        }
-
         public async Task<List<QueryFilesResponse>> QueryFiles(QueryFilesGatewayToService requestModel)
         {
             var responseContext = await _queryFilesClient.GetResponse<CommunicationModel<List<QueryFilesResponse>>>(requestModel);
