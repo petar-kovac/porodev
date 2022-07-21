@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 
 namespace PoroDev.StorageService.MapperProfiles
@@ -12,7 +13,9 @@ namespace PoroDev.StorageService.MapperProfiles
 
             CreateMap<IUploadRequest, FileUploadRequestServiceToDatabase>();
 
-            CreateMap<FileUploadModel, FileUploadResponse> ();
+            CreateMap<FileUploadModel, FileUploadResponse>();
+
+            CreateMap<FileQueryGatewayToService, FileQueryServiceToDatabase>();
         }
 
     }
