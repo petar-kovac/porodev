@@ -281,7 +281,7 @@ namespace PoroDev.UserManagementService.Services
                 Subject = "Verification email",
                 plainTextContent = "Verification plan text",
                 OtherParametersForEmail = OtherProperties,
-                htmlTextContent = $"<h1>Verification email</h1><p>Please click on this link http://localhost:3000/verify/?Email={EmailReceiver}&Token={OtherProperties["VerificationToken"]} to verify your account</p>"
+                htmlTextContent = $"<h1>Verification email</h1><p>Please click on this link http://localhost:3000/verify?Email={EmailReceiver}&Token={OtherProperties["VerificationToken"]} to verify your account</p>"
             };
 
             return returnModel;
