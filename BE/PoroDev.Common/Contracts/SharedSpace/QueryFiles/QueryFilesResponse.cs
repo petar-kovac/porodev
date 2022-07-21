@@ -17,5 +17,23 @@ namespace PoroDev.Common.Contracts.SharedSpace.QueryFiles
         public string UserName { get; set; }
 
         public string UserLastName { get; set; }
+
+        public QueryFilesResponse()
+        {
+
+        }
+
+        public QueryFilesResponse(string fileId,
+                                  string fileName,
+                                  Guid ownerId,
+                                  string userName,
+                                  string userLastName)
+        {
+            FileId = fileId;
+            FileName = fileName;
+            OwnerId = ownerId;
+            UserName = userName;
+            UserLastName = userLastName;
+        }
     }
 }

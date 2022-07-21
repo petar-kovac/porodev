@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MassTransit;
+using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -20,9 +22,16 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
 
             foreach (var data in result)
             {
-                
+                var fileData= (await _fileRepository.QueryFiles(new FileQueryServiceToDatabase() { FileId = data.FileId, UserId = data.File.CurrentUserId })).First();
+
+                responseList.Add(new QueryFilesResponse(data.FileId,
+                                                        fileData.Filename,
+                                                        data.File.CurrentUserId,
+                                                        fileData.UserName,
+                                                        fileData.UserLastname));
             }
 
+            await context.RespondAsync(new CommunicationModel<List<QueryFilesResponse>>(responseList));
         }
     }
 }
