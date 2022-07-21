@@ -86,5 +86,15 @@ namespace PoroDev.GatewayAPI.Controllers
 
             return Ok(responseList);
         }
+
+        [HttpPost("DeleteFileFromSpace")]
+        public async Task<IActionResult> DeleteFile([FromBody] DeletFileRequest request)
+        {
+            await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            await _sharedSpaceService.DeleteFile(request);
+
+            return Ok();
+        }
     }
 }
