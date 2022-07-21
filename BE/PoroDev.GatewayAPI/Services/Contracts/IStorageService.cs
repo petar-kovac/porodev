@@ -19,5 +19,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<FileDeleteMessage> DeleteFile(FileDeleteRequestGatewayToService deleteModel);
 
         Task<List<FileQueryModel>> QueryFiles(FileQueryGatewayToService queryModel);
+
+        Task ChangeFileEx(FileExeReq request);
     }
 }

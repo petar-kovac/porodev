@@ -33,7 +33,7 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
-            await _limitValidatorService.ValidateUpload(userId, file.Length);                
+            await _limitValidatorService.ValidateUpload(userId, file.Length);
 
             FileUploadRequest fileUploadRequest = new(file, userId);
 
@@ -41,6 +41,16 @@ namespace PoroDev.GatewayAPI.Controllers
 
             return Ok(fileUploadResponse);
         }
+
+        [HttpPost("ChangeFileExecutable")]
+        public async Task<IActionResult> ChangeFile([FromBody]FileExeReq request)
+        {
+            request.UserId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            await _storageService.ChangeFileEx(request);
+
+            return Ok();
+        } 
 
         [RequireHttps]
         [HttpGet("Download")]
