@@ -10,6 +10,7 @@ namespace PoroDev.Common.Models.UserReportsModels.Data
 {
     public class UserReportsData
     {
+        public Guid Id { get; set; }
         public ulong FileDownloadTotal { get; set; }
 
         public ulong FileUploadTotal { get; set; }
@@ -28,8 +29,9 @@ namespace PoroDev.Common.Models.UserReportsModels.Data
 
         }
 
-        public UserReportsData(ulong fileDownloadTotal, ulong fileUploadTotal, ushort runtimeTotal, string month, Guid currentUserId)
+        public UserReportsData(Guid id, ulong fileDownloadTotal, ulong fileUploadTotal, ushort runtimeTotal, string month, Guid currentUserId)
         {
+            Id = id;
             FileDownloadTotal = fileDownloadTotal;
             FileUploadTotal = fileUploadTotal;
             RuntimeTotal = runtimeTotal;
