@@ -2,10 +2,13 @@
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -21,6 +24,8 @@ namespace PoroDev.GatewayAPI.Services.Contracts
 
         Task<DeleteUserModel> DeleteAllUsers(UserDeleteAllRequestGatewayToService model);
 
+        Task<List<DataUserModel>> ReadAllUsers(ReadAllUsersRequestGatewayToService model);
+
         Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel);
 
         Task<DataUserModel> ReadUserByEmail(string email);
@@ -34,6 +39,8 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<RegisterUserResponse> RegisterUser(RegisterUserRequestGatewayToService registerModel);
 
         Task<DataUserModel> VerifyEmail(VerifyEmailRequestGatewayToService verifyModel);
+
+        Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
 
         Task<List<DataUserModel>> QueryAll();
     }

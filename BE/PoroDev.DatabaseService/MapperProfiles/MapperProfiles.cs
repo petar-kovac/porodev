@@ -2,12 +2,15 @@
 using MongoDB.Bson;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
+using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UnitOfWorkResponse;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -26,6 +29,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<UnitOfWorkResponseModel<List<RuntimeData>>, CommunicationModel<List<RuntimeData>>>();
 
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DataUserModel>>();
+
+            CreateMap<UnitOfWorkResponseModel<SharedSpacesUsers>, CommunicationModel<SharedSpacesUsers>>();
 
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
             CreateMap<UserUpdateRequestServiceToDatabase, DataUserModel>();
@@ -53,22 +58,14 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<FileDownload, FileDownloadMessage>()
                 .ForMember(destination => destination.File, options => options.Ignore());
 
-            //CreateMap<GridFSFileInfo<ObjectId>, FileQueryModel>()
-            //    .ForMember(dst => dst.Id, options => options.MapFrom(src => src.Id.ToString()))
-            //    .ForMember(dst => dst.Length, options => options.MapFrom(src => (ulong)src.Length))
-            //    .ForMember(dst => dst.ContentType, opt => opt.MapFrom(src => GetMetadata(src, "ContentType")))
-            //    .ForMember(dst => dst.UserName, opt => opt.Ignore())
-            //    .ForMember(dst => dst.UserLastname, opt => opt.Ignore());
+            CreateMap<CreateSharedSpaceRequestServiceToDatabase, SharedSpace>();
+            CreateMap<UnitOfWorkResponseModel<SharedSpace>, CommunicationModel<SharedSpace>>();
 
-            //CreateMap<List<GridFSFileInfo<ObjectId>>, List<FileQueryModel>>();
+            CreateMap<AddFileToSharedSpaceServiceToDatabase, SharedSpacesFiles>();
+
+            CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
         }
 
-        //private string GetMetadata(GridFSFileInfo<ObjectId> doc, string metadataName)
-        //{
-        //    var metadataTypeReturn = doc.Metadata.GetValue(metadataName).ToString();
-
-        //    return metadataTypeReturn;
-        //}
 
         private bool ValidateUserDeletion(DataUserModel src)
         {

@@ -1,5 +1,6 @@
 ﻿using PoroDev.Common.Enums;
 using PoroDev.Common.Models.RuntimeModels.Data;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.StorageModels.Data;
 using System.Text.Json.Serialization;
 
@@ -43,6 +44,12 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<RuntimeData> runtimeDatas { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public ICollection<SharedSpacesUsers> SharedSpaceUser { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public ICollection<SharedSpace> UsersSharedSpaces { get; set; }
 
         public string VerificationToken { get; set; }
 

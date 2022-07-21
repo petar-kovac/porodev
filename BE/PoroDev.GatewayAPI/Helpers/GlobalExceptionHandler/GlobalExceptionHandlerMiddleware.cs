@@ -28,6 +28,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case SharedSpaceNameFormatException sharedSpaceNameFormatException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = sharedSpaceNameFormatException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, sharedSpaceNameFormatException);
+                        break;
+
                     case UserAlreadyVerifiedException userAlreadyVerifiedException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = userAlreadyVerifiedException.HumanReadableErrorMessage;
