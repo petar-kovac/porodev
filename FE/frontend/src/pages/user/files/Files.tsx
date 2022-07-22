@@ -1,5 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
+import { searchFiles } from 'service/files/files';
+
 import { usePageContext } from 'context/PageContext';
 import ListCards from 'components/cards/list/ListCards';
 import GridCards from 'components/cards/grid/GridCards';
@@ -32,6 +34,41 @@ const Files: FC = () => {
     usePageContext();
   const { data, isLoading, error } = useFilesData();
 
+  // search filter
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchRes, setSearchRes] = useState<any>([]);
+  const [filteredResults, setFilteredResults] = useState([]);
+
+  useEffect(() => {
+    searchFiles(searchTerm)
+      .then((res) => {
+        setSearchRes(res);
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const handleFilter = (e: any) => {
+    const searchWord = e.target.value;
+    setSearchTerm(searchWord);
+
+    const filteredData = searchRes.filter((value: any) => {
+      // return value.filename.toLowerCase().includes(searchTerm.toLowerCase());
+      return value.filename.toLowerCase().startsWith(searchTerm.toLowerCase());
+    });
+
+    if (searchWord === '') {
+      setFilteredResults([]);
+    } else {
+      setFilteredResults(filteredData);
+    }
+  };
+
+  const clearInput = () => {
+    setFilteredResults([]);
+    setSearchTerm('');
+  };
+
   return (
     <StyledPageWrapper>
       <StyledContent
@@ -56,11 +93,17 @@ const Files: FC = () => {
           <StyledFoldersContainer>
             <h2>Folders</h2>
             <StyledFoldersWrapper>
-              <PFolders
+              {/* <PFolders
                 cardData={cardData}
                 setCardData={setCardData}
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
+              /> */}
+              <input
+                type="text"
+                placeholder="Search..."
+                onChange={handleFilter}
+                value={searchTerm}
               />
             </StyledFoldersWrapper>
           </StyledFoldersContainer>
@@ -90,12 +133,22 @@ const Files: FC = () => {
               {!isListView ? (
                 <StyledListCardsWrapper>
                   <ListCards
+                    searchTerm={searchTerm}
+                    searchRes={searchRes}
+                    filteredResults={filteredResults}
                     data={data}
                     cardData={cardData}
                     setCardData={setCardData}
                     selectedCardId={selectedCardId}
                     setSelectedCardId={setSelectedCardId}
                   />
+                  {/* <ListCards
+                    data={data}
+                    cardData={cardData}
+                    setCardData={setCardData}
+                    selectedCardId={selectedCardId}
+                    setSelectedCardId={setSelectedCardId}
+                  /> */}
                 </StyledListCardsWrapper>
               ) : (
                 <StyledGridCardsWrapper>

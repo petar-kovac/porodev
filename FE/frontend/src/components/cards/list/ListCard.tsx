@@ -91,7 +91,7 @@ const ListCard: FC<IListCardProps> = ({
         <StyledListCard ref={ref} hoverable selected={selected} id="remove-id">
           <StyledDescription>
             <StyledHeading>
-              <h3>{value.fileName}</h3>
+              <h3>{value.filename}</h3>
               {isAdmin && (
                 <span>
                   by {userName} {userLastName}

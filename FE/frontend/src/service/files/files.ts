@@ -48,3 +48,10 @@ export const postProfile: (payload: IProfileRequest) => Promise<any> = (
     .put('/api/User/UpdateUser', { ...payload, passwordUnhashed: 'Srdjan123!' })
     .then((res) => res.data);
 };
+
+export const searchFiles: (fileName: string) => Promise<any> = (fileName) => {
+  return api
+    .service()
+    .get(`/api/StorageQuery/files?FileName=${fileName}`)
+    .then((res) => res.data);
+};
