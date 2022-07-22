@@ -6,14 +6,17 @@
 
         public Guid UserId { get; init; }
 
+        public string Month { get; init; }
+
         public TotalRuntimeRequestGatewayToService()
         {
         }
 
-        public TotalRuntimeRequestGatewayToService(Guid adminId, Guid userId)
+        public TotalRuntimeRequestGatewayToService(Guid adminId, Guid userId, string month)
         {
             AdminId = adminId;
             UserId = userId;
+            Month = month;
         }
     }
 }
