@@ -11,6 +11,7 @@ public class FileControlUtil {
     public static String RUNTIME_DATA_PROPERTIES = "be_runtime_data.properties";
 
     public static String BE_REGISTER_PROPERTIES = "be_registration.properties";
+    public static String FILE_PATH_PROPERTIES = "filePath.properties";
     public Properties properties;
 
     public FileControlUtil(String file) throws IOException {

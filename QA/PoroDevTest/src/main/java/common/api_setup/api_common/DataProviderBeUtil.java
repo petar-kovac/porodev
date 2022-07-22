@@ -6,7 +6,16 @@ import java.io.IOException;
 
 public class DataProviderBeUtil {
 
-    private final FileControlUtil file = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
+    private final FileControlUtil fileRegister = new FileControlUtil(FileControlUtil.BE_REGISTER_PROPERTIES);
+    private static final FileControlUtil filePath;
+
+    static {
+        try {
+            filePath = new FileControlUtil(FileControlUtil.FILE_PATH_PROPERTIES);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public DataProviderBeUtil() throws IOException {
     }
@@ -62,21 +71,21 @@ public class DataProviderBeUtil {
     @DataProvider(name = "CombinationOfInvalidEntryList")
     public Object[][] invalidEntryCombinationList() {
         return new Object[][]{
-                {new User(file.getValue("VALID_FIRSTNAME"), file.getValue("VALID_LASTNAME"),
-                        file.getValue("VALID_EMAIL"),
-                        file.getValue("VALID_PASS"),
+                {new User(fileRegister.getValue("VALID_FIRSTNAME"), fileRegister.getValue("VALID_LASTNAME"),
+                        fileRegister.getValue("VALID_EMAIL"),
+                        fileRegister.getValue("VALID_PASS"),
                         2, 0, "string", "")}, // existing non-matching password
 
-                {new User(file.getValue("VALID_FIRSTNAME"), file.getValue("VALID_LASTNAME"),
+                {new User(fileRegister.getValue("VALID_FIRSTNAME"), fileRegister.getValue("VALID_LASTNAME"),
                         "", "",
                         2, 0, "String", "")}, // Empty email and password field
 
-                {new User("", "", file.getValue("VALID_EMAIL"),
-                        file.getValue("VALID_PASS"),
+                {new User("", "", fileRegister.getValue("VALID_EMAIL"),
+                        fileRegister.getValue("VALID_PASS"),
                         2, 0, "string", "")}, // empty name and lastname
 
                 {new User("String String", "String String",
-                        "string string@boing.rs", file.getValue("VALID_PASS") + " string",
+                        "string string@boing.rs", fileRegister.getValue("VALID_PASS") + " string",
                         2, 0, "stri ng", "ss ff")}, // white space in all fields
 
                 {new User("", "", "", "", // empty all string fields
@@ -160,14 +169,30 @@ public class DataProviderBeUtil {
     @DataProvider(name = "PojoRegularEntry")
     public Object[][] functionalTestPojo() {
         return new Object[][]{
-                {new User(file.getValue("VALID_FIRSTNAME"),
-                        file.getValue("VALID_FIRSTNAME"),
-                        file.getValue("VALID_EMAIL"),
-                        file.getValue("VALID_PASS"),
+                {new User(fileRegister.getValue("VALID_FIRSTNAME"),
+                        fileRegister.getValue("VALID_FIRSTNAME"),
+                        fileRegister.getValue("VALID_EMAIL"),
+                        fileRegister.getValue("VALID_PASS"),
                         0,
                         1,
                         "string",
                         "string")}
+        };
+    }
+
+    @DataProvider(name = "uploadFilePaths")
+    public static Object[][] uploadFiles() {
+        return new Object[][] {
+                {"src/test/resources/logback.xml"},
+                {"src/test/resources/filesForUpload/SRSQuestionsForClient.pdf"},
+                {"src/test/resources/filesForUpload/Sabirator.zip"},
+                {"src/test/resources/filesForUpload/PoroDev.RunTime.CurrentDate.zip"},
+                {"src/test/resources/filesForUpload/PerformanceScenarios.txt"},
+                {"src/test/resources/filesForUpload/ParallelTestExecution.docx"},
+                {"src/test/resources/filesForUpload/jpgPicture.jpg"},
+                {"src/test/resources/filesForUpload/ImageApp.zip"},
+                {"src/test/resources/filesForUpload/FinancialLiteracy.pptx"},
+                {"src/test/resources/filesForUpload/50MB.zip"}
         };
     }
 }
