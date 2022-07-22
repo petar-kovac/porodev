@@ -34,5 +34,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<RegisterUserResponse> RegisterUser(RegisterUserRequestGatewayToService registerModel);
 
         Task<DataUserModel> VerifyEmail(VerifyEmailRequestGatewayToService verifyModel);
+
+        Task<List<DataUserModel>> QueryAll();
     }
 }

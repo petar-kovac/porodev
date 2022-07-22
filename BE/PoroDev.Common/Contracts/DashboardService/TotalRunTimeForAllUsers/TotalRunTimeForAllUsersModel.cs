@@ -8,7 +8,7 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers
 {
     public class TotalRunTimeForAllUsersModel
     {
-        public int _numberOfTotalRunTimeForAllUsers { get; set; }
+        public int NumberOfTotalRunTimeForAllUsers { get; set; }
 
         public TotalRunTimeForAllUsersModel()
         {
@@ -17,7 +17,7 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers
 
         public TotalRunTimeForAllUsersModel(int numberOfTotalRunTimeForAllUsers)
         {
-            _numberOfTotalRunTimeForAllUsers = numberOfTotalRunTimeForAllUsers;
+            NumberOfTotalRunTimeForAllUsers = numberOfTotalRunTimeForAllUsers;
         }
     }
 }

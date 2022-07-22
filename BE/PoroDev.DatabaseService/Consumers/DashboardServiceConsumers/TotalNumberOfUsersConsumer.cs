@@ -19,37 +19,35 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         public async Task Consume(ConsumeContext<TotalNumberOfUsersRequestServiceToDatabase> context)
         {
-            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
+            var responseModel = await TotalNumberOfUsers(context.Message);
 
-            if(user.Role == 0)
+            await context.RespondAsync<CommunicationModel<TotalNumberOfUsersModel>>(responseModel);
+        }
+
+
+        private async Task<CommunicationModel<TotalNumberOfUsersModel>> TotalNumberOfUsers(TotalNumberOfUsersRequestServiceToDatabase totalNumberOfUsers)
+        {
+            DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalNumberOfUsers.UserId);
+
+            if (admin.Role != 0)
             {
-                List<DataUserModel> users = (await _unitOfWork.Users.FindAllAsync(users => users.Email.Contains(""))).ToList<DataUserModel>();
-                TotalNumberOfUsersModel returnModel = new TotalNumberOfUsersModel();
-                returnModel._numberOfUsers = users.Count;
-
-                var response = new CommunicationModel<TotalNumberOfUsersModel>()
-                {
-                    Entity = returnModel,
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
-
-                await context.RespondAsync<CommunicationModel<TotalNumberOfUsersModel>>(response);
+                return new CommunicationModel<TotalNumberOfUsersModel>(new UserIsNotAdminException());
             }
-            else
+
+            List<DataUserModel> users = (await _unitOfWork.Users.FindAllAsync(users => users.Email.Contains(""))).ToList<DataUserModel>();
+            TotalNumberOfUsersModel returnModel = new TotalNumberOfUsersModel();
+            returnModel.NumberOfUsers = users.Count;
+
+            var responseTotalNumberOfUsers = new CommunicationModel<TotalNumberOfUsersModel>()
             {
-                string exceptionType = nameof(UserIsNotAdminException);
-                string humanReadableMessage = "User must be admin!";
+                Entity = returnModel,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
 
-                var resposneException = new CommunicationModel<TotalNumberOfUsersModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                await context.RespondAsync(resposneException);
-            }
+            return responseTotalNumberOfUsers;
         }
     }
 }
+
+

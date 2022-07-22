@@ -24,7 +24,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             if(user.Role == 0)
             {
                 TotalNumberOfDeletedFilesModel returnModel = new TotalNumberOfDeletedFilesModel();
-                returnModel._numberOfDeletedFiles = await countNumberOfUploadedFiles();
+                returnModel.NumberOfDeletedFiles = await countNumberOfUploadedFiles();
 
                 var response = new CommunicationModel<TotalNumberOfDeletedFilesModel>()
                 {
@@ -52,7 +52,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         }
 
-        public async Task<int> countNumberOfUploadedFiles()
+        private async Task<int> countNumberOfUploadedFiles()
         {
             List<FileData> userFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
             int countTotalNumberOfDeletedFiles = 0;

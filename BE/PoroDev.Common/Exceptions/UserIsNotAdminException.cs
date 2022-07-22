@@ -14,7 +14,7 @@ namespace PoroDev.Common.Exceptions
 
         public UserIsNotAdminException() : base()
         {
-            HumanReadableErrorMessage = "Internal server error occurred";
+            HumanReadableErrorMessage = "User must be admin!";
         }
 
         public UserIsNotAdminException(string humanReadableErrorMessage) : base()

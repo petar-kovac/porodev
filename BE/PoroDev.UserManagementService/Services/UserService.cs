@@ -6,6 +6,7 @@ using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
+using PoroDev.Common.Contracts.UserManagement.Query;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
@@ -38,6 +39,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<UserDeleteAllRequestServiceToDataBase> _deleteAllUserRequestClient;
         private readonly IRequestClient<SendEmailRequest> _verificationEmailSenderRequestClient;
         private readonly IRequestClient<VerifyEmailRequestServiceToDatabase> _verifyEmailRequestClient;
+        private readonly IRequestClient<QueryAllUsersRequestServiceToDatabase> _queryAllClient;
 
         private readonly IMapper _mapper;
 
@@ -51,6 +53,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<UserReadByIdWithRuntimeRequestServiceToDataBase> readUserByIdWithRuntimeClient,
                            IRequestClient<UserDeleteAllRequestServiceToDataBase> deleteAllUsersRequestClient,
                            IRequestClient<SendEmailRequest> verificationEmailSenderRequestClient,
+                           IRequestClient<QueryAllUsersRequestServiceToDatabase> queryAllClient,
                            IRequestClient<VerifyEmailRequestServiceToDatabase> verifyEmailRequestClient,
                            IMapper mapper)
         {
@@ -64,6 +67,7 @@ namespace PoroDev.UserManagementService.Services
             _readUserByIdWithRuntimeClient = readUserByIdWithRuntimeClient;
             _deleteAllUserRequestClient = deleteAllUsersRequestClient;
             _verificationEmailSenderRequestClient = verificationEmailSenderRequestClient;
+            _queryAllClient = queryAllClient;
             _verifyEmailRequestClient = verifyEmailRequestClient;
             _mapper = mapper;
         }
@@ -277,6 +281,12 @@ namespace PoroDev.UserManagementService.Services
 
             return returnModel;
         }
-        
+
+        public async Task<CommunicationModel<List<DataUserModel>>> QueryAll()
+        {
+            var responseContext = await _queryAllClient.GetResponse<CommunicationModel<List<DataUserModel>>>(new QueryAllUsersRequestServiceToDatabase());
+
+            return responseContext.Message;
+        }
     }
 }

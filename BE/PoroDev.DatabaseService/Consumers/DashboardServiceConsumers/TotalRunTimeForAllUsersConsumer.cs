@@ -25,7 +25,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             if(user.Role == 0)
             {
                 TotalRunTimeForAllUsersModel returnModel = new TotalRunTimeForAllUsersModel();
-                returnModel._numberOfTotalRunTimeForAllUsers = await countNumberOfRunTimeExecutions();
+                returnModel.NumberOfTotalRunTimeForAllUsers = await countNumberOfRunTimeExecutions();
 
                 var response = new CommunicationModel<TotalRunTimeForAllUsersModel>()
                 {
