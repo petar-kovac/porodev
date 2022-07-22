@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth
+﻿namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth
 {
     public class TotalRunTimePerMonthModel
     {
@@ -14,7 +8,6 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth
 
         public TotalRunTimePerMonthModel()
         {
-
         }
 
         public TotalRunTimePerMonthModel(string month, ushort totalRunTime)

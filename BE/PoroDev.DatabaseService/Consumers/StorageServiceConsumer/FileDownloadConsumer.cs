@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using MassTransit;
-using PoroDev.Common;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Exceptions;
-using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
-using static PoroDev.Common.Enums.UserEnums;
-using static PoroDev.DatabaseService.Constants.Constants;
-using static PoroDev.Common.MassTransit.Extensions;
 using PoroDev.DatabaseService.Services.Contracts;
+using static PoroDev.Common.MassTransit.Extensions;
+using static PoroDev.DatabaseService.Constants.Constants;
 
 namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 {
@@ -22,12 +19,11 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             _encryptionService = encryptionService;
         }
 
-
         public async Task Consume(ConsumeContext<FileDownloadRequestServiceToDatabase> context)
         {
             var respondModel = await DownloadFile(context.Message);
 
-            await context.RespondAsync(respondModel);         
+            await context.RespondAsync(respondModel);
         }
 
         private async Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadRequest)
@@ -65,10 +61,8 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             }
             catch (Exception)
             {
-
                 return new CommunicationModel<FileDownloadMessage>(new DatabaseException(InternalDatabaseError));
             }
-
         }
     }
 }

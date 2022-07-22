@@ -53,7 +53,6 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             }
 
             //var responseModel = await TotalMemoryUsedForDownloadPerMonth(context.Message);
-
         }
 
         //private async Task<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>> TotalMemoryUsedForDownloadPerMonth
@@ -86,7 +85,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             List<DataUserModel> allUsers = (await _unitOfWork.Users.FindAllAsync(user => user.Email.Contains(""))).ToList<DataUserModel>();
             ulong countTotalMemoryUsedForDownloadPerMonthInKBs = 0;
 
-            foreach(var user in allUsers)
+            foreach (var user in allUsers)
             {
                 countTotalMemoryUsedForDownloadPerMonthInKBs += user.FileDownloadTotal;
             }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.StorageService.Query
+﻿namespace PoroDev.Common.Contracts.StorageService.Query
 {
     public class SingleFileQueryServiceToDatabase
     {
@@ -26,7 +20,6 @@ namespace PoroDev.Common.Contracts.StorageService.Query
 
         public SingleFileQueryServiceToDatabase()
         {
-
         }
 
         public SingleFileQueryServiceToDatabase(Guid userId, string? fileId = null, string? fileName = null, DateTime? uploadTime = null, string? userName = null, string? userLastName = null, ulong? size = null, string? contentType = null)

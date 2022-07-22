@@ -244,14 +244,14 @@ namespace PoroDev.UserManagementService.Services
 
             var requestResponseContext = await _registerUserClient.GetResponse<CommunicationModel<DataUserModel>>(userToRegister, CancellationToken.None, RequestTimeout.After(m: 5));
 
-            var otherProperties = new Dictionary<string, string>() {{"VerificationToken", userToRegister.VerificationToken }};
+            var otherProperties = new Dictionary<string, string>() { { "VerificationToken", userToRegister.VerificationToken } };
             var emailProperties = CreateVerificationEmailProperties(userToRegister.Email, otherProperties);
 
             var verificationEmailResponseContext = await _verificationEmailSenderRequestClient.GetResponse<CommunicationModel<SendEmailModel>>(emailProperties);
 
             if (verificationEmailResponseContext.Message.Entity == null || verificationEmailResponseContext.Message.Entity.StatusCode != HttpStatusCode.Accepted)
             {
-                await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(new UserDeleteRequestServiceToDatabase() { Email = userToRegister.Email});
+                await _deleteUserRequestClient.GetResponse<CommunicationModel<DeleteUserModel>>(new UserDeleteRequestServiceToDatabase() { Email = userToRegister.Email });
                 return CreateResponseModel<CommunicationModel<RegisterUserResponse>, RegisterUserResponse>(nameof(FailedToRegisterUserException), FailedToRegisterUserExceptionMessage);
             }
             return _mapper.Map<CommunicationModel<RegisterUserResponse>>(requestResponseContext.Message);

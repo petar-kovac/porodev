@@ -20,7 +20,7 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("TotalUpload")]
-        public async Task<ActionResult> TotalUpload([FromQuery]Guid userId)
+        public async Task<ActionResult> TotalUpload([FromQuery] Guid userId)
         {
             Guid adminId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
@@ -31,7 +31,7 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("TotalDownload")]
-        public async Task<ActionResult> TotalDownload([FromQuery]Guid userId)
+        public async Task<ActionResult> TotalDownload([FromQuery] Guid userId)
         {
             Guid adminId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 

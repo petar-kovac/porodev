@@ -17,12 +17,11 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         public Task<TotalNumberOfDeletedFilesModel> GetTotalNumberOfDeletedFiles(TotalNumberOfDeletedFilesRequestGatewayToService totalNumberOfDeletedFilesModel);
 
         public Task<TotalNumberOfUsersModel> GetTotalNumberOfUsers(TotalNumberOfUsersRequestGatewayToService totalNumberOfUsersModel);
-         
+
         public Task<TotalRunTimePerMonthModel> GetTotalRuntimePerMonth(TotalRunTimePerMonthRequestGatewayToService totalRunTimePerMonthModel);
 
         public Task<TotalMemoryUsedForUploadPerMonthModel> GetTotalMemoryUsedForUploadPerMonth(TotalMemoryUsedForUploadPerMonthRequestGatewayToService totalMemoryUsedForUploadModel);
 
         public Task<TotalMemoryUsedForDownloadPerMonthModel> GetTotalMemoryUsedForDownloadPerMonth(TotalMemoryUsedForDownloadPerMonthRequestGatewayToService totalMemoryUsedForDownloadModel);
-
     }
 }

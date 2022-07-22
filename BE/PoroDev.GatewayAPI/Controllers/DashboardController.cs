@@ -70,12 +70,12 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpGet("TotalRunTimePerMonth")]
         public async Task<ActionResult<TotalRunTimePerMonthModel>> GetTotalRunTimePerMonth()
         {
-           Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-           var returnModel = new TotalRunTimePerMonthRequestGatewayToService(userId);
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            var returnModel = new TotalRunTimePerMonthRequestGatewayToService(userId);
 
-           var response = await _dashBoardService.GetTotalRuntimePerMonth(returnModel);
+            var response = await _dashBoardService.GetTotalRuntimePerMonth(returnModel);
 
-           return Ok(response);
+            return Ok(response);
         }
 
         [HttpGet("TotalMemoryUsedForUploadPerMonth")]
@@ -99,6 +99,5 @@ namespace PoroDev.GatewayAPI.Controllers
 
             return Ok(response);
         }
-
     }
 }

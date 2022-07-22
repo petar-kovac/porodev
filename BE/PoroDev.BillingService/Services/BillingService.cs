@@ -29,6 +29,7 @@ namespace PoroDev.BillingService.Services
 
             return response.Message;
         }
+
         public async Task<CommunicationModel<TotalDownloadResponse>> TotalDownload(TotalDownloadRequestServiceToDatabase downloadModel)
         {
             var response = await _downloadRequestClient.GetResponse<CommunicationModel<TotalDownloadResponse>>(downloadModel);

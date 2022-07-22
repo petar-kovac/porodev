@@ -3,7 +3,6 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -22,7 +21,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         {
             DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
 
-            if(user.Role == 0)
+            if (user.Role == 0)
             {
                 TotalRunTimeForAllUsersModel returnModel = new TotalRunTimeForAllUsersModel();
                 returnModel.NumberOfTotalRunTimeForAllUsers = await countNumberOfRunTimeExecutions();
@@ -55,10 +54,10 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         public async Task<int> countNumberOfRunTimeExecutions()
         {
             List<RuntimeData> runTimeDataFiles = (await _unitOfWork.RuntimeData.FindAllAsync(userRuntime => userRuntime.User.Email.Contains(""))).ToList<RuntimeData>();
-            
+
             int countTotalRunTimeForAllUsers = 0;
             countTotalRunTimeForAllUsers = runTimeDataFiles.Count;
-            
+
             return countTotalRunTimeForAllUsers;
         }
     }

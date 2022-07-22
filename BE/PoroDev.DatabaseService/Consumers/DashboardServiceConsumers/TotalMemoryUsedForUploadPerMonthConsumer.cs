@@ -21,7 +21,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
             string currentMonth = GetMonthName();
 
-            if(user.Role == 0)
+            if (user.Role == 0)
             {
                 TotalMemoryUsedForUploadPerMonthModel returnModel = new TotalMemoryUsedForUploadPerMonthModel();
                 returnModel.TotalMemoryUsedForUploadInMBs = await CountTotalMemoryUsedForUploadPerMonth();

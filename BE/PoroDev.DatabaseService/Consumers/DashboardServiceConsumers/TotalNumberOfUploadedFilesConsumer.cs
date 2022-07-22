@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
-using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
@@ -22,7 +21,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         {
             DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
 
-            if(user.Role == 0)
+            if (user.Role == 0)
             {
                 TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
                 returnModel.NumberOfUploadedFiles = await CountNumberOfUploadedFiles();
@@ -52,7 +51,6 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             }
         }
 
-        
         public async Task<int> CountNumberOfUploadedFiles()
         {
             List<FileData> userFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();

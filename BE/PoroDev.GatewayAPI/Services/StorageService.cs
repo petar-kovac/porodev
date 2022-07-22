@@ -10,7 +10,6 @@ using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
-using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.GatewayAPI.Services
 {

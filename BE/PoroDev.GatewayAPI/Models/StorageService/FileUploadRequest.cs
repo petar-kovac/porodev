@@ -18,7 +18,6 @@
             FileName = file.FileName;
             ContentType = file.ContentType;
             UserId = userId;
-
         }
 
         private byte[] ConvertFormFileToBytes(IFormFile file)

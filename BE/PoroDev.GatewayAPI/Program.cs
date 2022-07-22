@@ -29,7 +29,6 @@ builder.Services.AddScoped<ILimitValidatorService, LimitValidatorService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
 builder.Services.AddScoped<IBillingReportService, BillingReportService>();
 
-
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

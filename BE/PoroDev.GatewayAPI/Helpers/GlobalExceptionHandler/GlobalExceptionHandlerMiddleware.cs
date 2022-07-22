@@ -172,7 +172,6 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userPermissionException);
                         break;
 
-
                     case UserIsNotAdminException userIsNotAdminException:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = userIsNotAdminException.HumanReadableErrorMessage;

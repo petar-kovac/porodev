@@ -21,7 +21,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         {
             DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
 
-            if(user.Role == 0)
+            if (user.Role == 0)
             {
                 TotalNumberOfDeletedFilesModel returnModel = new TotalNumberOfDeletedFilesModel();
                 returnModel.NumberOfDeletedFiles = await countNumberOfUploadedFiles();
@@ -49,7 +49,6 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
                 await context.RespondAsync(resposneException);
             }
-
         }
 
         private async Task<int> countNumberOfUploadedFiles()
