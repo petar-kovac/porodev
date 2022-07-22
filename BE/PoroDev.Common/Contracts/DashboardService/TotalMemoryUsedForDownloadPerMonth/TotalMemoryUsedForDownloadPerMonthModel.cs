@@ -12,7 +12,7 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPe
         
         public TotalMemoryUsedForDownloadPerMonthModel()
         {
-
+            Content = new List<TotalMemoryUsedForDownloadPerMonthSingleModel>();
         }
 
         public TotalMemoryUsedForDownloadPerMonthModel(List<TotalMemoryUsedForDownloadPerMonthSingleModel> content)

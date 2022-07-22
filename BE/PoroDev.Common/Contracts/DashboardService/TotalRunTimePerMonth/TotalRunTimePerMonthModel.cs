@@ -8,19 +8,16 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth
 {
     public class TotalRunTimePerMonthModel
     {
-        public string Month { get; set; }
-
-        public ulong TotalRunTime { get; set; }
+        public List<TotalRunTimePerMonthSingleModel> Content { get; set; }
 
         public TotalRunTimePerMonthModel()
         {
-
+            Content = new List<TotalRunTimePerMonthSingleModel>();
         }
 
-        public TotalRunTimePerMonthModel(string month, ushort totalRunTime)
+        public TotalRunTimePerMonthModel(List<TotalRunTimePerMonthSingleModel> content)
         {
-            Month = month;
-            TotalRunTime = totalRunTime;
+            Content = content;
         }
     }
 }
