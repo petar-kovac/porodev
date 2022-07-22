@@ -19,14 +19,17 @@ namespace PoroDev.DatabaseService.Repositories
 
         public ISharedSpacesUsersRepository SharedSpacesUsers { get; }
 
+        public INotificationDataRepository NotificationData { get; }
+
         public UnitOfWork(SqlDataContext context,
                           IUserRepository users,
                           IStorageRepository userFiles,
                           IRuntimeDataRepository runtimeData,
                           ISharedSpaceRepository sharedSpaceRepository,
                           ISharedSpacesWithFilesRepository sharedSpacesWithFiles,
-                          ISharedSpacesUsersRepository sharedSpacesUsers)
-        
+                          ISharedSpacesUsersRepository sharedSpacesUsers,
+                          INotificationDataRepository notificationData)
+
 
         {
             _context = context;
@@ -36,6 +39,7 @@ namespace PoroDev.DatabaseService.Repositories
             SharedSpaces = sharedSpaceRepository;
             SharedSpacesUsers = sharedSpacesUsers;
             SharedSpacesWithFiles = sharedSpacesWithFiles;
+            NotificationData = notificationData;
         }
 
         public async Task<int> SaveChanges()

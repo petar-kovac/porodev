@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -18,6 +19,9 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             var modelForDB = _mapper.Map<DataUserModel>(context.Message);
 
             var dbResponse = await _unitOfWork.Users.CreateAsync(modelForDB);
+            var notificationModelForDb = new NotificationDataModel() { UserId = modelForDB.Id, Day = 1, Hour = 12 };
+
+            await _unitOfWork.NotificationData.CreateAsync(notificationModelForDb);
             await _unitOfWork.SaveChanges();
 
             var responseModel = _mapper.Map<CommunicationModel<DataUserModel>>(dbResponse);

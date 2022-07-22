@@ -5,7 +5,9 @@ using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.Create;
+using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.Common.Contracts.UserManagement.Update;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UnitOfWorkResponse;
@@ -29,9 +31,11 @@ namespace PoroDev.DatabaseService.MapperProfiles
 
             CreateMap<UnitOfWorkResponseModel<SharedSpacesUsers>, CommunicationModel<SharedSpacesUsers>>();
 
+            CreateMap<SetMonthlyReportTimeRequestServiceToDatabase, NotificationDataModel>();
+
             CreateMap<UserCreateRequestServiceToDatabase, DataUserModel>();
             CreateMap<UserUpdateRequestServiceToDatabase, DataUserModel>();
-
+            
             CreateMap<UnitOfWorkResponseModel<DataUserModel>, CommunicationModel<DeleteUserModel>>();
             CreateMap<DataUserModel, DeleteUserModel>()
                 .ForMember(destionation => destionation.Deleted, option => option.MapFrom(source => ValidateUserDeletion(source)));

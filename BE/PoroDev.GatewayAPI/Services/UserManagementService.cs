@@ -9,9 +9,12 @@ using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Exceptions.Contract;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -37,6 +40,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<VerifyEmailRequestGatewayToService> _verifyUserRequestClient;
         private readonly IRequestClient<ReadAllUsersRequestGatewayToService> _readAllusersRequestClient;
         private readonly IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> _readAllSharedSpacesForUser;
+        private readonly IRequestClient<SetMonthlyReportTimeRequestGatewayToService> _setMonthlyReportTimeRequestClient;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
@@ -50,7 +54,8 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers,
             IRequestClient<VerifyEmailRequestGatewayToService> verifyUserRequestClient,
             IRequestClient<ReadAllUsersRequestGatewayToService> readAllUsersRequestClient,
-            IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser
+            IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser,
+            IRequestClient<SetMonthlyReportTimeRequestGatewayToService> setMonthlyReportTimeRequestClient
             )
         {
             _createRequestClient = createRequestClient;
@@ -65,6 +70,8 @@ namespace PoroDev.GatewayAPI.Services
             _verifyUserRequestClient = verifyUserRequestClient;
             _readAllusersRequestClient = readAllUsersRequestClient;
             _readAllSharedSpacesForUser = readAllSharedSpacesForUser;
+            _setMonthlyReportTimeRequestClient = setMonthlyReportTimeRequestClient;
+
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -226,6 +233,29 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(nameof(requestResponseContext.Message.ExceptionName), requestResponseContext.Message.HumanReadableMessage);
 
             return requestResponseContext.Message.Entity;
+        }
+
+        public async Task<NotificationDataModel> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService model)
+        {
+            var exception = CheckInputValues(model);
+            if (exception != null)
+                ThrowException(exception.GetType().Name, exception.HumanReadableErrorMessage);
+
+            var responseRequestContext = await _setMonthlyReportTimeRequestClient.GetResponse<CommunicationModel<NotificationDataModel>>(model);
+            if (responseRequestContext.Message.ExceptionName != null)
+                ThrowException(nameof(responseRequestContext.Message.ExceptionName), responseRequestContext.Message.HumanReadableMessage);
+            return responseRequestContext.Message.Entity;
+        }
+
+        private ICustomException CheckInputValues(SetMonthlyReportTimeRequestGatewayToService model)
+        {
+            if (model.Hour < 0 || model.Hour > 23)
+                return new InvalidHourValueException(InvalidHourValueExceptionMessage);
+
+            if (model.Day < 1 || model.Day > 31)
+                return new InvalidDayValueException(InvalidDayValueExceptionMessage);
+
+            return null;
         }
     }
 }

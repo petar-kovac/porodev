@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
@@ -7,14 +8,19 @@ using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
+using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
+using PoroDev.Common.Exceptions;
+using PoroDev.Common.Exceptions.Contract;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.GatewayAPI.Services.Contracts;
+using static PoroDev.GatewayAPI.Constants.Constats;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -24,11 +30,13 @@ namespace PoroDev.GatewayAPI.Controllers
     {
         private readonly IUserManagementService _userService;
         private readonly IJwtValidatorService _jwtValidatorService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserManagementService userService, IJwtValidatorService jwtValidatorService)
+        public UserController(IUserManagementService userService, IJwtValidatorService jwtValidatorService, IMapper mapper)
         {
             _userService = userService;
             _jwtValidatorService = jwtValidatorService;
+            _mapper = mapper;
         }
 
         [HttpPost("CreateUser")]
@@ -100,19 +108,34 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("ReadAllUsers")]
-        public async Task<ActionResult<List<DataUserModel>>> ReadAllUsers([FromQuery]ReadAllUsersRequestGatewayToService model)
+        public async Task<ActionResult<List<DataUserModel>>> ReadAllUsers([FromQuery] ReadAllUsersRequestGatewayToService model)
         {
             var returnModel = await _userService.ReadAllUsers(model);
             return Ok(returnModel);
         }
 
         [HttpGet("ReadAllSharedSpacesForUser")]
-        public async Task<ActionResult<List<SharedSpace>>> ReadAllSharedSpacesForUser([FromQuery]ReadAllSharedSpacesRequest model)
+        public async Task<ActionResult<List<SharedSpace>>> ReadAllSharedSpacesForUser([FromQuery] ReadAllSharedSpacesRequest model)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var modelToPass = new ReadAllSharedSpacesForUserRequestGatewayToService() { UserId = userId };
             var returnModel = await _userService.ReadAllSharedSpacesForUser(modelToPass);
             return Ok(returnModel);
         }
+
+
+        [HttpPut("SetMonthlyReportTime")]
+        public async Task<ActionResult<NotificationDataModel>> SetMonthlyReportTime([FromQuery] SetMonthlyReportTimeRequest model)
+        {
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            var modelToPass = _mapper.Map<SetMonthlyReportTimeRequestGatewayToService>(model);
+            modelToPass.UserId = userId;
+
+            var returnModel = await _userService.SetMonthlyReportTime(modelToPass);
+            return Ok(returnModel);
+        }
+
+        
     }
 }
