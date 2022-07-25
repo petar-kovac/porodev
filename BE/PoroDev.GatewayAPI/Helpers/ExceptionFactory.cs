@@ -33,6 +33,8 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(FileUploadException) => new FileUploadException(errorMessage),
                 nameof(UserPermissionException) => new UserPermissionException(errorMessage),
                 nameof(SharedSpaceNameFormatException) => new SharedSpaceNameFormatException(errorMessage),
+                nameof(InvalidDayValueException) => new InvalidDayValueException(errorMessage),
+                nameof(InvalidHourValueException) => new InvalidHourValueException(errorMessage),
                 _ => new Exception("Exception not found!"),
             };
         }

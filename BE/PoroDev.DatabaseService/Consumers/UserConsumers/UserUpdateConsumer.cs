@@ -37,6 +37,10 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
             updatedModel.Entity.DateCreated = userToBeUpdated.Entity.DateCreated;
             updatedModel.Entity.Password = userToBeUpdated.Entity.Password;
             updatedModel.Entity.Salt = userToBeUpdated.Entity.Salt;
+            updatedModel.Entity.VerificationToken = userToBeUpdated.Entity.VerificationToken;
+            updatedModel.Entity.VerifiedAt = userToBeUpdated.Entity.VerifiedAt;
+            updatedModel.Entity.UsersSharedSpaces = userToBeUpdated.Entity.UsersSharedSpaces;
+            updatedModel.Entity.fileDatas = userToBeUpdated.Entity.fileDatas;
 
             var updatedUser = await _unitOfWork.Users.UpdateAsync(updatedModel.Entity, updatedModel.Entity.Id);
             await _unitOfWork.SaveChanges();

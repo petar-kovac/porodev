@@ -15,5 +15,9 @@
         public const string InvalidToken = "Invalid verification token.";
 
         public const string FileUploadExceptionMessage = "File or Id is invalid or null";
+
+        public const string InvalidHourValueExceptionMessage = "Invalid hour value, please enter value between 0 and 23";
+
+        public const string InvalidDayValueExceptionMessage = "Invalid day value, please enter value between 1 and 31";
     }
 }

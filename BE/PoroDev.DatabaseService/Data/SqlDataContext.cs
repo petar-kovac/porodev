@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.StorageModels.Data;
@@ -18,6 +19,7 @@ namespace PoroDev.DatabaseService.Data
         public virtual DbSet<SharedSpace> SharedSpace { get; set; } = default!;
         public virtual DbSet<SharedSpacesUsers> SharedSpacesUsers { get; set; } = default!;
         public virtual DbSet<SharedSpacesFiles> SharedSpacesFiles { get; set; } = default!;
+        public virtual DbSet<NotificationDataModel> NotificationData { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
