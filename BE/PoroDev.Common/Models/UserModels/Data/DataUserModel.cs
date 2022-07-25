@@ -1,7 +1,9 @@
 ﻿using PoroDev.Common.Enums;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.StorageModels.Data;
+using PoroDev.Common.Models.UserReportsModels.Data;
 using System.Text.Json.Serialization;
 
 namespace PoroDev.Common.Models.UserModels.Data
@@ -50,6 +52,12 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<SharedSpace> UsersSharedSpaces { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public NotificationDataModel NotificationTime { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public ICollection<UserReportsData> userReportsDatas { get; set; }
 
         public string VerificationToken { get; set; }
 

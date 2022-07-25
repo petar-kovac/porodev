@@ -17,7 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.Runtime", "PoroDev.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.EmailSender", "PoroDev.EmailSender\PoroDev.EmailSender.csproj", "{6C9661EA-938A-46B0-BD27-093E59CD9142}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoroDev.SharedSpaceService", "PoroDev.SharedSpaceService\PoroDev.SharedSpaceService.csproj", "{3C452446-8568-4043-88DC-EAC55257A8E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.SharedSpaceService", "PoroDev.SharedSpaceService\PoroDev.SharedSpaceService.csproj", "{3C452446-8568-4043-88DC-EAC55257A8E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.DashboardService", "PoroDev.DashboardService\PoroDev.DashboardService.csproj", "{651E365E-3209-4173-86F0-F0504F5AEE18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoroDev.NotificationService", "PoroDev.NotificationService\PoroDev.NotificationService.csproj", "{8E7D2B7F-D1A7-442D-913D-EE8C2D082DCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoroDev.SharedSpaceService", "PoroDev.SharedSpaceService\PoroDev.SharedSpaceService.csproj", "{3C452446-8568-4043-88DC-EAC55257A8E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +58,18 @@ Global
 		{6C9661EA-938A-46B0-BD27-093E59CD9142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C9661EA-938A-46B0-BD27-093E59CD9142}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C9661EA-938A-46B0-BD27-093E59CD9142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{651E365E-3209-4173-86F0-F0504F5AEE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{651E365E-3209-4173-86F0-F0504F5AEE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{651E365E-3209-4173-86F0-F0504F5AEE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{651E365E-3209-4173-86F0-F0504F5AEE18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C452446-8568-4043-88DC-EAC55257A8E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C452446-8568-4043-88DC-EAC55257A8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C452446-8568-4043-88DC-EAC55257A8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C452446-8568-4043-88DC-EAC55257A8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7D2B7F-D1A7-442D-913D-EE8C2D082DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7D2B7F-D1A7-442D-913D-EE8C2D082DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7D2B7F-D1A7-442D-913D-EE8C2D082DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7D2B7F-D1A7-442D-913D-EE8C2D082DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

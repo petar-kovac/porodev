@@ -23,8 +23,11 @@ namespace PoroDev.Common.Models.StorageModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<SharedSpacesFiles> SharedSpaces { get; set; }
 
+        public bool IsExecutable { get; set; }
+
         public FileData()
         {
+            
         }
 
         public FileData(string fileId)
@@ -32,10 +35,11 @@ namespace PoroDev.Common.Models.StorageModels.Data
             FileId = fileId;
         }
 
-        public FileData(string fileId, Guid CurrentUserId, bool isDeleted) : this(fileId)
+        public FileData(string fileId, Guid CurrentUserId, bool isDeleted, bool isExecutable = false) : this(fileId)
         {
             this.CurrentUserId = CurrentUserId;
             this.IsDeleted = isDeleted;
+            IsExecutable = isExecutable;
         }
     }
 }
