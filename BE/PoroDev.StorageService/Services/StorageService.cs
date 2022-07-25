@@ -70,6 +70,8 @@ namespace PoroDev.StorageService.Services
         {
             var response = await _queryClient.GetResponse<CommunicationModel<List<FileQueryModel>>>(queryRequest, CancellationToken.None, RequestTimeout.After(m: 1));
 
+            var filteredList = response.Message.Entity.Where(file => file.IsDeleted == false);
+
             return response.Message;
         }
     }
