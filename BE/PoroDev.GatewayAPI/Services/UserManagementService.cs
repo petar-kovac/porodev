@@ -57,8 +57,7 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<VerifyEmailRequestGatewayToService> verifyUserRequestClient,
             IRequestClient<ReadAllUsersRequestGatewayToService> readAllUsersRequestClient,
             IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser,
-            IRequestClient<QueryAllUsersRequestGatewayToService> queryAllUsers
-            IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser,
+            IRequestClient<QueryAllUsersRequestGatewayToService> queryAllUsers,
             IRequestClient<SetMonthlyReportTimeRequestGatewayToService> setMonthlyReportTimeRequestClient
             )
         {
