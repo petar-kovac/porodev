@@ -55,7 +55,7 @@ namespace PoroDev.GatewayAPI.Services
 
             if (currentTotal + 1 > MAX_RUNTIME_TOTAL)
                 throw new UserLimitException("Runtime limit reached.");
-            
+
             return;
         }
     }

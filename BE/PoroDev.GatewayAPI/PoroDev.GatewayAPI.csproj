@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PoroDev.Common\PoroDev.Common.csproj" />
+    <ProjectReference Include="..\PoroDev.DashboardService\PoroDev.DashboardService.csproj" />
   </ItemGroup>
 
 </Project>

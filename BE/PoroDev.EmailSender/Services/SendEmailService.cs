@@ -1,17 +1,17 @@
 ﻿using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.EmailSender;
-using static PoroDev.Common.Extensions.CreateResponseExtension;
 using PoroDev.Common.Models.EmailSenderModels;
 using PoroDev.EmailSender.Services.Contracts;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System.Net;
+using static PoroDev.Common.Extensions.CreateResponseExtension;
 
 namespace PoroDev.EmailSender.Services
 {
     public class SendEmailService : ISendEmailService
     {
         private readonly IConfiguration _configuration;
+
         public SendEmailService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -22,7 +22,7 @@ namespace PoroDev.EmailSender.Services
             try
             {
                 var client = new SendGridClient(_configuration.GetValue<string>("SendGridSettings:ApiKey"));
-                EmailAddress from = new EmailAddress(_configuration.GetValue<string>("SendGridSettings:EmailAdress")); 
+                EmailAddress from = new EmailAddress(_configuration.GetValue<string>("SendGridSettings:EmailAdress"));
                 EmailAddress to = new EmailAddress(emailModel.EmailReceiver);
                 string subject = emailModel.Subject;
                 string plainTextContent = emailModel.plainTextContent;

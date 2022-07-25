@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.StorageService.Query
+﻿namespace PoroDev.Common.Contracts.StorageService.Query
 {
     public class FileQueryGatewayToService
     {
@@ -22,7 +16,6 @@ namespace PoroDev.Common.Contracts.StorageService.Query
 
         public FileQueryGatewayToService()
         {
-
         }
 
         public FileQueryGatewayToService(Guid userId, string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null)

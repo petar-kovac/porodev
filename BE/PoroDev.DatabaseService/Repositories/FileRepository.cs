@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
@@ -83,7 +82,7 @@ namespace PoroDev.DatabaseService.Repositories
                 FileName = fileName,
                 ContentType = contentType
             };
-            
+
             return modelToReturn;
         }
 

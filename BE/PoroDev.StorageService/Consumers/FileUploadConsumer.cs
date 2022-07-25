@@ -7,7 +7,6 @@ namespace PoroDev.StorageService.Consumers
 {
     public class FileUploadConsumer : ConsumerBase, IConsumer<IUploadRequest>
     {
-
         public FileUploadConsumer(IStorageService storageService, IMapper mapper) : base(storageService, mapper)
         {
         }

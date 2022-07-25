@@ -28,7 +28,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
         private async Task<CommunicationModel<FileUploadModel>> UploadFile(FileUploadRequestServiceToDatabase uploadRequest)
         {
-
             var userFileIds = (await _unitOfWork.UserFiles.FindAllAsync(userFile => userFile.CurrentUserId.Equals(uploadRequest.UserId)
                                                                                  && userFile.IsDeleted == false)).Select(a => a.FileId);
             foreach (var userFileId in userFileIds)
@@ -44,8 +43,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 var file = await uploadRequest.File.Value;
 
                 file = _encryptionService.EncryptBytes(file);
-
-                
 
                 ObjectId fileId = await _fileRepository.UploadFile(uploadRequest.FileName,
                                                                        file,

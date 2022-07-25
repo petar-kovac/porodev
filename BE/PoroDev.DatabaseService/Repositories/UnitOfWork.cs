@@ -9,6 +9,7 @@ namespace PoroDev.DatabaseService.Repositories
         private bool _disposed;
 
         public IUserRepository Users { get; }
+
         public IStorageRepository UserFiles { get; }
 
         public IRuntimeDataRepository RuntimeData { get; }
@@ -28,6 +29,9 @@ namespace PoroDev.DatabaseService.Repositories
                           ISharedSpacesUsersRepository sharedSpacesUsers)
         
 
+        public IUserReportsRepository UserReports { get; }
+
+        public UnitOfWork(SqlDataContext context, IUserRepository users, IStorageRepository userFiles, IRuntimeDataRepository runtimeData, IUserReportsRepository userReports)
         {
             _context = context;
             Users = users;
@@ -36,6 +40,7 @@ namespace PoroDev.DatabaseService.Repositories
             SharedSpaces = sharedSpaceRepository;
             SharedSpacesUsers = sharedSpacesUsers;
             SharedSpacesWithFiles = sharedSpacesWithFiles;
+            UserReports = userReports;
         }
 
         public async Task<int> SaveChanges()

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MassTransit;
 using PoroDev.Common.Contracts.RunTime.Query;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;

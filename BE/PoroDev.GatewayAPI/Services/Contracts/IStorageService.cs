@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Contracts.StorageService.DeleteFile;
+﻿using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;

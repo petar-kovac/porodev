@@ -2,6 +2,7 @@
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.StorageModels.Data;
+using PoroDev.Common.Models.UserReportsModels.Data;
 using System.Text.Json.Serialization;
 
 namespace PoroDev.Common.Models.UserModels.Data
@@ -30,7 +31,7 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         public string AvatarUrl { get; set; }
 
-        public ulong FileDownloadTotal { get ; set; }
+        public ulong FileDownloadTotal { get; set; }
 
         public ulong FileUploadTotal { get; set; }
 
@@ -51,13 +52,15 @@ namespace PoroDev.Common.Models.UserModels.Data
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<SharedSpace> UsersSharedSpaces { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+        public ICollection<UserReportsData> userReportsDatas { get; set; }
+
         public string VerificationToken { get; set; }
 
         public DateTime? VerifiedAt { get; set; }
 
         public DataUserModel()
         {
-
         }
 
         public DataUserModel(Guid id, string name, string lastname, string email, byte[] password, UserEnums.UserRole role,

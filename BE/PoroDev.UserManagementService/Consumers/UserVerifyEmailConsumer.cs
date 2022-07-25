@@ -1,7 +1,5 @@
 ﻿using MassTransit;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.UserManagement.Verify;
-using PoroDev.Common.Models.EmailSenderModels;
 using PoroDev.UserManagementService.Services.Contracts;
 
 namespace PoroDev.UserManagementService.Consumers
