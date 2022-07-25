@@ -1,0 +1,85 @@
+import { CloseOutlined, UserOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
+import { useGroupsContext } from 'context/GroupsContext';
+import { useSiderContext } from 'context/SiderContext';
+import { FC } from 'react';
+import styled from 'styled-components';
+
+/**
+ * Component to set input fields in a Runtime sider.
+ */
+const UsersMapper: FC = () => {
+  const { inputParameters, dispatchInput } = useGroupsContext();
+
+  return (
+    <>
+      {inputParameters.map((value: string, index: number) => {
+        return (
+          <StyledInputRow>
+            <StyledField>
+              <StyledTextField>
+                <UserOutlined />
+                <div>text</div>
+              </StyledTextField>
+              <div>a</div>
+            </StyledField>
+            {/* <StyledInput
+              value={value as unknown as string}
+              placeholder="Add parameter"
+              onChange={(e) => {
+                dispatchInput({
+                  type: 'CHANGE_INPUT_FIELD_VALUE',
+                  payload: { e, index },
+                });
+              }}
+            />
+            <StyledClose
+              onClick={() => {
+                dispatchInput({
+                  type: 'DELETE_SINGLE_FIELD',
+                  payload: { index },
+                });
+              }}
+            /> */}
+          </StyledInputRow>
+        );
+      })}
+    </>
+  );
+};
+
+const StyledTextField = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+const StyledField = styled.div`
+  display: flex;
+  width: 260px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+  padding: 0 8px;
+  align-items: center;
+`;
+
+const StyledInputRow = styled.div`
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 260px;
+`;
+const StyledInput = styled(Input)`
+  border-radius: 12px;
+  width: 260px;
+`;
+const StyledClose = styled(CloseOutlined)`
+  position: absolute;
+  color: red;
+  cursor: pointer;
+  left: 235px;
+`;
+
+export default UsersMapper;

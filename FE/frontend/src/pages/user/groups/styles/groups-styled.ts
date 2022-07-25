@@ -37,6 +37,10 @@ export const StyledFoldersContainer = styled.div`
     font-size: 3rem;
   }
 `;
+export const StyledHeadingWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 export const StyledFilesWrapper = styled.div`
   display: grid;

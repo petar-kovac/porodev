@@ -9,8 +9,10 @@ import { StyledSpinnerWrapper } from 'styles/shared-styles';
 import { IFilesCard } from 'types/card-data';
 
 import PFolders from 'components/folders/PFolders';
+import PModal from 'components/modal/PModal';
 
-import useRuntimeData from '../runtime/hooks/useRuntimeData';
+import { FileZipFilled } from '@ant-design/icons';
+import GroupsContextProvider from 'context/GroupsContext';
 import GroupModal from './modal/GroupModal';
 import GroupSider from './sider/GroupSider';
 import {
@@ -22,15 +24,21 @@ import {
   StyledFoldersContainer,
   StyledFoldersWrapper,
   StyledFilesContainer,
+  StyledHeadingWrapper,
 } from './styles/groups-styled';
+import useGroupData from './hooks/useGroupData';
+import { IModalTitleProps } from '../profile/Profile';
 
 const Groups: FC = () => {
   const [isList, setIsList] = useState<boolean>(false);
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+  const [modalData, setModalData] = useState<IModalTitleProps | undefined>(
+    undefined,
+  );
 
-  const { setIsSiderVisible } = usePageContext();
-  const { data, isLoading, error } = useRuntimeData();
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+  const { data, isLoading, error } = useGroupData();
 
   if (isLoading) {
     return (
@@ -55,9 +63,17 @@ const Groups: FC = () => {
       >
         <StyledStaticContent>
           <StyledFoldersContainer>
-            <h2>Folders</h2>
+            <StyledHeadingWrapper>
+              <h2>Shared spaces</h2>
+              <FileZipFilled
+                onClick={() => {
+                  setIsModalVisible(true);
+                }}
+              />
+            </StyledHeadingWrapper>
             <StyledFoldersWrapper>
               <PFolders
+                data={data}
                 cardData={cardData}
                 setCardData={setCardData}
                 selectedCardId={selectedCardId}
@@ -76,7 +92,7 @@ const Groups: FC = () => {
                 }}
               />
             </StyledFilterWrapper> */}
-            <h2>Folders</h2>
+            <h2>Latest 5 files</h2>
             <StyledFilesWrapper>
               <GroupCards
                 data={data}
@@ -89,9 +105,18 @@ const Groups: FC = () => {
           </StyledFilesContainer>
         </StyledStaticContent>
 
-        <GroupSider cardData={cardData} />
+        <GroupsContextProvider>
+          <GroupSider cardData={cardData} />
+        </GroupsContextProvider>
       </StyledContent>
       <GroupModal cardData={cardData} setCardData={setCardData} />
+      <PModal
+        data={data}
+        title="Create shared space"
+        inputField="sharedspace"
+        modalData={modalData}
+        setModalData={setModalData}
+      />
     </StyledPageWrapper>
   );
 };

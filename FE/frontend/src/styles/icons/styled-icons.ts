@@ -6,6 +6,7 @@ import {
   FieldTimeOutlined,
   FileImageOutlined,
   FolderFilled,
+  FolderOpenOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Airplane } from '@styled-icons/ionicons-outline';
@@ -19,7 +20,7 @@ export const StyledRuntimeIcon = styled(FieldTimeOutlined)`
   color: ${({ theme: { colors } }) => colors.primary};
   font-size: 100px;
 `;
-export const StyledFile = styled(FileImageOutlined)`
+export const StyledFile = styled(FolderOpenOutlined)`
   color: ${({ theme: { colors } }) => colors.primary};
   font-size: 100px;
 `;

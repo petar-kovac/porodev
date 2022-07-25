@@ -1,9 +1,14 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Modal, Input } from 'antd';
 import { usePageContext } from 'context/PageContext';
+import useGroupData from 'pages/user/groups/hooks/useGroupData';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
 import { postProfile } from 'service/files/files';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
+import {
+  createSharedSpace,
+  getAllSharedSpaces,
+} from 'service/shared-spaces/shared-spaces';
 import styled from 'styled-components';
 import { IFilesCard } from 'types/card-data';
 
@@ -11,6 +16,7 @@ interface IPModalProps {
   title?: string;
   content?: ReactNode;
   onOk?: any;
+  data?: any;
   onCancel?: any;
   setModalData?: any;
   modalData?: any | null;
@@ -21,16 +27,26 @@ const PModal: FC<IPModalProps> = ({
   title,
   content,
   modalData,
+  data,
   setModalData = () => undefined,
   onOk,
   onCancel,
   inputField,
 }) => {
-  const { isModalVisible, setIsModalVisible } = usePageContext();
+  const { isModalVisible, setIsModalVisible, setSharedSpaceId, sharedSpaceId } =
+    usePageContext();
+  const { setData } = useGroupData();
 
   const handleOk = async () => {
-    await postProfile(modalData);
-    setIsModalVisible(false);
+    if (inputField === 'sharedspace') {
+      const space = await createSharedSpace(modalData);
+      const res = await getAllSharedSpaces();
+      setSharedSpaceId(!sharedSpaceId);
+      setIsModalVisible(false);
+    } else {
+      await postProfile(modalData);
+      setIsModalVisible(false);
+    }
   };
 
   const handleCancel = () => {
@@ -67,6 +83,14 @@ const PModal: FC<IPModalProps> = ({
             <Input
               onChange={(e) =>
                 setModalData({ ...modalData, lastname: e.target.value })
+              }
+              value={modalData?.content as string}
+            />
+          )}
+          {inputField === 'sharedspace' && (
+            <Input
+              onChange={(e) =>
+                setModalData({ ...modalData, name: e.target.value })
               }
               value={modalData?.content as string}
             />

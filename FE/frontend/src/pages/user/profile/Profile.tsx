@@ -17,7 +17,7 @@ import {
 import PModal from 'components/modal/PModal';
 import { usePageContext } from 'context/PageContext';
 
-interface IModalTitleProps {
+export interface IModalTitleProps {
   title?: string;
   content?: ReactNode;
   avatarUrl?: string;

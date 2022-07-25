@@ -169,7 +169,6 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
 const StyledImageParametersList = styled.div`
   display: flex;
   gap: 10px;
-  background-color: aqua;
 `;
 
 const StyledInputParametersList = styled.div`

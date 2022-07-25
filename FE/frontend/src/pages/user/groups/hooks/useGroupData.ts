@@ -2,29 +2,29 @@ import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import { findFiles } from 'service/files/files';
 import { usePageContext } from 'context/PageContext';
+import { getAllSharedSpaces } from 'service/shared-spaces/shared-spaces';
 
 const useGroupData = () => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [data, setData] = useState<[] | undefined>(undefined);
   const [error, setError] = useState<string>('');
 
-  const { setIsSiderVisible } = usePageContext();
+  const { setIsSiderVisible, isSiderVisible, sharedSpaceId } = usePageContext();
+
+  console.log(data, 'datad');
 
   useEffect(() => {
     setIsSiderVisible(false);
     const fetchFiles = async () => {
-      setisLoading(true);
       try {
-        const res = await findFiles();
-        setData(res.content);
+        const res = await getAllSharedSpaces();
+        setData(res);
       } catch (err: any) {
         setError(err.message);
-      } finally {
-        setisLoading(false);
       }
     };
     fetchFiles();
-  }, []);
+  }, [sharedSpaceId]);
 
   return {
     isLoading,

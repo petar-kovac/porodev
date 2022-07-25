@@ -11,7 +11,7 @@ const useRuntimeData = () => {
   const { setIsSiderVisible } = usePageContext();
 
   useEffect(() => {
-    setIsSiderVisible(true);
+    setIsSiderVisible(false);
     const fetchFiles = async () => {
       setisLoading(true);
       try {

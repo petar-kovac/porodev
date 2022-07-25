@@ -1,12 +1,28 @@
-import { Layout } from 'antd';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Layout, message } from 'antd';
+import {
+  Dispatch,
+  FC,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 
 import PButton from 'components/buttons/PButton';
+import { useGroupsContext } from 'context/GroupsContext';
+import {
+  getAllUsersFromSharedSpace,
+  readAllUsers,
+} from 'service/shared-spaces/shared-spaces';
 import { usePageContext } from 'context/PageContext';
 import { StyledFile } from 'styles/icons/styled-icons';
 import { IFilesCard } from 'types/card-data';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import UsersMapper from 'util/mappers/UsersMapper';
+import { RenderUserList } from 'util/util-components/RenderUserList';
+import ChoseUserModal from '../modal/ChoseUserModal';
 
 const { Sider } = Layout;
 
@@ -26,16 +42,51 @@ const GroupSider: FC<IPFileSiderProps> = ({
   selectedCardId,
 }) => {
   const { isLoading, isSiderVisible, setIsSiderVisible } = usePageContext();
-
+  const [modalContent, setModalContent] = useState<ReactNode>(undefined);
+  const [users, setUsers] = useState<any>(undefined);
+  const [usersFromSpace, setUsersFromSpace] = useState<any>(undefined);
+  const [isSiderModalVisible, setIsSiderModalVisible] =
+    useState<boolean>(false);
   const handleClose = () => {
     setIsSiderVisible(false);
     // setCardData(null);
     setSelectedCardId(null);
   };
+  const {
+    inputParameters,
+    imageParameters,
+    dispatchInput,
+    setImageParameters,
+  } = useGroupsContext();
 
   const onClick = () => {
     console.log('Group sider');
   };
+  const onAddUser = () => {
+    const modalDataToRender: ReactNode = RenderUserList(
+      cardData,
+      users,
+      imageParameters,
+      setImageParameters,
+    );
+    setModalContent(modalDataToRender);
+    setIsSiderModalVisible(true);
+  };
+
+  useEffect(() => {
+    const readUsers = async () => {
+      try {
+        const res = await readAllUsers();
+        const res2 = await getAllUsersFromSharedSpace();
+        setUsers(res);
+        setUsersFromSpace(res2);
+      } catch (err: any) {
+        message.error('err');
+      }
+    };
+    readUsers();
+  }, []);
+  console.log(usersFromSpace, 'ufsp');
 
   return (
     <StyledGroupSider
@@ -53,12 +104,34 @@ const GroupSider: FC<IPFileSiderProps> = ({
           <StyledContent>
             {cardData && <SiderDataMapper data={cardData} />}
           </StyledContent>
+          <StyledRow>
+            <StyledTitle>Users</StyledTitle>
+            <PlusCircleOutlined onClick={onAddUser} />
+          </StyledRow>
+          <StyledInputParametersList>
+            <UsersMapper />
+          </StyledInputParametersList>
         </StyledFirstPart>
         <PButton text="Show files" onClick={onClick} isLoading={isLoading} />
+        <ChoseUserModal
+          title="Chose user"
+          isSiderModalVisible={isSiderModalVisible}
+          setIsSiderModalVisible={setIsSiderModalVisible}
+          content={modalContent}
+        />
       </StyledColumn>
     </StyledGroupSider>
   );
 };
+
+const StyledInputParametersList = styled.div`
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+`;
 
 const StyledFirstPart = styled.div`
   display: flex;

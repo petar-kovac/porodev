@@ -3,6 +3,7 @@ import { useFetchData } from 'hooks/useFetchData';
 // import { IPFoldersProps } from 'types/folder-props';
 import { usePageContext } from 'context/PageContext';
 import { IFilesCard } from 'types/card-data';
+import { useNavigate } from 'react-router-dom';
 import PFolder from './PFolder';
 
 interface IPFoldersProps {
@@ -12,6 +13,7 @@ interface IPFoldersProps {
   selected?: boolean | null;
   selectedCardId?: number | null;
   cardData?: IFilesCard | null;
+  data?: any;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
   setIsSiderVisible?: Dispatch<SetStateAction<boolean>>;
   setIsModalVisible?: Dispatch<SetStateAction<boolean>>;
@@ -22,30 +24,33 @@ interface IPFoldersProps {
 
 const PFolders: FC<IPFoldersProps> = ({
   selectedCardId,
+  data,
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
 }) => {
-  const url = `${process.env.REACT_APP_MOCK_URL}/files`;
-  const { data } = useFetchData(url);
-
-  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+  const { setIsSiderVisible, setIsModalVisible, setSharedSpaceId } =
+    usePageContext();
+  const navigate = useNavigate();
 
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
     setCardData(value);
     setSelectedCardId(value.id);
+    // setSharedSpaceId(value)
   };
 
   const handleDoubleClick = (value: any) => {
     setSelectedCardId(value.id);
     setCardData(value);
-    setIsSiderVisible(false);
-    setIsModalVisible(true);
+    // setIsSiderVisible(false);
+    navigate(`/user-groups/${value.id}`);
+
+    // setIsModalVisible(true);
   };
 
   return (
     <>
-      {data?.slice(0, 4).map((value: any) => (
+      {data?.map((value: any) => (
         <PFolder
           key={value.id}
           value={value}
