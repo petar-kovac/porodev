@@ -1,13 +1,24 @@
-import React from 'react';
-// import logo from './logo.svg';
-import './App.css';
-import Util from './util/Util';
+import { FC } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import theme from 'theme/theme';
+import AuthProvider from './context/AuthContext';
+import ApplicationProvider from './context/ApplicationContext';
+import PRouter from './router/PRouter';
+import 'antd/dist/antd.min.css';
+import './index.css';
 
-const App: React.FC = () => {
+const App: FC = () => {
   return (
-    <div className="App">
-      <Util />
-    </div>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <ApplicationProvider>
+          <AuthProvider>
+            <PRouter />
+          </AuthProvider>
+        </ApplicationProvider>
+      </ThemeProvider>
+    </Router>
   );
 };
 
