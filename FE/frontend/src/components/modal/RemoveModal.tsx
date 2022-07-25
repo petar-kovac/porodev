@@ -2,6 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { Button, Modal, Input } from 'antd';
 import { usePageContext } from 'context/PageContext';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
+import { handleDelete } from 'util/helpers/files-functions';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import styled from 'styled-components';
 import { IFilesCard } from 'types/card-data';
@@ -13,9 +14,9 @@ interface IPModalProps {
   onCancel?: any;
   isRemoveModalVisible?: boolean;
   fileName?: string;
+  fileId?: string;
   setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
-  handleDelete?: any;
   handleCancel?: any;
   cardData?: IFilesCard | null;
 }
@@ -23,10 +24,11 @@ interface IPModalProps {
 const RemoveModal: FC<IPModalProps> = ({
   title,
   setCardData,
-  handleDelete,
   handleCancel,
   fileName,
+  fileId,
   isRemoveModalVisible,
+  setIsRemoveModalVisible = () => undefined,
 }) => {
   return (
     <>
@@ -35,7 +37,10 @@ const RemoveModal: FC<IPModalProps> = ({
         cancelText="No"
         title={title}
         visible={isRemoveModalVisible}
-        onOk={handleDelete}
+        onOk={() => {
+          handleDelete(fileId);
+          setIsRemoveModalVisible(false);
+        }}
         onCancel={handleCancel}
 
         // footer={[

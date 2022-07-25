@@ -12,9 +12,9 @@ import {
 
 import theme from 'theme/theme';
 
-import api from 'service/base';
-
 import useDoubleClick from 'hooks/useDoubleClick';
+
+import { handleDownload } from 'util/helpers/files-functions';
 
 import DownloadButton from 'components/buttons/DownloadButton';
 
@@ -27,7 +27,7 @@ import RemoveModal from '../../modal/RemoveModal';
 
 interface IListCardProps {
   isAdmin?: boolean;
-  fileId: any;
+  fileId?: any;
   fileName: any;
   data: any;
   value: any;
@@ -43,6 +43,7 @@ const ListCard: FC<IListCardProps> = ({
   isAdmin,
   fileId,
   value,
+  fileName,
   selected,
   userName,
   userLastName,
@@ -58,32 +59,32 @@ const ListCard: FC<IListCardProps> = ({
   const [isRemoveModalVisible, setIsRemoveModalVisible] =
     useState<boolean>(false);
 
-  const handleDownload = async () => {
-    const res = await downloadFile(fileId as string);
-    const url = window.URL.createObjectURL(new Blob([res.data]));
+  // const handleDownload = async () => {
+  //   const res = await downloadFile(fileId as string);
+  //   const url = window.URL.createObjectURL(new Blob([res.data]));
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `${value.fileName}`);
-    document.body.appendChild(link);
-    link.click();
+  //   const link = document.createElement('a');
+  //   link.href = url;
+  //   link.setAttribute('download', `${fileName}`);
+  //   document.body.appendChild(link);
+  //   link.click();
 
-    link.parentNode?.removeChild(link);
-  };
+  //   link.parentNode?.removeChild(link);
+  // };
 
-  const handleDelete = async () => {
-    await deleteFile(fileId as string);
-    const listCard = document.getElementById('remove-id');
-    listCard?.parentNode?.removeChild(listCard);
+  // const handleDelete = async () => {
+  //   await deleteFile(fileId as string);
+  //   const listCard = document.getElementById('remove-id');
+  //   listCard?.parentNode?.removeChild(listCard);
 
-    setIsRemoveModalVisible(false);
-  };
+  //   setIsRemoveModalVisible(false);
+  // };
 
   const handleCancel = () => {
     setIsRemoveModalVisible(false);
   };
 
-  const formattedDate = formatDateListCard(value.uploadTime);
+  const formattedDate = formatDateListCard(value.uploadDateTime);
 
   return (
     <>
@@ -116,7 +117,7 @@ const ListCard: FC<IListCardProps> = ({
                 type="button"
                 onClickCapture={(e) => {
                   e.stopPropagation();
-                  handleDownload();
+                  handleDownload(fileId, fileName);
                   setIsSiderVisible(false);
                   setSelectedCardId(value.fileId);
                 }}
@@ -128,9 +129,10 @@ const ListCard: FC<IListCardProps> = ({
         </StyledListCard>
       </StyledListCardContainer>
       <RemoveModal
+        fileId={fileId}
         isRemoveModalVisible={isRemoveModalVisible}
         setIsRemoveModalVisible={setIsRemoveModalVisible}
-        handleDelete={handleDelete}
+        // handleDelete={handleDelete}
         handleCancel={handleCancel}
         fileName={value.fileName}
       />

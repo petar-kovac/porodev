@@ -91,7 +91,7 @@ const StyledGridCard = styled(Card).attrs({
   }
 
   .ant-card-cover {
-    height: 14rem;
+    height: 10rem;
     max-width: auto;
     overflow: hidden;
     border-top-left-radius: 1.5rem;

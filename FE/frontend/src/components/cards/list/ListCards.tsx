@@ -18,7 +18,7 @@ import ListCard from './ListCard';
 interface IListCardProps {
   isAdmin?: boolean;
   cardData?: IFilesCard | null;
-  data?: IFilesCard[] | null;
+  data?: any;
   selected?: boolean;
   selectedCardId?: number | null;
   onClick?: (event: MouseEvent) => unknown;
@@ -44,8 +44,6 @@ const ListCards: FC<IListCardProps> = ({
 }) => {
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
-  // console.log(data);
-
   const handleClick = (value: any) => {
     setSelectedCardId(value.id);
     setCardData(value);
@@ -59,24 +57,26 @@ const ListCards: FC<IListCardProps> = ({
     setIsModalVisible(true);
   };
 
-  return searchRes.map((value: any) => {
-    return (
-      <ListCard
-        data={data}
-        value={value}
-        isAdmin={isAdmin}
-        fileId={value.id}
-        fileName={value.filename}
-        userName={value.userName}
-        userLastName={value.userLastname}
-        selected={selectedCardId === value.id}
-        key={value.id}
-        setSelectedCardId={setSelectedCardId}
-        onClick={() => handleClick(value)}
-        onDoubleClick={() => handleDoubleClick(value)}
-      />
-    );
-  });
+  return searchRes
+    ?.map((value: any) => {
+      return (
+        <ListCard
+          data={data}
+          value={value}
+          isAdmin={isAdmin}
+          fileId={value.id}
+          fileName={value.filename}
+          userName={value.userName}
+          userLastName={value.userLastname}
+          selected={selectedCardId === value.id}
+          key={value.id}
+          setSelectedCardId={setSelectedCardId}
+          onClick={() => handleClick(value)}
+          onDoubleClick={() => handleDoubleClick(value)}
+        />
+      );
+    })
+    .reverse();
 
   // <>
   //   {searchTerm.length > 0

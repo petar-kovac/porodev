@@ -23,6 +23,8 @@ import PContent from '../layout/content/PContent';
 import PHeader from '../layout/header/PHeader';
 import PSider from '../layout/sider/PSider';
 
+import SpinnerPage from '../pages/SpinnerPage';
+
 // routes
 import AdminRoutes from './AdminRoutes';
 import UserRoutes from './UserRoutes';
@@ -42,7 +44,8 @@ import Profile from '../pages/user/profile/Profile';
 import UserGroups from '../pages/user/groups/Groups';
 
 const PRouter: FC = () => {
-  const { isAuthenticated, isAdmin, loggedUser } = useAuthStateValue();
+  const { isAuthenticated, isAdmin, loggedUser, isLoading } =
+    useAuthStateValue();
   const location = useLocation();
 
   // if (!isLoading) {
@@ -102,10 +105,15 @@ const PRouter: FC = () => {
   return (
     <Routes>
       <Route path="/verified" element={<EmailVerified />} />
+      <Route path="/loading" element={<SpinnerPage />} />
       <Route path="/verification" element={<EmailVerify />} />
       <Route path="/confirm" element={<EmailConfirmed />} />
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Navigate to="/login" />} />
+      {/* <Route path="*" element={<Login />} /> */}
+      <Route
+        path="*"
+        element={<Navigate to={isLoading ? '/loading' : '/'} />}
+      />
     </Routes>
   );
 };

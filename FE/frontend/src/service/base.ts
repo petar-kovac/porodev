@@ -63,20 +63,21 @@ instance.interceptors.response.use(
     //   throw error;
     // }
 
-    if (error.response.status === StatusCode.UNAUTHORIZED) {
-      if (window.location.href === 'http://localhost:3000/login') {
-        window.location.href = '/verification';
-      } else {
-        window.location.href = '/login';
-        localStorage.clear();
-      }
-      // tu sam 2
-      delete instance.defaults.headers.common.Authorization;
-      // eslint-disable-next-line no-underscore-dangle
-      const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
-      localStorage.clear();
-      window.location.href = '/login';
-    }
+    // if (error.response.status === StatusCode.UNAUTHORIZED) {
+    //   if (window.location.href === 'http://localhost:3000/login') {
+    //     window.location.href = '/verification';
+    //   } else {
+    //     window.location.href = '/login';
+    //     localStorage.clear();
+    //   }
+    // tu sam 2
+    // delete instance.defaults.headers.common.Authorization;
+    // // eslint-disable-next-line no-underscore-dangle
+    // const oldAccess = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+    // localStorage.clear();
+    // window.location.href = '/login';
+    // }
+
     throw error;
   },
 );

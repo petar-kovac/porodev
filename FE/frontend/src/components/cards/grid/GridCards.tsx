@@ -10,6 +10,8 @@ interface IGridCardProps {
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
   selectedCardId?: number | null;
+  searchTerm?: string;
+  searchRes?: any;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
@@ -21,6 +23,8 @@ const GridCards: FC<IGridCardProps> = ({
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
   data,
+  searchTerm,
+  searchRes,
 }) => {
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
@@ -39,16 +43,16 @@ const GridCards: FC<IGridCardProps> = ({
 
   return (
     <>
-      {data
+      {searchRes
         ?.map((value: any) => (
           <GridCard
             value={value}
-            key={value.fileId}
-            image={value.image}
-            heading={value.fileName}
-            description={value.description}
-            selected={selectedCardId === value.fileId}
-            fileExtension={value.fileName.split('.')[1]}
+            key={value.id}
+            // image={value.image}
+            heading={value.filename}
+            // description={value.description}
+            selected={selectedCardId === value.id}
+            fileExtension={value.filename.split('.')[1]}
             onClick={() => handleClick(value)}
             onDoubleClick={() => handleDoubleClick(value)}
           />

@@ -67,18 +67,22 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     // first check if is it tryting to verify on initialization
     if (searchEmail !== null && searchToken !== null) {
+      setIsLoading(true);
       verifyEmail(searchEmail, searchToken)
         .then((response: any) => {
           navigate('/confirm');
+          setIsLoading(false);
         })
         .catch((error: any) => {
-          console.log(error);
           if (error.response.status === 400) {
             navigate('/verified');
+            console.log('verified');
           }
           if (error.response.status === 401) {
             navigate('/verification');
+            console.log('verification');
           }
+          setIsLoading(false);
         })
         .finally(() => setIsLoading(false));
     } else {
@@ -108,10 +112,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
             navigate('/login');
             throw new Error('Invalid token');
           }
-        } else if (pathname === '/verified') {
-          navigate('/verified');
-        } else if (pathname === '/verification') {
-          navigate('/verification');
         } else {
           setAuthenticated(false);
           setIsLoading(false);
@@ -128,7 +128,6 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const login: (loginData: ILoginRequest) => Promise<void> = useCallback(
     async (loginData: ILoginRequest) => {
       setIsLoading(true);
-      console.log('lglgl');
       try {
         const res: ILoginResponse = await loginApi({
           email: loginData.email,
