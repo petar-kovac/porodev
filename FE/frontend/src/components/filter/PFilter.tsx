@@ -1,5 +1,9 @@
-import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons';
-import { TrendingUpDimensions } from '@styled-icons/ionicons-outline/TrendingUp';
+import {
+  AppstoreOutlined,
+  BarsOutlined,
+  CloseCircleOutlined,
+} from '@ant-design/icons';
+
 import { DatePicker, Select, Slider, Input } from 'antd';
 import { DefaultOptionType } from 'antd/lib/select';
 import PSelect from 'components/select/PSelect';
@@ -75,6 +79,7 @@ const PFilter: FC<IPFilterProps> = ({
             placeholder="Search files"
             onChange={(e) => setSearchTerm(e.target.value)}
             value={searchTerm}
+            allowClear
           />
         </StyledFilesSlider>
       )}
