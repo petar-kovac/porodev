@@ -19,6 +19,9 @@ namespace PoroDev.UserManagementService.Helpers
             if (!password.Any(char.IsUpper))
                 throw new PasswordFormatException(PASSWORD_MIN_UPPERCASE_ERROR);
 
+            if (password.Contains(' '))
+                throw new PasswordFormatException(PASSWORD_CONTAINS_WHITESPACE);
+
             if (!password.Any(char.IsLower))
                 throw new PasswordFormatException(PASSWORD_MIN_LOWERCASE_ERROR);
 

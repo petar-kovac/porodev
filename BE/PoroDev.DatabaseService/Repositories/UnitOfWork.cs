@@ -31,9 +31,7 @@ namespace PoroDev.DatabaseService.Repositories
                           ISharedSpaceRepository sharedSpaceRepository,
                           ISharedSpacesWithFilesRepository sharedSpacesWithFiles,
                           ISharedSpacesUsersRepository sharedSpacesUsers,
-                          INotificationDataRepository notificationData)
-
-               
+                          INotificationDataRepository notificationData,
                           IUserReportsRepository userReports)
         
 
