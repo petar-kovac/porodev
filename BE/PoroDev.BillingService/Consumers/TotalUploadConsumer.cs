@@ -18,7 +18,8 @@ namespace PoroDev.BillingService.Consumers
             var modelToReturn = await _billingService.TotalUpload(new TotalUploadRequestServiceToDatabase()
             {
                 AdminId = context.Message.AdminId,
-                UserId = context.Message.UserId
+                UserId = context.Message.UserId,
+                Month = context.Message.Month
             });
 
             await context.RespondAsync(modelToReturn);

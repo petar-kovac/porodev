@@ -6,14 +6,17 @@
 
         public Guid UserId { get; init; }
 
+        public string Month { get; init; }
+
         public TotalRuntimeRequestServiceToDatabase()
         {
         }
 
-        public TotalRuntimeRequestServiceToDatabase(Guid adminId, Guid userId)
+        public TotalRuntimeRequestServiceToDatabase(Guid adminId, Guid userId, string month)
         {
             AdminId = adminId;
             UserId = userId;
+            Month = month;
         }
     }
 }

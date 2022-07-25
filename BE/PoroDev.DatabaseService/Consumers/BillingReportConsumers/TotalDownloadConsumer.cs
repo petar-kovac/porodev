@@ -7,6 +7,7 @@ using PoroDev.Common.Models.UserReportsModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.Common.Constants.Constants;
 using static PoroDev.DatabaseService.Constants.Constants;
+using static PoroDev.DatabaseService.Helpers.CurrentMonth;
 
 namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
 {
@@ -31,7 +32,7 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
             if (user == null)
                 return new CommunicationModel<TotalDownloadResponse>(new UserNotFoundException(UserNotFoundExceptionMessage));
 
-            if (totalDownload.Month == MonthName())
+            if (totalDownload.Month == GetMonthName())
             {
                 var totalDownloadSize = Convert.ToDouble(user.FileDownloadTotal / 1024.0);
                 var downloadSize = CreateDownloadResponse(totalDownloadSize);
@@ -50,12 +51,6 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
             var sizeDownload = CreateDownloadResponse(totalSizeDownload);
 
             return new CommunicationModel<TotalDownloadResponse>(sizeDownload);
-        }
-
-        private string MonthName()
-        {
-            DateTime dt = DateTime.Now;
-            return dt.Month.ToString("MMMM");
         }
 
         private TotalDownloadResponse CreateDownloadResponse(double totalDownloadSize)

@@ -3,8 +3,11 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.BillingReport.TotalUpload;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserReportsModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using static PoroDev.Common.Constants.Constants;
+using static PoroDev.DatabaseService.Constants.Constants;
+using static PoroDev.DatabaseService.Helpers.CurrentMonth;
 
 namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
 {
@@ -22,19 +25,45 @@ namespace PoroDev.DatabaseService.Consumers.BillingReportConsumers
             DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalUpload.AdminId);
 
             if (admin.Role != 0)
-                return new CommunicationModel<TotalUploadResponse>(new UserPermissionException());
+                return new CommunicationModel<TotalUploadResponse>(new UserPermissionException(UserIsNotAdminExceptionMessage));
 
             var user = await _unitOfWork.Users.GetByIdAsync(totalUpload.UserId);
-            var totalUploadSize = Convert.ToDouble(user.FileUploadTotal / 1024.0);
-            var updatePrice = totalUploadSize * PRICE_PER_MB;
+
+            if (user == null)
+                return new CommunicationModel<TotalUploadResponse>(new UserNotFoundException(UserNotFoundExceptionMessage));
+
+            if (totalUpload.Month == GetMonthName())
+            {
+                var totalUploadSize = Convert.ToDouble(user.FileUploadTotal / 1024.0);
+                var uploadSize = CreateUploadResponse(totalUploadSize);
+
+                return new CommunicationModel<TotalUploadResponse>(uploadSize);
+            }
+
+            List<UserReportsData> findUser = (await _unitOfWork.UserReports.FindAllAsync(
+                user => user.CurrentUserId.Equals(totalUpload.UserId) &&
+                user.Month.Equals(totalUpload.Month))).ToList<UserReportsData>();
+
+            if (findUser == null)
+                return new CommunicationModel<TotalUploadResponse>(new UserNotFoundException(UserNotFoundExceptionMessage));
+
+            var totalSizeUpload = Convert.ToDouble(findUser.FirstOrDefault().FileUploadTotal / 1024.0);
+            var sizeUpload = CreateUploadResponse(totalSizeUpload);
+
+            return new CommunicationModel<TotalUploadResponse>(sizeUpload);
+        }
+
+        private TotalUploadResponse CreateUploadResponse(double totalUploadSize)
+        {
+            var price = totalUploadSize * PRICE_PER_MB;
 
             TotalUploadResponse uploadSize = new()
             {
                 UploadSize = totalUploadSize,
-                UploadPrice = updatePrice
+                UploadPrice = price
             };
 
-            return new CommunicationModel<TotalUploadResponse>(uploadSize);
+            return uploadSize;
         }
 
         public async Task Consume(ConsumeContext<TotalUploadRequestServiceToDatabase> context)
