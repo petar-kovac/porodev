@@ -16,6 +16,8 @@
 
         INotificationDataRepository NotificationData { get; }
 
+        IUserReportsRepository UserReports { get; }
+
         Task<int> SaveChanges();
     }
 }

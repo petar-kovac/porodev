@@ -31,6 +31,7 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(FileUploadExistException) => new FileUploadExistException(errorMessage),
                 nameof(FileUploadFormatException) => new FileUploadFormatException(errorMessage),
                 nameof(FileUploadException) => new FileUploadException(errorMessage),
+                nameof(UserIsNotAdminException) => new UserIsNotAdminException(errorMessage),
                 nameof(UserPermissionException) => new UserPermissionException(errorMessage),
                 nameof(SharedSpaceNameFormatException) => new SharedSpaceNameFormatException(errorMessage),
                 nameof(InvalidDayValueException) => new InvalidDayValueException(errorMessage),
