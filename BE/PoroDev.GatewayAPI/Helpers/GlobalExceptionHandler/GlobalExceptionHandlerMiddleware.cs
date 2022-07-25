@@ -28,6 +28,18 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case InvalidDayValueException invalidDayValueException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = invalidDayValueException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, invalidDayValueException);
+                        break;
+
+                    case InvalidHourValueException invalidHourValueException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = invalidHourValueException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, invalidHourValueException);
+                        break;
+
                     case SharedSpaceNameFormatException sharedSpaceNameFormatException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = sharedSpaceNameFormatException.HumanReadableErrorMessage;

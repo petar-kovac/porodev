@@ -14,6 +14,8 @@
 
         ISharedSpacesUsersRepository SharedSpacesUsers { get; }
 
+        INotificationDataRepository NotificationData { get; }
+
         IUserReportsRepository UserReports { get; }
 
         Task<int> SaveChanges();

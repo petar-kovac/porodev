@@ -35,6 +35,7 @@ builder.Services.AddScoped<IUserReportsRepository, UserReportsRepository>();
 builder.Services.AddScoped<ISharedSpaceRepository, SharedSpaceRepository>();
 builder.Services.AddScoped<ISharedSpacesUsersRepository, SharedSpacesUsersRepository>();
 builder.Services.AddScoped<ISharedSpacesWithFilesRepository, SharedSpacesFilesRepository>();
+builder.Services.AddScoped<INotificationDataRepository, NotificationDataRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
