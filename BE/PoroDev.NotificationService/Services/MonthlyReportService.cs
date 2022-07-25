@@ -24,7 +24,7 @@ namespace PoroDev.NotificationService.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var _timer = new CronTimer("* * * * *", TimeZoneInfo.Local);
+            var _timer = new CronTimer("0 * * * *", TimeZoneInfo.Local);
             while(await _timer.WaitForNextTickAsync(stoppingToken)
                 && !stoppingToken.IsCancellationRequested)
             {
