@@ -14,6 +14,21 @@ namespace PoroDev.DatabaseService.Repositories
 
         public IRuntimeDataRepository RuntimeData { get; }
 
+        public ISharedSpaceRepository SharedSpaces { get; }
+
+        public ISharedSpacesWithFilesRepository SharedSpacesWithFiles { get; }
+
+        public ISharedSpacesUsersRepository SharedSpacesUsers { get; }
+
+        public UnitOfWork(SqlDataContext context,
+                          IUserRepository users,
+                          IStorageRepository userFiles,
+                          IRuntimeDataRepository runtimeData,
+                          ISharedSpaceRepository sharedSpaceRepository,
+                          ISharedSpacesWithFilesRepository sharedSpacesWithFiles,
+                          ISharedSpacesUsersRepository sharedSpacesUsers)
+        
+
         public IUserReportsRepository UserReports { get; }
 
         public UnitOfWork(SqlDataContext context, IUserRepository users, IStorageRepository userFiles, IRuntimeDataRepository runtimeData, IUserReportsRepository userReports)
@@ -22,6 +37,9 @@ namespace PoroDev.DatabaseService.Repositories
             Users = users;
             RuntimeData = runtimeData;
             UserFiles = userFiles;
+            SharedSpaces = sharedSpaceRepository;
+            SharedSpacesUsers = sharedSpacesUsers;
+            SharedSpacesWithFiles = sharedSpacesWithFiles;
             UserReports = userReports;
         }
 

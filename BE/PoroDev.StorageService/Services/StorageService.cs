@@ -3,6 +3,7 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 
@@ -16,6 +17,7 @@ namespace PoroDev.StorageService.Services
         private readonly IRequestClient<FileDownloadRequestServiceToDatabase> _downloadRequestClient;
         private readonly IRequestClient<FileReadModel> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestServiceToDatabase> _deleteRequestClient;
+        private readonly IRequestClient<FileQueryServiceToDatabase> _queryClient;
         private readonly IMapper _mapper;
 
         public StorageService
@@ -23,12 +25,14 @@ namespace PoroDev.StorageService.Services
             IRequestClient<FileDownloadRequestServiceToDatabase> downloadRequestClient,
             IRequestClient<FileReadModel> readRequestClient,
             IRequestClient<FileDeleteRequestServiceToDatabase> deleteRequestClient,
+            IRequestClient<FileQueryServiceToDatabase> queryClient,
             IMapper mapper)
         {
             _uploadRequestClient = uploadRequestClient;
             _downloadRequestClient = downloadRequestClient;
             _readRequestClient = readRequestClient;
             _deleteRequestClient = deleteRequestClient;
+            _queryClient = queryClient;
             _mapper = mapper;
         }
 
@@ -58,6 +62,13 @@ namespace PoroDev.StorageService.Services
         public async Task<CommunicationModel<FileDeleteMessage>> DeleteFile(FileDeleteRequestServiceToDatabase deleteModel)
         {
             var response = await _deleteRequestClient.GetResponse<CommunicationModel<FileDeleteMessage>>(deleteModel, CancellationToken.None, RequestTimeout.After(m: 5));
+
+            return response.Message;
+        }
+
+        public async Task<CommunicationModel<List<FileQueryModel>>> Query(FileQueryServiceToDatabase queryRequest)
+        {
+            var response = await _queryClient.GetResponse<CommunicationModel<List<FileQueryModel>>>(queryRequest, CancellationToken.None, RequestTimeout.After(m: 1));
 
             return response.Message;
         }

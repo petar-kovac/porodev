@@ -5,12 +5,15 @@ using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
 using PoroDev.Common.Contracts.UserManagement.Query;
+using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
+using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
@@ -33,6 +36,8 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> _readUserByIdWithRuntimedataRequestClient;
         private readonly IRequestClient<UserDeleteAllRequestGatewayToService> _deleteAllRequestClient;
         private readonly IRequestClient<VerifyEmailRequestGatewayToService> _verifyUserRequestClient;
+        private readonly IRequestClient<ReadAllUsersRequestGatewayToService> _readAllusersRequestClient;
+        private readonly IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> _readAllSharedSpacesForUser;
         private readonly IRequestClient<QueryAllUsersRequestGatewayToService> _queryAllUsers;
 
         public UserManagementService(
@@ -45,8 +50,10 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<UserReadByIdWithRuntimeRequestGatewayToService> readUserByIdWithRuntimedataRequestClient,
             IRequestClient<UserReadByIdRequestGatewayToService> readUserByIdRequestClient,
             IRequestClient<UserDeleteAllRequestGatewayToService> deleteAllUsers,
-            IRequestClient<QueryAllUsersRequestGatewayToService> queryAllUsers,
-            IRequestClient<VerifyEmailRequestGatewayToService> verifyUserRequestClient
+            IRequestClient<VerifyEmailRequestGatewayToService> verifyUserRequestClient,
+            IRequestClient<ReadAllUsersRequestGatewayToService> readAllUsersRequestClient,
+            IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser,
+            IRequestClient<QueryAllUsersRequestGatewayToService> queryAllUsers
             )
         {
             _createRequestClient = createRequestClient;
@@ -60,6 +67,8 @@ namespace PoroDev.GatewayAPI.Services
             _queryAllUsers = queryAllUsers;
             _readUserByIdWithRuntimedataRequestClient = readUserByIdWithRuntimedataRequestClient;
             _verifyUserRequestClient = verifyUserRequestClient;
+            _readAllusersRequestClient = readAllUsersRequestClient;
+            _readAllSharedSpacesForUser = readAllSharedSpacesForUser;
         }
 
         public async Task<DataUserModel> CreateUser(UserCreateRequestGatewayToService createModel)
@@ -97,6 +106,16 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;
+        }
+
+        public async Task<List<DataUserModel>> ReadAllUsers(ReadAllUsersRequestGatewayToService model)
+        {
+            var responseContext = await _readAllusersRequestClient.GetResponse<CommunicationModel<List<DataUserModel>>>(model);
+            if(responseContext.Message.ExceptionName != null)
+                ThrowException(nameof(responseContext.Message.ExceptionName), responseContext.Message.HumanReadableMessage);
+
+            return responseContext.Message.Entity;
+
         }
 
         public async Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel)
@@ -211,6 +230,15 @@ namespace PoroDev.GatewayAPI.Services
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;
+        }
+
+        public async Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
+        {
+            var requestResponseContext = await _readAllSharedSpacesForUser.GetResponse<CommunicationModel<List<SharedSpace>>>(model);
+            if (requestResponseContext.Message.ExceptionName != null)
+                ThrowException(nameof(requestResponseContext.Message.ExceptionName), requestResponseContext.Message.HumanReadableMessage);
+
+            return requestResponseContext.Message.Entity;
         }
     }
 }

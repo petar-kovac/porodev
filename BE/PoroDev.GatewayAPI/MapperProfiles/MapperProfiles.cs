@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts.RunTime.Query;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.GatewayAPI.Models.Runtime;
 using PoroDev.GatewayAPI.Models.StorageService;
@@ -19,6 +20,8 @@ namespace PoroDev.GatewayAPI.MapperProfiles
 
             CreateMap<FileUploadRequest, FileUploadRequestGatewayToService>()
                 .ForMember(destination => destination.File, option => option.Ignore());
+
+            CreateMap<FileQueryRequest, FileQueryGatewayToService>();
         }
 
         private string ConvertListToArgumentString(List<string>? argumentList)

@@ -15,6 +15,6 @@ namespace PoroDev.DatabaseService.Repositories.Contracts
 
         Task<FileMetadata> ReadFileById(string fileId);
 
-        Task<List<SingleFileQueryModel>> QueryFiles(SingleFileQueryServiceToDatabase queryReqeust);
+        Task<List<FileQueryModel>> QueryFiles(FileQueryServiceToDatabase queryReqeust);
     }
 }
