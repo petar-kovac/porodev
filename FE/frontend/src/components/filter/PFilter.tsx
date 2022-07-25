@@ -16,6 +16,8 @@ interface IPFilterProps {
   isList: boolean;
   setIsList: Dispatch<SetStateAction<boolean>>;
   activeFilters?: IACtiveFilters;
+  handleFilter?: any;
+  searchTerm?: any;
 }
 interface IACtiveFilters {
   showSortByTime?: boolean;
@@ -29,6 +31,8 @@ const PFilter: FC<IPFilterProps> = ({
   isList,
   setIsList,
   activeFilters = {},
+  handleFilter,
+  searchTerm,
 }) => {
   const propsObj = { ...activeFilters };
 
@@ -65,7 +69,11 @@ const PFilter: FC<IPFilterProps> = ({
 
       {propsObj.showFilterBySize && (
         <StyledFilesSlider>
-          <StyledInput placeholder="Search folders &amp; files" />
+          <StyledInput
+            placeholder="Search folders &amp; files"
+            onChange={handleFilter}
+            value={searchTerm}
+          />
         </StyledFilesSlider>
       )}
 

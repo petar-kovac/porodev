@@ -31,9 +31,11 @@ export const StyledStaticContent = styled.div`
 
 export const StyledFoldersContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-  gap: 2rem;
+  flex-direction: column;
+
+  & h2 {
+    font-size: 3rem;
+  }
 `;
 
 export const StyledFilesWrapper = styled.div`
@@ -41,4 +43,21 @@ export const StyledFilesWrapper = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(210px, 16%));
   gap: 1rem;
   padding-left: 2rem;
+`;
+
+export const StyledFoldersWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 2rem;
+
+  gap: 2rem;
+`;
+
+export const StyledFilesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & h2 {
+    font-size: 3rem;
+  }
 `;

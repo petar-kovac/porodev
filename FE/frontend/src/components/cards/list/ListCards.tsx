@@ -59,66 +59,83 @@ const ListCards: FC<IListCardProps> = ({
     setIsModalVisible(true);
   };
 
-  return (
-    <>
-      {searchTerm.length > 0
-        ? filteredResults.map((value: any) => {
-            return (
-              <ListCard
-                data={data}
-                value={value}
-                isAdmin={isAdmin}
-                fileId={value.id}
-                fileName={value.filename}
-                userName={value.userName}
-                userLastName={value.userLastname}
-                selected={selectedCardId === value.id}
-                key={value.id}
-                setSelectedCardId={setSelectedCardId}
-                onClick={() => handleClick(value)}
-                onDoubleClick={() => handleDoubleClick(value)}
-              />
-            );
-          })
-        : // data
-          //     ?.map((value: any) => (
-          //       <ListCard
-          //         isAdmin={isAdmin}
-          //         fileId={value.fileId}
-          //         fileName={value.fileName}
-          //         userName={value.userName}
-          //         userLastName={value.userLastName}
-          //         data={data}
-          //         value={value}
-          //         selected={selectedCardId === value.fileId}
-          //         key={value.fileId}
-          //         setSelectedCardId={setSelectedCardId}
-          //         onClick={() => handleClick(value)}
-          //         onDoubleClick={() => handleDoubleClick(value)}
-          //       />
-          //     ))
-          //     .reverse()}
+  return searchRes.map((value: any) => {
+    return (
+      <ListCard
+        data={data}
+        value={value}
+        isAdmin={isAdmin}
+        fileId={value.id}
+        fileName={value.filename}
+        userName={value.userName}
+        userLastName={value.userLastname}
+        selected={selectedCardId === value.id}
+        key={value.id}
+        setSelectedCardId={setSelectedCardId}
+        onClick={() => handleClick(value)}
+        onDoubleClick={() => handleDoubleClick(value)}
+      />
+    );
+  });
 
-          searchRes
-            ?.map((value: any) => (
-              <ListCard
-                isAdmin={isAdmin}
-                fileId={value.id}
-                fileName={value.filename}
-                userName={value.userName}
-                userLastName={value.userLastname}
-                data={data}
-                value={value}
-                selected={selectedCardId === value.id}
-                key={value.id}
-                setSelectedCardId={setSelectedCardId}
-                onClick={() => handleClick(value)}
-                onDoubleClick={() => handleDoubleClick(value)}
-              />
-            ))
-            .reverse()}
-    </>
-  );
+  // <>
+  //   {searchTerm.length > 0
+  //     ? searchRes.map((value: any) => {
+  //         return (
+  //           <ListCard
+  //             data={data}
+  //             value={value}
+  //             isAdmin={isAdmin}
+  //             fileId={value.id}
+  //             fileName={value.filename}
+  //             userName={value.userName}
+  //             userLastName={value.userLastname}
+  //             selected={selectedCardId === value.id}
+  //             key={value.id}
+  //             setSelectedCardId={setSelectedCardId}
+  //             onClick={() => handleClick(value)}
+  //             onDoubleClick={() => handleDoubleClick(value)}
+  //           />
+  //         );
+  //       })
+  //     : // data
+  //       //     ?.map((value: any) => (
+  //       //       <ListCard
+  //       //         isAdmin={isAdmin}
+  //       //         fileId={value.fileId}
+  //       //         fileName={value.fileName}
+  //       //         userName={value.userName}
+  //       //         userLastName={value.userLastName}
+  //       //         data={data}
+  //       //         value={value}
+  //       //         selected={selectedCardId === value.fileId}
+  //       //         key={value.fileId}
+  //       //         setSelectedCardId={setSelectedCardId}
+  //       //         onClick={() => handleClick(value)}
+  //       //         onDoubleClick={() => handleDoubleClick(value)}
+  //       //       />
+  //       //     ))
+  //       //     .reverse()}
+
+  //       searchRes
+  //         ?.map((value: any) => (
+  //           <ListCard
+  //             isAdmin={isAdmin}
+  //             fileId={value.id}
+  //             fileName={value.filename}
+  //             userName={value.userName}
+  //             userLastName={value.userLastname}
+  //             data={data}
+  //             value={value}
+  //             selected={selectedCardId === value.id}
+  //             key={value.id}
+  //             setSelectedCardId={setSelectedCardId}
+  //             onClick={() => handleClick(value)}
+  //             onDoubleClick={() => handleDoubleClick(value)}
+  //           />
+  //         ))
+  //         .reverse()}
+  // </>
 };
 
 export default ListCards;

@@ -46,22 +46,22 @@ const Files: FC = () => {
         console.log(res);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [searchTerm]);
 
   const handleFilter = (e: any) => {
     const searchWord = e.target.value;
     setSearchTerm(searchWord);
 
-    const filteredData = searchRes.filter((value: any) => {
-      // return value.filename.toLowerCase().includes(searchTerm.toLowerCase());
-      return value.filename.toLowerCase().startsWith(searchTerm.toLowerCase());
-    });
+    // const filteredData = searchRes.filter((value: any) => {
+    //   // return value.filename.toLowerCase().includes(searchTerm.toLowerCase());
+    //   return value.filename.toLowerCase().startsWith(searchTerm.toLowerCase());
+    // });
 
-    if (searchWord === '') {
-      setFilteredResults([]);
-    } else {
-      setFilteredResults(filteredData);
-    }
+    // if (searchWord === '') {
+    //   setFilteredResults([]);
+    // } else {
+    //   setFilteredResults(filteredData);
+    // }
   };
 
   const clearInput = () => {
@@ -81,6 +81,8 @@ const Files: FC = () => {
         <StyledStaticContent isCollapsed={isCollapsed}>
           <PFilterWrapper>
             <PFilter
+              handleFilter={handleFilter}
+              searchTerm={searchTerm}
               isList={isListView}
               setIsList={setIsListView}
               activeFilters={{
@@ -99,12 +101,6 @@ const Files: FC = () => {
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
               /> */}
-              <input
-                type="text"
-                placeholder="Search..."
-                onChange={handleFilter}
-                value={searchTerm}
-              />
             </StyledFoldersWrapper>
           </StyledFoldersContainer>
           <StyledFilesContainer>

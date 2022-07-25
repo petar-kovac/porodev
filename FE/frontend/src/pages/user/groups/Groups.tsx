@@ -8,6 +8,8 @@ import Error from 'pages/error/ErrorPage';
 import { StyledSpinnerWrapper } from 'styles/shared-styles';
 import { IFilesCard } from 'types/card-data';
 
+import PFolders from 'components/folders/PFolders';
+
 import useRuntimeData from '../runtime/hooks/useRuntimeData';
 import GroupModal from './modal/GroupModal';
 import GroupSider from './sider/GroupSider';
@@ -17,6 +19,9 @@ import {
   StyledFilterWrapper,
   StyledPageWrapper,
   StyledStaticContent,
+  StyledFoldersContainer,
+  StyledFoldersWrapper,
+  StyledFilesContainer,
 } from './styles/groups-styled';
 
 const Groups: FC = () => {
@@ -49,25 +54,39 @@ const Groups: FC = () => {
         }}
       >
         <StyledStaticContent>
-          <StyledFilterWrapper>
-            <PFilter
-              isList={isList}
-              setIsList={setIsList}
-              activeFilters={{
-                showSortByType: true,
-                showSortByTime: true,
-              }}
-            />
-          </StyledFilterWrapper>
-          <StyledFilesWrapper>
-            <GroupCards
-              data={data}
-              cardData={cardData}
-              setCardData={setCardData}
-              selectedCardId={selectedCardId}
-              setSelectedCardId={setSelectedCardId}
-            />
-          </StyledFilesWrapper>
+          <StyledFoldersContainer>
+            <h2>Folders</h2>
+            <StyledFoldersWrapper>
+              <PFolders
+                cardData={cardData}
+                setCardData={setCardData}
+                selectedCardId={selectedCardId}
+                setSelectedCardId={setSelectedCardId}
+              />
+            </StyledFoldersWrapper>
+          </StyledFoldersContainer>
+          <StyledFilesContainer>
+            {/* <StyledFilterWrapper>
+              <PFilter
+                isList={isList}
+                setIsList={setIsList}
+                activeFilters={{
+                  showSortByType: true,
+                  showSortByTime: true,
+                }}
+              />
+            </StyledFilterWrapper> */}
+            <h2>Folders</h2>
+            <StyledFilesWrapper>
+              <GroupCards
+                data={data}
+                cardData={cardData}
+                setCardData={setCardData}
+                selectedCardId={selectedCardId}
+                setSelectedCardId={setSelectedCardId}
+              />
+            </StyledFilesWrapper>
+          </StyledFilesContainer>
         </StyledStaticContent>
 
         <GroupSider cardData={cardData} />
