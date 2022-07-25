@@ -70,6 +70,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userNotVerified);
                         break;
 
+                    case UserLimitException userLimitException:
+                        response.StatusCode = (int)HttpStatusCode.Forbidden;
+                        HumanReadableErrorMessage = userLimitException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userLimitException);
+                        break;
+
                     case NoHeaderWithJwtException noHeaderWithJwtException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = noHeaderWithJwtException.HumanReadableErrorMessage;

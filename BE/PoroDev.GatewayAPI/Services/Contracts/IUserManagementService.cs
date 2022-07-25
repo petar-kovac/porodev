@@ -45,5 +45,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
 
         Task<NotificationDataModel> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService model);
+
+        Task<List<DataUserModel>> QueryAll();
     }
 }

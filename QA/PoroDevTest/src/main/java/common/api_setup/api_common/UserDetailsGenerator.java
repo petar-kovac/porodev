@@ -43,36 +43,31 @@ public class UserDetailsGenerator {
     // Taking the value from json based on defined endpoint and attribute
     public static String takeValueFromJsonResp(String endpoint, String attribute){
         String json = given().relaxedHTTPSValidation().when().get(endpoint).asString();
-        String attributeValue = JsonPath.read(json, "$."+attribute).toString();
-        return attributeValue;
+        return JsonPath.read(json, "$."+attribute).toString();
     }
 
     // Taking the jwt token attribute based on users email and password
     public static String takeTokenValueFromJson(String email, String password){
-        String loginJsonObject = "{\n" +
-                "  \"email\": \""+email+"\",\n" +
-                "  \"password\": \""+password+"\"\n" +
-                "}";
         String json = given().relaxedHTTPSValidation().
-                body(loginJsonObject)
+                body("{\n" +
+                        "  \"email\": \""+email+"\",\n" +
+                        "  \"password\": \""+password+"\"\n" +
+                        "}")
                 .when()
                 .post(Endpoints.USER_LOGIN).asString();
-        String fetchedToken = JsonPath.read(json, "$.jwt").toString();
 
-        return fetchedToken;
+        return JsonPath.read(json, "$.jwt").toString();
     }
 
     // Generating JSON body for runtime with two numbers
     public static String createRuntimeJsonReq(String fileID, String firstNmb, String secondNmb) {
-        String generatedRuntimeJsonReq = "{\n" +
-                "  \"projectId\": \""+fileID+"\",\n" +
+        return "{\n" +
+                "  \"projectId\": \" "+fileID+"\",\n" +
                 "  \"arguments\": [\n" +
                 "    \"" + firstNmb + "\",\n" +
                 "    \"" + secondNmb + "\"\n" +
                 "  ]\n" +
                 "}";
-        return generatedRuntimeJsonReq;
-
     }
 
     // Generating JSON req for Register or Update
@@ -81,16 +76,15 @@ public class UserDetailsGenerator {
             String lastname,
             String email,
             String password) {
-         String generatedRegisterJsonReq = "{\n" +
-                 "  \"name\": \""+name+"\",\n" +
-                 "  \"lastname\": \""+lastname+"\",\n" +
-                 "  \"email\": \""+email+"\",\n" +
-                 "  \"password\": \""+password+"\",\n" +
-                 "  \"department\": 0,\n" +
-                 "  \"position\": \"string\",\n" +
-                 "  \"avatarUrl\": \"string\"\n" +
-                 "}";
-         return generatedRegisterJsonReq;
+        return "{\n" +
+                "  \"name\": \""+name+"\",\n" +
+                "  \"lastname\": \""+lastname+"\",\n" +
+                "  \"email\": \""+email+"\",\n" +
+                "  \"password\": \""+password+"\",\n" +
+                "  \"department\": 0,\n" +
+                "  \"position\": \"string\",\n" +
+                "  \"avatarUrl\": \"string\"\n" +
+                "}";
     }
 
     public static String createUpdateJsonReq(
@@ -98,7 +92,7 @@ public class UserDetailsGenerator {
             String lastname,
             String email,
             String password) {
-        String generatedUpgradeJsonReq = "{\n" +
+        return "{\n" +
                 "  \"avatarUrl\": \"string\",\n" +
                 "  \"department\": 0,\n" +
                 "  \"email\": \""+email+"\",\n" +
@@ -108,30 +102,21 @@ public class UserDetailsGenerator {
                 "  \"position\": \"string\",\n" +
                 "  \"role\": 0\n" +
                 "}";
-        return generatedUpgradeJsonReq;
     }
 
 
     // Generating JSON req for LogIn operation
 
-    public static String createLogInJsonReq (
-            String email,
-            String password
-    ) {
-        String generatedLogInJsonReq = "{\n" +
+    public static String createLogInJsonReq (String email, String password) {
+        return "{\n" +
                 "  \"email\": \"" +email + "\",\n" +
                 "  \"password\": \""+password+"\"\n" +
                 "}";
-        return generatedLogInJsonReq;
     }
 
     public static String createEmailJsonReq (String email) {
-        String emailBody = "{\n" +
+        return "{\n" +
                 "  \"email\": \""+email+"\"\n" +
                 "}";
-        return emailBody;
     }
-
-
-
 }

@@ -2,6 +2,7 @@
 using MassTransit;
 using PoroDev.Common.Contracts.RunTime.Query;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.GatewayAPI.Models.Runtime;
@@ -24,6 +25,8 @@ namespace PoroDev.GatewayAPI.MapperProfiles
 
             CreateMap<SetMonthlyReportTimeRequest, SetMonthlyReportTimeRequestGatewayToService>()
                 .ForMember(destionation => destionation.UserId, option => option.Ignore());
+
+            CreateMap<FileQueryRequest, FileQueryGatewayToService>();
         }
 
         private string ConvertListToArgumentString(List<string>? argumentList)

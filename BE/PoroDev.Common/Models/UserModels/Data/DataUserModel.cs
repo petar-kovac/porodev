@@ -31,6 +31,12 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         public string AvatarUrl { get; set; }
 
+        public ulong FileDownloadTotal { get ; set; }
+
+        public ulong FileUploadTotal { get; set; }
+
+        public ushort RuntimeTotal { get; set; }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DateTime DateCreated { get; set; }
 
@@ -55,6 +61,7 @@ namespace PoroDev.Common.Models.UserModels.Data
 
         public DataUserModel()
         {
+
         }
 
         public DataUserModel(Guid id, string name, string lastname, string email, byte[] password, UserEnums.UserRole role,
