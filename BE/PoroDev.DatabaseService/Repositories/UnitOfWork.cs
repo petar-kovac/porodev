@@ -14,8 +14,7 @@ namespace PoroDev.DatabaseService.Repositories
         public IRuntimeDataRepository RuntimeData { get; }
 
         public IUserReportsRepository UserReports { get; }
-
-        
+       
         public ISharedSpaceRepository SharedSpaces { get; }
 
         public ISharedSpacesWithFilesRepository SharedSpacesWithFiles { get; }

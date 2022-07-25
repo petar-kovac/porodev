@@ -135,9 +135,9 @@ namespace PoroDev.DatabaseService.Repositories
 
                 var queryResultSingle = await (await _bucket.FindAsync(filterByFileId)).FirstAsync();
 
-                var isExe = (await _unitOfWork.UserFiles.GetByStringIdAsync(queryReqeust.FileId)).IsExecutable;
+                var sqlModel = await _unitOfWork.UserFiles.GetByStringIdAsync(queryReqeust.FileId);
 
-                var returnModel = new FileQueryModel(queryResultSingle, userName, userLastname, isExe);
+                var returnModel = new FileQueryModel(queryResultSingle, userName, userLastname, sqlModel.IsExecutable, sqlModel.IsDeleted);
 
                 fileQueryModels.Add(returnModel);
 
@@ -190,7 +190,7 @@ namespace PoroDev.DatabaseService.Repositories
 
                 var isExe = whereRes.IsExecutable;
 
-                fileQueryModels.Add(new FileQueryModel(result, userName, userLastname, isExe));
+                fileQueryModels.Add(new FileQueryModel(result, userName, userLastname, isExe, whereRes.IsDeleted));
             }
 
             return fileQueryModels;
