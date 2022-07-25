@@ -20,12 +20,14 @@ namespace PoroDev.Common.Contracts.StorageService.Query
 
         public string? ContentType { get; set; }
 
+        public bool? IsExe { get; set; }
+
         public FileQueryServiceToDatabase()
         {
 
         }
 
-        public FileQueryServiceToDatabase(Guid userId, string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null)
+        public FileQueryServiceToDatabase(Guid userId, string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null, bool? isExe = null)
         {
             UserId = userId;
             FileId = fileId;
@@ -33,6 +35,7 @@ namespace PoroDev.Common.Contracts.StorageService.Query
             UploadTime = uploadTime;
             Size = size;
             ContentType = contentType;
+            IsExe = isExe;
         }
     }
 }
