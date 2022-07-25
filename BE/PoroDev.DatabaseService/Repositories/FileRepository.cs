@@ -161,6 +161,11 @@ namespace PoroDev.DatabaseService.Repositories
 
             if (queryReqeust.FileName is not null)
             {
+                if(queryReqeust.FileName.Contains('(') || queryReqeust.FileName.Contains(')'))
+                {
+                    queryReqeust.FileName = queryReqeust.FileName.Replace("(", @"\(").Replace(")", @"\)");
+                }
+
                 var filterByFileName = builder.Regex(file => file.Filename, new Regex(@$".*{queryReqeust.FileName}.*"));
                 filter &= filterByFileName;
             }
@@ -179,8 +184,14 @@ namespace PoroDev.DatabaseService.Repositories
 
             var queryResult = await (await _bucket.FindAsync(filter)).ToListAsync();
 
-            queryResult.ForEach(result => fileQueryModels.Add(new FileQueryModel(result, userName, userLastname,
-                                                                                 fileList.Single(file => file.FileId.Equals(result.Id)).IsExecutable)));
+            foreach(var result in queryResult)
+            {
+                var whereRes = fileList.First(file => file.FileId.Equals(result.Id.ToString()));
+
+                var isExe = whereRes.IsExecutable;
+
+                fileQueryModels.Add(new FileQueryModel(result, userName, userLastname, isExe));
+            }
 
             return fileQueryModels;
         }

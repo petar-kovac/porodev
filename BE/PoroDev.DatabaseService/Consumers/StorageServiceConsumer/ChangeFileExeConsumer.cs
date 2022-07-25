@@ -15,7 +15,9 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
 
         public async Task Consume(ConsumeContext<IUpdateFileExe> context)
         {
-            var fileId = (await _fileRepository.QueryFiles(new FileQueryServiceToDatabase(context.Message.UserId.Value, null, context.Message.FileName))).First().Id;
+            var queryRequest = new FileQueryServiceToDatabase(context.Message.UserId.Value, null, context.Message.FileName);
+            var queryResult = await _fileRepository.QueryFiles(queryRequest);
+            var fileId = queryResult.First().Id;
 
             var modelToChange = await _unitOfWork.UserFiles.GetByStringIdAsync(fileId);
             modelToChange.IsExecutable = context.Message.IsExe;
