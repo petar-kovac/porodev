@@ -27,7 +27,7 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             await context.RespondAsync<CommunicationModel<TotalRunTimeForAllUsersModel>>(responseModel);
         }
 
-        public async Task<CommunicationModel<TotalRunTimeForAllUsersModel>> TotalRunTimeForAllUsers(
+        private async Task<CommunicationModel<TotalRunTimeForAllUsersModel>> TotalRunTimeForAllUsers(
             TotalRunTimeForAllUsersRequestServiceToDatabase totalMemoryUsedForRunTimePerMonthModel)
         {
             DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalMemoryUsedForRunTimePerMonthModel.UserId);
