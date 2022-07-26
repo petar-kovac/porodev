@@ -1,4 +1,6 @@
-﻿namespace PoroDev.Common.Contracts.SharedSpace.QueryFiles
+﻿using System.Text.Json.Serialization;
+
+namespace PoroDev.Common.Contracts.SharedSpace.QueryFiles
 {
     public class QueryFilesResponse
     {
@@ -12,6 +14,9 @@
 
         public string UserLastName { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public DateTimeOffset? AddedToSharedSpace { get; set; }
+
         public QueryFilesResponse()
         {
         }
@@ -20,13 +25,15 @@
                                   string fileName,
                                   Guid ownerId,
                                   string userName,
-                                  string userLastName)
+                                  string userLastName,
+                                  DateTimeOffset? addedToSharedSpace = null)
         {
             FileId = fileId;
             FileName = fileName;
             OwnerId = ownerId;
             UserName = userName;
             UserLastName = userLastName;
+            AddedToSharedSpace = addedToSharedSpace ?? null;
         }
     }
 }

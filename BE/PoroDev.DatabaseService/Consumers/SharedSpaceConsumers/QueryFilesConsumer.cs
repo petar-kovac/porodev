@@ -27,7 +27,8 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
                                                         fileData.Filename,
                                                         data.File.CurrentUserId,
                                                         fileData.UserName,
-                                                        fileData.UserLastname));
+                                                        fileData.UserLastname,
+                                                        data.DateAdded));
             }
 
             await context.RespondAsync(new CommunicationModel<List<QueryFilesResponse>>(responseList));
