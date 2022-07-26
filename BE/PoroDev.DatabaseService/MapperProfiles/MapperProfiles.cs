@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.SharedSpace.AddFile;
+using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
@@ -66,6 +67,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
                 .ForMember(dst => dst.DateAdded, option => option.MapFrom(src => DateTimeOffset.UtcNow));
 
             CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
+
+            CreateMap<AddUserToSharedSpaceRequestServiceToDatabase, SharedSpacesUsers>();
         }
 
         private bool ValidateUserDeletion(DataUserModel src)

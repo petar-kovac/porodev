@@ -38,7 +38,8 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(InvalidHourValueException) => new InvalidHourValueException(errorMessage),
                 nameof(WrongOldPasswordException) => new WrongOldPasswordException(errorMessage),
                 nameof(MonthLimitException) => new MonthLimitException(errorMessage),
-                _ => new Exception("Exception not found!"),
+                nameof(SharedSpaceException) => new SharedSpaceException(errorMessage),   
+                _ => new Exception($"Exception not found, error message {errorMessage} !")
             };
         }
     }

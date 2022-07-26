@@ -16,5 +16,13 @@ namespace PoroDev.Common.Models.SharedSpaces
         public FileData File { get; set; }
 
         public DateTimeOffset DateAdded { get; set; }
+
+        public bool Compare(string fileId, Guid sharedSpaceId)
+        {
+            if (FileId.Equals(fileId) && SharedSpaceId.Equals(sharedSpaceId))
+                return true;
+
+            return false;
+        }
     }
 }
