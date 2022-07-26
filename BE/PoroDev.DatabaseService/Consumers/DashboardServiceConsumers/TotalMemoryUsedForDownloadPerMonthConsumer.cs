@@ -29,12 +29,20 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         private async Task<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>> TotalMemoryUsedForDownloadPerMonth(
             TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadPerMonthModel)
         {
+
             DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalMemoryUsedForDownloadPerMonthModel.UserId);
 
             if (admin.Role != 0)
             {
                 return new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>(new UserIsNotAdminException());
             }
+
+            if (totalMemoryUsedForDownloadPerMonthModel.NumberOfMonthsToShow > 6)
+            {
+                return new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>(new MonthLimitException());
+
+            }
+
 
             DateTime dt = DateTime.Now;
             List<string> previousMonths = Helpers.PreviousMonths.GetPreviousMonths(dt, totalMemoryUsedForDownloadPerMonthModel.NumberOfMonthsToShow);

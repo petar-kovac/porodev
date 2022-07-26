@@ -28,11 +28,18 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         private async Task<CommunicationModel<TotalRunTimePerMonthModel>> TotalMemoryUsedForRunTimePerMonth(
            TotalRunTimePerMonthRequestServiceToDatabase totalMemoryUsedForRunTimePerMonthModel)
         {
+
             DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalMemoryUsedForRunTimePerMonthModel.UserId);
 
             if (admin.Role != 0)
             {
                 return new CommunicationModel<TotalRunTimePerMonthModel>(new UserIsNotAdminException());
+            }
+
+            if (totalMemoryUsedForRunTimePerMonthModel.NumberOfMonthsToShow > 6)
+            {
+                return new CommunicationModel<TotalRunTimePerMonthModel>(new MonthLimitException());
+
             }
 
             DateTime dt = DateTime.Now;
