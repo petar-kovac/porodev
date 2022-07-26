@@ -9,7 +9,6 @@ const useFilesData = (id: string) => {
   const [error, setError] = useState<string>('');
 
   const { setIsSiderVisible } = usePageContext();
-  console.log(id, 'id');
 
   useEffect(() => {
     setIsSiderVisible(false);

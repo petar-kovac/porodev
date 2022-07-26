@@ -16,12 +16,14 @@ const mapResponseToCardData = (response: IFilesCard): MappedCardData => {
   let obj: MappedCardData = {};
   // eslint-disable-next-line array-callback-return
   Object.entries(response).map(([key, value]: any) => {
-    if (key === 'uploadTime') {
+    if (key === 'isExe' || key === 'isDeleted' || key === 'isDeleted') {
+      console.log('A');
+    } else if (key === 'uploadTime') {
       obj = { ...obj, [ApiTranslation.createdAt]: formatDate(value) };
     } else {
       obj = {
         ...obj,
-        [ApiTranslation[key]]: `${value}`,
+        [ApiTranslation[key]]: value,
       };
     }
   });
@@ -33,27 +35,41 @@ const mapResponseToCardData = (response: IFilesCard): MappedCardData => {
  * Component to map trough API data.
  */
 const SiderData: FC<{ data: IFilesCard }> = ({ data }) => {
-  const obj = mapResponseToCardData(data);
-
   return (
     <>
-      {Object.entries(obj).map(([key, value]) => (
-        <div key={key}>
-          <StyledText>
-            <Left>{key}:</Left> <Right>{value}</Right>
-          </StyledText>
-        </div>
-      ))}
+      {Object.entries(data).map(([key, value]) => {
+        console.log(ApiTranslation[key as any]);
+        if (ApiTranslation[key as any] === 'Upload time') {
+          return (
+            <StyledText>
+              <Left>{[ApiTranslation[key as any]]}:</Left>
+              <Right>{formatDate(value)}</Right>
+            </StyledText>
+          );
+        }
+        // eslint-disable-next-line consistent-return
+        return (
+          <div key={key}>
+            {ApiTranslation[key as any] && (
+              <StyledText>
+                <Left>{[ApiTranslation[key as any]]}:</Left>
+                <Right>{`${value}`}</Right>
+              </StyledText>
+            )}
+          </div>
+        );
+      })}
     </>
   );
 };
 
 const StyledText = styled.div`
   display: flex;
-  height: 35px;
+  max-height: 60px;
+  word-break: break-all;
 `;
 const Left = styled.div`
-  flex: 0.4;
+  flex: 0.45;
   font-weight: 500;
 `;
 const Right = styled.div`

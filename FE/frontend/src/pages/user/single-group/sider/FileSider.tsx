@@ -58,7 +58,6 @@ const FileSider: FC<IPFileSiderProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
-        <div>filessider</div>
         <StyledRow>
           <StyledIcon type={type} />
         </StyledRow>

@@ -43,8 +43,6 @@ const FileModal: FC<IPModalProps> = ({
     setIsModalVisible(false);
   };
 
-  console.log(cardData, 'carddata');
-
   useEffect(() => {
     const fetch = async () => {
       const res = await findFiles();

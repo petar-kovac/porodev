@@ -50,16 +50,26 @@ const Runtime: FC = () => {
         }}
       >
         <StyledStaticContent>
-          <StyledFilterWrapper>
-            <PFilter
-              isList={isList}
-              setIsList={setIsList}
-              activeFilters={{
-                showSortByType: true,
-                showSortByTime: true,
-              }}
-            />
-          </StyledFilterWrapper>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <h2 style={{ flexBasis: '44%' }}>Runtime</h2>
+
+            <div>
+              <PFilter
+                isList={isList}
+                setIsList={setIsList}
+                activeFilters={{
+                  showSortByTime: true,
+                  showSortByType: true,
+                }}
+              />
+            </div>
+          </div>
           <StyledFilesWrapper>
             <RuntimeCards
               data={data}

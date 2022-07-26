@@ -62,8 +62,6 @@ const GridCard: FC<IGridCardProps> = ({
     setIsRemoveModalVisible(false);
   };
 
-  console.log(isCollapsed);
-
   const formattedDate = formatDateListCard(time);
 
   return (

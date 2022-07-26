@@ -11,8 +11,6 @@ const useGroupData = () => {
 
   const { setIsSiderVisible, isSiderVisible, sharedSpaceId } = usePageContext();
 
-  console.log(data, 'datad');
-
   useEffect(() => {
     setIsSiderVisible(false);
     const fetchFiles = async () => {

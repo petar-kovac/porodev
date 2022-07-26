@@ -14,6 +14,10 @@ export enum ApiTranslation {
   fileId = 'File ID',
   fileName = 'File name',
   uploadTime = 'Upload time',
+  uploadDateTime = 'Upload time',
   ownerId = 'Owner',
+  userLastname = 'Last name',
+  userName = 'First name',
+  contentType = 'Content type',
   ERROR = 4,
 }

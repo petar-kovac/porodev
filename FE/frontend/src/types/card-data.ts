@@ -20,7 +20,7 @@ export interface IFilesCard {
   id?: number;
   image?: string;
   name?: string;
-
+  userLastname?: string;
   groupName?: string;
   isModerator?: boolean;
   moderatorName?: string;

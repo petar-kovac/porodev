@@ -20,8 +20,6 @@ const FilesList: React.FC<{
   const { setIsModalVisible, userTrigger, setUserTrigger } = usePageContext();
   const { id } = useParams();
 
-  console.log(id, 'add');
-
   return (
     <List
       dataSource={data}
