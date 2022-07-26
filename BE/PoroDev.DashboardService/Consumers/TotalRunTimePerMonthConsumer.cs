@@ -16,7 +16,7 @@ namespace PoroDev.DashboardService.Consumers
 
         public async Task Consume(ConsumeContext<TotalRunTimePerMonthRequestGatewayToService> context)
         {
-            var modelToRead = new TotalRunTimePerMonthRequestServiceToDatabase(context.Message.UserId);
+            var modelToRead = new TotalRunTimePerMonthRequestServiceToDatabase(context.Message.UserId, context.Message.NumberOfMonthsToShow);
 
             var modelToReturn = await _dashboardService.GetTotalRunTimePerMonth(modelToRead);
 

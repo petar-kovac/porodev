@@ -3,7 +3,6 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
-using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
@@ -11,6 +10,9 @@ using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
+using static PoroDev.Common.MassTransit.Extensions;
+using PoroDev.Common.Contracts.StorageService.Query;
+using PoroDev.Common.Contracts.StorageService;
 
 namespace PoroDev.GatewayAPI.Services
 {
@@ -21,6 +23,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<FileReadRequestGatewayToService> _readRequestClient;
         private readonly IRequestClient<FileDeleteRequestGatewayToService> _deleteRequestClient;
         private readonly IRequestClient<FileQueryGatewayToService> _queryClient;
+        private readonly IRequestClient<IUpdateFileExe> _updateFileExeClient;
         private readonly IMapper _mapper;
 
         public StorageService
@@ -29,6 +32,7 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<FileReadRequestGatewayToService> readRequestClient,
             IRequestClient<FileDeleteRequestGatewayToService> deleteRequestClient,
             IRequestClient<FileQueryGatewayToService> queryClient,
+            IRequestClient<IUpdateFileExe> updateFileExeClient,
             IMapper mapper)
         {
             _downloadRequestClient = downloadRequestClient;
@@ -37,6 +41,7 @@ namespace PoroDev.GatewayAPI.Services
             _deleteRequestClient = deleteRequestClient;
             _queryClient = queryClient;
             _mapper = mapper;
+            _updateFileExeClient = updateFileExeClient;
         }
 
         public async Task<FileUploadResponse> UploadFile(FileUploadRequest uploadModel)
@@ -106,6 +111,11 @@ namespace PoroDev.GatewayAPI.Services
             var responseModel = responseCommunicationModel.Entity;
 
             return responseModel;
+        }
+
+        public async Task ChangeFileEx(FileExeReq request)
+        {
+            await _updateFileExeClient.GetResponse <CommunicationModel<EmptyResponse>>(new {FileName = request.FileName, UserId = request.UserId.Value, IsExe = request.IsExe });
         }
     }
 }

@@ -8,8 +8,10 @@ using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -45,5 +47,8 @@ namespace PoroDev.UserManagementService.Services.Contracts
         Task<CommunicationModel<DataUserModel>> VerifyEmail(VerifyEmailRequestGatewayToService tokenModel);
 
         Task<CommunicationModel<List<DataUserModel>>> QueryAll();
+
+        Task<CommunicationModel<NotificationDataModel>> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService setModel);
+
     }
 }

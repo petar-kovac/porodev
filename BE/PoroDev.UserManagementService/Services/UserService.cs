@@ -12,10 +12,12 @@ using PoroDev.Common.Contracts.UserManagement.ReadAllUsers;
 using PoroDev.Common.Contracts.UserManagement.ReadById;
 using PoroDev.Common.Contracts.UserManagement.ReadByIdWithRuntime;
 using PoroDev.Common.Contracts.UserManagement.ReadUser;
+using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.Common.Contracts.UserManagement.Update;
 using PoroDev.Common.Contracts.UserManagement.Verify;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.EmailSenderModels;
+using PoroDev.Common.Models.NotificationServiceModels;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserModels.DeleteUser;
@@ -45,6 +47,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<QueryAllUsersRequestServiceToDatabase> _queryAllClient;
         private readonly IRequestClient<ReadAllUsersRequestServiceToDatabase> _readAllUsersRequestClient;
         private readonly IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> _readAllSharedSpacesForUserRequestClient;
+        private readonly IRequestClient<SetMonthlyReportTimeRequestServiceToDatabase> _setMonthlyReportTimeRequestClient;
         private readonly IMapper _mapper;
 
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
@@ -61,6 +64,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<VerifyEmailRequestServiceToDatabase> verifyEmailRequestClient,
                            IRequestClient<ReadAllUsersRequestServiceToDatabase> readAllUsersRequestClient,
                            IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> readAllSharedSpacesForUserRequestClient,
+                           IRequestClient<SetMonthlyReportTimeRequestServiceToDatabase> setMonthlyReportTimeRequestServiceToDatabase,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
@@ -77,6 +81,7 @@ namespace PoroDev.UserManagementService.Services
             _verifyEmailRequestClient = verifyEmailRequestClient;
             _readAllUsersRequestClient = readAllUsersRequestClient;
             _readAllSharedSpacesForUserRequestClient = readAllSharedSpacesForUserRequestClient;
+            _setMonthlyReportTimeRequestClient = setMonthlyReportTimeRequestServiceToDatabase;
             _mapper = mapper;
         }
 
@@ -286,7 +291,7 @@ namespace PoroDev.UserManagementService.Services
         {
             var returnModel = new SendEmailRequest()
             {
-                EmailReceiver = "daniela.strbac@htecgroup.com",     //it's my private email right now since we do not have access to any boing.rs emails
+                EmailReceiver = "",     //it's my private email right now since we do not have access to any boing.rs emails
                 Subject = "Verification email",
                 plainTextContent = "Verification plan text",
                 OtherParametersForEmail = OtherProperties,
@@ -306,6 +311,12 @@ namespace PoroDev.UserManagementService.Services
         public async Task<CommunicationModel<List<SharedSpace>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
         {
             var returnModel = await _readAllSharedSpacesForUserRequestClient.GetResponse<CommunicationModel<List<SharedSpace>>>(model);
+            return returnModel.Message;
+        }
+
+        public async Task<CommunicationModel<NotificationDataModel>> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService setModel)
+        {
+            var returnModel = await _setMonthlyReportTimeRequestClient.GetResponse<CommunicationModel<NotificationDataModel>>(setModel);
             return returnModel.Message;
         }
     }

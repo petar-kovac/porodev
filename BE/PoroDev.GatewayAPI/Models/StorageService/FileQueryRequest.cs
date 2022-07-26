@@ -12,17 +12,20 @@
 
         public string? ContentType { get; set; }
 
+        public bool? IsExe { get; set; }
+
         public FileQueryRequest()
         {
         }
 
-        public FileQueryRequest(string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null)
+        public FileQueryRequest(string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null, bool? isExe = null)
         {
             FileId = fileId;
             FileName = fileName;
             UploadTime = uploadTime;
             Size = size;
             ContentType = contentType;
+            IsExe = isExe;
         }
     }
 }

@@ -4,13 +4,16 @@
     {
         public Guid UserId { get; set; }
 
+        public int NumberOfMonthsToShow { get; set; }
+
         public TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase()
         {
         }
 
-        public TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase(Guid userId)
+        public TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase(Guid userId, int numberOfMonthsToShow)
         {
             UserId = userId;
+            NumberOfMonthsToShow = numberOfMonthsToShow;
         }
     }
 }

@@ -19,39 +19,34 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         public async Task Consume(ConsumeContext<TotalNumberOFDeletedFilesRequestServiceToDatabase> context)
         {
-            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
+            var responseModel = await TotalNumberOfDeletedFiles(context.Message);
 
-            if (user.Role == 0)
-            {
-                TotalNumberOfDeletedFilesModel returnModel = new TotalNumberOfDeletedFilesModel();
-                returnModel.NumberOfDeletedFiles = await countNumberOfUploadedFiles();
-
-                var response = new CommunicationModel<TotalNumberOfDeletedFilesModel>()
-                {
-                    Entity = returnModel,
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
-
-                await context.RespondAsync<CommunicationModel<TotalNumberOfDeletedFilesModel>>(response);
-            }
-            else
-            {
-                string exceptionType = nameof(UserIsNotAdminException);
-                string humanReadableMessage = "User must be admin!";
-
-                var resposneException = new CommunicationModel<TotalNumberOfDeletedFilesModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                await context.RespondAsync(resposneException);
-            }
+            await context.RespondAsync<CommunicationModel<TotalNumberOfDeletedFilesModel>>(responseModel);
         }
 
-        private async Task<int> countNumberOfUploadedFiles()
+        private async Task<CommunicationModel<TotalNumberOfDeletedFilesModel>> TotalNumberOfDeletedFiles(TotalNumberOFDeletedFilesRequestServiceToDatabase totalNumberOfDeletedFiles)
+        {
+            DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalNumberOfDeletedFiles.UserId);
+
+            if (admin.Role != 0)
+            {
+                return new CommunicationModel<TotalNumberOfDeletedFilesModel>(new UserIsNotAdminException());
+            }
+
+            TotalNumberOfDeletedFilesModel returnModel = new TotalNumberOfDeletedFilesModel();
+            returnModel.NumberOfDeletedFiles = await CountNumberOfDeletedFiles();
+
+            var responseTotalNumberOfDeletedFiles = new CommunicationModel<TotalNumberOfDeletedFilesModel>()
+            {
+                Entity = returnModel,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+
+            return responseTotalNumberOfDeletedFiles;
+        }
+
+        private async Task<int> CountNumberOfDeletedFiles()
         {
             List<FileData> userFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
             int countTotalNumberOfDeletedFiles = 0;

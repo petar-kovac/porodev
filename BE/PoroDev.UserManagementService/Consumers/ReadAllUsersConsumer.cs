@@ -18,7 +18,7 @@ namespace PoroDev.UserManagementService.Consumers
         public async Task Consume(ConsumeContext<ReadAllUsersRequestGatewayToService> context)
         {
             var responseContext = await _userService.ReadAllUsers(context.Message);
-            context.RespondAsync<CommunicationModel<List<DataUserModel>>>(responseContext);
+            await context.RespondAsync<CommunicationModel<List<DataUserModel>>>(responseContext);
         }
     }
 }

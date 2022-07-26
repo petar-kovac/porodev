@@ -16,7 +16,7 @@ namespace PoroDev.DashboardService.Consumers
 
         public async Task Consume(ConsumeContext<TotalMemoryUsedForUploadPerMonthRequestGatewayToService> context)
         {
-            var modelToRead = new TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase(context.Message.UserId);
+            var modelToRead = new TotalMemoryUsedForUploadPerMonthRequestServiceToDatabase(context.Message.UserId, context.Message.NumberOfMonthsToShow);
 
             var modelToReturn = await _dashboardService.GetTotalMemoryUsedForUploadPerMonth(modelToRead);
 

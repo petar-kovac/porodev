@@ -68,10 +68,10 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("TotalRunTimePerMonth")]
-        public async Task<ActionResult<TotalRunTimePerMonthModel>> GetTotalRunTimePerMonth()
+        public async Task<ActionResult<TotalRunTimePerMonthModel>> GetTotalRunTimePerMonth([FromQuery] int numberOfMonthsToShow)
         {
-            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            var returnModel = new TotalRunTimePerMonthRequestGatewayToService(userId);
+           Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+           var returnModel = new TotalRunTimePerMonthRequestGatewayToService(userId, numberOfMonthsToShow);
 
             var response = await _dashBoardService.GetTotalRuntimePerMonth(returnModel);
 
@@ -79,10 +79,10 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("TotalMemoryUsedForUploadPerMonth")]
-        public async Task<ActionResult<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUpload()
+        public async Task<ActionResult<TotalMemoryUsedForUploadPerMonthModel>> GetTotalMemoryUsedForUpload([FromQuery] int numberOfMonthsToShow)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            var returnModel = new TotalMemoryUsedForUploadPerMonthRequestGatewayToService(userId);
+            var returnModel = new TotalMemoryUsedForUploadPerMonthRequestGatewayToService(userId, numberOfMonthsToShow);
 
             var response = await _dashBoardService.GetTotalMemoryUsedForUploadPerMonth(returnModel);
 
@@ -90,10 +90,10 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("TotalMemoryUsedForDownloadPerMonth")]
-        public async Task<ActionResult<TotalMemoryUsedForDownloadPerMonthModel>> GetTotalMemoryUsedForDownload()
+        public async Task<ActionResult<TotalMemoryUsedForDownloadPerMonthModel>> GetTotalMemoryUsedForDownload([FromQuery] int numberOfMonthsToShow)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
-            var returnModel = new TotalMemoryUsedForDownloadPerMonthRequestGatewayToService(userId);
+            var returnModel = new TotalMemoryUsedForDownloadPerMonthRequestGatewayToService(userId, numberOfMonthsToShow);
 
             var response = await _dashBoardService.GetTotalMemoryUsedForDownloadPerMonth(returnModel);
 

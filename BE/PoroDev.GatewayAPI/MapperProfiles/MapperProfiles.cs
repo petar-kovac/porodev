@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts.RunTime.Query;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
+using PoroDev.Common.Contracts.UserManagement.SetMonthlyReportTime;
 using PoroDev.GatewayAPI.Models.Runtime;
 using PoroDev.GatewayAPI.Models.StorageService;
 
@@ -20,6 +21,9 @@ namespace PoroDev.GatewayAPI.MapperProfiles
 
             CreateMap<FileUploadRequest, FileUploadRequestGatewayToService>()
                 .ForMember(destination => destination.File, option => option.Ignore());
+
+            CreateMap<SetMonthlyReportTimeRequest, SetMonthlyReportTimeRequestGatewayToService>()
+                .ForMember(destionation => destionation.UserId, option => option.Ignore());
 
             CreateMap<FileQueryRequest, FileQueryGatewayToService>();
         }

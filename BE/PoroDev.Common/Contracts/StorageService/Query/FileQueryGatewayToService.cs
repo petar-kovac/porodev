@@ -14,11 +14,13 @@
 
         public string? ContentType { get; set; }
 
+        public bool? IsExe { get; set; }
+
         public FileQueryGatewayToService()
         {
         }
 
-        public FileQueryGatewayToService(Guid userId, string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null)
+        public FileQueryGatewayToService(Guid userId, string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null, bool? isExe = null)
         {
             UserId = userId;
             FileId = fileId;
@@ -26,6 +28,7 @@
             UploadTime = uploadTime;
             Size = size;
             ContentType = contentType;
+            IsExe = isExe;
         }
     }
 }

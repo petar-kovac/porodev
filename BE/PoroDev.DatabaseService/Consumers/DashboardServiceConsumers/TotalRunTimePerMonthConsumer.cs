@@ -2,7 +2,9 @@
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserReportsModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
 namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
@@ -18,46 +20,66 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         public async Task Consume(ConsumeContext<TotalRunTimePerMonthRequestServiceToDatabase> context)
         {
-            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
-            string currentMonth = GetMonthName();
+            var responseModel = await TotalMemoryUsedForRunTimePerMonth(context.Message);
 
-            if (user.Role == 0)
-            {
-                TotalRunTimePerMonthModel returnModel = new TotalRunTimePerMonthModel();
-                returnModel.TotalRunTime = await CountTotalMemoryUsedForUploadPerMonth();
-                returnModel.Month = currentMonth;
-
-                var response = new CommunicationModel<TotalRunTimePerMonthModel>()
-                {
-                    Entity = returnModel,
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
-
-                await context.RespondAsync<CommunicationModel<TotalRunTimePerMonthModel>>(response);
-            }
-            else
-            {
-                string exceptionType = nameof(UserIsNotAdminException);
-                string humanReadableMessage = "User must be admin!";
-
-                var resposneException = new CommunicationModel<TotalRunTimePerMonthModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                await context.RespondAsync(resposneException);
-            }
-
-            throw new NotImplementedException();
+            await context.RespondAsync<CommunicationModel<TotalRunTimePerMonthModel>>(responseModel);
         }
 
-        public async Task<ushort> CountTotalMemoryUsedForUploadPerMonth()
+        private async Task<CommunicationModel<TotalRunTimePerMonthModel>> TotalMemoryUsedForRunTimePerMonth(
+           TotalRunTimePerMonthRequestServiceToDatabase totalMemoryUsedForRunTimePerMonthModel)
+        {
+            DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalMemoryUsedForRunTimePerMonthModel.UserId);
+
+            if (admin.Role != 0)
+            {
+                return new CommunicationModel<TotalRunTimePerMonthModel>(new UserIsNotAdminException());
+            }
+
+            DateTime dt = DateTime.Now;
+            List<string> previousMonths = Helpers.PreviousMonths.GetPreviousMonths(dt, totalMemoryUsedForRunTimePerMonthModel.NumberOfMonthsToShow);
+            TotalRunTimePerMonthModel model = new TotalRunTimePerMonthModel();
+
+            var returnModel = await CountTotalRunTimePerMonth(previousMonths, model);
+
+            var responseTotalMemoryUsedForUploadPerMonth = new CommunicationModel<TotalRunTimePerMonthModel>()
+            {
+                Entity = returnModel,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+
+            return responseTotalMemoryUsedForUploadPerMonth;
+        }
+
+        private async Task<TotalRunTimePerMonthModel> CountTotalRunTimePerMonth(
+            List<string> previousMonths, TotalRunTimePerMonthModel model)
+        {
+            foreach (var month in previousMonths)
+            {
+                if (month.Equals(Helpers.CurrentMonth.GetMonthName()))
+                {
+                    int totalRunTimeForCurrentMonth = await CountTotalRunTimeForCurrentMonth();
+                    TotalRunTimePerMonthSingleModel singleModelCurrentMonth = new TotalRunTimePerMonthSingleModel(month, totalRunTimeForCurrentMonth);
+                    model.Content.Add(singleModelCurrentMonth);
+                }
+                else
+                {
+                    int totalRunTimeForPreviousMonth = await CountTotalRunTimeForPreviousMonth(month);
+                    TotalRunTimePerMonthSingleModel singleModel = new TotalRunTimePerMonthSingleModel(month, totalRunTimeForPreviousMonth);
+                    model.Content.Add(singleModel);
+                }
+            }
+
+            TotalRunTimePerMonthModel returnModel = new TotalRunTimePerMonthModel(model.Content);
+
+            return returnModel;
+        }
+
+        private async Task<int> CountTotalRunTimeForCurrentMonth()
         {
             List<DataUserModel> allUsers = (await _unitOfWork.Users.FindAllAsync(user => user.Email.Contains(""))).ToList<DataUserModel>();
-            ushort countTotalRunTimePerMonth = 0;
+
+            int countTotalRunTimePerMonth = 0;
 
             foreach (var user in allUsers)
             {
@@ -67,10 +89,16 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             return countTotalRunTimePerMonth;
         }
 
-        public string GetMonthName()
+        private async Task<int> CountTotalRunTimeForPreviousMonth(string month)
         {
-            DateTime dt = DateTime.Now;
-            return dt.ToString("MMMM");
+            int totalRunTimeForPreviousMonth = 0;
+            List<UserReportsData> userReportsDatas = (await _unitOfWork.UserReports.FindAllAsync(user => user.Month.Equals(month))).ToList<UserReportsData>();
+            foreach (var userReport in userReportsDatas)
+            {
+                totalRunTimeForPreviousMonth += userReport.RuntimeTotal;
+            }
+
+            return totalRunTimeForPreviousMonth;
         }
     }
 }

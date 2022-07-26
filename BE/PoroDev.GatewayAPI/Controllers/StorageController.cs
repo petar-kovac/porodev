@@ -40,6 +40,16 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(fileUploadResponse);
         }
 
+        [HttpPost("ChangeFileExecutable")]
+        public async Task<IActionResult> ChangeFile([FromBody]FileExeReq request)
+        {
+            request.UserId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+
+            await _storageService.ChangeFileEx(request);
+
+            return Ok();
+        } 
+
         [RequireHttps]
         [HttpGet("Download")]
         public async Task<ActionResult<FileDownloadResponse>> Download([FromQuery] string fileId)

@@ -26,6 +26,7 @@
         public const string PASSWORD_MIN_LOWERCASE_ERROR = "Password must contain at least 1 uppercase letter!";
         public const string PASSWORD_MIN_NUMBER_ERROR = "Password must contain at least 1 number!";
         public const string PASSWORD_MIN_SPECIAL_ERROR = "Password must contain at least 1 special character!";
+        public const string PASSWORD_CONTAINS_WHITESPACE = "Password can not contain whitespaces";
 
         public const string EMAIL_EMPTY_ERROR = "Email cannot be empty!";
         public const string EMAIL_LENGTH_ERROR = "Email cannot exceed 50 characters!";

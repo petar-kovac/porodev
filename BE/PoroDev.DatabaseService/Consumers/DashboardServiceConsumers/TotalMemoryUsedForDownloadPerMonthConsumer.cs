@@ -3,6 +3,7 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalMemoryUsedForDownloadPerMonth;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Models.UserReportsModels.Data;
 using PoroDev.DatabaseService.Helpers;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -19,68 +20,64 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         public async Task Consume(ConsumeContext<TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase> context)
         {
-            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
-            string currentMonth = CurrentMonth.GetMonthName();
+            var responseModel = await TotalMemoryUsedForDownloadPerMonth(context.Message);
 
-            if (user.Role == 0)
-            {
-                TotalMemoryUsedForDownloadPerMonthModel returnModel = new TotalMemoryUsedForDownloadPerMonthModel();
-                returnModel.TotalMemoryUsedForDownloadInMBs = await CountTotalMemoryUsedForDownloadPerMonth();
-                returnModel.Month = currentMonth;
+            await context.RespondAsync<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>>(responseModel);
 
-                var response = new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>()
-                {
-                    Entity = returnModel,
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
-
-                await context.RespondAsync<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>>(response);
-            }
-            else
-            {
-                string exceptionType = nameof(UserIsNotAdminException);
-                string humanReadableMessage = "User must be admin!";
-
-                var resposneException = new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                await context.RespondAsync(resposneException);
-            }
-
-            //var responseModel = await TotalMemoryUsedForDownloadPerMonth(context.Message);
         }
 
-        //private async Task<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>> TotalMemoryUsedForDownloadPerMonth
-        //    (TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadPerMonthModel)
-        //{
-        //    DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalMemoryUsedForDownloadPerMonthModel.UserId);
-        //    string currentMonth = CurrentMonth.GetMonthName();
+        private async Task<CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>> TotalMemoryUsedForDownloadPerMonth(
+            TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase totalMemoryUsedForDownloadPerMonthModel)
+        {
+            DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalMemoryUsedForDownloadPerMonthModel.UserId);
 
-        //    if (admin.Role != 0)
-        //    {
-        //        return new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>(new UserIsNotAdminException());
-        //    }
+            if (admin.Role != 0)
+            {
+                return new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>(new UserIsNotAdminException());
+            }
 
-        //    TotalMemoryUsedForDownloadPerMonthModel returnModel = new TotalMemoryUsedForDownloadPerMonthModel();
-        //    returnModel.TotalMemoryUsedForDownloadInMBs = await CountTotalMemoryUsedForDownloadPerMonth();
-        //    returnModel.Month = currentMonth;
+            DateTime dt = DateTime.Now;
+            List<string> previousMonths = Helpers.PreviousMonths.GetPreviousMonths(dt, totalMemoryUsedForDownloadPerMonthModel.NumberOfMonthsToShow);
+            TotalMemoryUsedForDownloadPerMonthModel model = new TotalMemoryUsedForDownloadPerMonthModel();
 
-        //    var responseTotalMemoryUsedForDownloadPerMonth = new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>()
-        //    {
-        //        Entity = returnModel,
-        //        ExceptionName = null,
-        //        HumanReadableMessage = null
-        //    };
+            var returnModel = await CountTotalMemoryUsedForDownloadPerMonth(previousMonths, model);
 
-        //    return responseTotalMemoryUsedForDownloadPerMonth;
-        //}
+            var responseTotalMemoryUsedForDownloadPerMonth = new CommunicationModel<TotalMemoryUsedForDownloadPerMonthModel>()
+            {
+                Entity = returnModel,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
 
-        private async Task<double> CountTotalMemoryUsedForDownloadPerMonth()
+            return responseTotalMemoryUsedForDownloadPerMonth;
+        }
+
+        private async Task<TotalMemoryUsedForDownloadPerMonthModel> CountTotalMemoryUsedForDownloadPerMonth(
+            List<string> previousMonths, TotalMemoryUsedForDownloadPerMonthModel model)
+        {
+            foreach(var month in previousMonths)
+            {
+                if (month.Equals(Helpers.CurrentMonth.GetMonthName()))
+                {
+                    double totalMemoryUsedForDownloadForCurrentMonth = await CountTotalMemoryUsedForDownloadForCurrentMonth();
+                    TotalMemoryUsedForDownloadPerMonthSingleModel singleModelCurrentMonth = new TotalMemoryUsedForDownloadPerMonthSingleModel(month, totalMemoryUsedForDownloadForCurrentMonth);
+                    model.Content.Add(singleModelCurrentMonth);
+                }
+                else
+                {
+                    double totalMemoryUsedForDownloadInMbsForPreviousMonth = await CountTotalMemoryUsedForDownloadForPreviousMonth(month);
+                    TotalMemoryUsedForDownloadPerMonthSingleModel singleModel = new TotalMemoryUsedForDownloadPerMonthSingleModel(month, totalMemoryUsedForDownloadInMbsForPreviousMonth);
+                    model.Content.Add(singleModel);
+                }
+            }
+
+            TotalMemoryUsedForDownloadPerMonthModel returnModel = new TotalMemoryUsedForDownloadPerMonthModel(model.Content);
+
+            return returnModel;
+        }
+
+
+        private async Task<double> CountTotalMemoryUsedForDownloadForCurrentMonth()
         {
             List<DataUserModel> allUsers = (await _unitOfWork.Users.FindAllAsync(user => user.Email.Contains(""))).ToList<DataUserModel>();
             ulong countTotalMemoryUsedForDownloadPerMonthInKBs = 0;
@@ -94,6 +91,21 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
             countTotalMemoryUsedForDownloadPerMonthInMBs = Convert.ToDouble(countTotalMemoryUsedForDownloadPerMonthInKBs / 1024.0);
 
             return countTotalMemoryUsedForDownloadPerMonthInMBs;
+        }
+
+        private async Task<double> CountTotalMemoryUsedForDownloadForPreviousMonth(string month)
+        {
+            double totalMemoryUsedForDownloadInMBs = 0;
+            ulong countTotalMemoryUsedForDownloadPerMonthInKBs = 0;
+            List<UserReportsData> userReportsDatas = (await _unitOfWork.UserReports.FindAllAsync(user => user.Month.Equals(month))).ToList<UserReportsData>();
+            foreach (var userReport in userReportsDatas)
+            {
+                countTotalMemoryUsedForDownloadPerMonthInKBs += userReport.FileDownloadTotal;
+            }
+
+            totalMemoryUsedForDownloadInMBs = Convert.ToDouble(countTotalMemoryUsedForDownloadPerMonthInKBs / 1024.0);
+
+            return totalMemoryUsedForDownloadInMBs;
         }
     }
 }

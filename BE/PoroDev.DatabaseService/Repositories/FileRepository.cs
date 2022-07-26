@@ -7,6 +7,7 @@ using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -131,24 +132,37 @@ namespace PoroDev.DatabaseService.Repositories
 
                 var queryResultSingle = await (await _bucket.FindAsync(filterByFileId)).FirstAsync();
 
-                var returnModel = new FileQueryModel(queryResultSingle, userName, userLastname);
+                var isExe = (await _unitOfWork.UserFiles.GetByStringIdAsync(queryReqeust.FileId)).IsExecutable;
+
+                var returnModel = new FileQueryModel(queryResultSingle, userName, userLastname, isExe);
 
                 fileQueryModels.Add(returnModel);
 
                 return fileQueryModels;
             }
 
-            var stringFileIds = (await _unitOfWork.UserFiles.FindAllAsync(file => file.CurrentUserId == queryReqeust.UserId)).Select(file => file.FileId).ToList();
+            var files = (await _unitOfWork.UserFiles.FindAllAsync(file => file.CurrentUserId == queryReqeust.UserId));
+
+            List<FileData> fileList = new();
+            if (!queryReqeust.IsExe.HasValue)
+                fileList = files.ToList();
+            else
+                fileList = files.Where(file => file.IsExecutable == queryReqeust.IsExe).ToList();
 
             List<ObjectId> fileIds = new();
 
-            stringFileIds.ForEach(fileId => fileIds.Add(ObjectId.Parse(fileId)));
+            fileList.ForEach(file => fileIds.Add(ObjectId.Parse(file.FileId)));
 
             var builder = Builders<GridFSFileInfo<ObjectId>>.Filter;
             var filter = builder.In(file => file.Id, fileIds);
 
             if (queryReqeust.FileName is not null)
             {
+                if(queryReqeust.FileName.Contains('(') || queryReqeust.FileName.Contains(')'))
+                {
+                    queryReqeust.FileName = queryReqeust.FileName.Replace("(", @"\(").Replace(")", @"\)");
+                }
+
                 var filterByFileName = builder.Regex(file => file.Filename, new Regex(@$".*{queryReqeust.FileName}.*"));
                 filter &= filterByFileName;
             }
@@ -167,7 +181,14 @@ namespace PoroDev.DatabaseService.Repositories
 
             var queryResult = await (await _bucket.FindAsync(filter)).ToListAsync();
 
-            queryResult.ForEach(result => fileQueryModels.Add(new FileQueryModel(result, userName, userLastname)));
+            foreach(var result in queryResult)
+            {
+                var whereRes = fileList.First(file => file.FileId.Equals(result.Id.ToString()));
+
+                var isExe = whereRes.IsExecutable;
+
+                fileQueryModels.Add(new FileQueryModel(result, userName, userLastname, isExe));
+            }
 
             return fileQueryModels;
         }

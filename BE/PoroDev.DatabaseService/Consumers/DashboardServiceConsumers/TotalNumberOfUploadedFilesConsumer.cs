@@ -19,39 +19,34 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
         public async Task Consume(ConsumeContext<TotalNumberOfUploadedFilesRequestServiceToDatabase> context)
         {
-            DataUserModel user = await _unitOfWork.Users.GetByIdAsync(context.Message.UserId);
+            var responseModel = await TotalNumberOfUploadedFiles(context.Message);
 
-            if (user.Role == 0)
-            {
-                TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
-                returnModel.NumberOfUploadedFiles = await CountNumberOfUploadedFiles();
-
-                var response = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
-                {
-                    Entity = returnModel,
-                    ExceptionName = null,
-                    HumanReadableMessage = null
-                };
-
-                await context.RespondAsync<CommunicationModel<TotalNumberOfUploadedFilesModel>>(response);
-            }
-            else
-            {
-                string exceptionType = nameof(UserIsNotAdminException);
-                string humanReadableMessage = "User must be admin!";
-
-                var resposneException = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
-                {
-                    Entity = null,
-                    ExceptionName = exceptionType,
-                    HumanReadableMessage = humanReadableMessage
-                };
-
-                await context.RespondAsync(resposneException);
-            }
+            await context.RespondAsync<CommunicationModel<TotalNumberOfUploadedFilesModel>>(responseModel);
         }
 
-        public async Task<int> CountNumberOfUploadedFiles()
+        private async Task<CommunicationModel<TotalNumberOfUploadedFilesModel>> TotalNumberOfUploadedFiles(TotalNumberOfUploadedFilesRequestServiceToDatabase totalNumberOfUploadedFiles)
+        {
+            DataUserModel admin = await _unitOfWork.Users.GetByIdAsync(totalNumberOfUploadedFiles.UserId);
+
+            if (admin.Role != 0)
+            {
+                return new CommunicationModel<TotalNumberOfUploadedFilesModel>(new UserIsNotAdminException());
+            }
+
+            TotalNumberOfUploadedFilesModel returnModel = new TotalNumberOfUploadedFilesModel();
+            returnModel.NumberOfUploadedFiles = await CountNumberOfUploadedFiles();
+
+            var responseTotalNumberOfUploadedFiles = new CommunicationModel<TotalNumberOfUploadedFilesModel>()
+            {
+                Entity = returnModel,
+                ExceptionName = null,
+                HumanReadableMessage = null
+            };
+
+            return responseTotalNumberOfUploadedFiles;
+        }
+        
+        private async Task<int> CountNumberOfUploadedFiles()
         {
             List<FileData> userFiles = (await _unitOfWork.UserFiles.FindAllAsync(userFiles => userFiles.CurrentUser.Email.Contains(""))).ToList<FileData>();
             int countTotalNumberOfUploadedFiles = 0;
