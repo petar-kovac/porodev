@@ -12,9 +12,9 @@ import { StorageKey } from 'util/enums/storage-keys';
 const UsersList: React.FC<{
   data?: unknown[] | undefined;
   cardData: any;
-  setImageParameters?: Dispatch<SetStateAction<string[]>>;
-}> = ({ data, setImageParameters = () => undefined, cardData }) => {
-  const { setIsModalVisible } = usePageContext();
+  setIsSiderModalVisible: Dispatch<SetStateAction<boolean>>;
+}> = ({ data, cardData, setIsSiderModalVisible }) => {
+  const { setIsModalVisible, userTrigger, setUserTrigger } = usePageContext();
 
   return (
     <List
@@ -23,12 +23,12 @@ const UsersList: React.FC<{
         <StyledListItem
           aria-hidden="true"
           onClick={async () => {
-            console.log('ok');
             await addUserToSharedSpace({
-              userToAddId: cardData.ownerId,
+              userToAddId: item.id,
               sharedSpaceID: cardData.id,
             });
-            setIsModalVisible(false);
+            setIsSiderModalVisible(false);
+            setUserTrigger(!userTrigger);
           }}
           key={item.fileName}
         >

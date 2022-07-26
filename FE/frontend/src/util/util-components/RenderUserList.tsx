@@ -29,13 +29,13 @@ export const RenderUserList = (
   cardData: any,
   data: any,
   imageParameters: string[],
-  setImageParameters: Dispatch<SetStateAction<string[]>>,
+  setIsSiderModalVisible: Dispatch<SetStateAction<boolean>>,
 ): ReactNode => {
   return (
     <UsersList
       data={data}
       cardData={cardData}
-      setImageParameters={setImageParameters}
+      setIsSiderModalVisible={setIsSiderModalVisible}
     />
   );
 };

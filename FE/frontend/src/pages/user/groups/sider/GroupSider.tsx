@@ -67,7 +67,7 @@ const GroupSider: FC<IPFileSiderProps> = ({
       cardData,
       users,
       imageParameters,
-      setImageParameters,
+      setIsSiderModalVisible,
     );
     setModalContent(modalDataToRender);
     setIsSiderModalVisible(true);
@@ -77,16 +77,15 @@ const GroupSider: FC<IPFileSiderProps> = ({
     const readUsers = async () => {
       try {
         const res = await readAllUsers();
-        const res2 = await getAllUsersFromSharedSpace();
+        //  const res2 = await getAllUsersFromSharedSpace();
         setUsers(res);
-        setUsersFromSpace(res2);
+        //  setUsersFromSpace(res2);
       } catch (err: any) {
         message.error('err');
       }
     };
     readUsers();
   }, []);
-  console.log(usersFromSpace, 'ufsp');
 
   return (
     <StyledGroupSider
@@ -109,7 +108,7 @@ const GroupSider: FC<IPFileSiderProps> = ({
             <PlusCircleOutlined onClick={onAddUser} />
           </StyledRow>
           <StyledInputParametersList>
-            <UsersMapper />
+            <UsersMapper selectedCardId={selectedCardId} />
           </StyledInputParametersList>
         </StyledFirstPart>
         <PButton text="Show files" onClick={onClick} isLoading={isLoading} />

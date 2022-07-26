@@ -19,10 +19,12 @@ export const addUserToSharedSpace: (payload: any) => Promise<any> = (
     .then((res) => res.data);
 };
 
-export const getAllUsersFromSharedSpace: () => Promise<any> = () => {
+export const getAllUsersFromSharedSpace: (param: any) => Promise<any> = (
+  param,
+) => {
   return api
     .service()
-    .get('/api/SharedSpace/GetAllUsersInSharedSpace')
+    .get(`/api/SharedSpace/GetAllUsersInSharedSpace?SharedSpaceId=${param}`)
     .then((res) => res.data);
 };
 

@@ -11,7 +11,11 @@ import { IFilesCard } from 'types/card-data';
 import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
 
-import { FileZipFilled } from '@ant-design/icons';
+import {
+  FileAddOutlined,
+  FileZipFilled,
+  PlusCircleOutlined,
+} from '@ant-design/icons';
 import GroupsContextProvider from 'context/GroupsContext';
 import GroupModal from './modal/GroupModal';
 import GroupSider from './sider/GroupSider';
@@ -65,7 +69,7 @@ const Groups: FC = () => {
           <StyledFoldersContainer>
             <StyledHeadingWrapper>
               <h2>Shared spaces</h2>
-              <FileZipFilled
+              <PlusCircleOutlined
                 onClick={() => {
                   setIsModalVisible(true);
                 }}
@@ -106,7 +110,7 @@ const Groups: FC = () => {
         </StyledStaticContent>
 
         <GroupsContextProvider>
-          <GroupSider cardData={cardData} />
+          <GroupSider cardData={cardData} selectedCardId={selectedCardId} />
         </GroupsContextProvider>
       </StyledContent>
       <GroupModal cardData={cardData} setCardData={setCardData} />

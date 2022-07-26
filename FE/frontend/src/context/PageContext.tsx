@@ -24,6 +24,8 @@ type PageContextProps = {
   setIsCollapsed: Dispatch<SetStateAction<boolean>>;
   sharedSpaceId: boolean;
   setSharedSpaceId: Dispatch<SetStateAction<boolean>>;
+  userTrigger: boolean;
+  setUserTrigger: Dispatch<SetStateAction<boolean>>;
 };
 
 export const PageContext = createContext<PageContextProps>({
@@ -41,6 +43,8 @@ export const PageContext = createContext<PageContextProps>({
   setIsCollapsed: () => undefined,
   sharedSpaceId: false,
   setSharedSpaceId: () => undefined,
+  userTrigger: false,
+  setUserTrigger: () => undefined,
 });
 
 export const PageConsumer = PageContext.Consumer;
@@ -51,6 +55,7 @@ const PageProvider: FC<any> = ({ children }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [projectId, setProjectId] = useState<string>('');
   const [sharedSpaceId, setSharedSpaceId] = useState<boolean>(false);
+  const [userTrigger, setUserTrigger] = useState<boolean>(false);
 
   const [modalContent, setModalContent] = useState<ReactNode>(undefined);
 
@@ -74,6 +79,8 @@ const PageProvider: FC<any> = ({ children }) => {
       setIsCollapsed,
       sharedSpaceId,
       setSharedSpaceId,
+      userTrigger,
+      setUserTrigger,
     }),
     [
       isLoading,
@@ -83,6 +90,7 @@ const PageProvider: FC<any> = ({ children }) => {
       projectId,
       isCollapsed,
       sharedSpaceId,
+      userTrigger,
     ],
   );
   return <PageContext.Provider value={state}>{children}</PageContext.Provider>;

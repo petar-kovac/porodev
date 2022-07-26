@@ -1,25 +1,42 @@
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { useGroupsContext } from 'context/GroupsContext';
+import { usePageContext } from 'context/PageContext';
 import { useSiderContext } from 'context/SiderContext';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { getAllUsersFromSharedSpace } from 'service/shared-spaces/shared-spaces';
 import styled from 'styled-components';
 
 /**
  * Component to set input fields in a Runtime sider.
  */
-const UsersMapper: FC = () => {
+const UsersMapper: FC<{
+  selectedCardId: number | null | undefined;
+}> = ({ selectedCardId }) => {
   const { inputParameters, dispatchInput } = useGroupsContext();
+  const [userList, setUserList] = useState<any>(undefined);
+  const { setSharedSpaceId, sharedSpaceId, userTrigger } = usePageContext();
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (selectedCardId !== null) {
+        const res = await getAllUsersFromSharedSpace(selectedCardId);
+        setUserList(res);
+      }
+    };
+    fetch();
+  }, [selectedCardId, userTrigger]);
 
   return (
     <>
-      {inputParameters.map((value: string, index: number) => {
+      {userList?.map((value: any, index: number) => {
         return (
           <StyledInputRow>
             <StyledField>
               <StyledTextField>
                 <UserOutlined />
-                <div>text</div>
+                <div>{value.name}</div>
+                <div>{value.lastname}</div>
               </StyledTextField>
               <div>a</div>
             </StyledField>
