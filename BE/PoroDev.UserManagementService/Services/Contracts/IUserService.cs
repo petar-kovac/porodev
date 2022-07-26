@@ -1,4 +1,5 @@
 ﻿using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.UserManagement.ChangePassword;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
@@ -23,6 +24,8 @@ namespace PoroDev.UserManagementService.Services.Contracts
     public interface IUserService
     {
         Task<CommunicationModel<DataUserModel>> CreateUser(UserCreateRequestGatewayToService model);
+
+        Task<CommunicationModel<DataUserModel>> ChangePassword(ChangePasswordRequestGatewayToService model);
 
         Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
 

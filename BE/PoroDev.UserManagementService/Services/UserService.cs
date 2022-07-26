@@ -28,6 +28,7 @@ using System.Net;
 using System.Security.Cryptography;
 using static PoroDev.Common.Extensions.CreateResponseExtension;
 using static PoroDev.UserManagementService.Constants.Consts;
+using PoroDev.Common.Contracts.UserManagement.ChangePassword;
 
 namespace PoroDev.UserManagementService.Services
 {
@@ -48,6 +49,7 @@ namespace PoroDev.UserManagementService.Services
         private readonly IRequestClient<ReadAllUsersRequestServiceToDatabase> _readAllUsersRequestClient;
         private readonly IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> _readAllSharedSpacesForUserRequestClient;
         private readonly IRequestClient<SetMonthlyReportTimeRequestServiceToDatabase> _setMonthlyReportTimeRequestClient;
+        private readonly IRequestClient<ChangePasswordRequestServiceToDatabase> _changePasswordRequestClient;
         private readonly IMapper _mapper;
 
         public UserService(IRequestClient<UserCreateRequestServiceToDatabase> createRequestClient,
@@ -65,6 +67,7 @@ namespace PoroDev.UserManagementService.Services
                            IRequestClient<ReadAllUsersRequestServiceToDatabase> readAllUsersRequestClient,
                            IRequestClient<ReadAllSharedSpacesForUserRequestServiceToDatabase> readAllSharedSpacesForUserRequestClient,
                            IRequestClient<SetMonthlyReportTimeRequestServiceToDatabase> setMonthlyReportTimeRequestServiceToDatabase,
+                           IRequestClient<ChangePasswordRequestServiceToDatabase> changePasswordRequestClient,
                            IMapper mapper)
         {
             _createRequestClient = createRequestClient;
@@ -82,6 +85,7 @@ namespace PoroDev.UserManagementService.Services
             _readAllUsersRequestClient = readAllUsersRequestClient;
             _readAllSharedSpacesForUserRequestClient = readAllSharedSpacesForUserRequestClient;
             _setMonthlyReportTimeRequestClient = setMonthlyReportTimeRequestServiceToDatabase;
+            _changePasswordRequestClient = changePasswordRequestClient;
             _mapper = mapper;
         }
 
@@ -313,6 +317,13 @@ namespace PoroDev.UserManagementService.Services
         public async Task<CommunicationModel<NotificationDataModel>> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService setModel)
         {
             var returnModel = await _setMonthlyReportTimeRequestClient.GetResponse<CommunicationModel<NotificationDataModel>>(setModel);
+            return returnModel.Message;
+        }
+
+        public async Task<CommunicationModel<DataUserModel>> ChangePassword(ChangePasswordRequestGatewayToService model)
+        {
+            Helpers.UserManagementValidator.CheckPassword(model.NewPassword);
+            var returnModel = await _changePasswordRequestClient.GetResponse<CommunicationModel<DataUserModel>>(model);
             return returnModel.Message;
         }
     }

@@ -28,6 +28,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case WrongOldPasswordException wrongOldPasswordException:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = wrongOldPasswordException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, wrongOldPasswordException);
+                        break;
+
                     case InvalidDayValueException invalidDayValueException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = invalidDayValueException.HumanReadableErrorMessage;
