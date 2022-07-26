@@ -111,11 +111,10 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<List<DataUserModel>> ReadAllUsers(ReadAllUsersRequestGatewayToService model)
         {
             var responseContext = await _readAllusersRequestClient.GetResponse<CommunicationModel<List<DataUserModel>>>(model);
-            if(responseContext.Message.ExceptionName != null)
+            if (responseContext.Message.ExceptionName != null)
                 ThrowException(nameof(responseContext.Message.ExceptionName), responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;
-
         }
 
         public async Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel)

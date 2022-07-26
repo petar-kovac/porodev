@@ -100,14 +100,14 @@ namespace PoroDev.GatewayAPI.Controllers
         }
 
         [HttpGet("ReadAllUsers")]
-        public async Task<ActionResult<List<DataUserModel>>> ReadAllUsers([FromQuery]ReadAllUsersRequestGatewayToService model)
+        public async Task<ActionResult<List<DataUserModel>>> ReadAllUsers([FromQuery] ReadAllUsersRequestGatewayToService model)
         {
             var returnModel = await _userService.ReadAllUsers(model);
             return Ok(returnModel);
         }
 
         [HttpGet("ReadAllSharedSpacesForUser")]
-        public async Task<ActionResult<List<SharedSpace>>> ReadAllSharedSpacesForUser([FromQuery]ReadAllSharedSpacesRequest model)
+        public async Task<ActionResult<List<SharedSpace>>> ReadAllSharedSpacesForUser([FromQuery] ReadAllSharedSpacesRequest model)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var modelToPass = new ReadAllSharedSpacesForUserRequestGatewayToService() { UserId = userId };

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using MongoDB.Bson;
-using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
-using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.Update;
@@ -65,7 +62,6 @@ namespace PoroDev.DatabaseService.MapperProfiles
 
             CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
         }
-
 
         private bool ValidateUserDeletion(DataUserModel src)
         {

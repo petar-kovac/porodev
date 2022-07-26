@@ -3,6 +3,7 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
+using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
@@ -10,8 +11,6 @@ using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
 using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
-using static PoroDev.Common.MassTransit.Extensions;
-using PoroDev.Common.Contracts.StorageService.Query;
 
 namespace PoroDev.GatewayAPI.Services
 {

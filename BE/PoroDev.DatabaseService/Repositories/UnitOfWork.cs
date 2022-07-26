@@ -27,7 +27,7 @@ namespace PoroDev.DatabaseService.Repositories
                           ISharedSpaceRepository sharedSpaceRepository,
                           ISharedSpacesWithFilesRepository sharedSpacesWithFiles,
                           ISharedSpacesUsersRepository sharedSpacesUsers)
-        
+
 
         public IUserReportsRepository UserReports { get; }
 

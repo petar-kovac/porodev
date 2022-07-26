@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.DatabaseService.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
@@ -10,7 +9,6 @@ namespace PoroDev.DatabaseService.Repositories
     {
         public SharedSpacesFilesRepository(SqlDataContext context) : base(context)
         {
-
         }
 
         public async Task<List<SharedSpacesFiles>> QueryFilesBySpaceId(Guid spaceId)
