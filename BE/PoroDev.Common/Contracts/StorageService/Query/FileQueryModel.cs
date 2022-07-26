@@ -26,12 +26,22 @@ namespace PoroDev.Common.Contracts.StorageService.Query
 
         public bool IsExe { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public FileQueryModel()
         {
 
         }
 
-        public FileQueryModel(string id, string filename, DateTime uploadDateTime, ulong length, string contentType, string userName, string userLastname, bool isExe)
+        public FileQueryModel(string id,
+                              string filename,
+                              DateTime uploadDateTime,
+                              ulong length,
+                              string contentType,
+                              string userName,
+                              string userLastname,
+                              bool isExe,
+                              bool isDeleted)
         {
             Id = id;
             Filename = filename;
@@ -41,9 +51,10 @@ namespace PoroDev.Common.Contracts.StorageService.Query
             UserName = userName;
             UserLastname = userLastname;
             IsExe = isExe;
+            IsDeleted = isDeleted;
         }
 
-        public FileQueryModel(GridFSFileInfo<ObjectId>? doc, string userName, string userLastname, bool isExe)
+        public FileQueryModel(GridFSFileInfo<ObjectId>? doc, string userName, string userLastname, bool isExe, bool isDeleted)
         {
             Id = doc.Id.ToString();
             Filename = doc.Filename;
@@ -53,6 +64,7 @@ namespace PoroDev.Common.Contracts.StorageService.Query
             UserName = userName;
             UserLastname = userLastname;
             IsExe = isExe;
+            IsDeleted = isDeleted;
         }
     }
 }
