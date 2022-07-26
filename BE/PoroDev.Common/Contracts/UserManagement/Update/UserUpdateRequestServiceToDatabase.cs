@@ -11,10 +11,6 @@ namespace PoroDev.Common.Contracts.UserManagement.Update
 
         public string Email { get; set; }
 
-        public byte[] Password { get; set; }
-
-        public byte[] Salt { get; set; }
-
         public UserEnums.UserRole Role { get; set; }
 
         public UserEnums.UserDepartment Department { get; set; }

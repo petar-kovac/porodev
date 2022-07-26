@@ -118,11 +118,10 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<List<DataUserModel>> ReadAllUsers(ReadAllUsersRequestGatewayToService model)
         {
             var responseContext = await _readAllusersRequestClient.GetResponse<CommunicationModel<List<DataUserModel>>>(model);
-            if(responseContext.Message.ExceptionName != null)
+            if (responseContext.Message.ExceptionName != null)
                 ThrowException(nameof(responseContext.Message.ExceptionName), responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;
-
         }
 
         public async Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel)
@@ -214,27 +213,26 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DataUserModel> VerifyEmail(VerifyEmailRequestGatewayToService verifyModel)
         {
-            if(string.IsNullOrEmpty(verifyModel.Token.Trim()))
+            if (string.IsNullOrEmpty(verifyModel.Token.Trim()))
             {
                 ThrowException(nameof(InvalidVerificationTokenException), InvalidToken);
             }
 
             var requestResponseContext = await _verifyUserRequestClient.GetResponse<CommunicationModel<DataUserModel>>(verifyModel);
 
-            if(requestResponseContext.Message.ExceptionName != null)
+            if (requestResponseContext.Message.ExceptionName != null)
             {
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
             }
 
             return requestResponseContext.Message.Entity;
-
         }
 
         public async Task<List<DataUserModel>> QueryAll()
         {
             var responseContext = await _queryAllUsers.GetResponse<CommunicationModel<List<DataUserModel>>>(new QueryAllUsersRequestGatewayToService());
 
-            if(responseContext.Message.ExceptionName!= null)
+            if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;

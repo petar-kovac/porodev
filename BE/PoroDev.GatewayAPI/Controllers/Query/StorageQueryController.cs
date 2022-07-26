@@ -22,7 +22,7 @@ namespace PoroDev.GatewayAPI.Controllers.Query
         }
 
         [HttpGet("files")]
-        public async Task<ActionResult<List<FileQueryModel>>> QueryFiles([FromQuery]FileQueryRequest queryRequest)
+        public async Task<ActionResult<List<FileQueryModel>>> QueryFiles([FromQuery] FileQueryRequest queryRequest)
         {
             Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 

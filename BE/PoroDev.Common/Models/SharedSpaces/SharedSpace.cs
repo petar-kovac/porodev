@@ -1,5 +1,4 @@
 ﻿using PoroDev.Common.Models.UserModels.Data;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PoroDev.Common.Models.SharedSpaces
@@ -17,7 +16,6 @@ namespace PoroDev.Common.Models.SharedSpaces
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<SharedSpacesUsers> SharedSpaceUser { get; set; }
-
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public ICollection<SharedSpacesFiles> SharedSpaceFile { get; set; }

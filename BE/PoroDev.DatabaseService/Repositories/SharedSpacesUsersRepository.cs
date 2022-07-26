@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PoroDev.Common.Models.SharedSpaces;
-using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -11,7 +10,6 @@ namespace PoroDev.DatabaseService.Repositories
         public SharedSpacesUsersRepository(SqlDataContext context) : base(context)
         {
         }
-
 
         public async Task<List<SharedSpacesUsers>> GetSharedSpacesByUserId(Guid userId)
         {
