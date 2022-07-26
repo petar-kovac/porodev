@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.SharedSpace.AddFile
+﻿namespace PoroDev.Common.Contracts.SharedSpace.AddFile
 {
     public class AddFileToSharedSpaceServiceToDatabase
     {
@@ -16,7 +10,6 @@ namespace PoroDev.Common.Contracts.SharedSpace.AddFile
 
         public AddFileToSharedSpaceServiceToDatabase()
         {
-
         }
 
         public AddFileToSharedSpaceServiceToDatabase(Guid sharedSpaceId, string fileId, Guid userId)

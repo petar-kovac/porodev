@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Microsoft.AspNetCore.Http;
 
 namespace PoroDev.Common.Contracts.StorageService.UploadFile
 {
@@ -12,6 +11,5 @@ namespace PoroDev.Common.Contracts.StorageService.UploadFile
         public string ContentType { get; set; }
 
         public Guid UserId { get; set; }
-
     }
 }

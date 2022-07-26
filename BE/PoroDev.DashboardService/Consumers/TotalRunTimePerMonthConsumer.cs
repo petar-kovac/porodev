@@ -7,7 +7,6 @@ namespace PoroDev.DashboardService.Consumers
 {
     public class TotalRunTimePerMonthConsumer : IConsumer<TotalRunTimePerMonthRequestGatewayToService>
     {
-
         private readonly IDashboardService _dashboardService;
 
         public TotalRunTimePerMonthConsumer(IDashboardService dashboardService)

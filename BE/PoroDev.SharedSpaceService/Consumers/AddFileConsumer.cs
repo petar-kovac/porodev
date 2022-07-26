@@ -11,7 +11,7 @@ namespace PoroDev.SharedSpaceService.Consumers
         {
         }
 
-        public override async Task Consume(ConsumeContext<AddFileToSharedSpaceGatewayToService> context) 
+        public override async Task Consume(ConsumeContext<AddFileToSharedSpaceGatewayToService> context)
         {
             var resultModel = await _sharedSpaceService.AddFile(context.Message);
 
@@ -19,7 +19,3 @@ namespace PoroDev.SharedSpaceService.Consumers
         }
     }
 }
-
-
-
-

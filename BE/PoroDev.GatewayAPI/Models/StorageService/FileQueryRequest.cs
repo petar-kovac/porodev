@@ -16,7 +16,6 @@
 
         public FileQueryRequest()
         {
-
         }
 
         public FileQueryRequest(string? fileId = null, string? fileName = null, DateTime? uploadTime = null, ulong? size = null, string? contentType = null, bool? isExe = null)

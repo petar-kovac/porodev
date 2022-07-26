@@ -3,10 +3,8 @@ using PoroDev.Common.Contracts.StorageService.DeleteFile;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Contracts.StorageService.UploadFile;
-using PoroDev.Common.Exceptions;
 using PoroDev.GatewayAPI.Models.StorageService;
 using PoroDev.GatewayAPI.Services.Contracts;
-using System.Net;
 
 namespace PoroDev.GatewayAPI.Controllers
 {

@@ -2,7 +2,6 @@
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Exceptions;
-using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -23,7 +22,6 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
 
             await context.RespondAsync<CommunicationModel<TotalNumberOfUsersModel>>(responseModel);
         }
-
 
         private async Task<CommunicationModel<TotalNumberOfUsersModel>> TotalNumberOfUsers(TotalNumberOfUsersRequestServiceToDatabase totalNumberOfUsers)
         {
@@ -49,5 +47,3 @@ namespace PoroDev.DatabaseService.Consumers.DashboardServiceConsumers
         }
     }
 }
-
-

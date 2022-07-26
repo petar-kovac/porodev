@@ -17,6 +17,5 @@ namespace PoroDev.StorageService.MapperProfiles
 
             CreateMap<FileQueryGatewayToService, FileQueryServiceToDatabase>();
         }
-
     }
 }

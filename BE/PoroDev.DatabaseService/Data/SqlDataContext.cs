@@ -26,6 +26,5 @@ namespace PoroDev.DatabaseService.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SqlDataContext).Assembly);
         }
-
     }
 }

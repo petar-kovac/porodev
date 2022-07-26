@@ -8,7 +8,6 @@ using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth;
 using PoroDev.GatewayAPI.Services.Contracts;
-using static PoroDev.GatewayAPI.Constants.Constats;
 using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Services
@@ -24,7 +23,6 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<TotalMemoryUsedForUploadPerMonthRequestGatewayToService> _totalMemoryUsedForUploadClient;
         private readonly IRequestClient<TotalMemoryUsedForDownloadPerMonthRequestGatewayToService> _totalMemoryUsedForDownloadClient;
         private readonly IRequestClient<TotalRunTimePerMonthRequestGatewayToService> _totalRunTimePerMonthClient;
-
 
         public DashBoardService(
             IRequestClient<TotalNumberOfUsersRequestGatewayToService> totalNumberOfUsersClient,
@@ -43,7 +41,6 @@ namespace PoroDev.GatewayAPI.Services
             _totalMemoryUsedForDownloadClient = totalMemoryUsedForDownloadClient;
             _totalRunTimePerMonthClient = totalRunTimePerMonthClient;
         }
-
 
         public async Task<TotalRunTimeForAllUsersModel> GetTotalRunTimeForAllUsers(TotalRunTimeForAllUsersRequestGatewayToService totalRunTimeForAllUsersModel)
         {
