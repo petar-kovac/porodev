@@ -30,6 +30,7 @@ interface IGridCardProps {
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
   isCollapsed?: boolean;
+  isSharedSpace?: boolean;
   setSelectedCardId?: (value: number | null) => unknown;
 }
 
@@ -44,6 +45,7 @@ const GridCard: FC<IGridCardProps> = ({
   selected,
   image,
   fileExtension,
+  isSharedSpace,
   onClick,
   onDoubleClick,
   setSelectedCardId = () => undefined,

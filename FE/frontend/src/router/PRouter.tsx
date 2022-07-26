@@ -14,7 +14,7 @@ import Runtime from 'pages/admin/runtime/Runtime';
 import UserRuntime from 'pages/user/runtime/Runtime';
 import EmailVerified from 'pages/email-verify/EmailVerified';
 import { Role } from 'util/enums/roles';
-import SingleGroup from 'pages/user/groups/SingleGroup';
+import SingleGroup from 'pages/user/single-group/SingleGroup';
 import Spinner from '../components/spinner/Spinner';
 import { useAuthStateValue } from '../context/AuthContext';
 import PageProvider from '../context/PageContext';
@@ -48,7 +48,6 @@ const PRouter: FC = () => {
     useAuthStateValue();
   const location = useLocation();
 
-  // if (!isLoading) {
   if (isAuthenticated) {
     return (
       <StyledLayout>

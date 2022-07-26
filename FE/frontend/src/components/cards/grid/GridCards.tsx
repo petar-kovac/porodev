@@ -12,6 +12,7 @@ interface IGridCardProps {
   selectedCardId?: number | null;
   searchTerm?: string;
   searchRes?: any;
+  isSharedSpace?: boolean;
   onClick?: (event: MouseEvent) => unknown;
   onDoubleClick?: (event: MouseEvent) => unknown;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
@@ -24,6 +25,7 @@ const GridCards: FC<IGridCardProps> = ({
   setSelectedCardId = () => undefined,
   data,
   searchTerm,
+  isSharedSpace,
   searchRes,
 }) => {
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
@@ -31,7 +33,11 @@ const GridCards: FC<IGridCardProps> = ({
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
     setCardData(value);
-    setSelectedCardId(value.fileId);
+    if (isSharedSpace) {
+      setSelectedCardId(value.fileId);
+    } else {
+      setSelectedCardId(value.id);
+    }
   };
 
   const handleDoubleClick = (value: any) => {
@@ -41,9 +47,7 @@ const GridCards: FC<IGridCardProps> = ({
     setIsModalVisible(true);
   };
 
-  console.log(searchRes);
-
-  return (
+  return !isSharedSpace ? (
     <>
       {searchRes
         ?.map((value: any) => (
@@ -57,6 +61,25 @@ const GridCards: FC<IGridCardProps> = ({
             time={value.uploadDateTime}
             selected={selectedCardId === value.id}
             fileExtension={value.filename.split('.')[1]}
+            onClick={() => handleClick(value)}
+            onDoubleClick={() => handleDoubleClick(value)}
+          />
+        ))
+        .reverse()}
+    </>
+  ) : (
+    <>
+      {data
+        ?.map((value: any) => (
+          <GridCard
+            value={value}
+            key={value.fileId}
+            fileId={value.fileId}
+            // image={value.image}
+            fileName={value.filename}
+            // description={value.description}
+            selected={selectedCardId === value.fileId}
+            fileExtension={value.filename?.split('.')[1]}
             onClick={() => handleClick(value)}
             onDoubleClick={() => handleDoubleClick(value)}
           />

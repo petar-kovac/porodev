@@ -33,6 +33,7 @@ interface IListCardProps {
   value: any;
   selected: boolean;
   userName: string;
+  isSharedSpace?: boolean;
   userLastName: string;
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
@@ -47,6 +48,7 @@ const ListCard: FC<IListCardProps> = ({
   selected,
   userName,
   userLastName,
+  isSharedSpace,
   onClick = () => undefined,
   onDoubleClick = () => undefined,
   setSelectedCardId,
@@ -92,39 +94,54 @@ const ListCard: FC<IListCardProps> = ({
         <StyledListCard ref={ref} hoverable selected={selected} id="remove-id">
           <StyledDescription>
             <StyledHeading>
-              <h3>{value.filename}</h3>
+              {/* because BE has inconsistent naming */}
+              {isSharedSpace ? (
+                <h3>{value.fileName}</h3>
+              ) : (
+                <h3>{value.filename}</h3>
+              )}
               {isAdmin && (
                 <span>
                   by {userName} {userLastName}
                 </span>
               )}
+              {isSharedSpace && (
+                <span>
+                  by {userName} {value.userLastName}
+                </span>
+              )}
             </StyledHeading>
-            <StyledDescriptionUploadDetails>
-              <span>{formattedDate}</span>
-            </StyledDescriptionUploadDetails>
-            <StyledDescriptionButtons>
-              <StyledFilesButton
-                onClickCapture={(e) => {
-                  e.stopPropagation();
-                  setIsRemoveModalVisible(true);
-                  setIsSiderVisible(false);
-                  setSelectedCardId(value.fileId);
-                }}
-              >
-                Remove file
-              </StyledFilesButton>
-              <a
-                type="button"
-                onClickCapture={(e) => {
-                  e.stopPropagation();
-                  handleDownload(fileId, fileName);
-                  setIsSiderVisible(false);
-                  setSelectedCardId(value.fileId);
-                }}
-              >
-                <DownloadButton />
-              </a>
-            </StyledDescriptionButtons>
+            {!isSharedSpace && (
+              <>
+                <StyledDescriptionUploadDetails>
+                  <span>{formattedDate}</span>
+                </StyledDescriptionUploadDetails>
+
+                <StyledDescriptionButtons>
+                  <StyledFilesButton
+                    onClickCapture={(e) => {
+                      e.stopPropagation();
+                      setIsRemoveModalVisible(true);
+                      setIsSiderVisible(false);
+                      setSelectedCardId(value.fileId);
+                    }}
+                  >
+                    Remove file
+                  </StyledFilesButton>
+                  <a
+                    type="button"
+                    onClickCapture={(e) => {
+                      e.stopPropagation();
+                      handleDownload(fileId, fileName);
+                      setIsSiderVisible(false);
+                      setSelectedCardId(value.fileId);
+                    }}
+                  >
+                    <DownloadButton />
+                  </a>
+                </StyledDescriptionButtons>
+              </>
+            )}
           </StyledDescription>
         </StyledListCard>
       </StyledListCardContainer>

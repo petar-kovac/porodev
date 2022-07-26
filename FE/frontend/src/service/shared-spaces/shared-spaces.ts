@@ -28,19 +28,17 @@ export const getAllUsersFromSharedSpace: (param: any) => Promise<any> = (
     .then((res) => res.data);
 };
 
-export const addFile: (payload: ICreateSpaceRequest) => Promise<any> = (
-  payload,
-) => {
+export const addFile: (payload: any) => Promise<any> = (payload) => {
   return api
     .service()
     .post('/api/SharedSpace/AddFile', payload)
     .then((res) => res.data);
 };
 
-export const getAllFiles: () => Promise<any> = () => {
+export const getAllFiles: (id: string) => Promise<any> = (id) => {
   return api
     .service()
-    .get('/api/SharedSpace/GetAllFiles')
+    .get(`/api/SharedSpace/GetAllFiles?spaceId=${id}`)
     .then((res) => res.data);
 };
 export const getAllSharedSpaces: () => Promise<any> = () => {

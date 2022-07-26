@@ -25,7 +25,7 @@ interface IListCardProps {
   onDoubleClick?: (event: MouseEvent) => unknown;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
-
+  isSharedSpace?: boolean;
   searchTerm?: any;
   searchRes?: any;
   filteredResults?: any;
@@ -37,7 +37,7 @@ const ListCards: FC<IListCardProps> = ({
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
   data,
-
+  isSharedSpace,
   searchTerm,
   searchRes,
   filteredResults,
@@ -45,7 +45,11 @@ const ListCards: FC<IListCardProps> = ({
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
   const handleClick = (value: any) => {
-    setSelectedCardId(value.id);
+    if (isSharedSpace) {
+      setSelectedCardId(value.fileId);
+    } else {
+      setSelectedCardId(value.id);
+    }
     setCardData(value);
     setIsSiderVisible(true);
   };
@@ -57,26 +61,54 @@ const ListCards: FC<IListCardProps> = ({
     setIsModalVisible(true);
   };
 
-  return searchRes
-    ?.map((value: any) => {
-      return (
-        <ListCard
-          data={data}
-          value={value}
-          isAdmin={isAdmin}
-          fileId={value.id}
-          fileName={value.filename}
-          userName={value.userName}
-          userLastName={value.userLastname}
-          selected={selectedCardId === value.id}
-          key={value.id}
-          setSelectedCardId={setSelectedCardId}
-          onClick={() => handleClick(value)}
-          onDoubleClick={() => handleDoubleClick(value)}
-        />
-      );
-    })
-    .reverse();
+  return !isSharedSpace ? (
+    <>
+      {searchRes
+        ?.map((value: any) => {
+          return (
+            <ListCard
+              data={data}
+              value={value}
+              isAdmin={isAdmin}
+              fileId={value.id}
+              fileName={value.filename}
+              userName={value.userName}
+              userLastName={value.userLastname}
+              selected={selectedCardId === value.id}
+              key={value.id}
+              setSelectedCardId={setSelectedCardId}
+              onClick={() => handleClick(value)}
+              onDoubleClick={() => handleDoubleClick(value)}
+            />
+          );
+        })
+        .reverse()}
+    </>
+  ) : (
+    <>
+      {data
+        ?.map((value: any) => {
+          return (
+            <ListCard
+              isSharedSpace
+              data={data}
+              value={value}
+              isAdmin={isAdmin}
+              fileId={value.fileId}
+              fileName={value.filename}
+              userName={value.userName}
+              userLastName={value.userLastname}
+              selected={selectedCardId === value.fileId}
+              key={value.fileId}
+              setSelectedCardId={setSelectedCardId}
+              onClick={() => handleClick(value)}
+              onDoubleClick={() => handleDoubleClick(value)}
+            />
+          );
+        })
+        .reverse()}
+    </>
+  );
 
   // <>
   //   {searchTerm.length > 0
