@@ -6,7 +6,7 @@ using PoroDev.Common.Models.UserReportsModels.Data;
 namespace PoroDev.DatabaseService.Data.Configuration
 {
     public class UserReportsConfiguration : IEntityTypeConfiguration<UserReportsData>
-    { 
+    {
         public void Configure(EntityTypeBuilder<UserReportsData> builder)
         {
             builder.HasKey(x => x.Id);

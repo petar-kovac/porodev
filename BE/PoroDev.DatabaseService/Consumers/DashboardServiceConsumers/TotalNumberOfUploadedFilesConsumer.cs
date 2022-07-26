@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles;
-using PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;

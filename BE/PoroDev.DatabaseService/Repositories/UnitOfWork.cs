@@ -9,13 +9,13 @@ namespace PoroDev.DatabaseService.Repositories
         private bool _disposed;
 
         public IUserRepository Users { get; }
+
         public IStorageRepository UserFiles { get; }
 
         public IRuntimeDataRepository RuntimeData { get; }
 
         public IUserReportsRepository UserReports { get; }
 
-        
         public ISharedSpaceRepository SharedSpaces { get; }
 
         public ISharedSpacesWithFilesRepository SharedSpacesWithFiles { get; }
@@ -33,8 +33,6 @@ namespace PoroDev.DatabaseService.Repositories
                           ISharedSpacesUsersRepository sharedSpacesUsers,
                           INotificationDataRepository notificationData,
                           IUserReportsRepository userReports)
-        
-
         {
             _context = context;
             Users = users;

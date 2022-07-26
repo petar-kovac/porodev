@@ -30,7 +30,7 @@ namespace PoroDev.GatewayAPI.Controllers
             var returnModel = new TotalRunTimeForAllUsersRequestGatewayToService(userId);
 
             var response = await _dashBoardService.GetTotalRunTimeForAllUsers(returnModel);
-            
+
             return Ok(response);
         }
 
@@ -63,7 +63,7 @@ namespace PoroDev.GatewayAPI.Controllers
             var returnModel = new TotalNumberOfUsersRequestGatewayToService(userId);
 
             var response = await _dashBoardService.GetTotalNumberOfUsers(returnModel);
-           
+
             return Ok(response);
         }
 
@@ -73,9 +73,9 @@ namespace PoroDev.GatewayAPI.Controllers
            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
            var returnModel = new TotalRunTimePerMonthRequestGatewayToService(userId, numberOfMonthsToShow);
 
-           var response = await _dashBoardService.GetTotalRuntimePerMonth(returnModel);
+            var response = await _dashBoardService.GetTotalRuntimePerMonth(returnModel);
 
-           return Ok(response);
+            return Ok(response);
         }
 
         [HttpGet("TotalMemoryUsedForUploadPerMonth")]
@@ -99,6 +99,5 @@ namespace PoroDev.GatewayAPI.Controllers
 
             return Ok(response);
         }
-
     }
 }

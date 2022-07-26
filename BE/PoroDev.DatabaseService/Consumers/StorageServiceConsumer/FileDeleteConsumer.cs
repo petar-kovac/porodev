@@ -30,8 +30,6 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
                 {
                     entity.IsDeleted = true;
                     await _unitOfWork.UserFiles.UpdateAsyncStringId(entity, context.Message.FileId);
-
-                    
                 }
             }
 

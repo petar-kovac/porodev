@@ -49,7 +49,7 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             {
                 DataUserModel user = await _unitOfWork.Users.GetByIdAsync(file.CurrentUserId);
                 var fileReadSingleModel = await _fileRepository.ReadFiles(file.FileId, user.Name, user.Lastname);
-                
+
                 returnModel.Content.Add(fileReadSingleModel);
             }
 

@@ -4,7 +4,6 @@ using PoroDev.Common.Contracts.DashboardService.TotalRunTimeForAllUsers;
 using PoroDev.Common.Contracts.DashboardService.TotalRunTimePerMonth;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
-using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.Common.Models.UserModels.Data;
 using PoroDev.Common.Models.UserReportsModels.Data;
 using PoroDev.DatabaseService.Repositories.Contracts;

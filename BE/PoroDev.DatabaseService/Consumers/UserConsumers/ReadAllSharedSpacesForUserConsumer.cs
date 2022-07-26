@@ -12,8 +12,8 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
     {
         public ReadAllSharedSpacesForUserConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
-
         }
+
         public async Task Consume(ConsumeContext<ReadAllSharedSpacesForUserRequestServiceToDatabase> context)
         {
             var sharedSpacesForUser = await _unitOfWork.SharedSpacesUsers.GetSharedSpacesByUserId(context.Message.UserId);

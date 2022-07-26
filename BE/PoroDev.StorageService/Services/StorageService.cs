@@ -38,7 +38,7 @@ namespace PoroDev.StorageService.Services
 
         public async Task<CommunicationModel<FileUploadResponse>> UploadFile(FileUploadRequestServiceToDatabase uploadModel)
         {
-            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel,CancellationToken.None, RequestTimeout.After(m: 5));
+            var fileUploadResponseContext = await _uploadRequestClient.GetResponse<CommunicationModel<FileUploadModel>>(uploadModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             var fileUploadResponse = _mapper.Map<CommunicationModel<FileUploadResponse>>(fileUploadResponseContext.Message);
 
@@ -47,7 +47,7 @@ namespace PoroDev.StorageService.Services
 
         public async Task<CommunicationModel<FileDownloadMessage>> DownloadFile(FileDownloadRequestServiceToDatabase downloadModel)
         {
-            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel,CancellationToken.None, RequestTimeout.After(m: 5));
+            var response = await _downloadRequestClient.GetResponse<CommunicationModel<FileDownloadMessage>>(downloadModel, CancellationToken.None, RequestTimeout.After(m: 5));
 
             return response.Message;
         }
@@ -70,7 +70,9 @@ namespace PoroDev.StorageService.Services
         {
             var response = await _queryClient.GetResponse<CommunicationModel<List<FileQueryModel>>>(queryRequest, CancellationToken.None, RequestTimeout.After(m: 1));
 
-            return response.Message;
+            var filteredList = new CommunicationModel<List<FileQueryModel>>(response.Message.Entity.Where(file => file.IsDeleted == false).ToList());
+
+            return filteredList;
         }
     }
 }

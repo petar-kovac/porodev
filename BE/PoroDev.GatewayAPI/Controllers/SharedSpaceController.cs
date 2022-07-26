@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PoroDev.Common.Models.SharedSpaces;
-using PoroDev.GatewayAPI.Services.Contracts;
-using PoroDev.Common.Contracts.SharedSpace;
-using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
-using PoroDev.GatewayAPI.Models.SharedSpace;
-using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.Common.Contracts.SharedSpace.AddFile;
 using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
-using PoroDev.Common.Contracts.SharedSpace.AddFile;
-using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
 using PoroDev.Common.Contracts.SharedSpace.GetAllUsers;
+using PoroDev.Common.Contracts.SharedSpace.QueryFiles;
+using PoroDev.Common.Models.SharedSpaces;
+using PoroDev.Common.Models.UserModels.Data;
+using PoroDev.GatewayAPI.Models.SharedSpace;
+using PoroDev.GatewayAPI.Services.Contracts;
+using static PoroDev.GatewayAPI.Helpers.ExceptionFactory;
 
 namespace PoroDev.GatewayAPI.Controllers
 {
@@ -49,7 +48,6 @@ namespace PoroDev.GatewayAPI.Controllers
                 ThrowException(nameof(response.ExceptionName), response.HumanReadableMessage);
 
             return Ok(response.Entity);
-
         }
 
         [HttpGet("GetAllUsersInSharedSpace")]
@@ -80,7 +78,7 @@ namespace PoroDev.GatewayAPI.Controllers
         {
             await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
 
-            QueryFilesGatewayToService query = new() { SpaceId =  Guid.Parse(spaceId) };
+            QueryFilesGatewayToService query = new() { SpaceId = Guid.Parse(spaceId) };
 
             var responseList = await _sharedSpaceService.QueryFiles(query);
 

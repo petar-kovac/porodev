@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.StorageService.Services.Contracts;
 
