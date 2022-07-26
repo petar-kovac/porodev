@@ -27,7 +27,7 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
         {
             var exists = await _unitOfWork.SharedSpacesWithFiles.FindAsync(spaceFile => createModel.Compare(spaceFile.FileId, spaceFile.SharedSpaceId));
 
-            if (exists.Entity is null)
+            if (exists.Entity is not null)
                 return new CommunicationModel<SharedSpacesFiles>(new SharedSpaceException("File already exists in shared space"));
 
             try
