@@ -36,7 +36,8 @@ namespace PoroDev.GatewayAPI.Helpers
                 nameof(SharedSpaceNameFormatException) => new SharedSpaceNameFormatException(errorMessage),
                 nameof(InvalidDayValueException) => new InvalidDayValueException(errorMessage),
                 nameof(InvalidHourValueException) => new InvalidHourValueException(errorMessage),
-                _ => new Exception("Exception not found!"),
+                nameof(SharedSpaceException) => new SharedSpaceException(errorMessage),   
+                _ => new Exception($"Exception not found, error message {errorMessage} !")
             };
         }
     }

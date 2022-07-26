@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Driver.GridFS;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.SharedSpace.AddFile;
+using PoroDev.Common.Contracts.SharedSpace.AddUser;
 using PoroDev.Common.Contracts.SharedSpace.Create;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;
@@ -68,6 +69,8 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<AddFileToSharedSpaceServiceToDatabase, SharedSpacesFiles>();
 
             CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
+
+            CreateMap<AddUserToSharedSpaceRequestServiceToDatabase, SharedSpacesUsers>();
         }
 
 

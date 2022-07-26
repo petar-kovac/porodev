@@ -2,6 +2,7 @@
 using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.SharedSpace.AddFile;
+using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.DatabaseService.Repositories.Contracts;
 
@@ -15,15 +16,35 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
 
         public async Task Consume(ConsumeContext<AddFileToSharedSpaceServiceToDatabase> context)
         {
-            var createModel = _mapper.Map<SharedSpacesFiles>(context.Message);
+            var requestModel = _mapper.Map<SharedSpacesFiles>(context.Message);
 
-            var response = await _unitOfWork.SharedSpacesWithFiles.CreateAsync(createModel);
+            var returnModel = await AddFileToSharedSpace(requestModel);
 
-            await _unitOfWork.SaveChanges();
+            await context.RespondAsync(returnModel);
+        }
 
-            var responseModel = _mapper.Map<CommunicationModel<SharedSpacesFiles>>(response);
+        private async Task<CommunicationModel<SharedSpacesFiles>> AddFileToSharedSpace(SharedSpacesFiles createModel)
+        {
+            var exists = await _unitOfWork.SharedSpacesWithFiles.FindAsync(spaceFile => createModel.Compare(spaceFile.FileId, spaceFile.SharedSpaceId));
 
-            await context.RespondAsync(responseModel);
+            if (exists.Entity is null)
+                return new CommunicationModel<SharedSpacesFiles>(new SharedSpaceException("File already exists in shared space"));
+
+            try
+            {
+                var response = await _unitOfWork.SharedSpacesWithFiles.CreateAsync(createModel);
+                await _unitOfWork.SaveChanges();
+
+                var responseModel = _mapper.Map<CommunicationModel<SharedSpacesFiles>>(response);
+
+                return responseModel;
+            }
+            catch (Exception ex)
+            {
+                var dataException = (DatabaseException)ex;
+                dataException.HumanReadableErrorMessage = "Exception happened in DatabaseConsumer add file to shared space.";
+                return new CommunicationModel<SharedSpacesFiles>(dataException);
+            }
         }
     }
 }

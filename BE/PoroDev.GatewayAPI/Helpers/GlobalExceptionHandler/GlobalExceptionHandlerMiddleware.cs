@@ -197,6 +197,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userIsNotAdminException);
                         break;
 
+                    case SharedSpaceException sharedSpaceException:
+                        response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        HumanReadableErrorMessage = sharedSpaceException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, sharedSpaceException);
+                        break;
+
                     default:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = "Internal server error";
