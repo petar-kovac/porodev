@@ -2,7 +2,7 @@
 {
     public class AddUserToSharedSpaceRequestServiceToDatabase
     {
-        public Guid SharedSpaceID { get; set; }
-        public Guid UserToAddId { get; set; }
+        public Guid SharedSpaceId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

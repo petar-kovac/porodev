@@ -47,7 +47,11 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<CommunicationModel<SharedSpacesUsers>> AddUserToSharedSpace(AddUserToSharedSpaceRequestGatewayToService addModel)
         {
             var requestReturnContext = await _addUserToSharedSpaceRequestClient.GetResponse<CommunicationModel<SharedSpacesUsers>>(addModel, CancellationToken.None, RequestTimeout.After(m: 5));
-            return requestReturnContext.Message;
+
+            if (requestReturnContext.Message.ExceptionName is not null)
+                ThrowException(requestReturnContext.Message.ExceptionName, requestReturnContext.Message.HumanReadableMessage);
+
+            return requestReturnContext.Message;  
         }
 
         public async Task<CommunicationModel<List<DataUserModel>>> GetAllUsersFromSharedSpace(GetAllUsersFromSharedSpaceRequestGatewayToService model)
