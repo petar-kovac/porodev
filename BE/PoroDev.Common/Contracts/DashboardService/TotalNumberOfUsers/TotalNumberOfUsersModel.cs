@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers
+﻿namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers
 {
     public class TotalNumberOfUsersModel
     {
@@ -12,7 +6,6 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUsers
 
         public TotalNumberOfUsersModel()
         {
-
         }
 
         public TotalNumberOfUsersModel(int numberOfUsers)

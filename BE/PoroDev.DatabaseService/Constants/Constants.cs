@@ -9,5 +9,7 @@
         public const string UserNotVerifiedExceptionMessage = "You have to validate your email adress to be able to use your account.";
         public const string InvalidTokenExceptionMessage = "Verification token is not valid.";
         public const string UserAlreadyVerifiedExceptionMessage = "User is already verified, please proceed to login page.";
+        public const string UserIsNotAdminExceptionMessage = "User must be an admin.";
+        public const string WrongOldPasswordExceptionMessage = "Your old password is wrong.";
     }
 }

@@ -12,8 +12,8 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
     {
         public AddUserToSharedSpaceConsumer(IUnitOfWork unitOfWork, IMapper mapper, IFileRepository fileRepository) : base(unitOfWork, mapper, fileRepository)
         {
-
         }
+
         public async Task Consume(ConsumeContext<AddUserToSharedSpaceRequestServiceToDatabase> context)
         {
             var requestModel = _mapper.Map<SharedSpacesUsers>(context.Message);

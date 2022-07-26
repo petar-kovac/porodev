@@ -12,7 +12,7 @@ namespace PoroDev.UserManagementService.Helpers
 {
     public static class UserManagementValidator
     {
-        private static void CheckPassword(string password)
+        public static void CheckPassword(string password)
         {
             if (password.Length < MIN_PASSWORD_LENGTH)
                 throw new PasswordFormatException(PASSWORD_MIN_LENGTH_ERROR);
@@ -188,7 +188,6 @@ namespace PoroDev.UserManagementService.Helpers
             {
                 CheckFullName(updateModel.Name, updateModel.Lastname);
                 CheckEmailUpdate(updateModel.Email);
-                CheckPassword(updateModel.PasswordUnhashed);
                 CheckPosition(updateModel.Position);
             }
             catch (EmailFormatException ex)

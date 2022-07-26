@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles
+﻿namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles
 {
     public class TotalNumberOfUploadedFilesRequestServiceToDatabase
     {
@@ -12,8 +6,8 @@ namespace PoroDev.Common.Contracts.DashboardService.TotalNumberOfUploadedFiles
 
         public TotalNumberOfUploadedFilesRequestServiceToDatabase()
         {
-
         }
+
         public TotalNumberOfUploadedFilesRequestServiceToDatabase(Guid userId)
         {
             UserId = userId;

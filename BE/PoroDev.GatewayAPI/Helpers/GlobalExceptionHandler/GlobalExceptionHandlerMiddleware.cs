@@ -28,6 +28,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                 string HumanReadableErrorMessage;
                 switch (exception)
                 {
+                    case WrongOldPasswordException wrongOldPasswordException:
+                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        HumanReadableErrorMessage = wrongOldPasswordException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, wrongOldPasswordException);
+                        break;
+
                     case InvalidDayValueException invalidDayValueException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = invalidDayValueException.HumanReadableErrorMessage;
@@ -190,7 +196,6 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, userPermissionException);
                         break;
 
-
                     case UserIsNotAdminException userIsNotAdminException:
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         HumanReadableErrorMessage = userIsNotAdminException.HumanReadableErrorMessage;
@@ -201,6 +206,12 @@ namespace PoroDev.GatewayAPI.Helpers.GlobalExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         HumanReadableErrorMessage = sharedSpaceException.HumanReadableErrorMessage;
                         ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, sharedSpaceException);
+                        break;
+
+                    case MonthLimitException monthLimitException:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        HumanReadableErrorMessage = monthLimitException.HumanReadableErrorMessage;
+                        ExceptionLogger.WriteNewLog(HumanReadableErrorMessage, monthLimitException);
                         break;
 
                     default:

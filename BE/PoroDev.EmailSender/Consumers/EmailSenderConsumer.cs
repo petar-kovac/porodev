@@ -3,8 +3,6 @@ using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.EmailSender;
 using PoroDev.Common.Models.EmailSenderModels;
 using PoroDev.EmailSender.Services.Contracts;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace PoroDev.EmailSender.Consumers
 {
@@ -12,11 +10,11 @@ namespace PoroDev.EmailSender.Consumers
     {
         private readonly ISendEmailService _sendEmailService;
 
-
         public EmailSenderConsumer(ISendEmailService sendEmailService)
         {
             _sendEmailService = sendEmailService;
         }
+
         public async Task Consume(ConsumeContext<SendEmailRequest> context)
         {
             try

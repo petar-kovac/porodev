@@ -4,7 +4,6 @@ using PoroDev.SharedSpaceService.Services.Contracts;
 
 namespace PoroDev.SharedSpaceService.Consumers
 {
-
     public abstract class BaseConsumer<T> : IConsumer<T> where T : class, new()
     {
         protected readonly ISharedSpaceService _sharedSpaceService;

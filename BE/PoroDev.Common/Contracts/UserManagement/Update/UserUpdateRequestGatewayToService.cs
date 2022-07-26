@@ -9,7 +9,6 @@ namespace PoroDev.Common.Contracts.UserManagement.Update
         public string Email { get; set; }
         public string Lastname { get; set; }
         public string Name { get; set; }
-        public string PasswordUnhashed { get; set; }
         public string Position { get; set; }
         public UserEnums.UserRole Role { get; set; }
     }

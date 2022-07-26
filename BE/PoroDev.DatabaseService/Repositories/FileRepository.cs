@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Contracts.StorageService.Query;
 using PoroDev.Common.Contracts.StorageService.ReadFile;
 using PoroDev.Common.Exceptions;
@@ -12,9 +11,7 @@ using PoroDev.Common.Models.StorageModels.Data;
 using PoroDev.DatabaseService.Data.Configuration;
 using PoroDev.DatabaseService.Models;
 using PoroDev.DatabaseService.Repositories.Contracts;
-using PoroDev.DatabaseService.Services.Contracts;
 using System.Text.RegularExpressions;
-using static PoroDev.Common.MassTransit.Extensions;
 
 namespace PoroDev.DatabaseService.Repositories
 {
@@ -84,7 +81,7 @@ namespace PoroDev.DatabaseService.Repositories
                 FileName = fileName,
                 ContentType = contentType
             };
-            
+
             return modelToReturn;
         }
 
@@ -172,7 +169,7 @@ namespace PoroDev.DatabaseService.Repositories
 
             if (queryReqeust.UploadTime.HasValue)
             {
-                var filterByUploadTime = builder.Eq(file => file.UploadDateTime.Date, queryReqeust.UploadTime.Value.Date );
+                var filterByUploadTime = builder.Eq(file => file.UploadDateTime.Date, queryReqeust.UploadTime.Value.Date);
                 filter &= filterByUploadTime;
             }
 

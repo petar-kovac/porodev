@@ -1,4 +1,5 @@
-﻿using PoroDev.Common.Contracts.UserManagement.Create;
+﻿using PoroDev.Common.Contracts.UserManagement.ChangePassword;
+using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
 using PoroDev.Common.Contracts.UserManagement.LoginUser;
@@ -45,6 +46,8 @@ namespace PoroDev.GatewayAPI.Services.Contracts
         Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
 
         Task<NotificationDataModel> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService model);
+
+        Task ChangePassword(ChangePasswordRequestGatewayToService model);
 
         Task<List<DataUserModel>> QueryAll();
     }

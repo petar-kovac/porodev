@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.UserManagement.ChangePassword;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
@@ -43,6 +44,7 @@ namespace PoroDev.GatewayAPI.Services
         private readonly IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> _readAllSharedSpacesForUser;
         private readonly IRequestClient<SetMonthlyReportTimeRequestGatewayToService> _setMonthlyReportTimeRequestClient;
         private readonly IRequestClient<QueryAllUsersRequestGatewayToService> _queryAllUsers;
+        private readonly IRequestClient<ChangePasswordRequestGatewayToService> _changePasswordRequestClient;
 
         public UserManagementService(
             IRequestClient<UserCreateRequestGatewayToService> createRequestClient,
@@ -58,7 +60,8 @@ namespace PoroDev.GatewayAPI.Services
             IRequestClient<ReadAllUsersRequestGatewayToService> readAllUsersRequestClient,
             IRequestClient<ReadAllSharedSpacesForUserRequestGatewayToService> readAllSharedSpacesForUser,
             IRequestClient<QueryAllUsersRequestGatewayToService> queryAllUsers,
-            IRequestClient<SetMonthlyReportTimeRequestGatewayToService> setMonthlyReportTimeRequestClient
+            IRequestClient<SetMonthlyReportTimeRequestGatewayToService> setMonthlyReportTimeRequestClient,
+            IRequestClient<ChangePasswordRequestGatewayToService> changePasswordRequestClient
             )
         {
             _createRequestClient = createRequestClient;
@@ -75,6 +78,7 @@ namespace PoroDev.GatewayAPI.Services
             _readAllusersRequestClient = readAllUsersRequestClient;
             _readAllSharedSpacesForUser = readAllSharedSpacesForUser;
             _setMonthlyReportTimeRequestClient = setMonthlyReportTimeRequestClient;
+            _changePasswordRequestClient = changePasswordRequestClient;
 
         }
 
@@ -118,11 +122,10 @@ namespace PoroDev.GatewayAPI.Services
         public async Task<List<DataUserModel>> ReadAllUsers(ReadAllUsersRequestGatewayToService model)
         {
             var responseContext = await _readAllusersRequestClient.GetResponse<CommunicationModel<List<DataUserModel>>>(model);
-            if(responseContext.Message.ExceptionName != null)
+            if (responseContext.Message.ExceptionName != null)
                 ThrowException(nameof(responseContext.Message.ExceptionName), responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;
-
         }
 
         public async Task<LoginUserModel> LoginUser(UserLoginRequestGatewayToService loginModel)
@@ -214,27 +217,26 @@ namespace PoroDev.GatewayAPI.Services
 
         public async Task<DataUserModel> VerifyEmail(VerifyEmailRequestGatewayToService verifyModel)
         {
-            if(string.IsNullOrEmpty(verifyModel.Token.Trim()))
+            if (string.IsNullOrEmpty(verifyModel.Token.Trim()))
             {
                 ThrowException(nameof(InvalidVerificationTokenException), InvalidToken);
             }
 
             var requestResponseContext = await _verifyUserRequestClient.GetResponse<CommunicationModel<DataUserModel>>(verifyModel);
 
-            if(requestResponseContext.Message.ExceptionName != null)
+            if (requestResponseContext.Message.ExceptionName != null)
             {
                 ThrowException(requestResponseContext.Message.ExceptionName, requestResponseContext.Message.HumanReadableMessage);
             }
 
             return requestResponseContext.Message.Entity;
-
         }
 
         public async Task<List<DataUserModel>> QueryAll()
         {
             var responseContext = await _queryAllUsers.GetResponse<CommunicationModel<List<DataUserModel>>>(new QueryAllUsersRequestGatewayToService());
 
-            if(responseContext.Message.ExceptionName!= null)
+            if (responseContext.Message.ExceptionName != null)
                 ThrowException(responseContext.Message.ExceptionName, responseContext.Message.HumanReadableMessage);
 
             return responseContext.Message.Entity;
@@ -270,6 +272,14 @@ namespace PoroDev.GatewayAPI.Services
                 return new InvalidDayValueException(InvalidDayValueExceptionMessage);
 
             return null;
+        }
+
+        public async Task ChangePassword(ChangePasswordRequestGatewayToService model)
+        {
+            var responseRequestContext = await _changePasswordRequestClient.GetResponse<CommunicationModel<DataUserModel>>(model);
+            if (responseRequestContext.Message.ExceptionName != null)
+                ThrowException(responseRequestContext.Message.ExceptionName, responseRequestContext.Message.HumanReadableMessage);
+            return;
         }
     }
 }

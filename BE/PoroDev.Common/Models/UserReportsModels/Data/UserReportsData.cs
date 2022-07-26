@@ -1,10 +1,5 @@
 ﻿using PoroDev.Common.Models.UserModels.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace PoroDev.Common.Models.UserReportsModels.Data
 {
@@ -26,7 +21,6 @@ namespace PoroDev.Common.Models.UserReportsModels.Data
 
         public UserReportsData()
         {
-
         }
 
         public UserReportsData(Guid id, ulong fileDownloadTotal, ulong fileUploadTotal, ushort runtimeTotal, string month, Guid currentUserId)

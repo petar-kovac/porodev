@@ -14,10 +14,11 @@ namespace PoroDev.SharedSpaceService.Consumers
         {
             _sharedSpaceService = sharedSpaceService;
         }
+
         public async Task Consume(ConsumeContext<CreateSharedSpaceRequestGatewayToService> context)
         {
             var modelToReturn = await _sharedSpaceService.Create(context.Message);
-            
+
             await context.RespondAsync<CommunicationModel<SharedSpace>>(modelToReturn);
         }
     }

@@ -14,7 +14,6 @@ namespace PoroDev.DashboardService.Consumers
             _dashboardService = dashboardService;
         }
 
-
         public async Task Consume(ConsumeContext<TotalNumberOfUsersRequestGatewayToService> context)
         {
             var modelToRead = new TotalNumberOfUsersRequestServiceToDatabase(context.Message.UserId);

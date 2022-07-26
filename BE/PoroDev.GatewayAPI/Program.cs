@@ -28,7 +28,7 @@ builder.Services.AddScoped<IRuntimeQueryService, RuntimeQueryService>();
 builder.Services.AddScoped<ISharedSpaceService, SharedSpaceService>();
 builder.Services.AddScoped<ILimitValidatorService, LimitValidatorService>();
 builder.Services.AddScoped<IDashBoardService, DashBoardService>();
-
+builder.Services.AddScoped<IBillingReportService, BillingReportService>();
 
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddControllers();
