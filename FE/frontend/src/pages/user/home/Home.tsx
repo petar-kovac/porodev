@@ -61,7 +61,7 @@ const Home: FC = () => {
                     <GridCard
                       key={value.fileId}
                       heading={value.fileName}
-                      description={value.uploadTime}
+                      time={value.uploadDateTime}
                       selected={false}
                       fileExtension={value.fileName.split('.')[1]}
                     />

@@ -4,17 +4,21 @@ import { FC, RefObject, useRef, MouseEventHandler, useState } from 'react';
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
+import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
+
 import { handleDownload } from 'util/helpers/files-functions';
 
 import DownloadButton from 'components/buttons/DownloadButton';
 
 import { usePageContext } from 'context/PageContext';
 
+import { formatDateListCard } from 'util/helpers/date-formaters';
 import RemoveModal from '../../modal/RemoveModal';
 
 interface IGridCardProps {
   fileId?: any;
   fileName?: string;
+  time?: any;
   id?: string;
   data?: any;
   value?: any;
@@ -32,6 +36,7 @@ interface IGridCardProps {
 const GridCard: FC<IGridCardProps> = ({
   fileId,
   fileName,
+  time,
   data,
   value,
   heading,
@@ -57,6 +62,8 @@ const GridCard: FC<IGridCardProps> = ({
 
   console.log(isCollapsed);
 
+  const formattedDate = formatDateListCard(time);
+
   return (
     <div>
       <StyledGridCard
@@ -77,17 +84,20 @@ const GridCard: FC<IGridCardProps> = ({
       >
         <StyledMetaCardDescription>
           <h4>{fileName}</h4>
-          <div className="buttons">
-            <StyledFilesButton
+          <p>{formattedDate}</p>
+          <StyledGridButtons>
+            <Button
               onClickCapture={(e) => {
                 e.stopPropagation();
                 setIsRemoveModalVisible(true);
                 setIsSiderVisible(false);
                 setSelectedCardId(value.fileId);
               }}
-            >
-              Remove file
-            </StyledFilesButton>
+              type="default"
+              shape="circle"
+              icon={<DeleteOutlined />}
+            />
+
             <a
               type="button"
               onClickCapture={(e) => {
@@ -97,9 +107,13 @@ const GridCard: FC<IGridCardProps> = ({
                 setSelectedCardId(value.fileId);
               }}
             >
-              <DownloadButton />
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<DownloadOutlined />}
+              />
             </a>
-          </div>
+          </StyledGridButtons>
           {/* <span>{value.uploadTime?.slice(0, 30)}...</span>
         <span className="show-more">&rarr; Show more</span> */}
         </StyledMetaCardDescription>
@@ -159,6 +173,11 @@ const StyledGridCard = styled(Card).attrs({
 `;
 
 const StyledMetaCardDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   .show-more {
     font-weight: bold;
     margin-left: 2rem;
@@ -167,6 +186,11 @@ const StyledMetaCardDescription = styled.div`
 
 const StyledFilesButton = styled(Button)`
   border-radius: 0.8rem;
+`;
+
+const StyledGridButtons = styled.div`
+  display: flex;
+  gap: 1rem;
 `;
 
 export default GridCard;

@@ -41,6 +41,8 @@ const GridCards: FC<IGridCardProps> = ({
     setIsModalVisible(true);
   };
 
+  console.log(searchRes);
+
   return (
     <>
       {searchRes
@@ -52,6 +54,7 @@ const GridCards: FC<IGridCardProps> = ({
             // image={value.image}
             fileName={value.filename}
             // description={value.description}
+            time={value.uploadDateTime}
             selected={selectedCardId === value.id}
             fileExtension={value.filename.split('.')[1]}
             onClick={() => handleClick(value)}
