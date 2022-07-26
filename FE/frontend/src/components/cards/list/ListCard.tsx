@@ -134,7 +134,7 @@ const ListCard: FC<IListCardProps> = ({
         setIsRemoveModalVisible={setIsRemoveModalVisible}
         // handleDelete={handleDelete}
         handleCancel={handleCancel}
-        fileName={value.fileName}
+        fileName={fileName}
       />
     </>
   );

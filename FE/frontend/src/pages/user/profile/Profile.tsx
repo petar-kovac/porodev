@@ -34,10 +34,11 @@ const Profile: FC = () => {
     undefined,
   );
   const [inputField, setInputField] = useState<string>('');
+  const [userData, setUserData] = useState<any>(null);
+
+  const { isModalVisible, setIsModalVisible } = usePageContext();
 
   const accessToken = localStorage.getItem(StorageKey.ACCESS_TOKEN);
-
-  // const allowed = ['item1', 'item3'];
 
   const allowed = [
     'avatarUrl',
@@ -45,19 +46,9 @@ const Profile: FC = () => {
     'email',
     'name',
     'lastname',
-    'passwordUnhashed',
     'position',
     'role',
   ];
-
-  // const filtered = Object.keys(raw)
-  //   .filter((key) => allowed.includes(key))
-  //   .reduce((obj, key) => {
-  //     return {
-  //       ...obj,
-  //       [key]: raw[key],
-  //     };
-  //   }, {});
 
   useEffect(() => {
     if (accessToken) {
@@ -66,7 +57,9 @@ const Profile: FC = () => {
       findUserById(Id)
         .then((res) => {
           const { data } = res;
-          const filteredResponse = Object.keys(data)
+          setUserData(data);
+          console.log(data);
+          const filteredResponse: any = Object.keys(data)
             .filter((key) => {
               console.log(key);
               return allowed.includes(key);
@@ -76,15 +69,17 @@ const Profile: FC = () => {
               return { ...obj, [key]: data[key] };
             }, {});
           console.log(filteredResponse);
+          localStorage.setItem(StorageKey.NAME, filteredResponse.name);
+          localStorage.setItem(StorageKey.LASTNAME, filteredResponse.lastname);
+
           setModalData(filteredResponse);
           console.log(res.data);
         })
         .catch((error) => console.log(error));
     }
-  }, []);
+  }, [isModalVisible]);
 
   console.log(modalData);
-  const { setIsModalVisible } = usePageContext();
 
   return (
     <>
@@ -101,9 +96,7 @@ const Profile: FC = () => {
             </StyledProfileCardItem>
             <StyledProfileCardItem>
               <StyledPHeading className="name">First name: </StyledPHeading>
-              <StyledPContent>
-                {localStorage.getItem(StorageKey.NAME)}
-              </StyledPContent>
+              <StyledPContent>{userData?.name}</StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
@@ -119,9 +112,7 @@ const Profile: FC = () => {
             </StyledProfileCardItem>
             <StyledProfileCardItem>
               <StyledPHeading>Last name: </StyledPHeading>
-              <StyledPContent>
-                {localStorage.getItem(StorageKey.LASTNAME)}
-              </StyledPContent>
+              <StyledPContent>{userData?.lastname}</StyledPContent>
 
               <StyledProfileIcon
                 onClick={() => {
@@ -139,23 +130,41 @@ const Profile: FC = () => {
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
+              <StyledPHeading>Position</StyledPHeading>
+              <StyledPContent>position</StyledPContent>
+              <StyledProfileIcon
+                onClick={() => {
+                  setIsModalVisible(true);
+                  setInputField('position');
+                  // setModalData({
+                  //   title: 'Change Your Password',
+                  // });
+                }}
+              >
+                <StyledEditIcon />
+              </StyledProfileIcon>
+            </StyledProfileCardItem>
+            <StyledProfileCardItem>
               <StyledPHeading>Email</StyledPHeading>
               <StyledPContent>
-                {localStorage.getItem(StorageKey.EMAIL)}
+                {/* {localStorage.getItem(StorageKey.EMAIL)} */}
+                {userData?.email}
               </StyledPContent>
               <StyledProfileIcon>
                 <StyledDisableIcon />
               </StyledProfileIcon>
             </StyledProfileCardItem>
+
             <StyledProfileCardItem>
               <StyledPHeading>Password</StyledPHeading>
               <StyledPContent>******</StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);
-                  setModalData({
-                    title: 'Change Your Password',
-                  });
+                  setInputField('password');
+                  // setModalData({
+                  //   title: 'Change Your Password',
+                  // });
                 }}
               >
                 <StyledEditIcon />
@@ -165,7 +174,8 @@ const Profile: FC = () => {
         </StyledProfileCard>
       </StyledPage>
       <PModal
-        title={modalData?.title}
+        // title={modalData?.title}
+        title={`Change your ${inputField}`}
         inputField={inputField}
         modalData={modalData}
         setModalData={setModalData}

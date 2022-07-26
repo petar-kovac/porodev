@@ -48,8 +48,9 @@ const GridCards: FC<IGridCardProps> = ({
           <GridCard
             value={value}
             key={value.id}
+            fileId={value.id}
             // image={value.image}
-            heading={value.filename}
+            fileName={value.filename}
             // description={value.description}
             selected={selectedCardId === value.id}
             fileExtension={value.filename.split('.')[1]}

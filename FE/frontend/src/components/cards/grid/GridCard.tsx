@@ -1,10 +1,16 @@
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import useDoubleClick from 'hooks/useDoubleClick';
-import { FC, RefObject, useRef, MouseEventHandler } from 'react';
+import { FC, RefObject, useRef, MouseEventHandler, useState } from 'react';
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
+import { handleDownload } from 'util/helpers/files-functions';
+
+import DownloadButton from 'components/buttons/DownloadButton';
+
 import { usePageContext } from 'context/PageContext';
+
+import RemoveModal from '../../modal/RemoveModal';
 
 interface IGridCardProps {
   fileId?: any;
@@ -20,6 +26,7 @@ interface IGridCardProps {
   onClick?: MouseEventHandler<HTMLElement>;
   onDoubleClick?: MouseEventHandler<HTMLElement>;
   isCollapsed?: boolean;
+  setSelectedCardId?: (value: number | null) => unknown;
 }
 
 const GridCard: FC<IGridCardProps> = ({
@@ -34,35 +41,78 @@ const GridCard: FC<IGridCardProps> = ({
   fileExtension,
   onClick,
   onDoubleClick,
+  setSelectedCardId = () => undefined,
 }) => {
+  const [isRemoveModalVisible, setIsRemoveModalVisible] =
+    useState<boolean>(false);
+
+  const { isCollapsed, setIsSiderVisible } = usePageContext();
+
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
 
-  const { isCollapsed } = usePageContext();
+  const handleCancel = () => {
+    setIsRemoveModalVisible(false);
+  };
+
   console.log(isCollapsed);
 
   return (
-    <StyledGridCard
-      ref={ref}
-      selected={selected}
-      isCollapsed={isCollapsed}
-      hoverable
-      cover={
-        <img
-          alt="example"
-          src={`https://pro.alchemdigital.com/api/extension-image/${fileExtension}`}
-          // src="https://pro.alchemdigital.com/api/extension-image/exe"
-          style={{ width: '8rem', height: '8rem' }}
-        />
-      }
-      role="button"
-    >
-      <StyledMetaCardDescription>
-        <h4>{heading}</h4>
-        {/* <span>{value.uploadTime?.slice(0, 30)}...</span>
+    <div>
+      <StyledGridCard
+        id="remove-id"
+        ref={ref}
+        selected={selected}
+        isCollapsed={isCollapsed}
+        hoverable
+        cover={
+          <img
+            alt="example"
+            src={`https://pro.alchemdigital.com/api/extension-image/${fileExtension}`}
+            // src="https://pro.alchemdigital.com/api/extension-image/exe"
+            style={{ width: '8rem', height: '8rem' }}
+          />
+        }
+        role="button"
+      >
+        <StyledMetaCardDescription>
+          <h4>{fileName}</h4>
+          <div className="buttons">
+            <StyledFilesButton
+              onClickCapture={(e) => {
+                e.stopPropagation();
+                setIsRemoveModalVisible(true);
+                setIsSiderVisible(false);
+                setSelectedCardId(value.fileId);
+              }}
+            >
+              Remove file
+            </StyledFilesButton>
+            <a
+              type="button"
+              onClickCapture={(e) => {
+                e.stopPropagation();
+                handleDownload(fileId, fileName);
+                setIsSiderVisible(false);
+                setSelectedCardId(value.fileId);
+              }}
+            >
+              <DownloadButton />
+            </a>
+          </div>
+          {/* <span>{value.uploadTime?.slice(0, 30)}...</span>
         <span className="show-more">&rarr; Show more</span> */}
-      </StyledMetaCardDescription>
-    </StyledGridCard>
+        </StyledMetaCardDescription>
+      </StyledGridCard>
+      <RemoveModal
+        fileId={fileId}
+        isRemoveModalVisible={isRemoveModalVisible}
+        setIsRemoveModalVisible={setIsRemoveModalVisible}
+        // handleDelete={handleDelete}
+        handleCancel={handleCancel}
+        fileName={fileName}
+      />
+    </div>
   );
 };
 
@@ -113,6 +163,10 @@ const StyledMetaCardDescription = styled.div`
     font-weight: bold;
     margin-left: 2rem;
   }
+`;
+
+const StyledFilesButton = styled(Button)`
+  border-radius: 0.8rem;
 `;
 
 export default GridCard;

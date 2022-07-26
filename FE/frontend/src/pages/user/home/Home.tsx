@@ -24,7 +24,7 @@ import {
 } from './home-styled';
 
 const Home: FC = () => {
-  const [data, setData] = useState<any>(undefined);
+  const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>();
 
   useEffect(() => {
@@ -50,20 +50,24 @@ const Home: FC = () => {
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.content
-              .slice(-4)
-              .reverse()
-              .map((value: any) => (
-                <StyledHomeCard>
-                  <GridCard
-                    key={value.fileId}
-                    heading={value.fileName}
-                    description={value.uploadTime}
-                    selected={false}
-                    fileExtension={value.fileName.split('.')[1]}
-                  />
-                </StyledHomeCard>
-              ))}
+            {data?.content?.length === 0 ? (
+              <p>No files found</p>
+            ) : (
+              data?.content
+                ?.slice(-4)
+                .reverse()
+                .map((value: any) => (
+                  <StyledHomeCard>
+                    <GridCard
+                      key={value.fileId}
+                      heading={value.fileName}
+                      description={value.uploadTime}
+                      selected={false}
+                      fileExtension={value.fileName.split('.')[1]}
+                    />
+                  </StyledHomeCard>
+                ))
+            )}
           </StyledCardWrapper>
           <StyledShowMoreButton>
             <Link to="/user-files">

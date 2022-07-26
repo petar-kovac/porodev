@@ -45,7 +45,7 @@ export const postProfile: (payload: IProfileRequest) => Promise<any> = (
 ) => {
   return api
     .service()
-    .put('/api/User/UpdateUser', { ...payload, passwordUnhashed: 'Srdjan123!' })
+    .put('/api/User/UpdateUser', { ...payload })
     .then((res) => res.data);
 };
 

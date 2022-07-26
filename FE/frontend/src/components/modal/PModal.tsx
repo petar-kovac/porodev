@@ -74,7 +74,10 @@ const PModal: FC<IPModalProps> = ({
           {inputField === 'firstname' && (
             <Input
               onChange={(e) =>
-                setModalData({ ...modalData, name: e.target.value })
+                setModalData({
+                  ...modalData,
+                  name: e.target.value,
+                })
               }
               value={modalData?.content as string}
             />
