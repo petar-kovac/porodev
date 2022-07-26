@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PoroDev.Common.Contracts.UserManagement.ChangePassword;
 using PoroDev.Common.Contracts.UserManagement.Create;
 using PoroDev.Common.Contracts.UserManagement.DeleteAllUsers;
 using PoroDev.Common.Contracts.UserManagement.DeleteUser;
@@ -136,6 +137,13 @@ namespace PoroDev.GatewayAPI.Controllers
             return Ok(returnModel);
         }
 
-        
+        [HttpPut("ChangePassword")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordRequestGatewayToService model)
+        {
+
+            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            await _userService.ChangePassword(model);
+            return Ok();
+        }
     }
 }
