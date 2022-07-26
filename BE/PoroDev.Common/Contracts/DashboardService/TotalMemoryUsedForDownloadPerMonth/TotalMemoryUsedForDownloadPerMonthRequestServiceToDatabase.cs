@@ -10,7 +10,6 @@
         {
         }
 
-        }
         public TotalMemoryUsedForDownloadPerMonthRequestServiceToDatabase(Guid userId, int numberOfMonthsToShow)
         {
             UserId = userId;

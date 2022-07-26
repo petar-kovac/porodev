@@ -10,7 +10,6 @@
         {
         }
 
-        }
         public TotalMemoryUsedForUploadPerMonthRequestGatewayToService(Guid userId, int numberOfMonthsToShow)
         {
             UserId = userId;

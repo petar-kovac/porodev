@@ -9,8 +9,6 @@
         public TotalMemoryUsedForDownloadPerMonthRequestGatewayToService()
         {
         }
-
-        }
         public TotalMemoryUsedForDownloadPerMonthRequestGatewayToService(Guid userId, int numberOfMonthsToShow)
         {
             UserId = userId;
