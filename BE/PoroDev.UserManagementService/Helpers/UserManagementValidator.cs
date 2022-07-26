@@ -188,7 +188,6 @@ namespace PoroDev.UserManagementService.Helpers
             {
                 CheckFullName(updateModel.Name, updateModel.Lastname);
                 CheckEmailUpdate(updateModel.Email);
-                CheckPassword(updateModel.PasswordUnhashed);
                 CheckPosition(updateModel.Position);
             }
             catch (EmailFormatException ex)

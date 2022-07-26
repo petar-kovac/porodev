@@ -232,11 +232,7 @@ namespace PoroDev.UserManagementService.Services
                 return isException;
             }
 
-            GetHashAndSalt(model.PasswordUnhashed, out byte[] salt, out byte[] hash);
-
             var updateUserRequest = _mapper.Map<UserUpdateRequestServiceToDatabase>(model);
-            updateUserRequest.Password = hash;
-            updateUserRequest.Salt = salt;
 
             var response = await _updateRequestClient.GetResponse<CommunicationModel<DataUserModel>>(updateUserRequest, CancellationToken.None, RequestTimeout.After(m: 5));
 
@@ -291,7 +287,7 @@ namespace PoroDev.UserManagementService.Services
         {
             var returnModel = new SendEmailRequest()
             {
-                EmailReceiver = "",     //it's my private email right now since we do not have access to any boing.rs emails
+                EmailReceiver = "srdjanstanojcic031@gmail.com",     //it's my private email right now since we do not have access to any boing.rs emails
                 Subject = "Verification email",
                 plainTextContent = "Verification plan text",
                 OtherParametersForEmail = OtherProperties,
