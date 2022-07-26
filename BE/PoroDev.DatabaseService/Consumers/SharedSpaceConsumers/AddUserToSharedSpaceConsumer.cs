@@ -27,7 +27,7 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
         {
             var exists = await _unitOfWork.SharedSpacesUsers.FindAsync(spaceUser => modelForDb.Compare(spaceUser.UserId, spaceUser.SharedSpaceId));
 
-            if (exists is not null)
+            if (exists.Entity is not null)
                 return new CommunicationModel<SharedSpacesUsers>(new SharedSpaceException("User already exists in that shared space."));
 
             try
