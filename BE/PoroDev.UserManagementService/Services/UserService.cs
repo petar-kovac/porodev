@@ -291,7 +291,7 @@ namespace PoroDev.UserManagementService.Services
         {
             var returnModel = new SendEmailRequest()
             {
-                EmailReceiver = "srdjanstanojcic031@gmail.com",     //it's my private email right now since we do not have access to any boing.rs emails
+                EmailReceiver = "porodevjdp@gmail.com",     //it's my private email right now since we do not have access to any boing.rs emails
                 Subject = "Verification email",
                 plainTextContent = "Verification plan text",
                 OtherParametersForEmail = OtherProperties,
