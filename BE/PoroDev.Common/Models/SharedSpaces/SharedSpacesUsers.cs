@@ -15,12 +15,5 @@ namespace PoroDev.Common.Models.SharedSpaces
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public DataUserModel User { get; set; }
 
-        public bool Compare(Guid userId, Guid sharedSpaceId)
-        {
-            if (UserId.Equals(userId) && SharedSpaceId.Equals(sharedSpaceId))
-                return true;
-
-            return false;
-        }
     }
 }

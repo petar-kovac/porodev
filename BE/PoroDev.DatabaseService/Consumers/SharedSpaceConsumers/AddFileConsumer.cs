@@ -25,7 +25,8 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
 
         private async Task<CommunicationModel<SharedSpacesFiles>> AddFileToSharedSpace(SharedSpacesFiles createModel)
         {
-            var exists = await _unitOfWork.SharedSpacesWithFiles.FindAsync(spaceFile => createModel.Compare(spaceFile.FileId, spaceFile.SharedSpaceId));
+            var exists = await _unitOfWork.SharedSpacesWithFiles.FindAsync(spaceFile => spaceFile.FileId.Equals(createModel.FileId)
+                                                                                     && spaceFile.SharedSpaceId.Equals(createModel.SharedSpaceId));
 
             if (exists.Entity is not null)
                 return new CommunicationModel<SharedSpacesFiles>(new SharedSpaceException("File already exists in shared space"));
@@ -39,10 +40,9 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
 
                 return responseModel;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var dataException = (DatabaseException)ex;
-                dataException.HumanReadableErrorMessage = "Exception happened in DatabaseConsumer add file to shared space.";
+                var dataException = new DatabaseException("Exception happened in DatabaseConsumer add file to shared space.");
                 return new CommunicationModel<SharedSpacesFiles>(dataException);
             }
         }
