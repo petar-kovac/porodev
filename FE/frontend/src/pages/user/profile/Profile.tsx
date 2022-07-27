@@ -125,7 +125,7 @@ const Profile: FC = () => {
             </StyledProfileCardItem>
             <StyledProfileCardItem>
               <StyledPHeading>Position</StyledPHeading>
-              <StyledPContent>position</StyledPContent>
+              <StyledPContent>{userData?.position}</StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
                   setIsModalVisible(true);

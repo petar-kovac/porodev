@@ -80,3 +80,20 @@ export const loginSchema = yup.object().shape({
     .matches(/^\S*$/, 'Whitespace not allowed')
     .matches(passwordRegex, 'Wrong password'),
 });
+
+export const passwordSchema = yup.object().shape({
+  oldPassword: yup
+    .string()
+    .required('This field is required')
+    .matches(/^\S*$/, 'Whitespace not allowed')
+    .matches(passwordRegex, 'Wrong password'),
+  newPassword: yup
+    .string()
+    .required('This field is required')
+    .matches(/^\S*$/, 'Whitespace not allowed')
+    .matches(passwordRegex, 'Wrong password'),
+  confirmPassword: yup
+    .string()
+    .required('This field is required')
+    .oneOf([yup.ref('newPassword'), null], 'Passwords should match'),
+});

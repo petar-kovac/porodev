@@ -18,7 +18,7 @@ import { StyledLogo } from 'styles/icons/styled-icons';
 const Login: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const { login, register } = useAuthStateValue();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogin = (values: unknown) => {
     login(values as ILoginRequest);
