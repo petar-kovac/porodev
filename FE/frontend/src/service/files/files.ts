@@ -1,5 +1,9 @@
 import api from '../base';
-import { IFilesRequest, IProfileRequest } from './files.props';
+import {
+  IFilesRequest,
+  IProfileRequest,
+  IPasswordRequest,
+} from './files.props';
 
 export const findFiles: () => Promise<any> = () => {
   return api
@@ -53,5 +57,14 @@ export const searchFiles: (fileName: string) => Promise<any> = (fileName) => {
   return api
     .service()
     .get(`/api/StorageQuery/files?FileName=${fileName}`)
+    .then((res) => res.data);
+};
+
+export const postPassword: (payload: IPasswordRequest) => Promise<any> = (
+  payload,
+) => {
+  return api
+    .service()
+    .put('/api/User/ChangePassword', { ...payload })
     .then((res) => res.data);
 };

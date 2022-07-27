@@ -3,7 +3,7 @@ import { Button, Modal, Input } from 'antd';
 import { usePageContext } from 'context/PageContext';
 import useGroupData from 'pages/user/groups/hooks/useGroupData';
 import { Dispatch, FC, SetStateAction, ReactNode } from 'react';
-import { postProfile } from 'service/files/files';
+import { postPassword, postProfile } from 'service/files/files';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import {
   createSharedSpace,
@@ -20,6 +20,8 @@ interface IPModalProps {
   onCancel?: any;
   setModalData?: any;
   modalData?: any | null;
+  passData?: any;
+  setPassData?: any;
   inputField?: string;
 }
 
@@ -32,6 +34,8 @@ const PModal: FC<IPModalProps> = ({
   onOk,
   onCancel,
   inputField,
+  passData,
+  setPassData,
 }) => {
   const { isModalVisible, setIsModalVisible, setSharedSpaceId, sharedSpaceId } =
     usePageContext();
@@ -42,6 +46,9 @@ const PModal: FC<IPModalProps> = ({
       const space = await createSharedSpace(modalData);
       const res = await getAllSharedSpaces();
       setSharedSpaceId(!sharedSpaceId);
+      setIsModalVisible(false);
+    } else if (inputField === 'password') {
+      await postPassword(passData);
       setIsModalVisible(false);
     } else {
       await postProfile(modalData);
@@ -90,6 +97,26 @@ const PModal: FC<IPModalProps> = ({
               value={modalData?.content as string}
             />
           )}
+
+          {inputField === 'password' && (
+            <>
+              <p>Old password:</p>
+              <Input
+                onChange={(e) =>
+                  setPassData({ ...passData, oldPassword: e.target.value })
+                }
+                value={passData?.content as string}
+              />
+              <p>New password:</p>
+              <Input
+                onChange={(e) =>
+                  setPassData({ ...passData, newPassword: e.target.value })
+                }
+                value={passData?.content as string}
+              />
+            </>
+          )}
+
           {inputField === 'sharedspace' && (
             <Input
               onChange={(e) =>

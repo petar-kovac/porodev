@@ -33,6 +33,8 @@ const Profile: FC = () => {
   const [modalData, setModalData] = useState<IModalTitleProps | undefined>(
     undefined,
   );
+  const [passData, setPassData] = useState<any>(null);
+
   const [inputField, setInputField] = useState<string>('');
   const [userData, setUserData] = useState<any>(null);
 
@@ -152,8 +154,10 @@ const Profile: FC = () => {
               <StyledPContent>******</StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
+                  setPassData({ email: modalData?.email });
                   setIsModalVisible(true);
                   setInputField('password');
+
                   // setModalData({
                   //   title: 'Change Your Password',
                   // });
@@ -171,6 +175,8 @@ const Profile: FC = () => {
         inputField={inputField}
         modalData={modalData}
         setModalData={setModalData}
+        passData={passData}
+        setPassData={setPassData}
       />
     </>
   );

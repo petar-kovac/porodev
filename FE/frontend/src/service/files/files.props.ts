@@ -13,3 +13,9 @@ export interface IProfileRequest {
   position: string;
   role: number;
 }
+
+export interface IPasswordRequest {
+  email: string;
+  oldPassword: string;
+  newPassword: string;
+}
