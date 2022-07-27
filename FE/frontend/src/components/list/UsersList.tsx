@@ -24,7 +24,7 @@ const UsersList: React.FC<{
           aria-hidden="true"
           onClick={async () => {
             await addUserToSharedSpace({
-              userToAddId: item.id,
+              userId: item.id,
               sharedSpaceID: cardData.id,
             });
             setIsSiderModalVisible(false);
