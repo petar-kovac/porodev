@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddHostedService<MonthlyLimitRestartService>();
 
 var app = builder.Build();
 
