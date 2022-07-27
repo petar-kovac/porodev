@@ -25,7 +25,8 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
 
         private async Task<CommunicationModel<SharedSpacesUsers>> AddUserToSharedSpace(SharedSpacesUsers modelForDb)
         {
-            var exists = await _unitOfWork.SharedSpacesUsers.FindAsync(spaceUser => modelForDb.Compare(spaceUser.UserId, spaceUser.SharedSpaceId));
+            var exists = await _unitOfWork.SharedSpacesUsers.FindAsync(spaceUser => spaceUser.UserId.Equals(modelForDb.UserId)
+                                                                                 && spaceUser.SharedSpaceId.Equals(modelForDb.SharedSpaceId));
 
             if (exists.Entity is not null)
                 return new CommunicationModel<SharedSpacesUsers>(new SharedSpaceException("User already exists in that shared space."));
@@ -41,11 +42,10 @@ namespace PoroDev.DatabaseService.Consumers.SharedSpaceConsumers
 
             }
             catch (Exception ex)
-            { 
-                var dataException = (DatabaseException)ex;
-                dataException.HumanReadableErrorMessage = "Exception happened in DatabaseConsumer add user to shared space.";
+            {
+                DatabaseException dbException = new DatabaseException(ex.Message);
 
-                return new CommunicationModel<SharedSpacesUsers>(dataException);
+                return new CommunicationModel<SharedSpacesUsers>(dbException);
             }           
         }
     }

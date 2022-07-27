@@ -57,7 +57,7 @@ namespace PoroDev.SharedSpaceService.Services
             }
             var response = await _createSharedSpaceRequestClient.GetResponse<CommunicationModel<SharedSpace>>(createModel); 
             if (response.Message.ExceptionName == null)
-                await AddUserToSharedSpace(new AddUserToSharedSpaceRequestGatewayToService() { SharedSpaceID = response.Message.Entity.Id, UserToAddId = createModel.OwnerId });
+                await AddUserToSharedSpace(new AddUserToSharedSpaceRequestGatewayToService(response.Message.Entity.Id, createModel.OwnerId));
             return response.Message;
         }
 

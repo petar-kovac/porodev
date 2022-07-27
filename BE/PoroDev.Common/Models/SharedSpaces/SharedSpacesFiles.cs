@@ -15,12 +15,6 @@ namespace PoroDev.Common.Models.SharedSpaces
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public FileData File { get; set; }
 
-        public bool Compare(string fileId, Guid sharedSpaceId)
-        {
-            if (FileId.Equals(fileId) && SharedSpaceId.Equals(sharedSpaceId))
-                return true;
-
-            return false;
-        }
+        public DateTimeOffset DateAdded { get; set; }
     }
 }

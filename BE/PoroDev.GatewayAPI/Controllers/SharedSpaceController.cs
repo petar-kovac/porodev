@@ -41,7 +41,7 @@ namespace PoroDev.GatewayAPI.Controllers
         [HttpPost("AddUserToSharedSpace")]
         public async Task<ActionResult<SharedSpacesUsers>> AddUserToSharedSpace([FromBody] AddUserToSharedSpaceRequestGatewayToService model)
         {
-            Guid userId = await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
+            await _jwtValidatorService.ValidateRecievedToken(Request.Headers["authorization"]);
             var response = await _sharedSpaceService.AddUserToSharedSpace(model);
 
             if (response.ExceptionName != null)
