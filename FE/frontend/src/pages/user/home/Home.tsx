@@ -59,8 +59,9 @@ const Home: FC = () => {
                 .map((value: any) => (
                   <StyledHomeCard>
                     <GridCard
+                      home={false}
                       key={value.fileId}
-                      heading={value.fileName}
+                      fileName={value.fileName}
                       time={value.uploadDateTime}
                       selected={false}
                       fileExtension={value.fileName.split('.')[1]}

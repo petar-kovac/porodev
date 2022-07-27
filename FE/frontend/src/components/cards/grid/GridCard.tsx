@@ -31,6 +31,7 @@ interface IGridCardProps {
   onDoubleClick?: MouseEventHandler<HTMLElement>;
   isCollapsed?: boolean;
   isSharedSpace?: boolean;
+  home?: any;
   setSelectedCardId?: (value: number | null) => unknown;
 }
 
@@ -46,6 +47,7 @@ const GridCard: FC<IGridCardProps> = ({
   image,
   fileExtension,
   isSharedSpace,
+  home,
   onClick,
   onDoubleClick,
   setSelectedCardId = () => undefined,
@@ -67,6 +69,7 @@ const GridCard: FC<IGridCardProps> = ({
   return (
     <div>
       <StyledGridCard
+        home={home}
         id="remove-id"
         ref={ref}
         selected={selected}
@@ -84,36 +87,41 @@ const GridCard: FC<IGridCardProps> = ({
       >
         <StyledMetaCardDescription>
           <h4>{fileName}</h4>
-          <p>{formattedDate}</p>
-          <StyledGridButtons>
-            <Button
-              onClickCapture={(e) => {
-                e.stopPropagation();
-                setIsRemoveModalVisible(true);
-                setIsSiderVisible(false);
-                setSelectedCardId(value.fileId);
-              }}
-              type="default"
-              shape="circle"
-              icon={<DeleteOutlined />}
-            />
+          {home && (
+            <>
+              <p>{formattedDate}</p>
+              <StyledGridButtons>
+                <Button
+                  onClickCapture={(e) => {
+                    e.stopPropagation();
+                    setIsRemoveModalVisible(true);
+                    setIsSiderVisible(false);
+                    setSelectedCardId(value.fileId);
+                  }}
+                  type="default"
+                  shape="circle"
+                  icon={<DeleteOutlined />}
+                />
 
-            <a
-              type="button"
-              onClickCapture={(e) => {
-                e.stopPropagation();
-                handleDownload(fileId, fileName);
-                setIsSiderVisible(false);
-                setSelectedCardId(value.fileId);
-              }}
-            >
-              <Button
-                type="primary"
-                shape="circle"
-                icon={<DownloadOutlined />}
-              />
-            </a>
-          </StyledGridButtons>
+                <a
+                  type="button"
+                  onClickCapture={(e) => {
+                    e.stopPropagation();
+                    handleDownload(fileId, fileName);
+                    setIsSiderVisible(false);
+                    setSelectedCardId(value.fileId);
+                  }}
+                >
+                  <Button
+                    type="primary"
+                    shape="circle"
+                    icon={<DownloadOutlined />}
+                  />
+                </a>
+              </StyledGridButtons>
+            </>
+          )}
+
           {/* <span>{value.uploadTime?.slice(0, 30)}...</span>
         <span className="show-more">&rarr; Show more</span> */}
         </StyledMetaCardDescription>
@@ -136,9 +144,11 @@ const StyledGridCard = styled(Card).attrs({
   selected: boolean;
   ref: RefObject<HTMLDivElement | null>;
   isCollapsed: boolean;
+  home: boolean;
 }>`
   box-shadow: 0 1px #ffffff inset, 1px 3px 8px rgba(34, 25, 25, 0.2);
-  height: 21.5rem;
+  /* height: 21.5rem; */
+  height: ${({ home }) => (!home ? '16.5rem' : '21.5rem')};
   border-radius: 1.5rem;
   overflow: hidden;
   max-width: auto;
@@ -156,6 +166,7 @@ const StyledGridCard = styled(Card).attrs({
 
   .ant-card-cover {
     height: 10rem;
+    /* height: ${({ home }) => (!home ? '15rem' : '10rem')}; */
     max-width: auto;
     overflow: hidden;
     border-top-left-radius: 1.5rem;

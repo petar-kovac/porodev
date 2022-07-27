@@ -6,6 +6,7 @@ import { usePageContext } from 'context/PageContext';
 import GridCard from './GridCard';
 
 interface IGridCardProps {
+  home?: boolean;
   selected?: boolean;
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
@@ -27,6 +28,7 @@ const GridCards: FC<IGridCardProps> = ({
   searchTerm,
   isSharedSpace,
   searchRes,
+  home,
 }) => {
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
 
@@ -52,6 +54,7 @@ const GridCards: FC<IGridCardProps> = ({
       {searchRes
         ?.map((value: any) => (
           <GridCard
+            home
             value={value}
             key={value.id}
             fileId={value.id}

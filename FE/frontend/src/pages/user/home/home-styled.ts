@@ -53,5 +53,5 @@ export const StyledShowMoreButton = styled.div`
 `;
 
 export const StyledHomeCard = styled.div`
-  width: 23rem;
+  width: 21rem;
 `;
