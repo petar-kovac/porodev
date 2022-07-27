@@ -4,5 +4,11 @@
     {
         public Guid SharedSpaceId { get; set; }
         public Guid UserId { get; set; }
+
+        public AddUserToSharedSpaceRequestServiceToDatabase()
+        {
+        }
+
+
     }
 }
