@@ -36,8 +36,6 @@ const Home: FC = () => {
     fetchFiles();
   }, []);
 
-  console.log(data);
-
   return (
     <StyledPage>
       <StyledUploadWrapper>

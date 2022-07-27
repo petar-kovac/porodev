@@ -76,11 +76,9 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         .catch((error: any) => {
           if (error.response.status === 400) {
             navigate('/verified');
-            console.log('verified');
           }
           if (error.response.status === 401) {
             navigate('/verification');
-            console.log('verification');
           }
           setIsLoading(false);
         })

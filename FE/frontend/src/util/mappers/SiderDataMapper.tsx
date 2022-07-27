@@ -38,7 +38,6 @@ const SiderData: FC<{ data: IFilesCard }> = ({ data }) => {
   return (
     <>
       {Object.entries(data).map(([key, value]) => {
-        console.log(ApiTranslation[key as any]);
         if (ApiTranslation[key as any] === 'Upload time') {
           return (
             <StyledText>

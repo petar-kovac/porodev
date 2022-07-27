@@ -53,33 +53,25 @@ const Profile: FC = () => {
   useEffect(() => {
     if (accessToken) {
       const { Id }: any = JwtDecode(accessToken);
-      console.log(Id);
       findUserById(Id)
         .then((res) => {
           const { data } = res;
           setUserData(data);
-          console.log(data);
           const filteredResponse: any = Object.keys(data)
             .filter((key) => {
-              console.log(key);
               return allowed.includes(key);
             })
             .reduce((obj, key) => {
-              console.log(obj);
               return { ...obj, [key]: data[key] };
             }, {});
-          console.log(filteredResponse);
           localStorage.setItem(StorageKey.NAME, filteredResponse.name);
           localStorage.setItem(StorageKey.LASTNAME, filteredResponse.lastname);
 
           setModalData(filteredResponse);
-          console.log(res.data);
         })
         .catch((error) => console.log(error));
     }
   }, [isModalVisible]);
-
-  console.log(modalData);
 
   return (
     <>

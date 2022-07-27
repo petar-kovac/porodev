@@ -52,16 +52,14 @@ const FileModal: FC<IPModalProps> = ({
   }, []);
 
   return (
-    <>
-      <StyledFilesModal
-        title="Select file to add"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <FilesList data={data} />
-      </StyledFilesModal>
-    </>
+    <StyledFilesModal
+      title="Select file to add"
+      visible={isModalVisible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+    >
+      <FilesList data={data} />
+    </StyledFilesModal>
   );
 };
 

@@ -31,7 +31,6 @@ const GroupCard: FC<IGroupCardProps> = ({
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
 
   const sider = localStorage.getItem('collapsedMenu');
-  console.log(sider, 'sider');
 
   return (
     <StyledGroupCard

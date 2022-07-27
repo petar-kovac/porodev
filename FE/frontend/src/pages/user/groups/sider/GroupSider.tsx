@@ -11,6 +11,7 @@ import styled from 'styled-components';
 
 import PButton from 'components/buttons/PButton';
 import { useGroupsContext } from 'context/GroupsContext';
+import { useNavigate } from 'react-router-dom';
 import {
   getAllUsersFromSharedSpace,
   readAllUsers,
@@ -47,6 +48,7 @@ const GroupSider: FC<IPFileSiderProps> = ({
   const [usersFromSpace, setUsersFromSpace] = useState<any>(undefined);
   const [isSiderModalVisible, setIsSiderModalVisible] =
     useState<boolean>(false);
+  const navigate = useNavigate();
   const handleClose = () => {
     setIsSiderVisible(false);
     // setCardData(null);
@@ -60,7 +62,7 @@ const GroupSider: FC<IPFileSiderProps> = ({
   } = useGroupsContext();
 
   const onClick = () => {
-    console.log('Group sider');
+    navigate(`${selectedCardId}`);
   };
   const onAddUser = () => {
     const modalDataToRender: ReactNode = RenderUserList(

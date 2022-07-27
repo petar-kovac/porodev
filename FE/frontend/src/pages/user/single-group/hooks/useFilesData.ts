@@ -8,7 +8,7 @@ const useFilesData = (id: string) => {
   const [data, setData] = useState<[] | undefined>(undefined);
   const [error, setError] = useState<string>('');
 
-  const { setIsSiderVisible } = usePageContext();
+  const { setIsSiderVisible, userTrigger } = usePageContext();
 
   useEffect(() => {
     setIsSiderVisible(false);
@@ -24,7 +24,7 @@ const useFilesData = (id: string) => {
       }
     };
     fetchFiles();
-  }, []);
+  }, [userTrigger]);
 
   return {
     isLoading,
