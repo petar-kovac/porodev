@@ -14,5 +14,7 @@ namespace PoroDev.Common.Models.SharedSpaces
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
         public FileData File { get; set; }
+
+        public DateTimeOffset DateAdded { get; set; }
     }
 }
