@@ -91,8 +91,8 @@ const GridCard: FC<IGridCardProps> = ({
       >
         <StyledMetaCardDescription>
           <h4>
-            {fileName?.length > 20
-              ? `${fileName?.slice(0, 20)}...`
+            {fileName?.length > 18
+              ? `${fileName?.slice(0, 18)}...`
               : `${fileName}`}
           </h4>
           {home && (
