@@ -1,4 +1,5 @@
 import { downloadFile, deleteFile } from 'service/files/files';
+import { deleteFileFromSharedSpace } from 'service/shared-spaces/shared-spaces';
 
 export const handleDownload = async (fileId: any, fileName: any) => {
   const res = await downloadFile(fileId);
@@ -13,8 +14,16 @@ export const handleDownload = async (fileId: any, fileName: any) => {
   link.parentNode?.removeChild(link);
 };
 
-export const handleDelete = async (fileId: any) => {
-  await deleteFile(fileId);
+export const handleDelete = async (
+  fileId: any,
+  isSharedSpaceFile: any,
+  sharedSpaceId: any,
+) => {
+  if (isSharedSpaceFile) {
+    await deleteFileFromSharedSpace({ sharedSpaceId, fileId });
+  } else {
+    await deleteFile(fileId);
+  }
   const listCard = document.getElementById('remove-id');
   listCard?.parentNode?.removeChild(listCard);
 };

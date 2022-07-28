@@ -13,8 +13,10 @@ interface IPModalProps {
   onOk?: any;
   onCancel?: any;
   isRemoveModalVisible?: boolean;
+  sharedSpaceId?: string;
   fileName?: string;
   fileId?: string;
+  isSharedSpaceFile?: boolean;
   setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
   handleCancel?: any;
@@ -28,6 +30,8 @@ const RemoveModal: FC<IPModalProps> = ({
   fileName,
   fileId,
   isRemoveModalVisible,
+  isSharedSpaceFile,
+  sharedSpaceId,
   setIsRemoveModalVisible = () => undefined,
 }) => {
   return (
@@ -38,7 +42,7 @@ const RemoveModal: FC<IPModalProps> = ({
         title={title}
         visible={isRemoveModalVisible}
         onOk={() => {
-          handleDelete(fileId);
+          handleDelete(fileId, isSharedSpaceFile, sharedSpaceId);
           setIsRemoveModalVisible(false);
         }}
         onCancel={handleCancel}

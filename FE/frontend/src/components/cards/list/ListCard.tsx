@@ -17,12 +17,12 @@ import useDoubleClick from 'hooks/useDoubleClick';
 import { handleDownload } from 'util/helpers/files-functions';
 
 import DownloadButton from 'components/buttons/DownloadButton';
+import { useParams } from 'react-router-dom';
 
 import { downloadFile, findFiles, deleteFile } from 'service/files/files';
 import { usePageContext } from 'context/PageContext';
 
 import { formatDateListCard } from 'util/helpers/date-formaters';
-
 import RemoveModal from '../../modal/RemoveModal';
 
 interface IListCardProps {
@@ -57,6 +57,9 @@ const ListCard: FC<IListCardProps> = ({
   useDoubleClick({ ref, onClick, onDoubleClick, stopPropagation: true });
 
   const { setIsSiderVisible } = usePageContext();
+  const [isSharedSpaceFile, setIsSharedSpaceFile] = useState<boolean>(false);
+
+  const { id } = useParams();
 
   const [isRemoveModalVisible, setIsRemoveModalVisible] =
     useState<boolean>(false);
@@ -111,41 +114,45 @@ const ListCard: FC<IListCardProps> = ({
                 </span>
               )}
             </StyledHeading>
-            {!isSharedSpace && (
-              <>
-                <StyledDescriptionUploadDetails>
-                  <span>{formattedDate}</span>
-                </StyledDescriptionUploadDetails>
 
-                <StyledDescriptionButtons>
-                  <StyledFilesButton
-                    onClickCapture={(e) => {
-                      e.stopPropagation();
-                      setIsRemoveModalVisible(true);
-                      setIsSiderVisible(false);
-                      setSelectedCardId(value.fileId);
-                    }}
-                  >
-                    Remove file
-                  </StyledFilesButton>
-                  <a
-                    type="button"
-                    onClickCapture={(e) => {
-                      e.stopPropagation();
-                      handleDownload(fileId, fileName);
-                      setIsSiderVisible(false);
-                      setSelectedCardId(value.fileId);
-                    }}
-                  >
-                    <DownloadButton />
-                  </a>
-                </StyledDescriptionButtons>
-              </>
-            )}
+            <>
+              <StyledDescriptionUploadDetails>
+                <span>{formattedDate}</span>
+              </StyledDescriptionUploadDetails>
+
+              <StyledDescriptionButtons>
+                <StyledFilesButton
+                  onClickCapture={(e) => {
+                    e.stopPropagation();
+                    if (id) {
+                      setIsSharedSpaceFile(true);
+                    }
+                    setIsRemoveModalVisible(true);
+                    setIsSiderVisible(false);
+                    setSelectedCardId(value.fileId);
+                  }}
+                >
+                  Remove file
+                </StyledFilesButton>
+                <a
+                  type="button"
+                  onClickCapture={(e) => {
+                    e.stopPropagation();
+                    handleDownload(fileId, fileName);
+                    setIsSiderVisible(false);
+                    setSelectedCardId(value.fileId);
+                  }}
+                >
+                  <DownloadButton />
+                </a>
+              </StyledDescriptionButtons>
+            </>
           </StyledDescription>
         </StyledListCard>
       </StyledListCardContainer>
       <RemoveModal
+        sharedSpaceId={id}
+        isSharedSpaceFile={isSharedSpaceFile}
         fileId={fileId}
         isRemoveModalVisible={isRemoveModalVisible}
         setIsRemoveModalVisible={setIsRemoveModalVisible}

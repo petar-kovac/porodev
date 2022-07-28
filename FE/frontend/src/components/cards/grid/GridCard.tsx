@@ -13,6 +13,7 @@ import DownloadButton from 'components/buttons/DownloadButton';
 import { usePageContext } from 'context/PageContext';
 
 import { formatDateListCard } from 'util/helpers/date-formaters';
+import { useParams } from 'react-router-dom';
 import RemoveModal from '../../modal/RemoveModal';
 
 interface IGridCardProps {
@@ -54,11 +55,14 @@ const GridCard: FC<IGridCardProps> = ({
 }) => {
   const [isRemoveModalVisible, setIsRemoveModalVisible] =
     useState<boolean>(false);
+  const [isSharedSpaceFile, setIsSharedSpaceFile] = useState<boolean>(false);
 
   const { isCollapsed, setIsSiderVisible } = usePageContext();
 
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
+
+  const { id } = useParams();
 
   const handleCancel = () => {
     setIsRemoveModalVisible(false);
@@ -98,6 +102,9 @@ const GridCard: FC<IGridCardProps> = ({
                 <Button
                   onClickCapture={(e) => {
                     e.stopPropagation();
+                    if (id) {
+                      setIsSharedSpaceFile(true);
+                    }
                     setIsRemoveModalVisible(true);
                     setIsSiderVisible(false);
                     setSelectedCardId(value.fileId);
@@ -131,6 +138,8 @@ const GridCard: FC<IGridCardProps> = ({
         </StyledMetaCardDescription>
       </StyledGridCard>
       <RemoveModal
+        sharedSpaceId={id}
+        isSharedSpaceFile={isSharedSpaceFile}
         fileId={fileId}
         isRemoveModalVisible={isRemoveModalVisible}
         setIsRemoveModalVisible={setIsRemoveModalVisible}

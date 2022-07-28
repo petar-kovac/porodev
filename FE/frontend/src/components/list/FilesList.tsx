@@ -1,6 +1,6 @@
 import { FileZipOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { AddCircle } from '@styled-icons/ionicons-outline';
-import { List } from 'antd';
+import { List, message } from 'antd';
 import { usePageContext } from 'context/PageContext';
 import { useSiderContext } from 'context/SiderContext';
 import React, { Dispatch, SetStateAction } from 'react';
@@ -27,12 +27,16 @@ const FilesList: React.FC<{
         <StyledListItem
           aria-hidden="true"
           onClick={async () => {
-            await addFile({
-              fileId: item.fileId,
-              sharedSpaceID: id,
-            });
-            setIsModalVisible(false);
-            setUserTrigger(!userTrigger);
+            try {
+              await addFile({
+                fileId: item.fileId,
+                sharedSpaceID: id,
+              });
+              setIsModalVisible(false);
+              setUserTrigger(!userTrigger);
+            } catch (err) {
+              message.error('File already exists');
+            }
           }}
           key={item.fileName}
         >
