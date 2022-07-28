@@ -10,6 +10,7 @@ import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
 import { IFilesCard } from 'types/card-data';
 import { Spin } from 'antd';
+import SiderContextProvider from 'context/SiderContext';
 import {
   PFilterWrapper,
   StyledContent,
@@ -152,13 +153,14 @@ const Files: FC = () => {
             )}
           </StyledFilesContainer>
         </StyledStaticContent>
-
-        <FileSider
-          cardData={cardData}
-          setCardData={setCardData}
-          setSelectedCardId={setSelectedCardId}
-          type="folder"
-        />
+        <SiderContextProvider>
+          <FileSider
+            cardData={cardData}
+            setCardData={setCardData}
+            setSelectedCardId={setSelectedCardId}
+            type="folder"
+          />
+        </SiderContextProvider>
       </StyledContent>
 
       <FileModal cardData={cardData} setCardData={setCardData} />

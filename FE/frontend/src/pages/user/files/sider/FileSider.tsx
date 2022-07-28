@@ -1,14 +1,17 @@
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import {
   Dispatch,
   FC,
   MouseEventHandler,
   ReactNode,
   SetStateAction,
+  useEffect,
+  useState,
 } from 'react';
 import styled from 'styled-components';
 
 import PButton from 'components/buttons/PButton';
+import { getAllSharedSpaces } from 'service/shared-spaces/shared-spaces';
 import { usePageContext } from 'context/PageContext';
 import { useSiderContext } from 'context/SiderContext';
 import { startRuntimeService } from 'service/runtime/runtime';
@@ -17,6 +20,11 @@ import { IFilesCard } from 'types/card-data';
 import { inputParamsChecker } from 'util/helpers/input-params-checker';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
 import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { CreateImageAsparameter } from 'util/util-components/CreateImageAsParameter';
+import { AddFileToSharedSpace } from 'util/util-components/AddFileToSharedSpace';
+import FileModal from '../modal/FileModal';
+import ChoseSharedSpaceModal from '../modal/ChoseSharedSpaceModal';
 
 const { Sider } = Layout;
 
@@ -38,8 +46,17 @@ const FileSider: FC<IPFileSiderProps> = ({
   selectedCardId,
   type,
 }) => {
-  const { isLoading, isSiderVisible, setIsSiderVisible } = usePageContext();
-
+  const {
+    isLoading,
+    isSiderVisible,
+    setIsSiderVisible,
+    setIsModalVisible,
+    isModalVisible,
+  } = usePageContext();
+  const [modalContent, setModalContent] = useState<ReactNode>(undefined);
+  const [spaceData, setSpaceData] = useState(undefined);
+  const [isSiderModalVisible, setIsSiderModalVisible] =
+    useState<boolean>(false);
   const handleClose = () => {
     setIsSiderVisible(false);
     // setCardData(null);
@@ -49,6 +66,30 @@ const FileSider: FC<IPFileSiderProps> = ({
   const onClick = () => {
     console.log('file sider');
   };
+
+  const onAddFileToSharedSpace = () => {
+    if (spaceData) {
+      const modalDataToRender: ReactNode = AddFileToSharedSpace(
+        spaceData,
+        cardData,
+        setIsSiderModalVisible,
+      );
+      setModalContent(modalDataToRender);
+      setIsSiderModalVisible(true);
+    }
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const spaces = await getAllSharedSpaces();
+        setSpaceData(spaces);
+      } catch (err: any) {
+        message.error(err);
+      }
+    };
+    fetch();
+  }, []);
 
   return (
     <StyledFileSider
@@ -66,11 +107,21 @@ const FileSider: FC<IPFileSiderProps> = ({
           <StyledContent>
             {cardData && <SiderDataMapper data={cardData} />}
           </StyledContent>
+          <StyledRow>
+            <StyledTitle>Add to Shared space</StyledTitle>
+            <PlusCircleOutlined onClick={onAddFileToSharedSpace} />
+          </StyledRow>
         </StyledFirstPart>
         <PButton
           text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
           onClick={onClick}
           isLoading={isLoading}
+        />
+        <ChoseSharedSpaceModal
+          title="Chose image"
+          isSiderModalVisible={isSiderModalVisible}
+          setIsSiderModalVisible={setIsSiderModalVisible}
+          content={modalContent}
         />
       </StyledColumn>
     </StyledFileSider>
