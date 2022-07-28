@@ -111,7 +111,7 @@ const PModal: FC<IPModalProps> = ({
           loading: isLoading,
           form: 'passwordForm',
         }}
-        onOk={handleSubmit(handleOk)}
+        onOk={inputField === 'password' ? handleSubmit(handleOk) : handleOk}
         onCancel={handleCancel}
       >
         <>

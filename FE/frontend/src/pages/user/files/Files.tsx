@@ -9,6 +9,7 @@ import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
 import { IFilesCard } from 'types/card-data';
+import { Spin } from 'antd';
 import {
   PFilterWrapper,
   StyledContent,
@@ -30,18 +31,26 @@ const Files: FC = () => {
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { setIsSiderVisible, setIsModalVisible, isCollapsed } =
-    usePageContext();
-  const { data, isLoading, error } = useFilesData();
+  const {
+    setIsSiderVisible,
+    setIsModalVisible,
+    isCollapsed,
+    isLoading,
+    setIsLoading,
+  } = usePageContext();
+  const { data, error } = useFilesData();
 
   // search filter
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchRes, setSearchRes] = useState<any>([]);
+  const [searchRes, setSearchRes] = useState<[]>();
 
   useEffect(() => {
+    setIsLoading(true);
     searchFiles(searchTerm)
       .then((res) => {
+        console.log(res);
         setSearchRes(res);
+        setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, [searchTerm]);
@@ -104,37 +113,43 @@ const Files: FC = () => {
                 />
               </div>
             </div>
-            {searchRes.length === 0 ? (
-              <p>No files found</p>
+            {isLoading ? (
+              <Spin />
             ) : (
               <>
-                <StyledFilesWrapper>
-                  {!isListView ? (
-                    <StyledListCardsWrapper>
-                      <ListCards
-                        searchTerm={searchTerm}
-                        searchRes={searchRes}
-                        data={data}
-                        cardData={cardData}
-                        setCardData={setCardData}
-                        selectedCardId={selectedCardId}
-                        setSelectedCardId={setSelectedCardId}
-                      />
-                    </StyledListCardsWrapper>
-                  ) : (
-                    <StyledGridCardsWrapper>
-                      <GridCards
-                        searchTerm={searchTerm}
-                        searchRes={searchRes}
-                        data={data}
-                        cardData={cardData}
-                        setCardData={setCardData}
-                        selectedCardId={selectedCardId}
-                        setSelectedCardId={setSelectedCardId}
-                      />
-                    </StyledGridCardsWrapper>
-                  )}
-                </StyledFilesWrapper>
+                {searchRes?.length === 0 ? (
+                  <p>No files found</p>
+                ) : (
+                  <>
+                    <StyledFilesWrapper>
+                      {!isListView ? (
+                        <StyledListCardsWrapper>
+                          <ListCards
+                            searchTerm={searchTerm}
+                            searchRes={searchRes}
+                            data={data}
+                            cardData={cardData}
+                            setCardData={setCardData}
+                            selectedCardId={selectedCardId}
+                            setSelectedCardId={setSelectedCardId}
+                          />
+                        </StyledListCardsWrapper>
+                      ) : (
+                        <StyledGridCardsWrapper>
+                          <GridCards
+                            searchTerm={searchTerm}
+                            searchRes={searchRes}
+                            data={data}
+                            cardData={cardData}
+                            setCardData={setCardData}
+                            selectedCardId={selectedCardId}
+                            setSelectedCardId={setSelectedCardId}
+                          />
+                        </StyledGridCardsWrapper>
+                      )}
+                    </StyledFilesWrapper>
+                  </>
+                )}
               </>
             )}
           </StyledFilesContainer>

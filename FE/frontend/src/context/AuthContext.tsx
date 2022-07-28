@@ -150,7 +150,13 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setAuthenticated(true);
         setIsLoading(false);
       } catch (error: any) {
-        message.error(error.message);
+        if (error.request.status === 400) {
+          message.error('Username and password don`t match ');
+        } else {
+          console.log(error.message);
+          console.log(error);
+        }
+        setIsLoading(false);
       }
     },
     [],

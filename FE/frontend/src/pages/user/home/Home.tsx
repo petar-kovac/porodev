@@ -2,6 +2,8 @@ import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { Spin } from 'antd';
+
 import GridCard from 'components/cards/grid/GridCard';
 import Spinner from 'components/spinner/Spinner';
 import PUpload from 'components/upload/PUpload';
@@ -11,6 +13,9 @@ import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { IFilesCard } from 'types/card-data';
 import GridCards from 'components/cards/grid/GridCards';
+
+import { usePageContext } from 'context/PageContext';
+
 import {
   StyledCardHeading,
   StyledCardListWrapper,
@@ -25,12 +30,21 @@ import {
 
 const Home: FC = () => {
   const [data, setData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState<boolean>();
+  const [isPageLoading, setIsPageLoading] = useState<boolean>();
+
+  const { isLoading, setIsLoading } = usePageContext();
 
   useEffect(() => {
     const fetchFiles = async () => {
-      const res = await findFiles();
-      setData(res);
+      try {
+        setIsLoading(true);
+        const res = await findFiles();
+        setData(res);
+      } catch (error) {
+        console.log(error);
+      }
+
+      setIsLoading(false);
     };
 
     fetchFiles();
@@ -42,42 +56,56 @@ const Home: FC = () => {
         <StyledHeading>User file upload:</StyledHeading>
         <PUpload setFiles={setData} />
       </StyledUploadWrapper>
-      {!isLoading ? (
+      {!isPageLoading ? (
         <StyledCardListWrapper>
           <StyledCardHeading>
             Here is the preview of the latest uploaded files
           </StyledCardHeading>
           <StyledCardWrapper>
-            {data?.content?.length === 0 ? (
-              <p>No files found</p>
+            {isLoading ? (
+              <Spin />
             ) : (
-              data?.content
-                ?.slice(-4)
-                .reverse()
-                .map((value: any) => (
-                  <StyledHomeCard>
-                    <GridCard
-                      home={false}
-                      key={value.fileId}
-                      fileName={value.fileName}
-                      time={value.uploadDateTime}
-                      selected={false}
-                      fileExtension={value.fileName.split('.')[1]}
-                    />
-                  </StyledHomeCard>
-                ))
+              <>
+                {data?.content?.length === 0 ? (
+                  <p>No files found</p>
+                ) : (
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '3rem',
+                    }}
+                  >
+                    {data?.content
+                      ?.slice(-4)
+                      .reverse()
+                      .map((value: any) => (
+                        <StyledHomeCard>
+                          <GridCard
+                            home={false}
+                            key={value.fileId}
+                            fileName={value.fileName}
+                            time={value.uploadDateTime}
+                            selected={false}
+                            fileExtension={value.fileName.split('.')[1]}
+                          />
+                        </StyledHomeCard>
+                      ))}
+                    <StyledShowMoreButton>
+                      <Link to="/user-files">
+                        <PButton
+                          text="Show more files"
+                          color="#fff"
+                          radius="12px"
+                          background={theme.colors.primary}
+                        />
+                      </Link>
+                    </StyledShowMoreButton>
+                  </div>
+                )}
+              </>
             )}
           </StyledCardWrapper>
-          <StyledShowMoreButton>
-            <Link to="/user-files">
-              <PButton
-                text="Show more files"
-                color="#fff"
-                radius="12px"
-                background={theme.colors.primary}
-              />
-            </Link>
-          </StyledShowMoreButton>
         </StyledCardListWrapper>
       ) : (
         <StyledSpinnerWrappper>
