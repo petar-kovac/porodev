@@ -76,21 +76,23 @@ const Home: FC = () => {
                       gap: '3rem',
                     }}
                   >
-                    {data?.content
-                      ?.slice(-4)
-                      .reverse()
-                      .map((value: any) => (
-                        <StyledHomeCard>
-                          <GridCard
-                            home={false}
-                            key={value.fileId}
-                            fileName={value.fileName}
-                            time={value.uploadDateTime}
-                            selected={false}
-                            fileExtension={value.fileName.split('.')[1]}
-                          />
-                        </StyledHomeCard>
-                      ))}
+                    <div style={{ display: 'flex', gap: '3rem' }}>
+                      {data?.content
+                        ?.slice(-4)
+                        .reverse()
+                        .map((value: any) => (
+                          <StyledHomeCard>
+                            <GridCard
+                              home={false}
+                              key={value.fileId}
+                              fileName={value.fileName}
+                              time={value.uploadDateTime}
+                              selected={false}
+                              fileExtension={value.fileName.split('.')[1]}
+                            />
+                          </StyledHomeCard>
+                        ))}
+                    </div>
                     <StyledShowMoreButton>
                       <Link to="/user-files">
                         <PButton

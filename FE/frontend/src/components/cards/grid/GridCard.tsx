@@ -17,7 +17,7 @@ import RemoveModal from '../../modal/RemoveModal';
 
 interface IGridCardProps {
   fileId?: any;
-  fileName?: string;
+  fileName?: any;
   time?: any;
   id?: string;
   data?: any;
@@ -86,7 +86,11 @@ const GridCard: FC<IGridCardProps> = ({
         role="button"
       >
         <StyledMetaCardDescription>
-          <h4>{fileName}</h4>
+          <h4>
+            {fileName?.length > 20
+              ? `${fileName?.slice(0, 20)}...`
+              : `${fileName}`}
+          </h4>
           {home && (
             <>
               <p>{formattedDate}</p>

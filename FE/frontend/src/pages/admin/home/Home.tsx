@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import DashboardCard from 'components/cards/dashboard/DashboardCard';
 import StackedArea from 'components/dashboard/StackedArea';
 import ColumnChart from 'components/dashboard/ColumnChart';
+import { totalUploadedFiles, totalUsers } from 'service/dashboard/dashboard';
 import useAdminsData from '../admins/hooks/useAdminsData';
 import {
   StyledChartsContainer,
@@ -52,39 +53,15 @@ const columnChartData = [
 ];
 
 const Home: FC = () => {
-  const [dashboardData, setDashboardData] = useState<[]>([]);
+  const [dashboardData, setDashboardData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>();
 
   const { findData, data } = useAdminsData();
 
-  useEffect(() => {
-    const fetchCards = async () => {
-      setIsLoading(true);
-      try {
-        const res = await axios.get(
-          `${process.env.REACT_APP_MOCK_URL_2}/dashboard`,
-        );
-        setDashboardData(res.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCards();
-    findData();
-  }, []);
-
   return (
     <StyledHome>
       <StyledDashboardCardContainer>
-        {dashboardData?.slice(0, 4).map((value: any) => (
-          <DashboardCard
-            title={value?.title}
-            numberOfAdmins={value?.numberOfAdmins}
-            numberOfFiles={value?.numberOfFiles}
-          />
-        ))}
+        <h1>ss</h1>
       </StyledDashboardCardContainer>
       <StyledChartsContainer>
         <StackedArea data={stackedAreaData} />
