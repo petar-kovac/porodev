@@ -14,11 +14,7 @@ import useUsersData from './hooks/useUsersData';
 
 const Users: FC = () => {
   const { columns } = useUsersColumns();
-  const { isLoading, data, error, findData } = useUsersData();
-
-  useEffect(() => {
-    findData();
-  }, []);
+  const { isLoading, data, error } = useUsersData();
 
   return (
     <StyledPage>

@@ -1,31 +1,31 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
+import { readAllUsers } from 'service/shared-spaces/shared-spaces';
 
 const useUsersData = () => {
   const [isLoading, setisLoading] = useState<boolean>(false);
   const [data, setData] = useState<[] | undefined>(undefined);
   const [error, setError] = useState<string>('');
 
-  const findData = useCallback(() => {
-    (async function () {
+  useEffect(() => {
+    const fetchFiles = async () => {
+      setisLoading(true);
       try {
-        setisLoading(true);
-        await axios
-          .get(`${process.env.REACT_APP_MOCK_URL}/admins`)
-          .then((res) => setData(res.data));
+        const res = await readAllUsers();
+        setData(res);
       } catch (err: any) {
         setError(err.message);
       } finally {
         setisLoading(false);
       }
-    })();
+    };
+    fetchFiles();
   }, []);
 
   return {
     isLoading,
     data,
     error,
-    findData,
     setData,
     setError,
   };

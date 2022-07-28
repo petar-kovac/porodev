@@ -1,5 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
+import { searchFiles } from 'service/files/files';
+
 import { usePageContext } from 'context/PageContext';
 import ListCards from 'components/cards/list/ListCards';
 import GridCards from 'components/cards/grid/GridCards';
@@ -7,6 +9,7 @@ import PFilter from 'components/filter/PFilter';
 import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
 import { IFilesCard } from 'types/card-data';
+import { Spin } from 'antd';
 import {
   PFilterWrapper,
   StyledContent,
@@ -28,9 +31,30 @@ const Files: FC = () => {
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { setIsSiderVisible, setIsModalVisible, isCollapsed } =
-    usePageContext();
-  const { data, isLoading, error } = useFilesData();
+  const {
+    setIsSiderVisible,
+    setIsModalVisible,
+    isCollapsed,
+    isLoading,
+    setIsLoading,
+  } = usePageContext();
+  const { data, error } = useFilesData();
+
+  console.log(data, 'dataaaaa');
+  // search filter
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchRes, setSearchRes] = useState<[]>();
+
+  useEffect(() => {
+    setIsLoading(true);
+    searchFiles(searchTerm)
+      .then((res) => {
+        console.log(res);
+        setSearchRes(res);
+        setIsLoading(false);
+      })
+      .catch((err) => console.log(err));
+  }, [searchTerm]);
 
   return (
     <StyledPageWrapper>
@@ -44,6 +68,8 @@ const Files: FC = () => {
         <StyledStaticContent isCollapsed={isCollapsed}>
           <PFilterWrapper>
             <PFilter
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
               isList={isListView}
               setIsList={setIsListView}
               activeFilters={{
@@ -53,17 +79,17 @@ const Files: FC = () => {
             />
           </PFilterWrapper>
 
-          <StyledFoldersContainer>
-            <h2>Folders</h2>
+          {/* <StyledFoldersContainer>
+             <h2>Folders</h2> 
             <StyledFoldersWrapper>
-              <PFolders
+               <PFolders
                 cardData={cardData}
                 setCardData={setCardData}
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
-              />
+              /> 
             </StyledFoldersWrapper>
-          </StyledFoldersContainer>
+          </StyledFoldersContainer> */}
           <StyledFilesContainer>
             <div
               style={{
@@ -73,7 +99,9 @@ const Files: FC = () => {
               }}
             >
               <h2 style={{ flexBasis: '44%' }}>Files</h2>
-              {!isListView && <h4>Uploaded</h4>}
+
+              {/* {!isListView && <h4>Uploaded</h4>} */}
+
               <div>
                 <PFilter
                   isList={!isListView}
@@ -86,30 +114,45 @@ const Files: FC = () => {
                 />
               </div>
             </div>
-            <StyledFilesWrapper>
-              {!isListView ? (
-                <StyledListCardsWrapper>
-                  <ListCards
-                    isAdmin
-                    data={data}
-                    cardData={cardData}
-                    setCardData={setCardData}
-                    selectedCardId={selectedCardId}
-                    setSelectedCardId={setSelectedCardId}
-                  />
-                </StyledListCardsWrapper>
-              ) : (
-                <StyledGridCardsWrapper>
-                  <GridCards
-                    data={data}
-                    cardData={cardData}
-                    setCardData={setCardData}
-                    selectedCardId={selectedCardId}
-                    setSelectedCardId={setSelectedCardId}
-                  />
-                </StyledGridCardsWrapper>
-              )}
-            </StyledFilesWrapper>
+            {isLoading ? (
+              <Spin />
+            ) : (
+              <>
+                {searchRes?.length === 0 ? (
+                  <p>No files found</p>
+                ) : (
+                  <>
+                    <StyledFilesWrapper>
+                      {!isListView ? (
+                        <StyledListCardsWrapper>
+                          <ListCards
+                            searchTerm={searchTerm}
+                            searchRes={searchRes}
+                            data={data}
+                            cardData={cardData}
+                            setCardData={setCardData}
+                            selectedCardId={selectedCardId}
+                            setSelectedCardId={setSelectedCardId}
+                          />
+                        </StyledListCardsWrapper>
+                      ) : (
+                        <StyledGridCardsWrapper>
+                          <GridCards
+                            searchTerm={searchTerm}
+                            searchRes={searchRes}
+                            data={data}
+                            cardData={cardData}
+                            setCardData={setCardData}
+                            selectedCardId={selectedCardId}
+                            setSelectedCardId={setSelectedCardId}
+                          />
+                        </StyledGridCardsWrapper>
+                      )}
+                    </StyledFilesWrapper>
+                  </>
+                )}
+              </>
+            )}
           </StyledFilesContainer>
         </StyledStaticContent>
 

@@ -1,7 +1,16 @@
-import { FolderFilled } from '@ant-design/icons';
-import { Card } from 'antd';
+import {
+  CloseCircleOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  FolderFilled,
+} from '@ant-design/icons';
+import { TrashBin } from '@styled-icons/ionicons-outline';
+import { Button, Card, Modal } from 'antd';
+import PModal from 'components/modal/PModal';
+import { usePageContext } from 'context/PageContext';
 import useDoubleClick from 'hooks/useDoubleClick';
-import { FC, RefObject, useRef, MouseEventHandler } from 'react';
+import { FC, RefObject, useRef, MouseEventHandler, useState } from 'react';
 import styled from 'styled-components';
 
 interface IPFolderProps {
@@ -23,14 +32,46 @@ const PFolder: FC<IPFolderProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   useDoubleClick({ ref, onDoubleClick, onClick, stopPropagation: true });
 
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const confirm = () => {
+    StyledModal.confirm({
+      title: 'Delete shared space',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Are you sure that you want to delete this shared space?',
+      okText: 'Ok',
+      cancelText: 'Cancel',
+      onOk: (e) => {
+        console.log('cedooo');
+      },
+      // onCancel: (e) => {
+      //   console.log('cancel');
+      // },
+    });
+  };
+
   return (
-    <StyledCard ref={ref} selected={selected} hoverable>
-      <FolderFilled />
-      <StyledFolderHeading>{heading}</StyledFolderHeading>
-      <p>{description?.slice(0, 10)}</p>
-    </StyledCard>
+    <>
+      <StyledCard ref={ref} selected={selected} hoverable>
+        <FolderFilled />
+        <Button
+          onClickCapture={(e) => {
+            e.stopPropagation();
+            // setIsRemoveModalVisible(true);
+            // setIsSiderVisible(false);
+            // setSelectedCardId(value.fileId);
+            confirm();
+          }}
+          type="default"
+          shape="circle"
+          icon={<DeleteOutlined style={{ fontSize: 16 }} />}
+        />
+        <StyledFolderHeading>{heading}</StyledFolderHeading>
+        <p>{description?.slice(0, 10)}</p>
+      </StyledCard>
+    </>
   );
 };
+const StyledModal = styled(Modal)``;
 
 const StyledCard = styled(Card)<{
   selected: boolean;

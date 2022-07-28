@@ -75,11 +75,13 @@ const GridCards: FC<IGridCardProps> = ({
       {data
         ?.map((value: any) => (
           <GridCard
+            isSharedSpace
+            home
             value={value}
             key={value.fileId}
             fileId={value.fileId}
             // image={value.image}
-            fileName={value.filename}
+            fileName={value.fileName}
             // description={value.description}
             selected={selectedCardId === value.fileId}
             fileExtension={value.filename?.split('.')[1]}

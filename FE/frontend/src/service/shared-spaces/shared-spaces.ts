@@ -53,3 +53,11 @@ export const readAllUsers: () => Promise<any> = () => {
     .get('/api/User/ReadAllUsers')
     .then((res) => res.data);
 };
+export const deleteFileFromSharedSpace: (payload: any) => Promise<any> = (
+  payload,
+) => {
+  return api
+    .service()
+    .post('/api/SharedSpace/DeleteFileFromSpace', payload)
+    .then((res) => res.data);
+};

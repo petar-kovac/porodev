@@ -56,9 +56,9 @@ const PSider: FC = () => {
             <Menu.Item key="/" icon={<HomeOutlined />}>
               <Link to="/">Home</Link>
             </Menu.Item>
-            <Menu.Item key="/admins" icon={<FontColorsOutlined />}>
+            {/* <Menu.Item key="/admins" icon={<FontColorsOutlined />}>
               <Link to="/admins">Admins</Link>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item key="/users" icon={<UserOutlined />}>
               <Link to="/users">Users</Link>
             </Menu.Item>
@@ -68,9 +68,9 @@ const PSider: FC = () => {
             <Menu.Item key="/groups" icon={<TeamOutlined />}>
               <Link to="/groups">Groups</Link>
             </Menu.Item>
-            <Menu.Item key="/runtime" icon={<FieldTimeOutlined />}>
+            {/* <Menu.Item key="/runtime" icon={<FieldTimeOutlined />}>
               <Link to="/runtime">Runtime</Link>
-            </Menu.Item>
+            </Menu.Item> */}
           </>
         )}
         {loggedUser === Role.USER && (

@@ -58,14 +58,15 @@ const FileSider: FC<IPFileSiderProps> = ({
       onClick={(e) => e.stopPropagation()}
     >
       <StyledColumn>
-        <div>filessider</div>
-        <StyledRow>
-          <StyledIcon type={type} />
-        </StyledRow>
-        <StyledTitle>{cardData?.title}</StyledTitle>
-        <StyledContent>
-          {cardData && <SiderDataMapper data={cardData} />}
-        </StyledContent>
+        <StyledFirstPart>
+          <StyledRow>
+            <StyledIcon type={type} />
+          </StyledRow>
+          <StyledTitle>Info </StyledTitle>
+          <StyledContent>
+            {cardData && <SiderDataMapper data={cardData} />}
+          </StyledContent>
+        </StyledFirstPart>
         <PButton
           text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
           onClick={onClick}
@@ -75,6 +76,12 @@ const FileSider: FC<IPFileSiderProps> = ({
     </StyledFileSider>
   );
 };
+
+const StyledFirstPart = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const StyledContent = styled.div`
   display: flex;
@@ -97,11 +104,12 @@ const StyledColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: space-around;
-  width: 290px;
-  flex: 1;
+  width: 275px;
   gap: 15px;
+  height: 95%;
+  justify-content: space-between;
+  padding-bottom: 20px;
 `;
-
 const StyledFileSider = styled(Sider).attrs({
   'data-testid': 'file-sider',
 })`

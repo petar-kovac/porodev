@@ -12,6 +12,7 @@ import PFolders from 'components/folders/PFolders';
 import PModal from 'components/modal/PModal';
 
 import {
+  CloseOutlined,
   FileAddOutlined,
   FileZipFilled,
   PlusCircleOutlined,

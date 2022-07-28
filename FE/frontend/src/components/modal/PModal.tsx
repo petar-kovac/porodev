@@ -91,6 +91,7 @@ const PModal: FC<IPModalProps> = ({
       setIsLoading(false);
       setIsModalVisible(false);
     }
+    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
