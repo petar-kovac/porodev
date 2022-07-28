@@ -1,4 +1,5 @@
-import { Input } from 'antd';
+import { Input, Select } from 'antd';
+
 import styled from 'styled-components';
 
 import landingImage from '../../assets/landing.jpg';
@@ -44,12 +45,14 @@ export const StyledForm = styled.form`
   width: 32rem;
 
   & input,
+  & select,
   & span {
     opacity: 0.75;
     border-radius: 10px;
   }
 
   & input:active,
+  & select,
   & input:focus {
     opacity: 1;
   }
@@ -73,4 +76,11 @@ export const StyledFormSpan = styled.span.attrs({
   left: 50%;
   transform: translateX(-50%);
   color: red;
+`;
+
+export const StyledSelect = styled(Select)`
+  opacity: 0.75 !important;
+  .ant-select-selector {
+    border-radius: 0.8rem !important;
+  }
 `;

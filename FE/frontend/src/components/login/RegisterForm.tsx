@@ -7,6 +7,8 @@ import { usePageContext } from 'context/PageContext';
 
 import { useAuthStateValue } from 'context/AuthContext';
 
+import { Select } from 'antd';
+
 import PButton from 'components/buttons/PButton';
 import theme from 'theme/theme';
 import { registrationSchema } from '../../util/validation-schema/ValidationSchema';
@@ -18,6 +20,7 @@ import {
   StyledFormInput,
   StyledFormSpan,
   StyledHeader,
+  StyledSelect,
 } from './StyledForm';
 
 interface ILoginFormProps {
@@ -46,6 +49,8 @@ const RegisterForm: FC<ILoginFormProps> = ({
   } = useForm<FormValues>({
     resolver: yupResolver(registrationSchema),
   });
+
+  const { Option } = Select;
 
   const { isLoading } = useAuthStateValue();
 
@@ -130,7 +135,15 @@ const RegisterForm: FC<ILoginFormProps> = ({
           render={({ field }) => (
             <StyledFormBox>
               <span>Department:</span>
-              <StyledFormInput {...field} />
+              {/* <StyledFormInput {...field} /> */}
+              <StyledSelect {...field} placeholder="Choose your department">
+                <Option value="0">Business Operations</Option>
+                <Option value="1">Cybersecurity</Option>
+                <Option value="2">Data Science and Analytics</Option>
+                <Option value="3">Engineering</Option>
+                <Option value="4">Information Technology</Option>
+                <Option value="5">Manufacturing</Option>
+              </StyledSelect>
               <StyledFormSpan>{errors?.department?.message}</StyledFormSpan>
             </StyledFormBox>
           )}

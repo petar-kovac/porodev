@@ -21,12 +21,19 @@ export const StyledContent = styled.div`
 `;
 
 export const StyledStaticContent = styled.div`
-  width: 100%;
+  /* width: 100%;
   margin-top: 4rem;
   padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
+  gap: 5rem; */
+  width: 100%;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
   gap: 5rem;
+  margin-top: 4rem;
 `;
 
 export const StyledFoldersContainer = styled.div`
@@ -43,18 +50,24 @@ export const StyledHeadingWrapper = styled.div`
 `;
 
 export const StyledFilesWrapper = styled.div`
+  //   display: grid;
+  //   grid-template-columns: repeat(auto-fit, minmax(210px, 16%));
+  //   gap: 1rem;
+  //   padding-left: 2rem;
+`;
+
+// export const StyledFoldersWrapper = styled.div`
+//   display: flex;
+//   flex-wrap: wrap;
+//   padding-left: 2rem;
+
+//   gap: 2rem;
+// `;
+export const StyledFoldersWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 16%));
   gap: 1rem;
   padding-left: 2rem;
-`;
-
-export const StyledFoldersWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 2rem;
-
-  gap: 2rem;
 `;
 
 export const StyledFilesContainer = styled.div`

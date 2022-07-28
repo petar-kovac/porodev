@@ -43,16 +43,16 @@ export const registrationSchema = yup.object().shape({
     .string()
     .required('This field is required')
     .oneOf([yup.ref('password'), null], 'Passwords should match'),
-  department: yup
-    .number()
-    .positive()
-    .transform((value, originalValue) => {
-      return originalValue === '' ? undefined : value;
-    })
-    .min(0, 'Must be > 0')
-    .nullable(true)
-    .typeError('Must be a number')
-    .required('This field is required'),
+  // department: yup
+  //   .number()
+  //   .positive()
+  //   .transform((value, originalValue) => {
+  //     return originalValue === '' ? undefined : value;
+  //   })
+  //   .min(0, 'Must be > 0')
+  //   .nullable(true)
+  //   .typeError('Must be a number')
+  //   .required('This field is required'),
   position: yup
     .string()
     .transform((value, originalValue) => {

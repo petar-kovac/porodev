@@ -32,22 +32,22 @@ export const StyledStaticContent = styled.div<{
   margin-top: 4rem;
 `;
 
-export const StyledFoldersContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+// export const StyledFoldersContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
 
-  & h2 {
-    font-size: 3rem;
-  }
-`;
+//   & h2 {
+//     font-size: 3rem;
+//   }
+// `;
 
-export const StyledFoldersWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 2rem;
+// export const StyledFoldersWrapper = styled.div`
+//   display: flex;
+//   flex-wrap: wrap;
+//   padding-left: 2rem;
 
-  gap: 2rem;
-`;
+//   gap: 2rem;
+// `;
 
 export const StyledFilesContainer = styled.div`
   display: flex;

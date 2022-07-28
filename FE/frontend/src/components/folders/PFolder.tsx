@@ -79,7 +79,7 @@ const StyledCard = styled(Card)<{
 }>`
   border: 1px solid #ccc;
   padding: 2rem;
-  width: 23rem;
+  max-width: auto;
   box-shadow: 1px 3px 8px rgba(34, 25, 25, 0.2);
   height: 14rem;
   border-radius: 1.5rem;

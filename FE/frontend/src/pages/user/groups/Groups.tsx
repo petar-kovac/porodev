@@ -76,15 +76,17 @@ const Groups: FC = () => {
                 }}
               />
             </StyledHeadingWrapper>
-            <StyledFoldersWrapper>
-              <PFolders
-                data={data}
-                cardData={cardData}
-                setCardData={setCardData}
-                selectedCardId={selectedCardId}
-                setSelectedCardId={setSelectedCardId}
-              />
-            </StyledFoldersWrapper>
+            <div>
+              <StyledFoldersWrapper>
+                <PFolders
+                  data={data}
+                  cardData={cardData}
+                  setCardData={setCardData}
+                  selectedCardId={selectedCardId}
+                  setSelectedCardId={setSelectedCardId}
+                />
+              </StyledFoldersWrapper>
+            </div>
           </StyledFoldersContainer>
           <StyledFilesContainer>
             {/* <StyledFilterWrapper>
