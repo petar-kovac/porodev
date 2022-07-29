@@ -2,7 +2,7 @@
 {
     public static class Consts
     {
-        public const string EMAIL_DOMAIN = "boing.rs";
+        public const string EMAIL_DOMAIN = "gmail.com";
 
         public const int MIN_PASSWORD_LENGTH = 8;
         public const int PASSWORD_MIN_UPPERCASE_LETTERS = 1;
