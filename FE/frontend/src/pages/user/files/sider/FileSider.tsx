@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import PButton from 'components/buttons/PButton';
 import { getAllSharedSpaces } from 'service/shared-spaces/shared-spaces';
 import { usePageContext } from 'context/PageContext';
+import { useNavigate } from 'react-router-dom';
 import { useSiderContext } from 'context/SiderContext';
 import { startRuntimeService } from 'service/runtime/runtime';
 import StyledIcon from 'styles/icons/StyledIcons';
@@ -53,6 +54,7 @@ const FileSider: FC<IPFileSiderProps> = ({
     setIsModalVisible,
     isModalVisible,
   } = usePageContext();
+  const navigate = useNavigate();
   const [modalContent, setModalContent] = useState<ReactNode>(undefined);
   const [spaceData, setSpaceData] = useState(undefined);
   const [isSiderModalVisible, setIsSiderModalVisible] =
@@ -63,8 +65,9 @@ const FileSider: FC<IPFileSiderProps> = ({
     setSelectedCardId(null);
   };
 
-  const onClick = () => {
-    console.log('file sider');
+  const onClick = (item: any) => {
+    console.log(item);
+    navigate(`${item.id}`);
   };
 
   const onAddFileToSharedSpace = () => {
@@ -112,11 +115,7 @@ const FileSider: FC<IPFileSiderProps> = ({
             <PlusCircleOutlined onClick={onAddFileToSharedSpace} />
           </StyledRow>
         </StyledFirstPart>
-        <PButton
-          text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
-          onClick={onClick}
-          isLoading={isLoading}
-        />
+
         <ChoseSharedSpaceModal
           title="Chose image"
           isSiderModalVisible={isSiderModalVisible}

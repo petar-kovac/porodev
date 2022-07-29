@@ -35,14 +35,27 @@ const mapResponseToCardData = (response: IFilesCard): MappedCardData => {
  * Component to map trough API data.
  */
 const SiderData: FC<{ data: IFilesCard }> = ({ data }) => {
+  console.log(data, 'data');
   return (
     <>
       {Object.entries(data).map(([key, value]) => {
-        if (ApiTranslation[key as any] === 'Upload time') {
+        if (
+          ApiTranslation[key as any] === 'Upload time' ||
+          ApiTranslation[key as any] === 'Added'
+        ) {
           return (
             <StyledText>
               <Left>{[ApiTranslation[key as any]]}:</Left>
               <Right>{formatDate(value)}</Right>
+            </StyledText>
+          );
+        }
+
+        if (ApiTranslation[key as any] === 'File size') {
+          return (
+            <StyledText>
+              <Left>{[ApiTranslation[key as any]]}:</Left>
+              <Right>{value / 1000} KB</Right>
             </StyledText>
           );
         }
@@ -64,7 +77,7 @@ const SiderData: FC<{ data: IFilesCard }> = ({ data }) => {
 
 const StyledText = styled.div`
   display: flex;
-  max-height: 60px;
+  max-height: 120px;
   word-break: break-all;
 `;
 const Left = styled.div`

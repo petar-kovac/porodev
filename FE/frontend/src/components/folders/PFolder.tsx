@@ -53,18 +53,7 @@ const PFolder: FC<IPFolderProps> = ({
     <>
       <StyledCard ref={ref} selected={selected} hoverable>
         <FolderFilled />
-        <Button
-          onClickCapture={(e) => {
-            e.stopPropagation();
-            // setIsRemoveModalVisible(true);
-            // setIsSiderVisible(false);
-            // setSelectedCardId(value.fileId);
-            confirm();
-          }}
-          type="default"
-          shape="circle"
-          icon={<DeleteOutlined style={{ fontSize: 16 }} />}
-        />
+
         <StyledFolderHeading>{heading}</StyledFolderHeading>
         <p>{description?.slice(0, 10)}</p>
       </StyledCard>

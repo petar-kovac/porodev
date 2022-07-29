@@ -58,7 +58,7 @@ const ListCards: FC<IListCardProps> = ({
     setSelectedCardId(value.id);
     setCardData(value);
     setIsSiderVisible(false);
-    setIsModalVisible(true);
+    // setIsModalVisible(true);
   };
 
   return !isSharedSpace ? (

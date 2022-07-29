@@ -67,11 +67,7 @@ const FileSider: FC<IPFileSiderProps> = ({
             {cardData && <SiderDataMapper data={cardData} />}
           </StyledContent>
         </StyledFirstPart>
-        <PButton
-          text={type === 'runtime' ? 'Start execution' : `Show ${type}`}
-          onClick={onClick}
-          isLoading={isLoading}
-        />
+        {/* <PButton text="Show file" onClick={onClick} isLoading={isLoading} /> */}
       </StyledColumn>
     </StyledFileSider>
   );

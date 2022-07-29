@@ -89,7 +89,9 @@ const ListCard: FC<IListCardProps> = ({
     setIsRemoveModalVisible(false);
   };
 
-  const formattedDate = formatDateListCard(value.uploadDateTime);
+  const formattedDate = formatDateListCard(
+    value.uploadDateTime ? value.uploadDateTime : value.addedToSharedSpace,
+  );
 
   return (
     <>

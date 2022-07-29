@@ -99,7 +99,7 @@ const Groups: FC = () => {
                 }}
               />
             </StyledFilterWrapper> */}
-            <h2>Latest 5 files</h2>
+            {/* <h2>Latest 5 files</h2>
             <StyledFilesWrapper>
               <GroupCards
                 data={data}
@@ -108,7 +108,7 @@ const Groups: FC = () => {
                 selectedCardId={selectedCardId}
                 setSelectedCardId={setSelectedCardId}
               />
-            </StyledFilesWrapper>
+            </StyledFilesWrapper> */}
           </StyledFilesContainer>
         </StyledStaticContent>
 

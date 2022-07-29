@@ -1,6 +1,6 @@
-import { Card, Button } from 'antd';
+import { Button, Card } from 'antd';
 import useDoubleClick from 'hooks/useDoubleClick';
-import { FC, RefObject, useRef, MouseEventHandler, useState } from 'react';
+import { FC, MouseEventHandler, RefObject, useRef, useState } from 'react';
 import styled from 'styled-components';
 import theme from 'theme/theme';
 
@@ -8,12 +8,10 @@ import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
 
 import { handleDownload } from 'util/helpers/files-functions';
 
-import DownloadButton from 'components/buttons/DownloadButton';
-
 import { usePageContext } from 'context/PageContext';
 
-import { formatDateListCard } from 'util/helpers/date-formaters';
 import { useParams } from 'react-router-dom';
+import { formatDateListCard } from 'util/helpers/date-formaters';
 import RemoveModal from '../../modal/RemoveModal';
 
 interface IGridCardProps {
@@ -68,7 +66,9 @@ const GridCard: FC<IGridCardProps> = ({
     setIsRemoveModalVisible(false);
   };
 
-  const formattedDate = formatDateListCard(time);
+  const formattedDate = formatDateListCard(
+    time ? time : value.addedToSharedSpace,
+  );
 
   return (
     <div>

@@ -45,8 +45,8 @@ const GridCards: FC<IGridCardProps> = ({
   const handleDoubleClick = (value: any) => {
     setSelectedCardId(value.fileId);
     setCardData(value);
-    setIsSiderVisible(false);
-    setIsModalVisible(true);
+    // setIsSiderVisible(false);
+    // setIsModalVisible(true);
   };
 
   return !isSharedSpace ? (
