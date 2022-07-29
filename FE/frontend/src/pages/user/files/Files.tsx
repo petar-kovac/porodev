@@ -72,7 +72,6 @@ const Files: FC = () => {
               setIsList={setIsListView}
               activeFilters={{
                 showFilterByDate: true,
-                showFilterBySize: true,
               }}
             />
           </PFilterWrapper>
@@ -96,10 +95,33 @@ const Files: FC = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <h2 style={{ flexBasis: '44%' }}>Files</h2>
+              {/* <h2 style={{ flexBasis: '44%' }}>Files</h2> */}
+              <div
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                }}
+              >
+                <h2>Files</h2>
+              </div>
 
               {/* {!isListView && <h4>Uploaded</h4>} */}
 
+              <div
+                style={{
+                  display: 'flex',
+                }}
+              >
+                <PFilter
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  isList={isListView}
+                  setIsList={setIsListView}
+                  activeFilters={{
+                    showFilterBySize: true,
+                  }}
+                />
+              </div>
               <div>
                 <PFilter
                   isList={!isListView}

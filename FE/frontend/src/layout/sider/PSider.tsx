@@ -42,8 +42,11 @@ const PSider: FC = () => {
       }}
     >
       <StyledSiderHeader>
-        <Avatar size={60} src="https://joeschmoe.io/api/v1/random" />
-        <h1>Dashboard</h1>
+        <Avatar
+          size={60}
+          src="https://joeschmoe.io/api/v1/random"
+          style={{ border: '1.5px solid #ccc' }}
+        />
       </StyledSiderHeader>
 
       <StyledSiderMenu

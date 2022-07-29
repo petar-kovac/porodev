@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import styled from 'styled-components';
 
 export const StyledFilterWrapper = styled.div`
@@ -21,6 +22,7 @@ export const StyledContent = styled.div`
 `;
 
 export const StyledStaticContent = styled.div`
+  position: relative;
   /* width: 100%;
   margin-top: 4rem;
   padding: 2rem 4rem;
@@ -77,4 +79,12 @@ export const StyledFilesContainer = styled.div`
   & h2 {
     font-size: 3rem;
   }
+`;
+
+export const StyledPlusCircle = styled(Button)`
+  width: 5.5rem;
+  height: 5.5rem;
+  position: absolute;
+  bottom: 5rem;
+  right: 5rem;
 `;

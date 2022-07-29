@@ -53,7 +53,7 @@ const Home: FC = () => {
   return (
     <StyledPage>
       <StyledUploadWrapper>
-        <StyledHeading>User file upload:</StyledHeading>
+        <StyledHeading>User file upload</StyledHeading>
         <PUpload setFiles={setData} />
       </StyledUploadWrapper>
       {!isPageLoading ? (

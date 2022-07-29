@@ -16,6 +16,7 @@ import {
   FileAddOutlined,
   FileZipFilled,
   PlusCircleOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import GroupsContextProvider from 'context/GroupsContext';
 import GroupModal from './modal/GroupModal';
@@ -30,6 +31,7 @@ import {
   StyledFoldersWrapper,
   StyledFilesContainer,
   StyledHeadingWrapper,
+  StyledPlusCircle,
 } from './styles/groups-styled';
 import useGroupData from './hooks/useGroupData';
 import { IModalTitleProps } from '../profile/Profile';
@@ -70,10 +72,20 @@ const Groups: FC = () => {
           <StyledFoldersContainer>
             <StyledHeadingWrapper>
               <h2>Shared spaces</h2>
-              <PlusCircleOutlined
+              {/* <PlusCircleOutlined
                 onClick={() => {
                   setIsModalVisible(true);
                 }}
+              /> */}
+              <StyledPlusCircle
+                onClick={() => {
+                  setIsModalVisible(true);
+                }}
+                type="primary"
+                shape="circle"
+                icon={
+                  <PlusOutlined style={{ color: '#fff', fontSize: '2.4rem' }} />
+                }
               />
             </StyledHeadingWrapper>
             <div>

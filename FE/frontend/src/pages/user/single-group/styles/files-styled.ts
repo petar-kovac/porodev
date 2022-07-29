@@ -1,3 +1,5 @@
+import { Button } from 'antd';
+
 import styled from 'styled-components';
 
 export const PFilterWrapper = styled.div`
@@ -10,6 +12,7 @@ export const PFilterWrapper = styled.div`
 `;
 
 export const StyledPageWrapper = styled.div`
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -23,6 +26,7 @@ export const StyledContent = styled.div`
 export const StyledStaticContent = styled.div<{
   isCollapsed: boolean;
 }>`
+  position: relative;
   width: 100%;
   padding: 2rem 4rem;
   display: flex;
@@ -70,4 +74,12 @@ export const StyledGridCardsWrapper = styled.div`
 export const StyledListCardsWrapper = styled.div`
   display: grid;
   row-gap: 2rem;
+`;
+
+export const StyledPlusCircle = styled(Button)`
+  width: 5.5rem;
+  height: 5.5rem;
+  position: absolute;
+  bottom: 5rem;
+  right: 5rem;
 `;

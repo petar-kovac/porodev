@@ -10,7 +10,8 @@ import PModal from 'components/modal/PModal';
 import PFolders from 'components/folders/PFolders';
 import { IFilesCard } from 'types/card-data';
 import { useParams } from 'react-router-dom';
-import { PlusCircleOutlined } from '@ant-design/icons';
+
+import { PlusOutlined } from '@ant-design/icons';
 import theme from 'theme/theme';
 import {
   PFilterWrapper,
@@ -23,6 +24,7 @@ import {
   StyledStaticContent,
   StyledGridCardsWrapper,
   StyledListCardsWrapper,
+  StyledPlusCircle,
 } from './styles/files-styled';
 import FileSider from './sider/FileSider';
 import FileModal from './modal/FileModal';
@@ -106,12 +108,16 @@ const SingleGroup: FC = () => {
                 justifyContent: 'space-between',
               }}
             >
-              <h2 style={{ flexBasis: '44%' }}>Shared space files</h2>
-              <PlusCircleOutlined
-                style={{ fontSize: 24, color: theme.colors.primary }}
+              <h2>Shared space files</h2>
+              <StyledPlusCircle
                 onClick={onAddFile}
+                type="primary"
+                shape="circle"
+                icon={
+                  <PlusOutlined style={{ color: '#fff', fontSize: '2.4rem' }} />
+                }
               />
-              {!isListView && <h4>Uploaded</h4>}
+
               <div>
                 <PFilter
                   isList={!isListView}

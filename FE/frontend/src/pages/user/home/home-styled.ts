@@ -8,6 +8,7 @@ export const StyledSpinnerWrappper = styled.div`
 `;
 export const StyledHeading = styled.div`
   font-size: 42px;
+  color: #444;
   display: flex;
   justify-content: center;
   font-weight: 600;
