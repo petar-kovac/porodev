@@ -17,11 +17,11 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
         public async Task Consume(ConsumeContext<ReadAllSharedSpacesForUserRequestServiceToDatabase> context)
         {
             var sharedSpacesForUser = await _unitOfWork.SharedSpacesUsers.GetSharedSpacesByUserId(context.Message.UserId);
-            List<SharedSpace> listOfSharedSpaces = new List<SharedSpace>();
-            foreach (var item in sharedSpacesForUser)
-            {
-                listOfSharedSpaces.Add(item.SharedSpace);
-            }
+            var listOfSharedSpaces =
+                sharedSpacesForUser.Select(userSharedSpace => userSharedSpace.SharedSpace)
+                    .OrderBy(sharedSpace => sharedSpace.Name).ToList();
+                    
+
             var returnModel = CreateResponseModel<CommunicationModel<List<SharedSpace>>, List<SharedSpace>>(listOfSharedSpaces);
             await context.RespondAsync<CommunicationModel<List<SharedSpace>>>(returnModel);
         }
