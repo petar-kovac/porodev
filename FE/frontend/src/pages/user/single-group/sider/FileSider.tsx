@@ -17,6 +17,7 @@ import { IFilesCard } from 'types/card-data';
 import { inputParamsChecker } from 'util/helpers/input-params-checker';
 import SiderDataMapper from 'util/mappers/SiderDataMapper';
 import { GetRuntimeModalData } from 'util/util-components/GetRuntimeModalData';
+import { StyledFileSingle } from 'styles/icons/styled-icons';
 
 const { Sider } = Layout;
 
@@ -60,7 +61,7 @@ const FileSider: FC<IPFileSiderProps> = ({
       <StyledColumn>
         <StyledFirstPart>
           <StyledRow>
-            <StyledIcon type={type} />
+            <StyledFileSingle />
           </StyledRow>
           <StyledTitle>Info </StyledTitle>
           <StyledContent>

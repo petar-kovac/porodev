@@ -67,7 +67,7 @@ const GridCard: FC<IGridCardProps> = ({
   };
 
   const formattedDate = formatDateListCard(
-    time ? time : value.addedToSharedSpace,
+    time ? time : value?.addedToSharedSpace,
   );
 
   return (

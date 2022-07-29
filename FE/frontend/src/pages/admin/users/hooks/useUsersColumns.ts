@@ -20,12 +20,12 @@ const useUsersColumns = () => {
         key: 'email',
       },
       {
-        title: 'department',
+        title: 'Department',
         dataIndex: 'department',
         key: 'department',
       },
       {
-        title: 'verifiedAt',
+        title: 'Verified at',
         dataIndex: 'verifiedAt',
         key: 'verifiedAt',
         render: (record: any) => {
@@ -33,9 +33,25 @@ const useUsersColumns = () => {
         },
       },
       {
-        title: 'runtimeTotal',
+        title: 'Total runtime',
         dataIndex: 'runtimeTotal',
         key: 'runtimeTotal',
+      },
+      {
+        title: 'Total upload',
+        dataIndex: 'fileUploadTotal',
+        key: 'fileUploadTotal',
+        render: (record: any) => {
+          return `${Number(record / 1000000).toFixed(2)} MB`;
+        },
+      },
+      {
+        title: 'Total download',
+        dataIndex: 'fileDownloadTotal',
+        key: 'fileDownloadTotal',
+        render: (record: any) => {
+          return `${Number(record / 1000000).toFixed(2)} MB`;
+        },
       },
     ],
     [],

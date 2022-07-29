@@ -35,7 +35,6 @@ const mapResponseToCardData = (response: IFilesCard): MappedCardData => {
  * Component to map trough API data.
  */
 const SiderData: FC<{ data: IFilesCard }> = ({ data }) => {
-  console.log(data, 'data');
   return (
     <>
       {Object.entries(data).map(([key, value]) => {

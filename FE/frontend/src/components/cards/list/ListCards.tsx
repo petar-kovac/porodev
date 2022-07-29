@@ -95,7 +95,7 @@ const ListCards: FC<IListCardProps> = ({
               value={value}
               isAdmin={isAdmin}
               fileId={value.fileId}
-              fileName={value.filename}
+              fileName={value.fileName}
               userName={value.userName}
               userLastName={value.userLastname}
               selected={selectedCardId === value.fileId}

@@ -90,7 +90,7 @@ const ListCard: FC<IListCardProps> = ({
   };
 
   const formattedDate = formatDateListCard(
-    value.uploadDateTime ? value.uploadDateTime : value.addedToSharedSpace,
+    value.uploadDateTime ? value.uploadDateTime : value?.addedToSharedSpace,
   );
 
   return (
@@ -100,11 +100,11 @@ const ListCard: FC<IListCardProps> = ({
           <StyledDescription>
             <StyledHeading>
               {/* because BE has inconsistent naming */}
-              {isSharedSpace ? (
-                <h3>{value.fileName}</h3>
-              ) : (
-                <h3>{value.filename}</h3>
-              )}
+              <h4>
+                {fileName?.length > 75
+                  ? `${fileName?.slice(0, 75)}...`
+                  : `${fileName}`}
+              </h4>
               {isAdmin && (
                 <span>
                   by {userName} {userLastName}

@@ -16,9 +16,11 @@ const Users: FC = () => {
   const { columns } = useUsersColumns();
   const { isLoading, data, error } = useUsersData();
 
+  console.log(data, 'data');
+
   return (
     <StyledPage>
-      <StyledHeadingWrapper>
+      <StyledHeadingWrapper style={{ paddingTop: 20, paddingBottom: 20 }}>
         <StyledHeading>{PAGES.users}</StyledHeading>
         <PButton text="Add user" color="#000" radius="12px" background="#fff" />
       </StyledHeadingWrapper>

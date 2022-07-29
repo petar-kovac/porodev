@@ -24,6 +24,10 @@ export const StyledFile = styled(FolderOpenOutlined)`
   color: ${({ theme: { colors } }) => colors.primary};
   font-size: 100px;
 `;
+export const StyledFileSingle = styled(FileImageOutlined)`
+  color: ${({ theme: { colors } }) => colors.primary};
+  font-size: 100px;
+`;
 export const StyledAppstoreOutlined = styled(AppstoreOutlined)<{
   isList: boolean;
 }>`

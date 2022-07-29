@@ -219,6 +219,7 @@ const PModal: FC<IPModalProps> = ({
 
           {inputField === 'sharedspace' && (
             <Input
+              style={{ borderRadius: 12 }}
               onChange={(e) =>
                 setModalData({ ...modalData, name: e.target.value })
               }
