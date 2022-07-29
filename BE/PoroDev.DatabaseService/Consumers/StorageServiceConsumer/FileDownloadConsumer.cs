@@ -3,6 +3,7 @@ using MassTransit;
 using PoroDev.Common.Contracts;
 using PoroDev.Common.Contracts.StorageService.DownloadFile;
 using PoroDev.Common.Exceptions;
+using PoroDev.Common.Models.SharedSpaces;
 using PoroDev.DatabaseService.Repositories.Contracts;
 using PoroDev.DatabaseService.Services.Contracts;
 using static PoroDev.Common.MassTransit.Extensions;
@@ -36,11 +37,30 @@ namespace PoroDev.DatabaseService.Consumers.StorageServiceConsumer
             var userModel = (await _unitOfWork.Users.FindAsync(user => user.Id.Equals(downloadRequest.UserId))).Entity;
 
             //If the user isn't an admin and if he doesn't own the file
-            if (!fileEntry.CurrentUserId.Equals(downloadRequest.UserId) && !(userModel.Role == 0))
-                return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
+            if (!fileEntry.CurrentUserId.Equals(downloadRequest.UserId) && (int)userModel.Role == 1)
+            {
+                //Check if user is in the same shared space as the file
+
+                var userSharedSpaces =
+                    await _unitOfWork.SharedSpacesUsers.FindAllAsync(userSpace =>
+                        userSpace.UserId.Equals(userModel.Id));
+
+                var fileSharedSpace =
+                    await _unitOfWork.SharedSpacesWithFiles.FindAllAsync(spaceFile =>
+                        spaceFile.FileId.Equals(fileEntry.FileId));
+
+                if(!userSharedSpaces.Any() && !fileSharedSpace.Any())
+                    return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
+
+                SharedSpacesFiles? intersect = fileSharedSpace.FirstOrDefault(fileSpace =>
+                    userSharedSpaces.Select(userSpace => userSpace.SharedSpaceId).Contains(fileSpace.SharedSpaceId));
+
+                if (intersect is null)
+                    return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
+            }
 
             //If the user isn't an admin and the file is deleted
-            if (((int)userModel.Role) == 1 && fileEntry.IsDeleted)
+            if ((int)userModel.Role == 1 && fileEntry.IsDeleted)
                 return new CommunicationModel<FileDownloadMessage>(new UserPermissionException());
 
             try
