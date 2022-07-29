@@ -38,7 +38,6 @@ const UsersMapper: FC<{
                 <div>{value.name}</div>
                 <div>{value.lastname}</div>
               </StyledTextField>
-              <div>a</div>
             </StyledField>
             {/* <StyledInput
               value={value as unknown as string}
