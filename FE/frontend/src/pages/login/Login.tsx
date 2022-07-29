@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler, useState } from 'react';
 import styled from 'styled-components';
 
-import logoImage from 'assets/logo.png';
+import logoImage from 'assets/newLogo.png';
 import LoginForm from 'components/login/LoginForm';
 import RegisterForm from 'components/login/RegisterForm';
 import { StyledFormWrapper, StyledPage } from 'components/login/StyledForm';

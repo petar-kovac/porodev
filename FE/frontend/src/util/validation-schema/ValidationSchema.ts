@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 const nameRegex = /^[a-zA-Z]+$/g;
-const emailRegex = /^[a-zA-Z0-9.\-_]+@boing\.rs$/g;
+const emailRegex = /^[a-zA-Z0-9.\-_]+@gmail\.com$/g;
 const passwordRegex =
   /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/g;
 const positionRegex = /^[a-zA-Z\s]*$/g;

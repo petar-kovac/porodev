@@ -14,6 +14,20 @@ const StyledTable = styled(Table).attrs({
 })`
   width: 100%;
   overflow: hidden;
+  border-radius: 0.8rem;
+  background-color: transparent;
+
+  .ant-table-content {
+    background-color: #f1f1f1 !important;
+  }
+
+  .ant-table-row {
+    background-color: #fff !important;
+  }
+
+  .ant-table-cell {
+    border-radius: 0.8rem;
+  }
 
   .ant-table-thead > tr > th {
     height: 60px;
@@ -21,6 +35,8 @@ const StyledTable = styled(Table).attrs({
     padding: 8px;
     background-color: ${({ theme: { colors } }) => colors.primary};
     color: white;
+    border-bottom-left-radius: 0.8rem;
+    border-bottom-right-radius: 0.8rem;
   }
 `;
 

@@ -3,7 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 import PDropdown from 'components/dropdown/PDropdown';
-import logoImage from 'assets/logo.png';
+import logoImage from 'assets/newLogo.png';
 import { StorageKey } from 'util/enums/storage-keys';
 
 const { Header } = Layout;
@@ -47,7 +47,7 @@ const StyledHeader = styled(Header).attrs({
   z-index: 1000;
 `;
 const StyledLogo = styled.img`
-  width: 110px;
+  width: 90px;
 `;
 
 export default PHeader;

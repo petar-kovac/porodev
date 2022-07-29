@@ -152,6 +152,8 @@ const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
       } catch (error: any) {
         if (error.request.status === 400) {
           message.error('Username and password don`t match ');
+        } else if (error.request.status === 401) {
+          message.error('Check your email and verify');
         } else {
           console.log(error.message);
           console.log(error);

@@ -82,14 +82,14 @@ const Profile: FC = () => {
           <h2>Profile Info</h2>
           <StyledProfileCardContent>
             <StyledProfileCardItem avatar>
-              <p>Profile picture</p>
+              <p style={{ fontSize: '1.5rem' }}>Profile picture</p>
               <Avatar size={48} src="https://joeschmoe.io/api/v1/random" />
               <StyledProfileIcon style={{ marginBottom: '.8rem' }}>
                 <UploadOutlined />
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
-              <StyledPHeading className="name">First name: </StyledPHeading>
+              <StyledPHeading className="name">First name</StyledPHeading>
               <StyledPContent>{userData?.name}</StyledPContent>
               <StyledProfileIcon
                 onClick={() => {
@@ -105,7 +105,7 @@ const Profile: FC = () => {
               </StyledProfileIcon>
             </StyledProfileCardItem>
             <StyledProfileCardItem>
-              <StyledPHeading>Last name: </StyledPHeading>
+              <StyledPHeading>Last name </StyledPHeading>
               <StyledPContent>{userData?.lastname}</StyledPContent>
 
               <StyledProfileIcon
@@ -207,8 +207,11 @@ const StyledProfileCardContent = styled.div`
 `;
 
 const StyledProfileCardItem = styled.div<{ avatar?: boolean }>`
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1fr;
+
   align-items: ${({ avatar }) => (avatar ? 'flex-end' : 'center')};
   border-bottom: 1px solid #ddd;
   padding: 0 1.5rem;
@@ -223,15 +226,20 @@ const StyledProfileCardItem = styled.div<{ avatar?: boolean }>`
 
 const StyledProfileIcon = styled.div`
   cursor: pointer;
+  justify-self: end;
 `;
 
 const StyledPHeading = styled.p.attrs(() => ({
   'data-testid': 'paragraph-heading',
-}))``;
+}))`
+  font-size: 1.5rem;
+`;
 
 const StyledPContent = styled.p.attrs(() => ({
   'data-testid': 'paragraph-description',
-}))``;
+}))`
+  color: #666;
+`;
 
 const StyledEditIcon = styled(EditOutlined).attrs(() => ({
   'data-testid': 'edit-icon',
