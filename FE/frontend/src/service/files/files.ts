@@ -95,13 +95,19 @@ export const findTotalMemory: (numberOfMonths: number) => Promise<any> = (
 ) => {
   return api
     .service()
-    .get('/api/Dashboard/TotalMemoryUsedForUploadPerMonth')
+    .get(
+      `/api/Dashboard/TotalMemoryUsedForUploadPerMonth?numberOfMonthsToShow=${numberOfMonths}`,
+    )
     .then((res) => res.data);
 };
 
-export const findTotalDownload: () => Promise<any> = () => {
+export const findTotalDownload: (numberOfMonths: number) => Promise<any> = (
+  numberOfMonths,
+) => {
   return api
     .service()
-    .get('/api/Dashboard/TotalMemoryUsedForDownloadPerMonth')
+    .get(
+      `/api/Dashboard/TotalMemoryUsedForDownloadPerMonth?numberOfMonthsToShow=${numberOfMonths}`,
+    )
     .then((res) => res.data);
 };

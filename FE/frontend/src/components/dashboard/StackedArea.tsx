@@ -3,15 +3,15 @@ import { Area } from '@ant-design/plots';
 import styled from 'styled-components';
 
 interface IDashboardProps {
-  data: object[];
+  data?: any;
 }
 
 const StackedArea: FC<IDashboardProps> = ({ data }) => {
   const config = {
     data,
-    xField: 'date',
-    yField: 'value',
-    seriesField: 'department',
+    xField: 'month',
+    yField: 'totalMemoryUsedForUploadInMBs',
+    // seriesField: 'department',
     line: {
       style: {
         cursor: 'pointer',

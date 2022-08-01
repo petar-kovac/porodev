@@ -10,8 +10,8 @@ const ColumnChart: FC<IColumnChartProps> = ({ columnData }) => {
   const data = columnData;
   const config = {
     data,
-    xField: 'day',
-    yField: 'value',
+    xField: 'month',
+    yField: 'totalMemoryUsedForDownloadInMBs',
     seriesField: '',
 
     xAxis: {

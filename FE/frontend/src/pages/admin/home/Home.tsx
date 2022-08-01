@@ -21,21 +21,21 @@ import {
   StyledHome,
 } from './home-styled';
 
-const stackedAreaData = [
-  { department: 'Department 1', date: 2010, value: 24 },
-  { department: 'Department 1', date: 2011, value: 293 },
-  { department: 'Department 2', date: 2012, value: 34 },
-  { department: 'Department 1', date: 2013, value: 340 },
-  { department: 'Department 2', date: 2014, value: 395 },
-  { department: 'Department 2', date: 2015, value: 412 },
-  { department: 'Department 2', date: 2016, value: 204 },
-  { department: 'Department 1', date: 2017, value: 250 },
-  { department: 'Department 1', date: 2018, value: 450 },
-  { department: 'Department 2', date: 2019, value: 524 },
-  { department: 'Department 1', date: 2020, value: 653 },
-  { department: 'Department 2', date: 2021, value: 694 },
-  { department: 'Department 1', date: 2022, value: 459 },
-];
+// const stackedAreaData = [
+//   { department: 'Department 1', date: 2010, value: 24 },
+//   { department: 'Department 1', date: 2011, value: 293 },
+//   { department: 'Department 2', date: 2012, value: 34 },
+//   { department: 'Department 1', date: 2013, value: 340 },
+//   { department: 'Department 2', date: 2014, value: 395 },
+//   { department: 'Department 2', date: 2015, value: 412 },
+//   { department: 'Department 2', date: 2016, value: 204 },
+//   { department: 'Department 1', date: 2017, value: 250 },
+//   { department: 'Department 1', date: 2018, value: 450 },
+//   { department: 'Department 2', date: 2019, value: 524 },
+//   { department: 'Department 1', date: 2020, value: 653 },
+//   { department: 'Department 2', date: 2021, value: 694 },
+//   { department: 'Department 1', date: 2022, value: 459 },
+// ];
 
 const columnChartData = [
   {
@@ -65,6 +65,8 @@ const Home: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
 
   const [filesData, setFilesData] = useState<any>([]);
+  const [chartData, setChartData] = useState<any>();
+  const [columnData, setColumnData] = useState<any>();
 
   useEffect(() => {
     const findFiles = async () => {
@@ -73,17 +75,20 @@ const Home: FC = () => {
           findNumberOfUploadedFiles(),
           findNumberOfDeletedFiles(),
           findNumberOfUsers(),
-          findTotalMemory(3),
-          findTotalDownload(),
+          findTotalMemory(5),
+          findTotalDownload(5),
         ]);
 
       setFilesData([firstRes, secondRes, thirdRes, fourthRes, fifthRes]);
+      setChartData(fourthRes.content);
+      setColumnData(fifthRes.content);
     };
 
     findFiles();
   }, []);
 
   console.log(filesData);
+  console.log(chartData);
 
   const { findData, data } = useAdminsData();
 
@@ -98,8 +103,8 @@ const Home: FC = () => {
         />
       </StyledDashboardCardContainer>
       <StyledChartsContainer>
-        <StackedArea data={stackedAreaData} />
-        <ColumnChart columnData={columnChartData} />
+        {chartData !== undefined && <StackedArea data={chartData} />}
+        {columnData !== undefined && <ColumnChart columnData={columnData} />}
       </StyledChartsContainer>
     </StyledHome>
   );
