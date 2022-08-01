@@ -2,7 +2,6 @@ import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { useGroupsContext } from 'context/GroupsContext';
 import { usePageContext } from 'context/PageContext';
-import { useSiderContext } from 'context/SiderContext';
 import { FC, useEffect, useState } from 'react';
 import { getAllUsersFromSharedSpace } from 'service/shared-spaces/shared-spaces';
 import styled from 'styled-components';

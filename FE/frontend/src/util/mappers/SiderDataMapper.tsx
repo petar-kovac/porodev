@@ -80,7 +80,7 @@ const StyledText = styled.div`
   word-break: break-all;
 `;
 const Left = styled.div`
-  flex: 0.45;
+  flex: 0.5;
   font-weight: 500;
 `;
 const Right = styled.div`

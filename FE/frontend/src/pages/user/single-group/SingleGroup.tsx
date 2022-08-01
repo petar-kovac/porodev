@@ -1,34 +1,26 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 
-import { searchFiles } from 'service/files/files';
-
-import { usePageContext } from 'context/PageContext';
-import ListCards from 'components/cards/list/ListCards';
 import GridCards from 'components/cards/grid/GridCards';
+import ListCards from 'components/cards/list/ListCards';
 import PFilter from 'components/filter/PFilter';
-import PModal from 'components/modal/PModal';
-import PFolders from 'components/folders/PFolders';
-import { IFilesCard } from 'types/card-data';
+import { usePageContext } from 'context/PageContext';
 import { useParams } from 'react-router-dom';
+import { IFilesCard } from 'types/card-data';
 
 import { PlusOutlined } from '@ant-design/icons';
-import theme from 'theme/theme';
+import useFilesData from './hooks/useFilesData';
+import FileModal from './modal/FileModal';
+import FileSider from './sider/FileSider';
 import {
-  PFilterWrapper,
   StyledContent,
-  StyledFilesWrapper,
-  StyledFoldersWrapper,
   StyledFilesContainer,
-  StyledFoldersContainer,
-  StyledPageWrapper,
-  StyledStaticContent,
+  StyledFilesWrapper,
   StyledGridCardsWrapper,
   StyledListCardsWrapper,
+  StyledPageWrapper,
   StyledPlusCircle,
+  StyledStaticContent,
 } from './styles/files-styled';
-import FileSider from './sider/FileSider';
-import FileModal from './modal/FileModal';
-import useFilesData from './hooks/useFilesData';
 
 const SingleGroup: FC = () => {
   const [isListView, setIsListView] = useState<boolean>(false);
@@ -44,24 +36,6 @@ const SingleGroup: FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchRes, setSearchRes] = useState<any>([]);
 
-  // useEffect(() => {
-  //   searchFiles(searchTerm)
-  //     .then((res) => {
-  //       setSearchRes(res);
-  //       console.log(res);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, [searchTerm]);
-
-  // const handleFilter = (e: any) => {
-  //   const searchWord = e.target.value;
-  //   setSearchTerm(searchWord);
-  // };
-
-  // const clearInput = () => {
-  //   setFilteredResults([]);
-  //   setSearchTerm('');
-  // };
   const onAddFile = () => {
     setIsModalVisible(true);
   };
@@ -76,30 +50,6 @@ const SingleGroup: FC = () => {
         }}
       >
         <StyledStaticContent isCollapsed={isCollapsed}>
-          {/* <PFilterWrapper>
-            <PFilter
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              isList={isListView}
-              setIsList={setIsListView}
-              activeFilters={{
-                showFilterByDate: true,
-                showFilterBySize: true,
-              }}
-            />
-          </PFilterWrapper> */}
-
-          {/* <StyledFoldersContainer>
-             <h2>Folders</h2> 
-            <StyledFoldersWrapper>
-               <PFolders
-                cardData={cardData}
-                setCardData={setCardData}
-                selectedCardId={selectedCardId}
-                setSelectedCardId={setSelectedCardId}
-              /> 
-            </StyledFoldersWrapper>
-          </StyledFoldersContainer> */}
           <StyledFilesContainer>
             <div
               style={{

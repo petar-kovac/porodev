@@ -1,4 +1,4 @@
-import { List } from 'antd';
+import { List, message } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
 import { addFile } from 'service/shared-spaces/shared-spaces';
 import styled from 'styled-components';
@@ -15,6 +15,7 @@ const SharedSpaceList: React.FC<{
   setIsSiderModalVisible,
 }) => {
   const { id } = cardData;
+
   return (
     <StyledList
       dataSource={data}
@@ -24,18 +25,21 @@ const SharedSpaceList: React.FC<{
           onClick={async () => {
             try {
               await addFile({
-                sharedSpaceId: item.id,
+                sharedSpaceId: item.sharedSpaceId,
                 fileId: id,
               });
               setIsSiderModalVisible(false);
             } catch (err: any) {
               console.log(err);
-              setIsSiderModalVisible(false);
+              message.error('File already exists');
             }
           }}
-          key={item.name}
+          key={item.sharedSpaceId}
         >
-          <List.Item.Meta title={item.name} description={item.ownerId} />
+          <List.Item.Meta
+            title={item.sharedSpaceName}
+            description={item.ownerName}
+          />
         </StyledListItem>
       )}
     />
