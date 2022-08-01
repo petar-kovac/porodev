@@ -2,6 +2,14 @@ import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import {
+  findNumberOfUploadedFiles,
+  findNumberOfDeletedFiles,
+  findNumberOfUsers,
+  findTotalMemory,
+  findTotalDownload,
+} from 'service/files/files';
+
 import DashboardCard from 'components/cards/dashboard/DashboardCard';
 import StackedArea from 'components/dashboard/StackedArea';
 import ColumnChart from 'components/dashboard/ColumnChart';
@@ -56,12 +64,38 @@ const Home: FC = () => {
   const [dashboardData, setDashboardData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>();
 
+  const [filesData, setFilesData] = useState<any>([]);
+
+  useEffect(() => {
+    const findFiles = async () => {
+      const [firstRes, secondRes, thirdRes, fourthRes, fifthRes] =
+        await Promise.all([
+          findNumberOfUploadedFiles(),
+          findNumberOfDeletedFiles(),
+          findNumberOfUsers(),
+          findTotalMemory(3),
+          findTotalDownload(),
+        ]);
+
+      setFilesData([firstRes, secondRes, thirdRes, fourthRes, fifthRes]);
+    };
+
+    findFiles();
+  }, []);
+
+  console.log(filesData);
+
   const { findData, data } = useAdminsData();
 
   return (
     <StyledHome>
       <StyledDashboardCardContainer>
-        <h1>ss</h1>
+        <DashboardCard
+          // title={value?.title}
+          numberOfUploadedFiles={filesData?.[0]?.numberOfUploadedFiles}
+          numberOfDeletedFiles={filesData?.[1]?.numberOfDeletedFiles}
+          numberOfUsers={filesData?.[2]?.numberOfUsers}
+        />
       </StyledDashboardCardContainer>
       <StyledChartsContainer>
         <StackedArea data={stackedAreaData} />

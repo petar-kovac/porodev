@@ -2,23 +2,26 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 interface IDashboardCardProps {
-  title: string;
-  numberOfAdmins: number;
-  numberOfFiles: number;
+  title?: string;
+  numberOfUploadedFiles?: any;
+  numberOfDeletedFiles?: any;
+  numberOfUsers?: any;
 }
 
 const DashboardCard: FC<IDashboardCardProps> = ({
   title,
-  numberOfAdmins,
-  numberOfFiles,
+  numberOfUploadedFiles,
+  numberOfDeletedFiles,
+  numberOfUsers,
 }) => {
-  const capitalizedTitle = title.charAt(0).toUpperCase() + title.slice(1);
+  // const capitalizedTitle = title.charAt(0).toUpperCase() + title.slice(1);
 
   return (
     <StyledDashboardCard>
-      <h3>{capitalizedTitle}</h3>
-      <p>Number of admins: {numberOfAdmins}</p>
-      <p>Number of files: {numberOfFiles}</p>
+      <h3>Files data</h3>
+      <p>Number of uploaded files: {numberOfUploadedFiles}</p>
+      <p>Number of deleted files: {numberOfDeletedFiles}</p>
+      <p>Number of users: {numberOfUsers}</p>
     </StyledDashboardCard>
   );
 };
@@ -27,8 +30,7 @@ const StyledDashboardCard = styled.div`
   border: 1px solid #ddd;
   border-radius: 2rem;
   padding: 2rem;
-  min-width: 22rem;
-  flex-grow: 1;
+  width: 25rem;
 `;
 
 export default DashboardCard;

@@ -68,3 +68,40 @@ export const postPassword: (payload: IPasswordRequest) => Promise<any> = (
     .put('/api/User/ChangePassword', { ...payload })
     .then((res) => res.data);
 };
+
+export const findNumberOfUploadedFiles: () => Promise<any> = () => {
+  return api
+    .service()
+    .get('/api/Dashboard/TotalNumberOfUploadedFiles')
+    .then((res) => res.data);
+};
+
+export const findNumberOfDeletedFiles: () => Promise<any> = () => {
+  return api
+    .service()
+    .get('/api/Dashboard/TotalNumberOfDeletedFiles')
+    .then((res) => res.data);
+};
+
+export const findNumberOfUsers: () => Promise<any> = () => {
+  return api
+    .service()
+    .get('/api/Dashboard/TotalNumberOfUsers')
+    .then((res) => res.data);
+};
+
+export const findTotalMemory: (numberOfMonths: number) => Promise<any> = (
+  numberOfMonths,
+) => {
+  return api
+    .service()
+    .get('/api/Dashboard/TotalMemoryUsedForUploadPerMonth')
+    .then((res) => res.data);
+};
+
+export const findTotalDownload: () => Promise<any> = () => {
+  return api
+    .service()
+    .get('/api/Dashboard/TotalMemoryUsedForDownloadPerMonth')
+    .then((res) => res.data);
+};
