@@ -247,7 +247,7 @@ namespace PoroDev.Runtime.Services
 
                 byte[] fileBytes = File.ReadAllBytes(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).FullName, "imageEdited.jpg"));
 
-                await _uploadClient.GetResponse<CommunicationModel<FileUploadResponse>>(new { FileName = $"Runtime Output {DateTime.UtcNow}",
+                await _uploadClient.GetResponse<CommunicationModel<FileUploadResponse>>(new { FileName = $"Runtime Output {DateTime.UtcNow}.jpg",
                                                                                               File = fileBytes, 
                                                                                               ContentType = "image/jpeg", 
                                                                                               UserId = userId 
