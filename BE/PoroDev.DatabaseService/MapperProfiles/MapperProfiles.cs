@@ -17,6 +17,7 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.DatabaseService.Models;
+using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {
@@ -69,11 +70,22 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
 
             CreateMap<AddUserToSharedSpaceRequestServiceToDatabase, SharedSpacesUsers>();
+
+            //CreateMap<List<SharedSpacesUsers>, List<ReadAllSharedSpacesResponse>>();
+
+            //CreateMap<SharedSpacesUsers, ReadAllSharedSpacesResponse>()
+            //    .ForMember(dst => dst.OwnerName, option => option.MapFrom(src => Fullname(src.User.Name, src.User.Lastname)))
+            //    .ForMember(dst => dst.SharedSpaceName, option => option.MapFrom(src => src.SharedSpace.Name));
         }
 
         private bool ValidateUserDeletion(DataUserModel src)
         {
             return !string.IsNullOrEmpty(src.Id.ToString());
+        }
+
+        private string Fullname(string firstName, string lastName)
+        {
+            return $"{firstName} {lastName}";
         }
     }
 }

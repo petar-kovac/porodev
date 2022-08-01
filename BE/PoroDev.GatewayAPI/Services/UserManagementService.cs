@@ -242,9 +242,9 @@ namespace PoroDev.GatewayAPI.Services
             return responseContext.Message.Entity;
         }
 
-        public async Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
+        public async Task<List<ReadAllSharedSpacesResponse>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
         {
-            var requestResponseContext = await _readAllSharedSpacesForUser.GetResponse<CommunicationModel<List<SharedSpace>>>(model);
+            var requestResponseContext = await _readAllSharedSpacesForUser.GetResponse<CommunicationModel<List<ReadAllSharedSpacesResponse>>>(model);
             if (requestResponseContext.Message.ExceptionName != null)
                 ThrowException(nameof(requestResponseContext.Message.ExceptionName), requestResponseContext.Message.HumanReadableMessage);
 

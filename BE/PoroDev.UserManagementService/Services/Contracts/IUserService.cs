@@ -29,7 +29,7 @@ namespace PoroDev.UserManagementService.Services.Contracts
 
         Task<CommunicationModel<DataUserModel>> ReadUserByEmail(UserReadByEmailRequestGatewayToService model);
 
-        Task<CommunicationModel<List<SharedSpace>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
+        Task<CommunicationModel<List<ReadAllSharedSpacesResponse>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
 
         Task<CommunicationModel<DeleteUserModel>> DeleteAllUsers(UserDeleteAllRequestGatewayToService model);
 

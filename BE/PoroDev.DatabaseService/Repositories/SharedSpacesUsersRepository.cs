@@ -14,9 +14,11 @@ namespace PoroDev.DatabaseService.Repositories
         public async Task<List<SharedSpacesUsers>> GetSharedSpacesByUserId(Guid userId)
         {
             var returnList = await _context.SharedSpacesUsers
+                .Include(userSharedSpace => userSharedSpace.User)
                 .Include(usersSharedSpaces => usersSharedSpaces.SharedSpace)
                 .Where(sharedSpacesUsers => sharedSpacesUsers.UserId.Equals(userId))
                 .ToListAsync();
+
             return returnList;
         }
 
