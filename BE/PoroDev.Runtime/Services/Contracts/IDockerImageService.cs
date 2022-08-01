@@ -16,7 +16,7 @@ namespace PoroDev.Runtime.Services.Contracts
 
         Task<DockerRuntimeException> CreateDockerfile(List<string> argumentList);
 
-        Task<DockerRuntimeException> GetProcessedOutput();
+        Task<DockerRuntimeException> GetProcessedOutput(Guid userId);
 
         Task<string> RunDockerImageUnsafe(string imageName);
 
