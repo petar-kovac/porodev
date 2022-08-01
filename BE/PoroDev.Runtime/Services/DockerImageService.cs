@@ -1,4 +1,6 @@
-﻿using PoroDev.Common.Contracts;
+﻿using MassTransit;
+using PoroDev.Common.Contracts;
+using PoroDev.Common.Contracts.StorageService.UploadFile;
 using PoroDev.Common.Exceptions;
 using PoroDev.Common.Models.RuntimeModels.Data;
 using PoroDev.Runtime.Services.Contracts;
@@ -10,10 +12,11 @@ namespace PoroDev.Runtime.Services
     public class DockerImageService : RuntimePathsAbstract, IDockerImageService
     {
         private readonly IZipManipulator _zipManipulator;
-
-        public DockerImageService(IZipManipulator zipManipulator) : base()
+        private readonly IRequestClient<IUploadRequest> _uploadClient;
+        public DockerImageService(IZipManipulator zipManipulator, IRequestClient<IUploadRequest> uploadClient) : base()
         {
             _zipManipulator = zipManipulator;
+            _uploadClient = uploadClient;
         }
 
         public async Task<CommunicationModel<RuntimeData>> CreateAndRunDockerImage(Guid userId, string projectId)
@@ -111,7 +114,7 @@ namespace PoroDev.Runtime.Services
             stopwatch.Stop();
 
             if (fileNames.Any())
-                await GetProcessedOutput();
+                await GetProcessedOutput(userId);
 
             await DeleteDockerImage(imageName);
 
@@ -236,11 +239,19 @@ namespace PoroDev.Runtime.Services
             return null;
         }
 
-        public async Task<DockerRuntimeException> GetProcessedOutput()
+        public async Task<DockerRuntimeException> GetProcessedOutput(Guid userId)
         {
             try
             {
                 await Process.Start("CMD.exe", $"/C docker cp runtime-container:/imageEdited.jpg {Directory.GetParent(Environment.CurrentDirectory).FullName}").WaitForExitAsync();
+
+                byte[] fileBytes = File.ReadAllBytes(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).FullName, "imageEdited.jpg"));
+
+                await _uploadClient.GetResponse<CommunicationModel<FileUploadResponse>>(new { FileName = $"Runtime Output {DateTime.UtcNow}",
+                                                                                              File = fileBytes, 
+                                                                                              ContentType = "image/jpeg", 
+                                                                                              UserId = userId 
+                                                                                             });
             }
             catch (Exception ex)
             {
