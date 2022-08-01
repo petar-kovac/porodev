@@ -25,6 +25,8 @@ namespace PoroDev.DatabaseService.Consumers.UserConsumers
                 responseModel.Add(new ReadAllSharedSpacesResponse(obj.SharedSpaceId, obj.UserId, obj.User.Name, obj.User.Lastname, obj.SharedSpace.Name));
             }
 
+            responseModel = responseModel.OrderBy(obj => obj.SharedSpaceName).ToList();
+
             await context.RespondAsync(new CommunicationModel<List<ReadAllSharedSpacesResponse>>(responseModel));
         }
     }
