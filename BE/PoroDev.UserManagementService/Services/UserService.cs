@@ -308,9 +308,9 @@ namespace PoroDev.UserManagementService.Services
             return responseContext.Message;
         }
 
-        public async Task<CommunicationModel<List<SharedSpace>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
+        public async Task<CommunicationModel<List<ReadAllSharedSpacesResponse>>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model)
         {
-            var returnModel = await _readAllSharedSpacesForUserRequestClient.GetResponse<CommunicationModel<List<SharedSpace>>>(model);
+            var returnModel = await _readAllSharedSpacesForUserRequestClient.GetResponse<CommunicationModel<List<ReadAllSharedSpacesResponse>>>(model);
             return returnModel.Message;
         }
 

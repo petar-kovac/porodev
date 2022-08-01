@@ -17,6 +17,7 @@ using PoroDev.Common.Models.UserModels.DeleteUser;
 using PoroDev.Common.Models.UserModels.LoginUser;
 using PoroDev.Common.Models.UserModels.RegisterUser;
 using PoroDev.DatabaseService.Models;
+using PoroDev.Common.Contracts.UserManagement.ReadAllSharedSpacesForUser;
 
 namespace PoroDev.DatabaseService.MapperProfiles
 {
@@ -75,5 +76,6 @@ namespace PoroDev.DatabaseService.MapperProfiles
         {
             return !string.IsNullOrEmpty(src.Id.ToString());
         }
+
     }
 }

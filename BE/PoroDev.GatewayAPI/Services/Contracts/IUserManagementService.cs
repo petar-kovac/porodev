@@ -43,7 +43,7 @@ namespace PoroDev.GatewayAPI.Services.Contracts
 
         Task<DataUserModel> VerifyEmail(VerifyEmailRequestGatewayToService verifyModel);
 
-        Task<List<SharedSpace>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
+        Task<List<ReadAllSharedSpacesResponse>> ReadAllSharedSpacesForUser(ReadAllSharedSpacesForUserRequestGatewayToService model);
 
         Task<NotificationDataModel> SetMonthlyReportTime(SetMonthlyReportTimeRequestGatewayToService model);
 

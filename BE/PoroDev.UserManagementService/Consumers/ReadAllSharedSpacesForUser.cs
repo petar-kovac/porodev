@@ -18,7 +18,7 @@ namespace PoroDev.UserManagementService.Consumers
         public async Task Consume(ConsumeContext<ReadAllSharedSpacesForUserRequestGatewayToService> context)
         {
             var returnModel = await _userService.ReadAllSharedSpacesForUser(context.Message);
-            await context.RespondAsync<CommunicationModel<List<SharedSpace>>>(returnModel);
+            await context.RespondAsync<CommunicationModel<List<ReadAllSharedSpacesResponse>>>(returnModel);
         }
     }
 }
