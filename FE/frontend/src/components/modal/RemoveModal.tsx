@@ -35,8 +35,6 @@ const RemoveModal: FC<IPModalProps> = ({
   fileId,
   data,
   setData,
-  setSearchRes,
-  searchRes,
   isRemoveModalVisible,
   isSharedSpaceFile,
   sharedSpaceId,
@@ -52,13 +50,9 @@ const RemoveModal: FC<IPModalProps> = ({
         title={title}
         visible={isRemoveModalVisible}
         onOk={() => {
-          console.log('tuuuuuuuu sam');
           handleDelete(fileId, isSharedSpaceFile, sharedSpaceId, data);
           setIsRemoveModalVisible(false);
           setData([...data.filter((value: any) => value.fileId !== fileId)]);
-          setSearchRes([
-            ...searchRes.filter((value: any) => value.fileId !== fileId),
-          ]);
         }}
         onCancel={handleCancel}
 

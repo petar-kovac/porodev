@@ -64,18 +64,6 @@ const Files: FC = () => {
         }}
       >
         <StyledStaticContent isCollapsed={isCollapsed}>
-          <PFilterWrapper>
-            <PFilter
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              isList={isListView}
-              setIsList={setIsListView}
-              activeFilters={{
-                showFilterByDate: true,
-              }}
-            />
-          </PFilterWrapper>
-
           {/* <StyledFoldersContainer>
              <h2>Folders</h2> 
             <StyledFoldersWrapper>

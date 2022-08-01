@@ -24,7 +24,7 @@ export const handleDelete = async (
     await deleteFileFromSharedSpace({ sharedSpaceId, fileId });
   } else {
     await deleteFile(fileId);
+    const listCard = document.getElementById('remove-id');
+    listCard?.parentNode?.removeChild(listCard);
   }
-  const listCard = document.getElementById('remove-id');
-  listCard?.parentNode?.removeChild(listCard);
 };
