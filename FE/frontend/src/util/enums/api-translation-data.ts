@@ -23,5 +23,8 @@ export enum ApiTranslation {
   contentType = 'Content type',
   addedToSharedSpace = 'Added',
   userLastName = 'Last name',
+  ownerName = 'Owner name',
+  sharedSpaceName = 'Name',
+  sharedSpaceId = 'ID',
   ERROR = 4,
 }

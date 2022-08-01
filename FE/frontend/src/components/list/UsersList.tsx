@@ -16,6 +16,8 @@ const UsersList: React.FC<{
 }> = ({ data, cardData, setIsSiderModalVisible }) => {
   const { setIsModalVisible, userTrigger, setUserTrigger } = usePageContext();
 
+  console.log(cardData, 'cd');
+
   return (
     <List
       dataSource={data}
@@ -26,7 +28,7 @@ const UsersList: React.FC<{
             try {
               await addUserToSharedSpace({
                 userId: item.id,
-                sharedSpaceID: cardData.id,
+                sharedSpaceID: cardData.sharedSpaceId,
               });
               setIsSiderModalVisible(false);
               setUserTrigger(!userTrigger);

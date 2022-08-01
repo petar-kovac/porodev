@@ -35,15 +35,15 @@ const PFolders: FC<IPFoldersProps> = ({
   const handleClick = (value: any) => {
     setIsSiderVisible(true);
     setCardData(value);
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.sharedSpaceId);
     // setSharedSpaceId(value)
   };
 
   const handleDoubleClick = (value: any) => {
-    setSelectedCardId(value.id);
+    setSelectedCardId(value.sharedSpaceId);
     setCardData(value);
     // setIsSiderVisible(false);
-    navigate(`/shared-spaces/${value.id}`);
+    navigate(`/shared-spaces/${value.sharedSpaceId}`);
 
     // setIsModalVisible(true);
   };
@@ -52,11 +52,11 @@ const PFolders: FC<IPFoldersProps> = ({
     <>
       {data?.map((value: any) => (
         <PFolder
-          key={value.id}
+          key={value.sharedSpaceId}
           value={value}
-          heading={value?.name}
+          heading={value?.sharedSpaceName}
           description={value?.description}
-          selected={selectedCardId === value.id}
+          selected={selectedCardId === value.sharedSpaceId}
           onClick={() => handleClick(value)}
           onDoubleClick={() => handleDoubleClick(value)}
         />
