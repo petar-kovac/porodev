@@ -70,12 +70,6 @@ namespace PoroDev.DatabaseService.MapperProfiles
             CreateMap<UnitOfWorkResponseModel<SharedSpacesFiles>, CommunicationModel<SharedSpacesFiles>>();
 
             CreateMap<AddUserToSharedSpaceRequestServiceToDatabase, SharedSpacesUsers>();
-
-            //CreateMap<List<SharedSpacesUsers>, List<ReadAllSharedSpacesResponse>>();
-
-            //CreateMap<SharedSpacesUsers, ReadAllSharedSpacesResponse>()
-            //    .ForMember(dst => dst.OwnerName, option => option.MapFrom(src => Fullname(src.User.Name, src.User.Lastname)))
-            //    .ForMember(dst => dst.SharedSpaceName, option => option.MapFrom(src => src.SharedSpace.Name));
         }
 
         private bool ValidateUserDeletion(DataUserModel src)
@@ -83,9 +77,5 @@ namespace PoroDev.DatabaseService.MapperProfiles
             return !string.IsNullOrEmpty(src.Id.ToString());
         }
 
-        private string Fullname(string firstName, string lastName)
-        {
-            return $"{firstName} {lastName}";
-        }
     }
 }
