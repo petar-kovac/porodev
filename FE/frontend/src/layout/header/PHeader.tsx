@@ -1,22 +1,45 @@
 import { Layout } from 'antd';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+import JwtDecode from 'jwt-decode';
 
 import PDropdown from 'components/dropdown/PDropdown';
 import logoImage from 'assets/newLogo.png';
 import { StorageKey } from 'util/enums/storage-keys';
+import { findUserById } from 'service/authorization/authorization';
+import { usePageContext } from 'context/PageContext';
+import { Navigate } from '@styled-icons/ionicons-outline';
+import { useNavigate } from 'react-router-dom';
 
 const { Header } = Layout;
 
 const PHeader: FC = () => {
+  const [userData, setUserData] = useState<any>(null);
+
+  const { isModalVisible, setIsModalVisible } = usePageContext();
+
+  const accessToken = localStorage.getItem(StorageKey.ACCESS_TOKEN);
+
+  useEffect(() => {
+    if (accessToken) {
+      const { Id }: any = JwtDecode(accessToken);
+      findUserById(Id)
+        .then((res) => {
+          const { data } = res;
+          setUserData(data);
+          console.log(userData);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [isModalVisible]);
+
   return (
     <StyledHeader style={{ color: 'white' }}>
       <StyledLogo src={logoImage} />
       <StyledButtons>
-        <StyledUserName>{localStorage.getItem(StorageKey.NAME)}</StyledUserName>
-        <StyledUserName>
-          {localStorage.getItem(StorageKey.LASTNAME)}
-        </StyledUserName>
+        <StyledUserName>{userData?.name}</StyledUserName>
+        <StyledUserName>{userData?.lastname}</StyledUserName>
         <PDropdown />
       </StyledButtons>
     </StyledHeader>

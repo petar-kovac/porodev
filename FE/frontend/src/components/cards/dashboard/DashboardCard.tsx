@@ -18,10 +18,18 @@ const DashboardCard: FC<IDashboardCardProps> = ({
 
   return (
     <StyledDashboardCard>
-      <h3>Files data</h3>
-      <p>Number of uploaded files: {numberOfUploadedFiles}</p>
-      <p>Number of deleted files: {numberOfDeletedFiles}</p>
-      <p>Number of users: {numberOfUsers}</p>
+      {/* <h2>Files data</h2> */}
+      <h2>{title}</h2>
+      <p>
+        Number of uploaded files:{' '}
+        <StyledSpan>{numberOfUploadedFiles}</StyledSpan>
+      </p>
+      <p>
+        Number of deleted files: <StyledSpan>{numberOfDeletedFiles}</StyledSpan>
+      </p>
+      <p>
+        Number of users: <StyledSpan>{numberOfUsers}</StyledSpan>
+      </p>
     </StyledDashboardCard>
   );
 };
@@ -31,6 +39,11 @@ const StyledDashboardCard = styled.div`
   border-radius: 2rem;
   padding: 2rem;
   width: 25rem;
+`;
+
+const StyledSpan = styled.span`
+  font-size: 1.5rem;
+  font-weight: bold;
 `;
 
 export default DashboardCard;

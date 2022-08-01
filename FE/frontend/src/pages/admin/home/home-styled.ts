@@ -6,8 +6,8 @@ export const StyledHome = styled.div`
 
 export const StyledDashboardCardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-  grid-column-gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 16%));
+  grid-column-gap: 1rem;
   grid-row-gap: 3rem;
 `;
 

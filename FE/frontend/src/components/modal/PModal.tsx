@@ -3,11 +3,14 @@ import { Button, Modal, Input } from 'antd';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { usePageContext } from 'context/PageContext';
+import { useAuthStateValue } from 'context/AuthContext';
 import useGroupData from 'pages/user/groups/hooks/useGroupData';
 import { Dispatch, FC, SetStateAction, ReactNode, useEffect } from 'react';
 import { postPassword, postProfile } from 'service/files/files';
 import { IRuntimeRsponse } from 'service/runtime/runtime.props';
 import { Controller, useForm } from 'react-hook-form';
+
+import { useNavigate } from 'react-router-dom';
 
 import {
   createSharedSpace,
@@ -58,7 +61,12 @@ const PModal: FC<IPModalProps> = ({
     isLoading,
     setIsLoading,
   } = usePageContext();
+
+  const { logout } = useAuthStateValue();
+
   const { setData } = useGroupData();
+
+  const navigate = useNavigate();
 
   const {
     control,
@@ -78,6 +86,7 @@ const PModal: FC<IPModalProps> = ({
       setIsLoading(true);
       try {
         await postPassword(passData);
+        logout();
       } catch (error) {
         console.log(error);
         setIsLoading(false);
@@ -88,6 +97,7 @@ const PModal: FC<IPModalProps> = ({
     } else {
       setIsLoading(true);
       await postProfile(modalData);
+      navigate(0);
       setIsLoading(false);
       setIsModalVisible(false);
     }

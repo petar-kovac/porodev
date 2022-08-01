@@ -61,9 +61,6 @@ const columnChartData = [
 ];
 
 const Home: FC = () => {
-  const [dashboardData, setDashboardData] = useState<any>();
-  const [isLoading, setIsLoading] = useState<boolean>();
-
   const [filesData, setFilesData] = useState<any>([]);
   const [chartData, setChartData] = useState<any>();
   const [columnData, setColumnData] = useState<any>();
@@ -75,8 +72,8 @@ const Home: FC = () => {
           findNumberOfUploadedFiles(),
           findNumberOfDeletedFiles(),
           findNumberOfUsers(),
-          findTotalMemory(5),
-          findTotalDownload(5),
+          findTotalMemory(6),
+          findTotalDownload(6),
         ]);
 
       setFilesData([firstRes, secondRes, thirdRes, fourthRes, fifthRes]);
@@ -90,21 +87,32 @@ const Home: FC = () => {
   console.log(filesData);
   console.log(chartData);
 
-  const { findData, data } = useAdminsData();
+  // const { findData, data } = useAdminsData();
 
   return (
     <StyledHome>
       <StyledDashboardCardContainer>
         <DashboardCard
-          // title={value?.title}
+          title="Files data"
           numberOfUploadedFiles={filesData?.[0]?.numberOfUploadedFiles}
           numberOfDeletedFiles={filesData?.[1]?.numberOfDeletedFiles}
           numberOfUsers={filesData?.[2]?.numberOfUsers}
         />
       </StyledDashboardCardContainer>
       <StyledChartsContainer>
-        {chartData !== undefined && <StackedArea data={chartData} />}
-        {columnData !== undefined && <ColumnChart columnData={columnData} />}
+        {chartData !== undefined && (
+          <div>
+            <h2>Total uploads per month</h2>
+
+            <StackedArea data={chartData} />
+          </div>
+        )}
+        {columnData !== undefined && (
+          <div>
+            <h2>Total downloads per month</h2>
+            <ColumnChart columnData={columnData} />
+          </div>
+        )}
       </StyledChartsContainer>
     </StyledHome>
   );
