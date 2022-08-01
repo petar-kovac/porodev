@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { formatDate } from 'util/helpers/date-formaters';
+import { findPosition } from 'util/helpers/find-user-position';
 
 const useUsersColumns = () => {
   const columns = useMemo(
@@ -23,6 +24,9 @@ const useUsersColumns = () => {
         title: 'Department',
         dataIndex: 'department',
         key: 'department',
+        render: (record: any) => {
+          return findPosition(record);
+        },
       },
       {
         title: 'Verified at',

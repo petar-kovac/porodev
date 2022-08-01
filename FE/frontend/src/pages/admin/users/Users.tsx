@@ -16,8 +16,6 @@ const Users: FC = () => {
   const { columns } = useUsersColumns();
   const { isLoading, data, error } = useUsersData();
 
-  console.log(data, 'data');
-
   return (
     <StyledPage>
       <StyledHeadingWrapper style={{ paddingTop: 20, paddingBottom: 20 }}>
