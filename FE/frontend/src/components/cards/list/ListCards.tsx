@@ -19,6 +19,7 @@ interface IListCardProps {
   isAdmin?: boolean;
   cardData?: IFilesCard | null;
   data?: any;
+  setData?: any;
   selected?: boolean;
   selectedCardId?: number | null;
   onClick?: (event: MouseEvent) => unknown;
@@ -28,6 +29,7 @@ interface IListCardProps {
   isSharedSpace?: boolean;
   searchTerm?: any;
   searchRes?: any;
+  setSearchRes?: any;
   filteredResults?: any;
 }
 
@@ -37,9 +39,11 @@ const ListCards: FC<IListCardProps> = ({
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
   data,
+  setData,
   isSharedSpace,
   searchTerm,
   searchRes,
+  setSearchRes,
   filteredResults,
 }) => {
   const { setIsSiderVisible, setIsModalVisible } = usePageContext();
@@ -68,9 +72,12 @@ const ListCards: FC<IListCardProps> = ({
           return (
             <ListCard
               data={data}
+              setData={setData}
               value={value}
               isAdmin={isAdmin}
               fileId={value.id}
+              searchRes={searchRes}
+              setSearchRes={setSearchRes}
               fileName={value.filename}
               userName={value.userName}
               userLastName={value.userLastname}
@@ -92,6 +99,7 @@ const ListCards: FC<IListCardProps> = ({
             <ListCard
               isSharedSpace
               data={data}
+              setData={setData}
               value={value}
               isAdmin={isAdmin}
               fileId={value.fileId}

@@ -78,8 +78,8 @@ const PRouter: FC = () => {
                   <Route path="/user-home" element={<UserHome />} />
                   <Route path="/user-files" element={<UserFiles />} />
                   <Route path="/profile" element={<Profile />} />
-                  <Route path="/user-groups" element={<UserGroups />} />
-                  <Route path="/user-groups/:id" element={<SingleGroup />} />
+                  <Route path="/shared-spaces" element={<UserGroups />} />
+                  <Route path="/shared-spaces/:id" element={<SingleGroup />} />
                   <Route path="/user-runtime" element={<UserRuntime />} />
                 </Route>
                 {/* <Route path="/confirm" element={<EmailConfirmed />} /> */}

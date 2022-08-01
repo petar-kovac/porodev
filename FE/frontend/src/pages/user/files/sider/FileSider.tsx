@@ -117,7 +117,7 @@ const FileSider: FC<IPFileSiderProps> = ({
         </StyledFirstPart>
 
         <ChoseSharedSpaceModal
-          title="Chose image"
+          title="Chose file"
           isSiderModalVisible={isSiderModalVisible}
           setIsSiderModalVisible={setIsSiderModalVisible}
           content={modalContent}

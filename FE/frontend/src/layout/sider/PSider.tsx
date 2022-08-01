@@ -84,8 +84,8 @@ const PSider: FC = () => {
             <Menu.Item key="/user-files" icon={<FileOutlined />}>
               <Link to="/user-files">Files</Link>
             </Menu.Item>
-            <Menu.Item key="/user-groups" icon={<TeamOutlined />}>
-              <Link to="/user-groups">Groups</Link>
+            <Menu.Item key="/shared-spaces" icon={<TeamOutlined />}>
+              <Link to="/shared-spaces">Shared spaces</Link>
             </Menu.Item>
             <Menu.Item key="/user-runtime" icon={<FieldTimeOutlined />}>
               <Link to="/user-runtime">Runtime</Link>

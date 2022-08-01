@@ -37,7 +37,7 @@ const Files: FC = () => {
     isLoading,
     setIsLoading,
   } = usePageContext();
-  const { data, error } = useFilesData();
+  const { data, error, setData } = useFilesData();
 
   // search filter
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -148,7 +148,9 @@ const Files: FC = () => {
                           <ListCards
                             searchTerm={searchTerm}
                             searchRes={searchRes}
+                            setSearchRes={setSearchRes}
                             data={data}
+                            setData={setData}
                             cardData={cardData}
                             setCardData={setCardData}
                             selectedCardId={selectedCardId}
@@ -161,6 +163,7 @@ const Files: FC = () => {
                             searchTerm={searchTerm}
                             searchRes={searchRes}
                             data={data}
+                            setData={setData}
                             cardData={cardData}
                             setCardData={setCardData}
                             selectedCardId={selectedCardId}

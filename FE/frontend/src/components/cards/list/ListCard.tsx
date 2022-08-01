@@ -30,9 +30,12 @@ interface IListCardProps {
   fileId?: any;
   fileName: any;
   data: any;
+  setData?: any;
   value: any;
   selected: boolean;
   userName: string;
+  setSearchRes?: any;
+  searchRes?: any;
   isSharedSpace?: boolean;
   userLastName: string;
   onClick?: MouseEventHandler<HTMLElement>;
@@ -48,6 +51,10 @@ const ListCard: FC<IListCardProps> = ({
   selected,
   userName,
   userLastName,
+  data,
+  setSearchRes,
+  searchRes,
+  setData,
   isSharedSpace,
   onClick = () => undefined,
   onDoubleClick = () => undefined,
@@ -153,7 +160,11 @@ const ListCard: FC<IListCardProps> = ({
         </StyledListCard>
       </StyledListCardContainer>
       <RemoveModal
+        data={data}
+        setData={setData}
         sharedSpaceId={id}
+        searchRes={searchRes}
+        setSearchRes={setSearchRes}
         isSharedSpaceFile={isSharedSpaceFile}
         fileId={fileId}
         isRemoveModalVisible={isRemoveModalVisible}

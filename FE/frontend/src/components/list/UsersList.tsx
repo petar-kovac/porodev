@@ -1,6 +1,6 @@
 import { FileZipOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { AddCircle } from '@styled-icons/ionicons-outline';
-import { List } from 'antd';
+import { List, message } from 'antd';
 import { usePageContext } from 'context/PageContext';
 import { useSiderContext } from 'context/SiderContext';
 import React, { Dispatch, SetStateAction } from 'react';
@@ -23,12 +23,16 @@ const UsersList: React.FC<{
         <StyledListItem
           aria-hidden="true"
           onClick={async () => {
-            await addUserToSharedSpace({
-              userId: item.id,
-              sharedSpaceID: cardData.id,
-            });
-            setIsSiderModalVisible(false);
-            setUserTrigger(!userTrigger);
+            try {
+              await addUserToSharedSpace({
+                userId: item.id,
+                sharedSpaceID: cardData.id,
+              });
+              setIsSiderModalVisible(false);
+              setUserTrigger(!userTrigger);
+            } catch (err) {
+              message.error('User already exists');
+            }
           }}
           key={item.fileName}
         >

@@ -35,10 +35,10 @@ const SingleGroup: FC = () => {
   const [cardData, setCardData] = useState<IFilesCard | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
 
-  const { setIsSiderVisible, setIsModalVisible, isCollapsed } =
+  const { setIsSiderVisible, setIsModalVisible, isCollapsed, userTrigger } =
     usePageContext();
   const { id } = useParams();
-  const { data, isLoading, error } = useFilesData(id as string);
+  const { data, isLoading, error, setData } = useFilesData(id as string);
 
   // search filter
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -138,6 +138,7 @@ const SingleGroup: FC = () => {
                     searchTerm={searchTerm}
                     searchRes={searchRes}
                     data={data}
+                    setData={setData}
                     cardData={cardData}
                     setCardData={setCardData}
                     selectedCardId={selectedCardId}
@@ -151,6 +152,7 @@ const SingleGroup: FC = () => {
                     searchTerm={searchTerm}
                     searchRes={searchRes}
                     data={data}
+                    setData={setData}
                     cardData={cardData}
                     setCardData={setCardData}
                     selectedCardId={selectedCardId}

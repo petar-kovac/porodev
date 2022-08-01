@@ -20,6 +20,7 @@ interface IGridCardProps {
   time?: any;
   id?: string;
   data?: any;
+  setData?: any;
   value?: any;
   heading?: string;
   description?: string;
@@ -40,6 +41,7 @@ const GridCard: FC<IGridCardProps> = ({
   time,
   data,
   value,
+  setData,
   heading,
   description,
   selected,
@@ -138,6 +140,8 @@ const GridCard: FC<IGridCardProps> = ({
         </StyledMetaCardDescription>
       </StyledGridCard>
       <RemoveModal
+        data={data}
+        setData={setData}
         sharedSpaceId={id}
         isSharedSpaceFile={isSharedSpaceFile}
         fileId={fileId}

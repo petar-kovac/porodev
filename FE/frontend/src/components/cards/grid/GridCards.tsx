@@ -10,6 +10,7 @@ interface IGridCardProps {
   selected?: boolean;
   cardData?: IFilesCard | null;
   data?: IFilesCard[] | null;
+  setData?: any;
   selectedCardId?: number | null;
   searchTerm?: string;
   searchRes?: any;
@@ -25,6 +26,7 @@ const GridCards: FC<IGridCardProps> = ({
   setCardData = () => undefined,
   setSelectedCardId = () => undefined,
   data,
+  setData,
   searchTerm,
   isSharedSpace,
   searchRes,
@@ -55,6 +57,8 @@ const GridCards: FC<IGridCardProps> = ({
         ?.map((value: any) => (
           <GridCard
             home
+            data={data}
+            setData={setData}
             value={value}
             key={value.id}
             fileId={value.id}
@@ -77,6 +81,8 @@ const GridCards: FC<IGridCardProps> = ({
           <GridCard
             isSharedSpace
             home
+            data={data}
+            setData={setData}
             value={value}
             key={value.fileId}
             fileId={value.fileId}

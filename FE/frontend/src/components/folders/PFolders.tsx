@@ -43,7 +43,7 @@ const PFolders: FC<IPFoldersProps> = ({
     setSelectedCardId(value.id);
     setCardData(value);
     // setIsSiderVisible(false);
-    navigate(`/user-groups/${value.id}`);
+    navigate(`/shared-spaces/${value.id}`);
 
     // setIsModalVisible(true);
   };

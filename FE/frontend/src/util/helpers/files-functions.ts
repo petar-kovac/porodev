@@ -18,6 +18,7 @@ export const handleDelete = async (
   fileId: any,
   isSharedSpaceFile: any,
   sharedSpaceId: any,
+  data: any,
 ) => {
   if (isSharedSpaceFile) {
     await deleteFileFromSharedSpace({ sharedSpaceId, fileId });

@@ -14,8 +14,12 @@ interface IPModalProps {
   onCancel?: any;
   isRemoveModalVisible?: boolean;
   sharedSpaceId?: string;
+  data?: any;
+  setData?: any;
   fileName?: string;
   fileId?: string;
+  setSearchRes?: any;
+  searchRes?: any;
   isSharedSpaceFile?: boolean;
   setIsRemoveModalVisible?: Dispatch<SetStateAction<boolean>>;
   setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
@@ -29,11 +33,17 @@ const RemoveModal: FC<IPModalProps> = ({
   handleCancel,
   fileName,
   fileId,
+  data,
+  setData,
+  setSearchRes,
+  searchRes,
   isRemoveModalVisible,
   isSharedSpaceFile,
   sharedSpaceId,
   setIsRemoveModalVisible = () => undefined,
 }) => {
+  const { setUserTrigger, userTrigger } = usePageContext();
+
   return (
     <>
       <StyledFilesModal
@@ -42,8 +52,13 @@ const RemoveModal: FC<IPModalProps> = ({
         title={title}
         visible={isRemoveModalVisible}
         onOk={() => {
-          handleDelete(fileId, isSharedSpaceFile, sharedSpaceId);
+          console.log('tuuuuuuuu sam');
+          handleDelete(fileId, isSharedSpaceFile, sharedSpaceId, data);
           setIsRemoveModalVisible(false);
+          setData([...data.filter((value: any) => value.fileId !== fileId)]);
+          setSearchRes([
+            ...searchRes.filter((value: any) => value.fileId !== fileId),
+          ]);
         }}
         onCancel={handleCancel}
 

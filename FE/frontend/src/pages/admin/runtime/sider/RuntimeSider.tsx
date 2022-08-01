@@ -139,7 +139,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
                 <RuntimeInputSiderMapper />
               </StyledInputParametersList>
               <StyledRow>
-                <StyledTitle>Add image</StyledTitle>
+                <StyledTitle>Add file</StyledTitle>
                 <PlusCircleOutlined onClick={onAddImage} />
               </StyledRow>
               <StyledImageParametersList>
@@ -152,7 +152,7 @@ const RuntimeSider: FC<IPFileSiderProps> = ({
               isLoading={isLoading}
             />
             <ChoseImageModal
-              title="Chose image"
+              title="Chose file"
               isSiderModalVisible={isSiderModalVisible}
               setIsSiderModalVisible={setIsSiderModalVisible}
               content={modalContent}
