@@ -77,8 +77,8 @@ const Home: FC = () => {
         ]);
 
       setFilesData([firstRes, secondRes, thirdRes, fourthRes, fifthRes]);
-      setChartData(fourthRes.content);
-      setColumnData(fifthRes.content);
+      setChartData(fourthRes.content.reverse());
+      setColumnData(fifthRes.content.reverse());
     };
 
     findFiles();
