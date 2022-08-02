@@ -102,14 +102,14 @@ const Home: FC = () => {
       <StyledChartsContainer>
         {chartData !== undefined && (
           <div>
-            <h2>Total uploads per month</h2>
+            <h2>Total uploads per month in MBs</h2>
 
             <StackedArea data={chartData} />
           </div>
         )}
         {columnData !== undefined && (
           <div>
-            <h2>Total downloads per month</h2>
+            <h2>Total downloads per month in MBs</h2>
             <ColumnChart columnData={columnData} />
           </div>
         )}

@@ -53,7 +53,7 @@ const GridCards: FC<IGridCardProps> = ({
 
   return !isSharedSpace ? (
     <>
-      {data
+      {searchRes
         ?.map((value: any) => (
           <GridCard
             home
