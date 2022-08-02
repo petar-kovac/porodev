@@ -25,6 +25,6 @@ export enum ApiTranslation {
   userLastName = 'Last name',
   ownerName = 'Owner name',
   sharedSpaceName = 'Name',
-  sharedSpaceId = 'ID',
+  // sharedSpaceId = 'ID',
   ERROR = 4,
 }
