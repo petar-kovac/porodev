@@ -28,6 +28,7 @@ const SharedSpaceList: React.FC<{
                 sharedSpaceId: item.sharedSpaceId,
                 fileId: id,
               });
+              message.success('Successful upload');
               setIsSiderModalVisible(false);
             } catch (err: any) {
               console.log(err);
