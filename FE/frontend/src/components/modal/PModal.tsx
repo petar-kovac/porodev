@@ -176,7 +176,7 @@ const PModal: FC<IPModalProps> = ({
                         style={{ borderRadius: '.8rem' }}
                       />
                       <StyledFormSpan>
-                        {errors?.oldPassword?.message}
+                        {errors?.oldPassword?.message as any}
                       </StyledFormSpan>
                     </StyledFormBox>
                   )}
@@ -196,7 +196,7 @@ const PModal: FC<IPModalProps> = ({
                         style={{ borderRadius: '.8rem' }}
                       />
                       <StyledFormSpan>
-                        {errors?.newPassword?.message}
+                        {errors?.newPassword?.message as any}
                       </StyledFormSpan>
                     </StyledFormBox>
                   )}
@@ -221,7 +221,7 @@ const PModal: FC<IPModalProps> = ({
                         style={{ borderRadius: '.8rem' }}
                       />
                       <StyledFormSpan>
-                        {errors?.confirmPassword?.message}
+                        {errors?.confirmPassword?.message as any}
                       </StyledFormSpan>
                     </StyledFormBox>
                   )}
