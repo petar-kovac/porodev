@@ -6,6 +6,7 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
+
 import { Avatar, Layout, Menu } from 'antd';
 import { FC, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -15,6 +16,8 @@ import { Airplane } from '@styled-icons/ionicons-outline';
 import { useAuthStateValue } from 'context/AuthContext';
 import { usePageContext } from 'context/PageContext';
 import { Role } from 'util/enums/roles';
+
+import userAvatar from '../../assets/useravatar.jpg';
 
 const { Sider } = Layout;
 
@@ -44,7 +47,7 @@ const PSider: FC = () => {
       <StyledSiderHeader>
         <Avatar
           size={60}
-          src="https://joeschmoe.io/api/v1/random"
+          src={userAvatar}
           style={{ border: '1.5px solid #ccc' }}
         />
       </StyledSiderHeader>

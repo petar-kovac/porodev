@@ -17,6 +17,8 @@ import {
 import PModal from 'components/modal/PModal';
 import { usePageContext } from 'context/PageContext';
 
+import userAvatar from '../../../assets/useravatar.jpg';
+
 export interface IModalTitleProps {
   title?: string;
   content?: ReactNode;
@@ -83,7 +85,7 @@ const Profile: FC = () => {
           <StyledProfileCardContent>
             <StyledProfileCardItem avatar>
               <p style={{ fontSize: '1.5rem' }}>Profile picture</p>
-              <Avatar size={48} src="https://joeschmoe.io/api/v1/random" />
+              <Avatar size={48} src={userAvatar} />
               <StyledProfileIcon style={{ marginBottom: '.8rem' }}>
                 <UploadOutlined />
               </StyledProfileIcon>

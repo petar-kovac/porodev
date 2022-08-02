@@ -38,9 +38,9 @@ const Files: FC = () => {
     isLoading,
     setIsLoading,
   } = usePageContext();
-  const { data, error } = useFilesData();
+  const { data, error, setData } = useFilesData();
 
-  console.log(data, 'dataaaaa');
+  console.log(data);
   // search filter
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchRes, setSearchRes] = useState<[]>();
@@ -51,6 +51,7 @@ const Files: FC = () => {
       .then((res) => {
         console.log(res);
         setSearchRes(res);
+
         setIsLoading(false);
       })
       .catch((err) => console.log(err));

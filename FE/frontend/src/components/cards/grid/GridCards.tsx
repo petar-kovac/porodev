@@ -53,7 +53,7 @@ const GridCards: FC<IGridCardProps> = ({
 
   return !isSharedSpace ? (
     <>
-      {searchRes
+      {data
         ?.map((value: any) => (
           <GridCard
             home
@@ -67,7 +67,7 @@ const GridCards: FC<IGridCardProps> = ({
             // description={value.description}
             time={value.uploadDateTime}
             selected={selectedCardId === value.id}
-            fileExtension={value.filename.split('.')[1]}
+            fileExtension={value.filename?.split('.')[1]}
             onClick={() => handleClick(value)}
             onDoubleClick={() => handleDoubleClick(value)}
           />

@@ -37,28 +37,28 @@ import {
 //   { department: 'Department 1', date: 2022, value: 459 },
 // ];
 
-const columnChartData = [
-  {
-    day: 'Monday',
-    value: 3,
-  },
-  {
-    day: 'Tuesday',
-    value: 5,
-  },
-  {
-    day: 'Wednesday',
-    value: 2,
-  },
-  {
-    day: 'Thursday',
-    value: 3,
-  },
-  {
-    day: 'Friday',
-    value: 4,
-  },
-];
+// const columnChartData = [
+//   {
+//     day: 'Monday',
+//     value: 3,
+//   },
+//   {
+//     day: 'Tuesday',
+//     value: 5,
+//   },
+//   {
+//     day: 'Wednesday',
+//     value: 2,
+//   },
+//   {
+//     day: 'Thursday',
+//     value: 3,
+//   },
+//   {
+//     day: 'Friday',
+//     value: 4,
+//   },
+// ];
 
 const Home: FC = () => {
   const [filesData, setFilesData] = useState<any>([]);
@@ -87,7 +87,7 @@ const Home: FC = () => {
   console.log(filesData);
   console.log(chartData);
 
-  // const { findData, data } = useAdminsData();
+  const { findData, data } = useAdminsData();
 
   return (
     <StyledHome>

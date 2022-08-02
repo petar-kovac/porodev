@@ -162,7 +162,7 @@ const PModal: FC<IPModalProps> = ({
                   control={control}
                   defaultValue=""
                   render={({ field: { ref, onChange, ...field } }) => (
-                    <StyledFormBox>
+                    <StyledFormBox style={{ marginBottom: '1rem' }}>
                       <span>Old password:</span>
                       <Input.Password
                         {...field}
@@ -173,6 +173,7 @@ const PModal: FC<IPModalProps> = ({
                           console.log(passData);
                         }}
                         placeholder="Enter your old password..."
+                        style={{ borderRadius: '.8rem' }}
                       />
                       <StyledFormSpan>
                         {errors?.oldPassword?.message}
@@ -185,13 +186,14 @@ const PModal: FC<IPModalProps> = ({
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
-                    <StyledFormBox>
+                    <StyledFormBox style={{ marginBottom: '1rem' }}>
                       <span>Password:</span>
                       <Input.Password
                         {...field}
                         type="password"
                         autoComplete="new-password"
                         placeholder="Enter your new password..."
+                        style={{ borderRadius: '.8rem' }}
                       />
                       <StyledFormSpan>
                         {errors?.newPassword?.message}
@@ -216,6 +218,7 @@ const PModal: FC<IPModalProps> = ({
                           console.log(passData);
                         }}
                         placeholder="Confirm your new password..."
+                        style={{ borderRadius: '.8rem' }}
                       />
                       <StyledFormSpan>
                         {errors?.confirmPassword?.message}

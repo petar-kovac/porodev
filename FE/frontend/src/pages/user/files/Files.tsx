@@ -49,10 +49,13 @@ const Files: FC = () => {
       .then((res) => {
         console.log(res);
         setSearchRes(res);
+
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
   }, [searchTerm]);
+
+  console.log(data);
 
   return (
     <StyledPageWrapper>
