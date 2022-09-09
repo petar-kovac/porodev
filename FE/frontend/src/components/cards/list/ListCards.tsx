@@ -1,0 +1,181 @@
+import {
+  Dispatch,
+  FC,
+  MouseEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
+
+import { IFilesCard } from 'types/card-data';
+import { useFetchData } from 'hooks/useFetchData';
+import { usePageContext } from 'context/PageContext';
+
+import { findFiles, downloadFile } from 'service/files/files';
+
+import ListCard from './ListCard';
+
+interface IListCardProps {
+  isAdmin?: boolean;
+  cardData?: IFilesCard | null;
+  data?: any;
+  setData?: any;
+  selected?: boolean;
+  selectedCardId?: number | null;
+  onClick?: (event: MouseEvent) => unknown;
+  onDoubleClick?: (event: MouseEvent) => unknown;
+  setCardData?: Dispatch<SetStateAction<IFilesCard | null>>;
+  setSelectedCardId?: Dispatch<SetStateAction<number | null>>;
+  isSharedSpace?: boolean;
+  searchTerm?: any;
+  searchRes?: any;
+  setSearchRes?: any;
+  filteredResults?: any;
+}
+
+const ListCards: FC<IListCardProps> = ({
+  isAdmin,
+  selectedCardId,
+  setCardData = () => undefined,
+  setSelectedCardId = () => undefined,
+  data,
+  setData,
+  isSharedSpace,
+  searchTerm,
+  searchRes,
+  setSearchRes,
+  filteredResults,
+}) => {
+  const { setIsSiderVisible, setIsModalVisible } = usePageContext();
+
+  const handleClick = (value: any) => {
+    if (isSharedSpace) {
+      setSelectedCardId(value.fileId);
+    } else {
+      setSelectedCardId(value.id);
+    }
+    setCardData(value);
+    setIsSiderVisible(true);
+  };
+
+  const handleDoubleClick = (value: any) => {
+    setSelectedCardId(value.id);
+    setCardData(value);
+    setIsSiderVisible(false);
+    // setIsModalVisible(true);
+  };
+
+  return !isSharedSpace ? (
+    <>
+      {searchRes
+        ?.map((value: any) => {
+          return (
+            <ListCard
+              data={data}
+              setData={setData}
+              value={value}
+              isAdmin={isAdmin}
+              fileId={value.id}
+              searchRes={searchRes}
+              setSearchRes={setSearchRes}
+              fileName={value.filename}
+              userName={value.userName}
+              userLastName={value.userLastname}
+              selected={selectedCardId === value.id}
+              key={value.id}
+              setSelectedCardId={setSelectedCardId}
+              onClick={() => handleClick(value)}
+              onDoubleClick={() => handleDoubleClick(value)}
+            />
+          );
+        })
+        .reverse()}
+    </>
+  ) : (
+    <>
+      {data
+        ?.map((value: any) => {
+          return (
+            <ListCard
+              isSharedSpace
+              data={data}
+              setData={setData}
+              value={value}
+              isAdmin={isAdmin}
+              fileId={value.fileId}
+              fileName={value.fileName}
+              userName={value.userName}
+              userLastName={value.userLastname}
+              selected={selectedCardId === value.fileId}
+              key={value.fileId}
+              setSelectedCardId={setSelectedCardId}
+              onClick={() => handleClick(value)}
+              onDoubleClick={() => handleDoubleClick(value)}
+            />
+          );
+        })
+        .reverse()}
+    </>
+  );
+
+  // <>
+  //   {searchTerm.length > 0
+  //     ? searchRes.map((value: any) => {
+  //         return (
+  //           <ListCard
+  //             data={data}
+  //             value={value}
+  //             isAdmin={isAdmin}
+  //             fileId={value.id}
+  //             fileName={value.filename}
+  //             userName={value.userName}
+  //             userLastName={value.userLastname}
+  //             selected={selectedCardId === value.id}
+  //             key={value.id}
+  //             setSelectedCardId={setSelectedCardId}
+  //             onClick={() => handleClick(value)}
+  //             onDoubleClick={() => handleDoubleClick(value)}
+  //           />
+  //         );
+  //       })
+  //     : // data
+  //       //     ?.map((value: any) => (
+  //       //       <ListCard
+  //       //         isAdmin={isAdmin}
+  //       //         fileId={value.fileId}
+  //       //         fileName={value.fileName}
+  //       //         userName={value.userName}
+  //       //         userLastName={value.userLastName}
+  //       //         data={data}
+  //       //         value={value}
+  //       //         selected={selectedCardId === value.fileId}
+  //       //         key={value.fileId}
+  //       //         setSelectedCardId={setSelectedCardId}
+  //       //         onClick={() => handleClick(value)}
+  //       //         onDoubleClick={() => handleDoubleClick(value)}
+  //       //       />
+  //       //     ))
+  //       //     .reverse()}
+
+  //       searchRes
+  //         ?.map((value: any) => (
+  //           <ListCard
+  //             isAdmin={isAdmin}
+  //             fileId={value.id}
+  //             fileName={value.filename}
+  //             userName={value.userName}
+  //             userLastName={value.userLastname}
+  //             data={data}
+  //             value={value}
+  //             selected={selectedCardId === value.id}
+  //             key={value.id}
+  //             setSelectedCardId={setSelectedCardId}
+  //             onClick={() => handleClick(value)}
+  //             onDoubleClick={() => handleDoubleClick(value)}
+  //           />
+  //         ))
+  //         .reverse()}
+  // </>
+};
+
+export default ListCards;
